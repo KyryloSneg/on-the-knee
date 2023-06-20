@@ -1,0 +1,163 @@
+main > h2 {
+  font-size: 3rem;
+}
+
+#change-data-window {
+  border: 3px solid;
+  padding-bottom: 15px;
+}
+
+ul[role="tablist"] {
+  display: grid;
+  grid-template-columns: 1fr;
+  padding: 0;
+  margin: 0;
+}
+
+li[role="tab"] {
+  padding: 5px;
+  box-sizing: border-box;
+  height: 55px;
+  border-bottom: 2px solid black;
+  border-top: none;
+  display: grid;
+  align-items: center;
+  text-align: center;
+  font-size: 1.3rem;
+}
+
+li[role="tab"].active {
+  background-color: #6980fe;
+  border-bottom: 3px solid black;
+}
+
+.panels {
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-content: center;
+  align-content: center;
+  position: relative;
+  min-height: 440px;
+}
+
+.panel { /* By this rule not active panels stay accessible to screen-readers */
+  border: 0;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+.panel.active {
+  box-sizing: border-box;
+  padding: 10px;
+  width: 100%;
+  justify-self: center;
+  position: static;
+  height: auto;
+  margin: auto;
+  overflow: visible;
+  white-space: normal;
+}
+
+.panel h2 {
+  font-size: 1.8rem;
+}
+
+.panel label[for="new-phone-number"] {
+  font-size: 1.2rem;
+}
+
+@media screen and (min-width: 215px) {
+  .wrong-input {
+    background: url("../icons/warning.png") right 8px center / 17px 17px no-repeat;
+  }
+}
+
+@media screen and (min-width: 230px) {
+  .visibility span, .category .icon span {
+    font-size: 2.4rem;
+  }
+
+  .category .error-description, .password-description {
+    padding-left: 34px;
+  }
+}
+
+@media screen and (min-width: 240px) {
+  li[role="tab"] {
+    font-size: 1.8rem;
+  }
+
+  .message {
+    font-size: 1.5rem;
+  }
+}
+
+@media screen and (min-width: 302px) {
+  .panel.active h2 {
+    font-size: 2.5rem;
+  }
+
+  .panel.active form label {
+    font-size: 1.5rem;
+  }
+
+  main {
+    padding: 20px;
+  }
+}
+
+@media screen and (min-width: 320px) {
+  #change-data-window .icon-select-item {
+    grid-template-columns: auto 1fr;
+    gap: 0;
+  }
+
+  #change-data-window .icon-select-item input {
+    border-radius: 0 5px 5px 0;
+  }
+}
+
+@media screen and (min-width: 350px) {
+  .panel.active label[for="new-phone-number"] {
+    font-size: 1.5rem;
+  }
+}
+
+@media screen and (min-width: 390px) {
+  .category .password-description li, .category .error-description {
+    font-size: 1.5rem;
+  }
+}
+
+@media screen and (min-width: 510px) {
+  ul[role="tablist"] {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  ul[role="tablist"] :not(li:last-child) {
+    border-right: 2px solid black;
+  }
+}
+
+@media screen and (min-width: 550px) {
+  .panel.active {
+    width: 70%;
+  }
+}
+
+@media screen and (min-width: 840px) {
+  .panel.active {
+    width: 50%;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .panel.active {
+    width: 40%;
+  }
+}

@@ -1,0 +1,184 @@
+main {
+  display: grid;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Icon */
+
+.icon-item {
+  height: 34px;
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  align-items: center;
+  justify-content: center;
+  border: 1px;
+  border-radius: 5px;
+}
+
+.icon-item > * {
+  box-sizing: border-box;
+  height: 100%;
+}
+
+.icon {
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid;
+  border-radius: 5px 0 0 5px;
+}
+
+.icon-item span {
+  align-self: center;
+  justify-self: center;
+  top: 0;
+}
+
+/* Log in and Sign up */
+
+.sign-in-up {
+  position: relative;
+  display: grid;
+  max-width: 900px;
+  grid-template-columns: 1fr;
+  grid-template-rows: 3fr 1fr;
+  border: 2px solid black;
+  border-radius: 20px;
+  animation: 1s 1s fadeIn;
+  z-index: 5;
+}
+
+.sign-in-up-fields {
+  box-sizing: border-box;
+  display: grid;
+  gap: 5px;
+  border-bottom: 1px solid black;
+  border-radius: 20px 20px 0 0;
+  padding: 30px 10px 10px 10px;
+  background-color: #f1f1f1;
+}
+
+.sign-in-up-fields label[for="email-tel"] {
+  font-size: 1.1rem;
+}
+
+.visibility:hover {
+  color: #bd5e10;
+  background: none;
+}
+
+.sign-in-up-fields a {
+  font-size: 1.5rem;
+  text-decoration: none;
+  align-self: center;
+  justify-self: center;
+  transition: 0.2s;
+  color: #4444ef;
+}
+
+.sign-in-up-fields a:visited {
+  color: #4444ef;
+}
+
+.sign-in-up-fields a:hover, .forgot-password-button:hover {
+  color: #bd5e10;
+}
+
+.sign-in-up-fields a:active, .forgot-password-button:active {
+  color: #ff6c00;
+}
+
+.message {
+  font-size: 1.5rem;
+}
+
+form + p, form + a {
+  margin-top: 5px;
+}
+
+form + p {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 5px;
+}
+
+.sign-as-user {
+  border-radius: 0 0 20px 20px;
+  box-sizing: border-box;
+  background-color: #e1e1e1;
+  padding: 30px 10px 10px 10px;
+}
+
+@media screen and (min-width: 200px) {
+  .wrong-input {
+    background: url("../icons/warning.png") right 8px center / 17px 17px no-repeat;
+  }
+}
+
+@media screen and (min-width: 230px) {
+  .visibility span, .category .icon span {
+    font-size: 2.4rem;
+  }
+
+  .category .error-description, .password-description {
+    padding-left: 34px;
+  }
+}
+
+@media screen and (min-width: 240px) {
+  .category .icon span {
+    font-size: 2.4rem;
+  }
+}
+
+@media screen and (min-width: 290px) {
+  .user-data-window .icon-select-item {
+    grid-template-columns: auto 1fr;
+    gap: 0;
+  }
+
+  .user-data-window .icon-select-item input {
+    border-radius: 0 5px 5px 0;
+  }
+}
+
+@media screen and (min-width: 340px) {
+  .password-description li, .error-description {
+    font-size: 1.5rem;
+  }
+}
+
+@media screen and (min-width: 460px) {
+  label[for="phone-number"] {
+    font-size: 1.5rem;
+  }
+}
+
+@media screen and (min-width: 540px) {
+
+  .message {
+    font-size: 1.8rem;
+  }
+
+  .sign-in-up-fields a {
+    font-size: 1.5rem;
+  }
+}
+
+@media screen and (min-width: 600px) {
+  .sign-in-up {
+    grid-template-columns: 3fr 1fr;
+    grid-template-rows: 1fr;
+  }
+
+  .sign-in-up-fields {
+    border-bottom: none;
+    border-right: 1px solid black;
+    border-radius: 20px 0 0 20px;
+  }
+
+  .sign-as-user {
+    border-radius: 0 20px 20px 0;
+  }
+}
