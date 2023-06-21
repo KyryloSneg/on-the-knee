@@ -1,13 +1,11 @@
-import { Outlet } from "react-router-dom";
+import AppRouter from "./components/AppRouter";
+import { BrowserRouter } from "react-router-dom";
 
 function App() {
   return (
-    <div>
-      <span>
-        Navbar
-      </span>
-      <Outlet />
-    </div>
+    <BrowserRouter>
+      <AppRouter />
+    </BrowserRouter>
   );
 }
 
