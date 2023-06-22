@@ -265,27 +265,6 @@ main {
   transition: background 0.2s;
 }
 
-.delete-input-content-btn {
-  align-self: center;
-  display: grid;
-  align-items: center;
-  background: none;
-  border: none;
-  padding: 0;
-  margin: 0;
-  position: absolute;
-  right: 5%;
-  cursor: pointer;
-}
-
-.delete-input-content-btn svg {
-  fill: rgb(50 63 125);
-}
-
-.delete-input-content-btn:hover svg {
-  fill: rgb(88, 103, 180);
-}
-
 .filters {
   max-height: 195px;
   overflow-y: auto;
