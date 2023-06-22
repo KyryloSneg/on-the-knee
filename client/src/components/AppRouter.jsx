@@ -8,7 +8,7 @@ import UserPage from "../pages/UserPage";
 import { useContext } from "react";
 import { Context } from "../index";
 import { observer } from "mobx-react-lite";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
 
 const AppRouter = observer(() => {
