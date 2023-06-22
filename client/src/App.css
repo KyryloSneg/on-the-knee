@@ -134,6 +134,10 @@ button:active {
   translate: 50% 0;
 }
 
+.display-grid {
+  display: grid;
+}
+
 /* li {
   display: grid;
   grid-template-columns: 1fr;

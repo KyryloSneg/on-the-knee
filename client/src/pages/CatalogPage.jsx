@@ -1,7 +1,9 @@
+import TopFilterBar from "../components/TopFilterBar";
+
 const CatalogPage = () => {
   return (
-    <div>
-      CatalogPage
+    <div className="display-grid">
+      <TopFilterBar />
     </div>
   );
 }
