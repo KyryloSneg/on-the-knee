@@ -30,9 +30,7 @@ nav > div {
  
 nav .skip-to-next-page-content {
   top: 0;
-  left: 0;
-  right: 0;
-  justify-self: center;
+  width: 93%;
   margin-top: 5px;
 }
 
@@ -110,6 +108,7 @@ nav .skip-to-next-page-content p {
     top: auto;
     left: auto;
     right: auto;
+    width: auto;
     margin-left: 7px;
     margin-top: 0;
   }
