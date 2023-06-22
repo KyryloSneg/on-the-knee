@@ -1,0 +1,11 @@
+.nav-category-button {
+  display: none;
+  flex: 1;
+  gap: 5px;
+}
+
+@media screen and (min-width: 550px) {
+  .nav-category-button {
+    display: flex;
+  }
+}

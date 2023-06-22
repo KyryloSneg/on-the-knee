@@ -1,0 +1,9 @@
+.acc-button {
+  display: none;
+}
+
+@media screen and (min-width: 395px) {
+  .acc-button {
+    display: grid;
+  }
+}

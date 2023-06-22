@@ -1,0 +1,116 @@
+nav {
+  display: grid;
+  grid-template-columns: 1fr; /* > (some pxs) => auto 1fr */
+  align-items: center;
+  justify-content: space-around;
+  gap: 12px;
+  padding: 0 4px;
+}
+
+nav > * {
+  height: 100%;
+}
+
+nav img {
+  font-size: 1rem;
+}
+
+nav > div {
+  display: grid;
+  /* display: flex;
+  flex: 1; */
+  gap: 5px;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  justify-content: space-around;
+  justify-items: center;
+}
+
+/* Skip to next page content */
+ 
+nav .skip-to-next-page-content {
+  top: 0;
+  left: 0;
+  right: 0;
+  justify-self: center;
+  margin-top: 5px;
+}
+
+nav .skip-to-next-page-content p {
+  font-size: 1rem;
+}
+
+/* Nav buttons */
+
+.nav-mini-button {
+  cursor: pointer;
+  align-self: center;
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border: none;
+  border-radius: 5px;
+  background: none;
+  color: white;
+  transition: 0.2s
+}
+
+.nav-mini-button:hover {
+  background-color: #6d6d6d;
+}
+
+@media screen and (min-width: 230px) {
+  nav > div {
+    gap: 10px;
+  }
+}
+
+@media screen and (min-width: 250px) {
+  nav .skip-to-next-page-content p {
+    font-size: 1.5rem;
+  }
+}
+
+@media screen and (min-width: 395px) {
+  nav > div {
+    grid-template-columns: auto 1fr auto auto;
+  }
+}
+
+@media screen and (min-width: 425px) {
+  nav > div {
+    gap: 22px;
+  }
+
+  nav {
+    padding: 0 10px;
+  }
+}
+
+@media screen and (min-width: 550px) {
+  nav > div {
+    grid-template-columns: auto auto 1fr auto auto;
+  }
+
+  nav {
+    padding: 0 12px;
+  }
+}
+
+@media screen and (min-width: 810px) {
+  nav {
+    grid-template-columns: auto 1fr;
+    grid-template-rows: 1fr;
+    gap: 40px;
+    padding: 0 40px;
+  }
+
+  nav .skip-to-next-page-content {
+    top: auto;
+    left: auto;
+    right: auto;
+    margin-left: 7px;
+    margin-top: 0;
+  }
+}
