@@ -43,5 +43,19 @@
 }
 
 .sorting-filter-btn-wrap p {
-  font-size: 1.8rem;
+  font-size: 1.5rem;
+}
+
+.sorting-filter-btn-wrap button {
+  font-size: 1.2rem;
+}
+
+@media screen and (min-width: 240px) {
+  .sorting-filter-btn-wrap p {
+    font-size: 1.8rem;
+  }
+  
+  .sorting-filter-btn-wrap button {
+    font-size: 1.5rem;
+  }
 }
