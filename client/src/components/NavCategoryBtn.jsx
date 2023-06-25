@@ -10,7 +10,7 @@ const NavCategoryBtn = () => {
   return (
     <button className="nav-mini-button nav-category-button" onClick={onClick}>
       <span>Category</span>
-      <img src={categoryBtnIcon} className="no-select" draggable="false" alt="Category" />
+      <img src={categoryBtnIcon} className="no-select" draggable="false" alt="" />
     </button>
   );
 }

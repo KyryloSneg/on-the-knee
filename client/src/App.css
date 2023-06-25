@@ -108,6 +108,10 @@ input, select {
   min-height: 25px;
 }
 
+ul {
+  list-style-type: none;
+}
+
 /* button {
   border: 1px solid #676767FF;
   background-color: rgba(224, 224, 224);

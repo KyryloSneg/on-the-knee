@@ -15,11 +15,11 @@ const TopFilterBar = () => {
   return (
     <section id="top-filter-bar">
       <button className="show-categories-select" onClick={showCategories}>
-        <img src={showCategoriesIcon} />
+        <img src={showCategoriesIcon} alt="" />
         Filter selection
       </button>
       <button className="used-filters-shortcut" onClick={showUsedFilters}>
-        <img src={usedFiltersIcon} />
+        <img src={usedFiltersIcon} alt="" />
         Used filters
       </button>
     </section>
