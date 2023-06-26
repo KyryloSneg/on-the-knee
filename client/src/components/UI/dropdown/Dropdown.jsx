@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { forwardRef, useState } from "react";
 import DropdownBtn from "./DropdownBtn";
 import "./Dropdown.css";
 import { sortingOptions } from "../../../utils/consts";
 import DropdownOptions from "./DropdownOptions";
 
-const Dropdown = ({ variant, options = sortingOptions, paramKey, placeHolder }) => {
+const Dropdown = forwardRef(({ variant, options = sortingOptions, paramKey, placeHolder }, ref) => {
   const [value, setValue] = useState(variant === "default-select" ? placeHolder : options[0].title);
   const [visible, setVisible] = useState(false);
   const [selectedId, setSelectedId] = useState(variant === "default-select" ? null : 0);
@@ -16,7 +16,7 @@ const Dropdown = ({ variant, options = sortingOptions, paramKey, placeHolder }) 
 
   return (
     <div className="dropdown">
-      <DropdownBtn variant={variant} value={value} onClick={onClick} visible={visible} />
+      <DropdownBtn variant={variant} value={value} onClick={onClick} visible={visible} ref={ref} />
       {visible && <DropdownOptions
                     options={options}
                     visible={visible} 
@@ -29,6 +29,6 @@ const Dropdown = ({ variant, options = sortingOptions, paramKey, placeHolder }) 
       }
     </div>
   );
-}
+});
 
 export default Dropdown;
