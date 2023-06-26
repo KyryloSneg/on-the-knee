@@ -2,6 +2,7 @@ const SkipTonextPageContent = ({ title, toFocusRef }) => {
 
   function onClick() {
     // to focus ref element
+    toFocusRef.current.focus();
   }
 
   return (
