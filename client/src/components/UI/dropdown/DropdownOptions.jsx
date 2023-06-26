@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import "./DropdownOptions.css";
+import useClickOutsideOptions from "../../../hooks/useClickOutsideOptions";
 
 const DropdownOptions = (props) => {
   const ulRef = useRef(null);
@@ -10,18 +11,7 @@ const DropdownOptions = (props) => {
     // eslint-disable-next-line
   }, [])
 
-  useEffect(() => {
-
-    function clickHandler() {
-      props.hide();
-    }
-
-    window.addEventListener("click", clickHandler);
-
-    return () => {
-      window.removeEventListener("click", clickHandler);
-    }
-  });
+  useClickOutsideOptions(props.hide);
 
   function onSelectButton(paramValue, value, id) {
     props.setValue(value);
