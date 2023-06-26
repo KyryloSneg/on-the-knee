@@ -7,10 +7,10 @@ import NavAccountBtn from "./NavAccountBtn";
 import NavCartBtn from "./NavCartBtn";
 import SkipTonextPageContent from "./UI/skipToNextPageContent/SkipTonextPageContent";
 
-const Navbar = () => {
+const Navbar = ({ toFocusRef }) => {
   return (
     <nav>
-      <SkipTonextPageContent title="Skip to the products section" centeredByX={true} /> {/* to pass main page ref to focus it */}
+      <SkipTonextPageContent title="Skip to the products section" toFocusRef={toFocusRef} /> {/* to pass main page ref to focus it */}
       <StoreTitle title={"On the knee"} />
       <div>
         <NavMenuBtn />

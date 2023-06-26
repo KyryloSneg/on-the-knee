@@ -1,8 +1,9 @@
+import { forwardRef } from "react";
 import showCategoriesIcon from "../assets/show-categories-select.svg";
 import usedFiltersIcon from "../assets/used-filters-shortcut.svg";
 import "./styles/TopFilterBar.css";
 
-const TopFilterBar = () => {
+const TopFilterBar = forwardRef((props, ref) => {
 
   function showCategories() {
     // open sidebar that contains various categories with simple animation
@@ -14,7 +15,7 @@ const TopFilterBar = () => {
 
   return (
     <section id="top-filter-bar">
-      <button className="show-categories-select" onClick={showCategories}>
+      <button className="show-categories-select" onClick={showCategories} ref={ref}>
         <img src={showCategoriesIcon} alt="" />
         Filter selection
       </button>
@@ -24,6 +25,6 @@ const TopFilterBar = () => {
       </button>
     </section>
   );
-}
+});
 
 export default TopFilterBar;

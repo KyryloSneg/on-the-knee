@@ -5,13 +5,13 @@ import CatalogPage from "../pages/CatalogPage";
 import CheckoutPage from "../pages/CheckoutPage";
 import DevicePage from "../pages/DevicePage";
 import UserPage from "../pages/UserPage";
-import { useContext } from "react";
+import { forwardRef, useContext } from "react";
 import { Context } from "../index";
 import { observer } from "mobx-react-lite";
 import { Route, Routes } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
 
-const AppRouter = observer(() => {
+const AppRouter = observer(forwardRef((props, ref) => {
   const { user } = useContext(Context);
 
   return (
@@ -19,20 +19,20 @@ const AppRouter = observer(() => {
       {/* public routes */}
       <Route
         path={CATALOG_ROUTE}
-        element={<CatalogPage />}
+        element={<CatalogPage ref={ref} />}
       />
       <Route
         path={DEVICE_ROUTE}
-        element={<DevicePage />}
+        element={<DevicePage ref={ref} />}
       />
       <Route
         path={CHECKOUT_ROUTE}
-        element={<CheckoutPage />}
+        element={<CheckoutPage ref={ref} />}
       />
       {/* if route is exactly equal to root route, it is the main page */}
       <Route
         index={true}
-        element={<MainPage />}
+        element={<MainPage ref={ref} />}
       />
 
       {/* private routes */}
@@ -40,7 +40,7 @@ const AppRouter = observer(() => {
         path={USER_ROUTE}
         element={
           <ProtectedRoute isAllowed={user.isAuth}>
-            <UserPage />
+            <UserPage ref={ref} />
           </ProtectedRoute>
         }
       />
@@ -48,10 +48,10 @@ const AppRouter = observer(() => {
       {/* asterisk "*" route that will be renavigating user to the error page */}
       <Route
         path="*"
-        element={<ErrorPage />}
+        element={<ErrorPage ref={ref} />}
       />
     </Routes>
   );
-});
+}));
 
 export default AppRouter;
