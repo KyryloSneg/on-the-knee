@@ -1,0 +1,21 @@
+#remove-all-filters {
+  transition: 0.2s;
+  height: 35px;
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+#remove-all-filters {
+  padding: 2px 16px;
+  border: 1px solid #a10e0e;
+}
+
+#remove-all-filters:hover {
+  color: white;
+  background-color: #ff3333;
+}
+
+#remove-all-filters:active {
+  color: white;
+  background-color: #a10e0e;
+}

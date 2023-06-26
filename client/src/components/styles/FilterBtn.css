@@ -1,0 +1,17 @@
+.remove-filter {
+  padding: 2px 8px;
+  display: grid;
+  grid-template-columns: 1fr 28px;
+  gap: 5px;
+  align-items: center;
+  justify-items: center;
+  height: 35px;
+  border-radius: 15px;
+  cursor: pointer;
+  border: 1px solid rgb(155, 155, 155);
+  transition: 0.2s;
+}
+
+.remove-filter:hover {
+  background-color: rgb(155, 155, 155);
+}
