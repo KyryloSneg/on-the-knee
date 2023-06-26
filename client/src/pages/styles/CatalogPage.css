@@ -1,0 +1,12 @@
+#wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 25px;
+  padding: 15px 10px;
+}
+
+@media screen and (min-width: 800px) {
+  #wrapper {
+    grid-template-columns: 1fr 3fr;
+  }
+}
