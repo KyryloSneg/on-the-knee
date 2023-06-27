@@ -21,7 +21,8 @@ class DeviceStore {
         "Samsung"
       ],
     }
-    this._allDevices = [];
+    // in the catalog page component or below in the tree we can use these states to calculate devices per page
+    // (because we are filtering products on client side not on the server side) 
     this._devices = [];
     this._page = 1;
     this._totalCount = 0;
