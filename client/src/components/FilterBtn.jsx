@@ -4,25 +4,25 @@ import { Context } from "../index";
 import "./styles/FilterBtn.css";
 
 const FilterBtn = ({ value, paramKey }) => {
-  const { filtersStore } = useContext(Context);
+  const { deviceStore } = useContext(Context);
 
   function onClick() {
     let nextFilters;
 
-    if (filtersStore.filters[paramKey].length !== 1) {
+    if (deviceStore.usedFilters[paramKey].length !== 1) {
       nextFilters = {
-        ...filtersStore.filters,
-        [paramKey]: filtersStore.filters[paramKey].filter(f => f !== value)
+        ...deviceStore.usedFilters,
+        [paramKey]: deviceStore.usedFilters[paramKey].filter(f => f !== value)
       }
     } else {
-      const filtersClone = {...filtersStore.filters};
+      const filtersClone = {...deviceStore.usedFilters};
       delete filtersClone[paramKey];
       nextFilters = filtersClone;
     }
 
     console.log(nextFilters);
 
-    filtersStore.setFilters(nextFilters);
+    deviceStore.setUsedFilters(nextFilters);
   }
 
   return (
