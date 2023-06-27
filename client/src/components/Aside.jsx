@@ -3,13 +3,15 @@ import { Context } from "../index";
 import UsedFilters from "./UsedFilters";
 import { observer } from "mobx-react-lite";
 import "./styles/Aside.css";
+import FilterCategories from "./FilterCategories";
 
 const Aside = observer(() => {
-  const { filtersStore } = useContext(Context);
-  
+  const { deviceStore } = useContext(Context);
+
   return (
     <aside>
-      {Object.keys(filtersStore.filters).length > 0 && <UsedFilters />}
+      {Object.keys(deviceStore.usedFilters).length > 0 && <UsedFilters />}
+      <FilterCategories />
     </aside>
   );
 });

@@ -3,10 +3,10 @@ import { Context } from "../index";
 import "./styles/RemoveAllFilterBtn.css";
 
 const RemoveAllFilterBtn = () => {
-  const { filtersStore } = useContext(Context);
+  const { deviceStore } = useContext(Context);
 
   function onClick() {
-    filtersStore.setFilters({});
+    deviceStore.setUsedFilters({});
   }
 
   return (
