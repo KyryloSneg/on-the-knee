@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { createContext } from 'react';
 import UserStore from './stores/UserStore';
 import App from './App';
-import FiltersStore from './stores/FiltersStore';
+import DeviceStore from './stores/DeviceStore';
 
 export const Context = createContext(null);
 
@@ -12,7 +12,7 @@ root.render(
   <React.StrictMode>
     <Context.Provider value={{
       user: new UserStore(),
-      filtersStore: new FiltersStore(),
+      deviceStore: new DeviceStore(),
     }}>
       <App />
     </Context.Provider>
