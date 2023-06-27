@@ -10,7 +10,7 @@ import SkipTonextPageContent from "./UI/skipToNextPageContent/SkipTonextPageCont
 const Navbar = ({ toFocusRef }) => {
   return (
     <nav>
-      <SkipTonextPageContent title="Skip to the products section" toFocusRef={toFocusRef} /> {/* to pass main page ref to focus it */}
+      <SkipTonextPageContent title="Skip to the products section" toFocusRef={toFocusRef} />
       <StoreTitle title={"On the knee"} />
       <div>
         <NavMenuBtn />
