@@ -3,7 +3,7 @@
 html {
   font-family: 'Montserrat', sans-serif;
   font-size: 10px;
-  background: #e5e5e5;
+  background: #f0f0f0;
 }
 
 html > *:focus {
@@ -110,6 +110,7 @@ input, select {
 
 ul {
   list-style-type: none;
+  padding: 0;
 }
 
 /* button {
@@ -140,6 +141,14 @@ button:active {
 
 .display-grid {
   display: grid;
+}
+
+.display-none {
+  display: none;
+}
+
+.visibility-none {
+  visibility: hidden;
 }
 
 /* li {
@@ -231,12 +240,54 @@ header .skip-to-next-page-content:focus {
   fill: white;
 }
 
-@keyframes fadeIn {
+@keyframes fade-in {
   from {
     opacity: 0;
   }
 
   to {
     opacity: 1;
+  }
+}
+
+@keyframes dropdown-collapse {
+  /* from {
+    transform: scale(1, 1);
+  }
+
+  to {
+    transform: scale(1, 0);
+  } */
+
+  from {
+    max-height: 195px;
+    /* display: none; */
+  }
+
+  to {
+    max-height: 0;
+    /* display: none; */
+    /* display: grid; */
+  }
+}
+
+@keyframes dropdown-open {
+  /* from {
+    transform: scale(1, 0);
+  }
+
+  to {
+    transform: scale(1, 1);
+  } */
+
+  from {
+    visibility: visible;
+    max-height: 0;
+    /* display: none; */
+  }
+
+  to {
+    max-height: 195px;
+    /* display: grid; */
   }
 }

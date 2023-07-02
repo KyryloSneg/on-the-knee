@@ -2,8 +2,8 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { act } from 'react-dom/test-utils';
 
-import Dropdown from '../UI/dropdown/Dropdown';
-import DivForTesting from '../DivForTesting';
+import Dropdown from '../../components/UI/dropdown/Dropdown';
+import DivForTesting from '../../components/DivForTesting';
 
 describe('SortingFilterBar', () => {
   it('shows / hides the options when clicked on the button', async () => {

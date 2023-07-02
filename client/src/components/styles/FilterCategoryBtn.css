@@ -1,0 +1,33 @@
+.filter-category-block > button {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #1e3cc2;
+  width: 100%;
+  padding: 8px 24px 8px 8px;
+  padding-right: 24px;
+  transition: 0.2s;
+}
+
+.filter-category-block button:active {
+  background: none;
+}
+
+.filter-category-block button:hover {
+  background: none;
+}
+
+.filter-category-block > button p {
+  font-weight: bold;
+  text-align: start;
+}
+
+.filter-category-block > button img {
+  position: absolute;
+  right: 8px;
+  transition: 0.3s;
+}
