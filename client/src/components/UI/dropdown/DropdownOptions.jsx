@@ -42,6 +42,8 @@ const DropdownOptions = (props) => {
                 if (optionRefs.length === props.options.length) return;
                 optionRefs.current.push(ref)
               }}
+              aria-checked={isSelected}
+              role="radio"
             >
               {opt.title}
             </button>
