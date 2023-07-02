@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Context } from "../index";
+import { Context } from "../Context";
 import "./styles/RemoveAllFilterBtn.css";
 
 const RemoveAllFilterBtn = () => {
