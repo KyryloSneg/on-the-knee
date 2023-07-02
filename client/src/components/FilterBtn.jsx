@@ -4,7 +4,7 @@ import { Context } from "../Context";
 import "./styles/FilterBtn.css";
 import { nextRemovedFilters } from "../utils/filterFunctions";
 
-const FilterBtn = ({ value, paramKey }) => {
+const FilterBtn = ({ value, paramKey, testId }) => {
   const { deviceStore } = useContext(Context);
 
   function onClick() {
@@ -13,7 +13,7 @@ const FilterBtn = ({ value, paramKey }) => {
   }
 
   return (
-    <button className="remove-filter" onClick={onClick}>
+    <button className="remove-filter" onClick={onClick} data-testid={testId}>
       {value}
       <img src={removeIcon} className="no-select" draggable="false" alt="" />
     </button>
