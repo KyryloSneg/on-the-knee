@@ -1,11 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { createContext } from 'react';
 import UserStore from './stores/UserStore';
 import App from './App';
 import DeviceStore from './stores/DeviceStore';
-
-export const Context = createContext(null);
+import { Context } from "./Context";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

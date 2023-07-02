@@ -1,3 +1,5 @@
+import DeviceStore from "../stores/DeviceStore";
+
 export const CATALOG_ROUTE = "/catalog";
 export const DEVICE_ROUTE = "/catalog/:deviceId";
 export const CHECKOUT_ROUTE = "/checkout";
@@ -26,3 +28,35 @@ export const sortingOptions = [
     value: "decreasing-price",
   },
 ];
+
+
+// set up mock stores
+const deviceStoreInstance = new DeviceStore();
+
+deviceStoreInstance.setFilters({
+  "category": ["phones", "TV", "computers"],
+  "price": ["20000", "100", "10800", "4030"],
+  "brand": ["Apple", "Asus", "LG", "Samsung"],
+  "hz": ["50", "60", "75", "120", "140", "144", "200", "240"],
+});
+
+deviceStoreInstance.setUsedFilters({
+  "category": [
+    "phones",
+  ],
+  "price": [
+    "10000-50000",
+  ],
+  "brand": [
+    "Apple",
+    "Samsung"
+  ],
+});
+
+// if i will be testing component that uses devices from store i should fill up the array with some of them
+deviceStoreInstance.setDevices([]);
+
+// mock stores to use in tests
+export const mockContextValue = {
+  deviceStore: deviceStoreInstance,
+}
