@@ -25,6 +25,7 @@
 
 .filters li button:focus {
   background-color: #dadada;
+  outline: none;
 }
 
 .filters li button:hover .filter-icon {
