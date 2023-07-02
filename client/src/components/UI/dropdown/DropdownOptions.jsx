@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import "./DropdownOptions.css";
 import useClickOutsideOptions from "../../../hooks/useClickOutsideOptions";
+import { onKeyDown } from "../../../utils/dropdownOptionsControl";
 
 const DropdownOptions = (props) => {
   const ulRef = useRef(null);
@@ -16,28 +17,7 @@ const DropdownOptions = (props) => {
   function onSelectButton(paramValue, value, id) {
     props.setValue(value);
     props.setSelectedId(id);
-    // TODO: adding URL params and filtering products by them
-  }
-
-  function onKeyDown(e, id) {
-    switch (e.key) {
-      case "ArrowDown":
-        if (id === props.options.length - 1) {
-          optionRefs.current[0].focus();
-        } else {
-          optionRefs.current[id + 1].focus();
-        }
-        break;
-      case "ArrowUp":
-        if (id === 0) {
-          optionRefs.current[props.options.length - 1].focus();
-        } else {
-          optionRefs.current[id - 1].focus();
-        }
-        break;
-      default: 
-        break;  
-    }
+    // TODO: adding URL params ?
   }
 
   return (
@@ -56,7 +36,7 @@ const DropdownOptions = (props) => {
           <li key={opt.id} className={isSelected ? "active" : ""}>
             <button
               onClick={() => onSelectButton(opt.value, opt.title, opt.id)}
-              onKeyDown={(e) => onKeyDown(e, opt.id)}
+              onKeyDown={(e) => onKeyDown(e, opt.id, props.options, optionRefs)}
               data-testid={`option ${opt.id}`}
               ref={ref => {
                 if (optionRefs.length === props.options.length) return;

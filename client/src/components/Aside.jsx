@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Context } from "../index";
+import { Context } from "../Context";
 import UsedFilters from "./UsedFilters";
 import { observer } from "mobx-react-lite";
 import "./styles/Aside.css";

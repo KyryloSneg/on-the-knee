@@ -3,9 +3,10 @@ import { makeAutoObservable } from "mobx";
 class DeviceStore {
   constructor() {
     this._filters = {
-      "category": [],
-      "price": [],
-      "brand": [],
+      "category": ["phones", "TV", "computers"],
+      "price": ["20000", "100", "10800", "4030"],
+      "brand": ["Apple", "Asus", "LG", "Samsung"],
+      "id": ["21", "3", "99", "47", "23", "3245", "342345", "324325", "34325"],
     }
 
     // just example
@@ -38,8 +39,8 @@ class DeviceStore {
     return this._filters;
   }
 
-  setUsedFilters(usedFilters) {
-    this._usedFilters = usedFilters;
+  setUsedFilters(filters) {
+    this._usedFilters = filters;
   }
 
   get usedFilters() {

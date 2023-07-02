@@ -1,11 +1,11 @@
 import { forwardRef } from "react";
 import SortingFilterBtn from "./SortingFilterBtn";
 
-const DropdownBtn = forwardRef(({ variant, placeHolder, value, onClick, visible }, ref) => {
+const DropdownBtn = forwardRef(({ variant, value, onClick, visible }, ref) => {
   if (variant === "default-select") {
     // TODO: default dropdown menu 
     return (
-      <div placeHolder={placeHolder}></div>
+      <div value={value}></div>
     );
   }
 

@@ -6,7 +6,7 @@ import CheckoutPage from "../pages/CheckoutPage";
 import DevicePage from "../pages/DevicePage";
 import UserPage from "../pages/UserPage";
 import { forwardRef, useContext } from "react";
-import { Context } from "../index";
+import { Context } from "../Context";
 import { observer } from "mobx-react-lite";
 import { Route, Routes } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";

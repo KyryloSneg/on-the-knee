@@ -1,0 +1,44 @@
+.filters {
+  max-height: 195px;
+  overflow-y: auto;
+  margin: 0;
+
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4px;
+  padding: 6px 0;
+  /* transition: max-height 0.35s linear 0.2s; */
+}
+
+/* .filter-category-block.collapsed > ul {
+  max-height: 0;
+} */
+
+/* Scrollbar */
+
+.filters {
+  scrollbar-color: #d4d4d4 rgb(103, 103, 103, 0.3);
+  scrollbar-width: thin;
+}
+
+/* Webkit syntax */
+.filters::-webkit-scrollbar {
+  border-radius: 5px;
+  width: 6px;
+  background-color: #d4d4d4;
+}
+
+.filters:-webkit-scrollbar-track {
+  border: 1px solid;
+}
+
+.filters::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background-color: rgb(103, 103, 103, 0.3);
+}
+
+.filters li {
+  padding: 1px 6px;
+  font-size: 1.5rem;
+  justify-items: start;
+}

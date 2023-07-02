@@ -1,0 +1,53 @@
+.filters li button {
+  cursor: pointer;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 8px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  color: black;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: 0.2s;
+  border: none;
+}
+
+.filters li button p {
+  text-align: start;
+}
+
+.filters li button:hover {
+  background-color: #dadada;
+}
+
+.filters li button:focus {
+  background-color: #dadada;
+}
+
+.filters li button:hover .filter-icon {
+  border: 1px solid black;
+}
+
+.filters li button:hover .filter-icon.checked {
+  border: 1px solid #7e95fa;
+}
+
+.filter-icon {
+  width: 14px;
+  height: 14px;
+  border: 1px solid #676767;
+  background-color: white;
+  border-radius: 3px;
+  transition: 0.2s;
+}
+
+.filter-icon.checked {
+  border: 1px solid #7e95fa;
+  background-color: #7e95fa;
+  background-image: url(../../assets/check.svg);
+  background-position: center;
+  background-size: 16px 16px;
+}

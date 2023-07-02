@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Context } from "../index";
+import { Context } from "../Context";
 import FilterBtn from "./FilterBtn";
 import { observer } from "mobx-react-lite";
 import RemoveAllFilterBtn from "./RemoveAllFilterBtn";
