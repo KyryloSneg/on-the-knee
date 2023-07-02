@@ -15,7 +15,7 @@ const Dropdown = forwardRef(({ variant, options = sortingOptions, paramKey, plac
   }
 
   return (
-    <div className="dropdown">
+    <div className="dropdown" role="radiogroup">
       <DropdownBtn variant={variant} value={value} onClick={onClick} visible={visible} ref={ref} />
       {visible && (
           <DropdownOptions
