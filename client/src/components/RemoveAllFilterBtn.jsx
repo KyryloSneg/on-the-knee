@@ -11,7 +11,7 @@ const RemoveAllFilterBtn = () => {
 
   return (
     <li>
-      <button id="remove-all-filters" onClick={onClick}>
+      <button id="remove-all-filters" onClick={onClick} data-testid="remove-all-filters">
         Remove all filters
       </button>
     </li>
