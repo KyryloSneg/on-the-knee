@@ -14,7 +14,7 @@ const FiltersList = observer(() => {
       for (let value of deviceStore.usedFilters[paramKey]) {
         result.push(
           <li key={`${paramKey}: ${value}`}>
-            <FilterBtn value={value} paramKey={paramKey} />
+            <FilterBtn value={value} paramKey={paramKey} testId={`${paramKey}: ${value}`} />
           </li>
         );
       }
