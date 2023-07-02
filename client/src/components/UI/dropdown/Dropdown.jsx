@@ -17,15 +17,17 @@ const Dropdown = forwardRef(({ variant, options = sortingOptions, paramKey, plac
   return (
     <div className="dropdown">
       <DropdownBtn variant={variant} value={value} onClick={onClick} visible={visible} ref={ref} />
-      {visible && <DropdownOptions
-                    options={options}
-                    visible={visible} 
-                    hide={() => setVisible(false)} 
-                    setValue={setValue} 
-                    selectedId={selectedId} 
-                    setSelectedId={setSelectedId}
-                    paramKey={paramKey}
-                 />
+      {visible && (
+          <DropdownOptions
+            options={options}
+            visible={visible}
+            hide={() => setVisible(false)}
+            setValue={setValue}
+            selectedId={selectedId}
+            setSelectedId={setSelectedId}
+            paramKey={paramKey}
+          />
+        )
       }
     </div>
   );

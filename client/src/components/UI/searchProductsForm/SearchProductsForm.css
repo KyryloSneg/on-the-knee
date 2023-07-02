@@ -4,7 +4,7 @@
   display: grid;
   grid-template-columns: 1fr auto;
   width: 85%;
-  max-width: 650px;
+  max-width: 850px;
   height: 35px;
 }
 

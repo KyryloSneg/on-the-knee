@@ -1,27 +1,14 @@
 import { useContext } from "react";
 import removeIcon from "../assets/remove.svg";
-import { Context } from "../index";
+import { Context } from "../Context";
 import "./styles/FilterBtn.css";
+import { nextRemovedFilters } from "../utils/filterFunctions";
 
 const FilterBtn = ({ value, paramKey }) => {
   const { deviceStore } = useContext(Context);
 
   function onClick() {
-    let nextFilters;
-
-    if (deviceStore.usedFilters[paramKey].length !== 1) {
-      nextFilters = {
-        ...deviceStore.usedFilters,
-        [paramKey]: deviceStore.usedFilters[paramKey].filter(f => f !== value)
-      }
-    } else {
-      const filtersClone = {...deviceStore.usedFilters};
-      delete filtersClone[paramKey];
-      nextFilters = filtersClone;
-    }
-
-    console.log(nextFilters);
-
+    const nextFilters = nextRemovedFilters(deviceStore.usedFilters, paramKey, value);
     deviceStore.setUsedFilters(nextFilters);
   }
 
