@@ -1,0 +1,75 @@
+.price-range-form-wrap {
+  overflow-y: auto;
+  max-height: 195px;
+  display: grid;
+}
+
+.price-range-filter-wrap {
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 4px 6px;
+}
+
+.price-range-filter-wrap > div {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.price-divider {
+  height: auto;
+  align-self: end;
+  display: grid;
+  align-items: center;
+  font-size: 3rem;
+  color: #676767;
+}
+
+.submit-price-range-wrap {
+  align-self: end;
+  display: grid;
+  justify-content: center;
+}
+
+.price-range-filter-wrap > button {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  align-self: center;
+  justify-self: center;
+  height: 34px;
+  width: 60px;
+  padding: 0;
+  margin: 0 10px;
+  border-radius: 5px;
+  /* border: 1px solid #3354e7; */
+  border: none;
+  background-color: #3354e7;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
+  outline: none;
+}
+
+.price-range-filter-wrap > button:disabled {
+  background-color: #676767;
+}
+
+.price-range-filter-wrap > button:enabled:hover,
+  .price-range-filter-wrap > button:enabled:active,
+    .price-range-filter-wrap > button:enabled:focus {
+  background-color: #5171ff;
+}
+
+@media screen and (min-width: 1240px) {
+  .price-range-filter-wrap {
+    flex-direction: row;
+  }
+
+  .price-range-filter-wrap > button {
+    align-self: end;
+  }
+}

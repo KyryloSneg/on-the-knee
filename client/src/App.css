@@ -151,6 +151,34 @@ button:active {
   visibility: hidden;
 }
 
+.invalidInput {
+  border: 2px red solid;
+}
+
+/* Scrollbar class */
+
+.use-preety-scrollbar {
+  scrollbar-color: #d4d4d4 rgb(103, 103, 103, 0.3);
+  scrollbar-width: thin;
+}
+
+/* Webkit syntax */
+.use-preety-scrollbar::-webkit-scrollbar {
+  border-radius: 5px;
+  width: 6px;
+  background-color: #d4d4d4;
+}
+
+.use-preety-scrollbar:-webkit-scrollbar-track {
+  border: 1px solid;
+}
+
+.use-preety-scrollbar::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background-color: rgb(103, 103, 103, 0.3);
+}
+
+
 /* li {
   display: grid;
   grid-template-columns: 1fr;

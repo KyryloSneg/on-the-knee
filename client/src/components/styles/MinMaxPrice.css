@@ -1,0 +1,43 @@
+.min-max-price-wrap {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 5px;
+}
+
+.min-max-price-wrap label {
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.min-max-price-wrap input {
+  transition: 0.2s;
+  width: 55px;
+  height: 32px;
+  font-size: 1.4rem;
+  padding: 6px;
+  box-sizing: border-box;
+}
+
+.min-max-price-wrap input.invalidInput {
+  border: 1px #a10e0e solid;
+}
+
+.min-max-price-wrap input.invalidInput:focus,
+  .min-max-price-wrap input.invalidInput:active {
+  border: 1px solid #a10e0e;
+}
+
+.min-max-price-wrap input:focus,
+  .min-max-price-wrap input:active {
+  border: 1px solid #5c7aff;
+}
+
+@media screen and (min-width: 850px) {
+  .min-max-price-wrap input {
+    width: 65px;
+  }
+
+  .min-max-price-wrap label {
+    font-size: 1.3rem;
+  }
+}
