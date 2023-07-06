@@ -29,6 +29,8 @@ export const sortingOptions = [
   },
 ];
 
+// in production build the value should be greater than current one
+export const FILTERS_OPTIONS_LENGTH_LIMIT = 5;
 
 // set up mock stores
 const deviceStoreInstance = new DeviceStore();
@@ -52,6 +54,9 @@ deviceStoreInstance.setUsedFilters({
     "Samsung"
   ],
 });
+
+deviceStoreInstance.setInitialMinPrice(1300);
+deviceStoreInstance.setInitialMaxPrice(79900);
 
 // if i will be testing component that uses devices from store i should fill up the array with some of them
 deviceStoreInstance.setDevices([]);

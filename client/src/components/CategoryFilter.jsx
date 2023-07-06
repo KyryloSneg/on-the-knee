@@ -2,9 +2,8 @@ import { forwardRef, useContext } from "react";
 import { nextAddedFilters, nextRemovedFilters } from "../utils/filterFunctions";
 import "./styles/CategoryFilter.css";
 import { Context } from "../Context";
-import { observer } from "mobx-react-lite";
 
-const CategoryFilter = observer(forwardRef(({ filter, value, active, onKeyDown, testId }, ref) => {
+const CategoryFilter = forwardRef(({ filter, value, active, onKeyDown, testId }, ref) => {
   const { deviceStore } = useContext(Context);
   const className = active ? "filter-icon checked" : "filter-icon";
   const iconTestId = active ? testId + " - icon checked" : testId + " - icon";
@@ -34,6 +33,6 @@ const CategoryFilter = observer(forwardRef(({ filter, value, active, onKeyDown, 
       <p>{value[0].toUpperCase() + value.slice(1)}</p>
     </button>
   );
-}));
+});
 
 export default CategoryFilter;

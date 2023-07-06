@@ -28,11 +28,13 @@
   outline: none;
 }
 
-.filters li button:hover .filter-icon {
+.filters li button:hover .filter-icon,
+  .filters li button:focus .filter-icon {
   border: 1px solid black;
 }
 
-.filters li button:hover .filter-icon.checked {
+.filters li button:hover .filter-icon.checked,
+  .filters li button:focus .filter-icon.checked {
   border: 1px solid #7e95fa;
 }
 

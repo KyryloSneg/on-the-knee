@@ -2,11 +2,13 @@
   max-height: 195px;
   overflow-y: auto;
   margin: 0;
+  position: relative;
 
   display: grid;
   grid-template-columns: 1fr;
   gap: 4px;
-  padding: 6px 0;
+  padding: 0 0 6px 0;
+  overflow-anchor: none;
   /* transition: max-height 0.35s linear 0.2s; */
 }
 
@@ -41,4 +43,16 @@
   padding: 1px 6px;
   font-size: 1.5rem;
   justify-items: start;
+}
+
+.empty-filters-msg {
+  /* color: grey; */
+  text-align: center;
+  font-size: 1.3rem;
+}
+
+@media screen and (min-width: 1090px) {
+  .empty-filters-msg {
+    font-size: 1.5rem;
+  }
 }
