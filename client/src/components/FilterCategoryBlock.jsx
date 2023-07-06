@@ -1,14 +1,22 @@
 import { useState, useRef } from "react";
 import FilterCategoryBtn from "./FilterCategoryBtn"
 import CategoryFilterList from "./CategoryFilterList";
+import PriceCategoryFilter from "./PriceCategoryFilter";
 import "./styles/FilterCategoryBlock.css";
 
-const FilterCategoryBlock = ({ filter, filterCategoryBlockId,  }) => {
+const initialPriceClass = "price-range-form-wrap use-preety-scrollbar";
+const initialFiltersClass = "filters use-preety-scrollbar";
+
+const FilterCategoryBlock = ({ filter, filterCategoryBlockId, variant="default" }) => {
   const [visible, setVisible] = useState(true);
+
   const optionRefs = useRef([]);
   const [selectedByKeyboardId, setSelectedByKeyboardId] = useState(0);
-  const ulRef = useRef(null);
-  const [ulClassName, setUlClassName] = useState("filters");
+
+  const blockItemRef = useRef(null);
+  const [blockItemClassName, setBlockItemClassName] = useState(variant === "price" ? initialPriceClass: initialFiltersClass);
+
+  const elemToFocusRef = useRef(null);
 
   return (
     <div className={"filter-category-block"}>
@@ -16,21 +24,37 @@ const FilterCategoryBlock = ({ filter, filterCategoryBlockId,  }) => {
         filter={filter} 
         visible={visible} 
         setVisible={setVisible} 
-        ulRef={ulRef} 
+        blockItemRef={blockItemRef} 
         optionRefs={optionRefs}
         selectedByKeyboardId={selectedByKeyboardId}
         filterCategoryBlockId={filterCategoryBlockId}
-        setUlClassName={setUlClassName}
+        setBlockItemClassName={setBlockItemClassName}
+        variant={variant}
+        elemToFocusRef={elemToFocusRef}
       />
-      <CategoryFilterList 
-        filter={filter} 
-        ref={ulRef} 
-        optionRefs={optionRefs} 
-        selectedByKeyboardId={selectedByKeyboardId} 
-        setSelectedByKeyboardId={setSelectedByKeyboardId}
-        filterCategoryBlockId={filterCategoryBlockId}
-        className={ulClassName}
-      />
+      {variant !== "price"
+        ? (
+          <CategoryFilterList 
+            filter={filter} 
+            ref={blockItemRef} 
+            optionRefs={optionRefs} 
+            selectedByKeyboardId={selectedByKeyboardId} 
+            setSelectedByKeyboardId={setSelectedByKeyboardId}
+            filterCategoryBlockId={filterCategoryBlockId}
+            className={blockItemClassName}
+            variant={variant}
+            elemToFocusRef={elemToFocusRef}
+          />
+        )
+        : (
+          <PriceCategoryFilter
+            className={blockItemClassName}
+            minPriceRef={elemToFocusRef}
+            ref={blockItemRef}
+          />
+        )
+      }
+
     </div>
   );
 }
