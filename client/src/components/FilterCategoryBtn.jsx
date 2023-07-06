@@ -25,7 +25,7 @@ const FilterCategoryBtn = ({
     const nextVisible = !visible;
 
     function draw(progress) {
-      const maxHeight = 195;
+      const maxHeight = 265;
       blockItemRef.current.style.maxHeight = (maxHeight * progress) + "px";
     }
 
