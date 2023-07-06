@@ -4,10 +4,14 @@ aside {
   gap: 20px;
 }
 
-aside input:focus, select:focus {
+aside input, select {
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* aside input:focus, select:focus {
   border: 2px solid #7e95fa;
   outline: none;
-}
+} */
 
 aside > * {
   background-color: #f1f1f1;

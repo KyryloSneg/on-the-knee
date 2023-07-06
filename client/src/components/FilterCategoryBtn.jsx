@@ -3,7 +3,22 @@ import { animate, makeEaseOutLinearQuad, quad } from "../utils/animation";
 import useDebounce from "../hooks/useDebounce";
 import "./styles/FilterCategoryBtn.css";
 
-const FilterCategoryBtn = ({ filter, visible, setVisible, ulRef, optionRefs, selectedByKeyboardId, filterCategoryBlockId, setUlClassName }) => {
+const initialPriceClass = "price-range-form-wrap use-preety-scrollbar";
+const initialFiltersClass = "filters use-preety-scrollbar";
+
+const FilterCategoryBtn = ({ 
+  filter,
+  visible,
+  setVisible, 
+  blockItemRef,
+  optionRefs,
+  filterCategoryBlockId, 
+  setBlockItemClassName,
+  variant, 
+  elemToFocusRef = null, 
+}) => {
+  const isWithSearchField = variant === "withSearchField";
+  const isPrice = variant === "price";
   const animationDuration = 300;
 
   function onClick() {
@@ -11,30 +26,45 @@ const FilterCategoryBtn = ({ filter, visible, setVisible, ulRef, optionRefs, sel
 
     function draw(progress) {
       const maxHeight = 195;
-      ulRef.current.style.maxHeight = (maxHeight * progress) + "px";
+      blockItemRef.current.style.maxHeight = (maxHeight * progress) + "px";
     }
 
     function animationRunHandler() {
       if (nextVisible) {
-        ulRef.current.style.display = "grid";
+        blockItemRef.current.style.display = "grid";
       }
     }
 
     function animationEndHandler() {
       if (nextVisible) {
-        optionRefs.current[selectedByKeyboardId].focus();
-        setUlClassName("filters")
+        if (isWithSearchField || isPrice) {
+          // console.log(optionRefs.current);
+          if (elemToFocusRef) elemToFocusRef.current.focus();
+        } else {
+          optionRefs.current[0].focus();
+        }
+
+        if (isPrice) {
+          setBlockItemClassName(`${initialPriceClass}`) 
+        } else {
+          setBlockItemClassName(`${initialFiltersClass}`)
+        }
       } else {
-        ulRef.current.style.display = "none";
-        setUlClassName("filters collapsed")
+        blockItemRef.current.style.display = "none";
+
+        if (isPrice) {
+          setBlockItemClassName(`${initialPriceClass} collapsed`) 
+        } else {
+          setBlockItemClassName(`${initialFiltersClass} collapsed`) 
+        }
       }
 
-      ulRef.current.removeEventListener("jsAnimationRun", animationRunHandler);
-      ulRef.current.removeEventListener("jsAnimationEnd", animationEndHandler);
+      blockItemRef.current.removeEventListener("jsAnimationRun", animationRunHandler);
+      blockItemRef.current.removeEventListener("jsAnimationEnd", animationEndHandler);
     }
 
-    ulRef.current.addEventListener("jsAnimationRun", animationRunHandler);
-    ulRef.current.addEventListener("jsAnimationEnd", animationEndHandler);
+    blockItemRef.current.addEventListener("jsAnimationRun", animationRunHandler);
+    blockItemRef.current.addEventListener("jsAnimationEnd", animationEndHandler);
     
     const timing = nextVisible ? quad : makeEaseOutLinearQuad(quad);
 
@@ -42,7 +72,7 @@ const FilterCategoryBtn = ({ filter, visible, setVisible, ulRef, optionRefs, sel
       timing: timing,
       draw: draw,
       duration: animationDuration,
-      elem: ulRef.current,
+      elem: blockItemRef.current,
     });
 
     setVisible(nextVisible);

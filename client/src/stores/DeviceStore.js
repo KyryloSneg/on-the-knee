@@ -6,7 +6,7 @@ class DeviceStore {
       "category": ["phones", "TV", "computers"],
       "price": ["20000", "100", "10800", "4030"],
       "brand": ["Apple", "Asus", "LG", "Samsung"],
-      "id": ["21", "3", "99", "47", "23", "3245", "342345", "324325", "34325"],
+      "hz": ["50", "60", "75", "120", "140", "144", "200", "240"],
     }
 
     // just example
@@ -22,6 +22,8 @@ class DeviceStore {
         "Samsung"
       ],
     }
+    this._initialMinPrice = 1300;
+    this._initialMaxPrice = 79900;
     // in the catalog page component or below in the tree we can use these states to calculate devices per page
     // (because we are filtering products on client side not on the server side) 
     this._devices = [];
@@ -80,11 +82,27 @@ class DeviceStore {
   }
 
   setLimit(limit) {
-    this._page = limit;
+    this._limit = limit;
   }
 
   get limit() {
     return this._limit;
+  }
+
+  setInitialMinPrice(initialMinPrice) {
+    this._initialMinPrice = initialMinPrice;
+  }
+
+  get initialMinPrice() {
+    return this._initialMinPrice;
+  }
+
+  setInitialMaxPrice(initialMaxPrice) {
+    this._initialMaxPrice = initialMaxPrice;
+  }
+
+  get initialMaxPrice() {
+    return this._initialMaxPrice;
   }
 }
 
