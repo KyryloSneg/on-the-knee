@@ -22,7 +22,7 @@ const AppRouter = observer(forwardRef((props, ref) => {
         element={<CatalogPage ref={ref} />}
       />
       <Route
-        path={DEVICE_ROUTE}
+        path={DEVICE_ROUTE + ":deviceId"}
         element={<DevicePage ref={ref} />}
       />
       <Route
