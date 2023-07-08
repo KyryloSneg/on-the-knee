@@ -1,5 +1,6 @@
 import DeviceStore from "../stores/DeviceStore";
 
+export const ROOT_ROUTE = "/";
 export const CATALOG_ROUTE = "/catalog";
 export const DEVICE_ROUTE = "/catalog/"; // + :deviceId
 export const CHECKOUT_ROUTE = "/checkout";
