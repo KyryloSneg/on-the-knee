@@ -1,22 +1,21 @@
-import AppRouter from "./components/AppRouter";
-import { BrowserRouter } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import "./App.css";
 import MyFooter from "./components/MyFooter";
 import { useRef } from "react";
+import { Outlet } from "react-router-dom";
 
 function App() {
   // ref for the "skip to next page content" btn
   const pageRef = useRef(null);
 
   return (
-    <BrowserRouter>
+    <div>
       <header>
         <Navbar toFocusRef={pageRef} />
       </header>
-      <AppRouter ref={pageRef} />
+      <Outlet context={pageRef} />
       <MyFooter />
-    </BrowserRouter>
+    </div>  
   );
 }
 
