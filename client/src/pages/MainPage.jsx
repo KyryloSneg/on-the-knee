@@ -1,11 +1,15 @@
-import { forwardRef } from "react";
+import { useOutletContext } from "react-router-dom";
 
-const MainPage = forwardRef((props, ref) => {
+const MainPage = () => {
+  // temporary ignoring linter
+  // eslint-disable-next-line
+  const pageRef = useOutletContext();
+
   return (
     <div>
       MainPage
     </div>
   );
-});
+};
 
 export default MainPage;

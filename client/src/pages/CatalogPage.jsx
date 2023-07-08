@@ -2,10 +2,12 @@ import Dropdown from "../components/UI/dropdown/Dropdown";
 import TopFilterBar from "../components/TopFilterBar";
 import Aside from "../components/Aside";
 import "./styles/CatalogPage.css";
-import { forwardRef } from "react";
 import useWindowWidth from "../hooks/useWindowWidth";
+import DeviceSection from "../components/DeviceSection";
+import { useOutletContext } from "react-router-dom";
 
-const CatalogPage = forwardRef((props, ref) => {
+const CatalogPage = () => {
+  const pageRef = useOutletContext();
   const windowWidth = useWindowWidth();
 
   return (
@@ -15,21 +17,22 @@ const CatalogPage = forwardRef((props, ref) => {
       {windowWidth >= 800 
         ? (
           <div className="ref-purpose-only display-grid">
-            <Dropdown variant="sorting-filter" paramKey="sort" ref={ref} />
+            <Dropdown variant="sorting-filter" paramKey="sort" ref={pageRef} />
           </div>
         )
         : (
           <div className="ref-purpose-only display-grid">
-            <TopFilterBar ref={ref} />
+            <TopFilterBar ref={pageRef} />
             <Dropdown variant="sorting-filter" paramKey="sort" />
           </div>
         )
       }
       <div id="wrapper">
         <Aside />
+        <DeviceSection />
       </div>
     </div>
   );
-});
+};
 
 export default CatalogPage;

@@ -1,11 +1,15 @@
-import { forwardRef } from "react";
+import { useOutletContext } from "react-router-dom";
 
-const ErrorPage = forwardRef((props, ref) => {
+const ErrorPage = () => {
+  // temporary ignoring linter
+  // eslint-disable-next-line
+  const pageRef = useOutletContext();
+  
   return (
     <div>
       ErrorPage
     </div>
   );
-});
+};
 
 export default ErrorPage;
