@@ -9,16 +9,16 @@ const SearchField = forwardRef(({ query, setQuery, setFilteredValues, filter, fi
   function filterValues(query) {
     const nextFilteredValues = deviceStore.filters[filter].filter(value => {
       if (query === "") return true;
-      return value.toLowerCase().includes(query.toLowerCase());
+      return value.trim().toLowerCase().includes(query.trim().toLowerCase());
     });
 
-    setFilteredValues(nextFilteredValues)
+    setFilteredValues(nextFilteredValues);
   }
 
   const debouncedFilterValues = useDebounce(query => filterValues(query), 200);
 
   function onChange(e) {
-    const nextQuery = e.target.value.trim();
+    const nextQuery = e.target.value;
     setQuery(nextQuery);
 
     debouncedFilterValues(nextQuery);
