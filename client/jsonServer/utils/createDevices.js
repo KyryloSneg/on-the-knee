@@ -45,8 +45,9 @@ async function createDevices() {
       "brandId": brandId,
       "colorId": deviceColor.id,
       // device info will be array because it doesn't work in any other way, so in order to get it you need to use 0 index
-      "deviceInfosId": deviceInfos.id,
+      "deviceInfosId": deviceInfos.id, 
       "thumbnail": dummyJsonDevices.products[i - 1].thumbnail,
+      // images of 'default' color (right now ther's no difference) 
       "images": dummyJsonDevices.products[i - 1].images,
     }
 
