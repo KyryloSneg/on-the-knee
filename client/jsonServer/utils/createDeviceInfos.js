@@ -3,7 +3,7 @@ const { POSSIBLE_DEVICE_INFOS } = require('./consts');
 
 module.exports = (deviceInfos, deviceCategory, infoId, deviceId) => {
   const possibleDeviceInfos = POSSIBLE_DEVICE_INFOS[deviceCategory];
-  if (!possibleDeviceInfos) return {};
+  if (!possibleDeviceInfos) return [];
 
   const infos = possibleDeviceInfos[faker.number.int({ min: 0, max: possibleDeviceInfos.length - 1 })];
   let infoItems = [];
