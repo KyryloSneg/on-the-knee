@@ -25,7 +25,7 @@ async function createDevices() {
     const category = dummyJsonDevices.products[i - 1].category;
 
     const deviceRatingsValues = createDeviceRatings(ratings, ratingId, i); // ratings of the device of current iteration
-    const deviceColor = createDeviceColor(colors, i, i, dummyJsonDevices.products[i - 1].images, dummyJsonDevices.products[i - 1].thumbnail);
+    const deviceColor = createDeviceColor(colors, i, i, dummyJsonDevices.products[i - 1].images);
     
     const categoryId = categoryValues.indexOf(category) + 1;
     const brandId = brandValues.indexOf(dummyJsonDevices.products[i - 1].brand) + 1;
@@ -45,9 +45,10 @@ async function createDevices() {
       "brandId": brandId,
       "colorId": deviceColor.id,
       // device info will be array because it doesn't work in any other way, so in order to get it you need to use 0 index
-      "deviceInfosId": deviceInfos.id,
-      // "thumbnail": dummyJsonDevices.products[i - 1].thumbnail,
-      // "images": dummyJsonDevices.products[i - 1].images,
+      "deviceInfosId": deviceInfos.id, 
+      "thumbnail": dummyJsonDevices.products[i - 1].thumbnail,
+      // images of 'default' color (right now ther's no difference) 
+      "images": dummyJsonDevices.products[i - 1].images,
     }
 
     devices.push(device);
