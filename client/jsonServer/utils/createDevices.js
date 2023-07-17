@@ -25,7 +25,7 @@ async function createDevices() {
     const category = dummyJsonDevices.products[i - 1].category;
 
     const deviceRatingsValues = createDeviceRatings(ratings, ratingId, i); // ratings of the device of current iteration
-    const deviceColor = createDeviceColor(colors, i, i);
+    const deviceColor = createDeviceColor(colors, i, i, dummyJsonDevices.products[i - 1].images);
     
     const categoryId = categoryValues.indexOf(category) + 1;
     const brandId = brandValues.indexOf(dummyJsonDevices.products[i - 1].brand) + 1;
