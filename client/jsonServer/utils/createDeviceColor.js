@@ -1,7 +1,11 @@
 const { faker } = require('@faker-js/faker');
 const { POSSIBLE_COLORS } = require("./consts");
+const createDeviceCode = require('./createDeviceCode');
+const createMpn = require('./createMpn');
 
 module.exports = function createDeviceColor(colorsArray, colorsId, deviceId, images) {
+  const baseMpn = faker.number.int({min: 100, max: 999});
+
   const colors = {
     "id": colorsId,
     "deviceId": deviceId,
@@ -9,6 +13,8 @@ module.exports = function createDeviceColor(colorsArray, colorsId, deviceId, ima
       return {
         ...item,
         "images": images, // images for the device page
+        "device-code": createDeviceCode(),
+        "mpn": createMpn(baseMpn),
       };
     }),
   }
