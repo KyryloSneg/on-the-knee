@@ -22,10 +22,11 @@ async function createDevices() {
   let ratingId = 1;
 
   for (let i = 1; i <= 100; i++) {
+    const baseMpn = faker.number.int({min: 100, max: 999});
     const category = dummyJsonDevices.products[i - 1].category;
 
     const deviceRatingsValues = createDeviceRatings(ratings, ratingId, i); // ratings of the device of current iteration
-    const deviceColor = createDeviceColor(colors, i, i, dummyJsonDevices.products[i - 1].images);
+    const deviceColor = createDeviceColor(colors, i, i, dummyJsonDevices.products[i - 1].images, baseMpn);
     
     const categoryId = categoryValues.indexOf(category) + 1;
     const brandId = brandValues.indexOf(dummyJsonDevices.products[i - 1].brand) + 1;
