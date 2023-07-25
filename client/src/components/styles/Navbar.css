@@ -98,7 +98,7 @@ nav .skip-to-next-page-content p {
   }
 }
 
-@media screen and (min-width: 810px) {
+@media screen and (min-width: 900px) {
   nav {
     grid-template-columns: auto 1fr;
     grid-template-rows: 1fr;
