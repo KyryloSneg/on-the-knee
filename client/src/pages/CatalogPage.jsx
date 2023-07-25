@@ -3,7 +3,7 @@ import TopFilterBar from "../components/TopFilterBar";
 import Aside from "../components/Aside";
 import "./styles/CatalogPage.css";
 import useWindowWidth from "../hooks/useWindowWidth";
-import DeviceSection from "../components/DeviceSection";
+// import DeviceSection from "../components/DeviceSection";
 import { useOutletContext } from "react-router-dom";
 
 const CatalogPage = () => {
@@ -29,7 +29,7 @@ const CatalogPage = () => {
       }
       <div id="wrapper">
         <Aside />
-        <DeviceSection />
+        {/* <DeviceSection /> */}
       </div>
     </div>
   );
