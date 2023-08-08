@@ -7,6 +7,7 @@ const createSellers = require('./createSellers');
 const createAttributes = require("./createAttributes");
 const createDeviceInfos = require("./createDeviceInfos");
 const createDeviceCombinations = require("./createDeviceCombinations");
+const createAdditionalServices = require("./createAdditionalServices");
 
 module.exports = async () => {
 
@@ -36,6 +37,9 @@ module.exports = async () => {
   let attributeNames = [];
   let attributeValues = [];
 
+  let additionalServices = [];
+  let additionalServiceDevices = [];
+
   dummyDevices.map((dev, i) => {
     const brand = brands[faker.number.int({ min: 0, max: brands.length - 1 })];
     const category = categories[faker.number.int({ min: 0, max: categories.length - 1 })];
@@ -46,6 +50,7 @@ module.exports = async () => {
 
     createDeviceInfos(dev.id, category.slug, deviceInfos, deviceAttributeNames);
     createDeviceCombinations(dev.id, deviceAttributeValues, deviceCombinations, stocks);
+    createAdditionalServices(dev.id, devices, additionalServices, additionalServiceDevices);
 
     const device = {
       "id": dev.id,
@@ -80,6 +85,9 @@ module.exports = async () => {
     attributes,
     attributeNames,
     attributeValues,
+
+    additionalServices,
+    additionalServiceDevices,
   }
 
 } 
