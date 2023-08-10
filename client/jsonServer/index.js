@@ -74,6 +74,11 @@ module.exports = function createData () {
 
     data["additional-services"] = result.additionalServices;
     data["additional-service-devices"] = result.additionalServiceDevices;
+
+    data["sales"] = result.sales;
+    data["sale-types"] = result.saleTypes;
+    data["sale-type-names"] = result.saleTypeNames;
+    data["sale-devices"] = result.saleDevices;
   });
   
   return data;
