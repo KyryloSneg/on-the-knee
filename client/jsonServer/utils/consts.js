@@ -184,6 +184,61 @@ const POSSIBLE_DEVICE_ATTRIBUTES = {
   },
 }
 
+// country => oblast / voivodeship => city => (district || null) && streets => house numbers
+const STORE_LOCATIONS = {
+  "Ukraine": {
+    "Zhytomyr Oblast": {
+      "Zhytomyr": {
+        "district": "Zhytomyr district",
+        "type": "big-city",
+        "streets": {
+          "Velyka Berdychivska Street": [60, 30],
+          "Chudnivska Street": [54],
+        }
+      },
+
+      "Korosten'": {
+        "district": "Korosten' district",
+        "type": "city",
+        "streets": {
+          "Mykhaila Hrushevskoho": [30, 53],
+        }
+      }
+    },
+
+    "Kyiv Oblast": {
+      "Kyiv": {
+        "district": null,
+        "type": "big-city",
+        "streets": {
+          "Khreshchatyk Street": [14, 18],
+          "Peremohy Ave": [93, 56],
+        }
+      },
+
+      "Brovary": {
+        "district": "Brovary district",
+        "type": "city",
+        "streets": {
+          "Kyiv Street": [160, 180],
+        },
+      }
+    },
+  },
+
+  "Poland": {
+    "Lublin Voivodeship": {
+      "Lublin": {
+        "district": "Lublin County",
+        "type": "big-city",
+        "streets": {
+          "al. Solidarnosci": [61, 32],
+        }
+      }
+    }
+  },
+}
+
 const POSSIBLE_SALE_TYPE_NAMES = ["discount", "freeDelivery"];
 
 const LOGO_HEIGHT = 40;
@@ -217,6 +272,7 @@ module.exports = {
   POSSIBLE_DEVICE_INFOS,
   POSSIBLE_DEVICE_ATTRIBUTES,
   POSSIBLE_SALE_TYPE_NAMES,
+  STORE_LOCATIONS,
 
   LOGO_HEIGHT,
   LOGO_WIDTH,
