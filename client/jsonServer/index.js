@@ -1,4 +1,6 @@
 const createDevices = require("./utils/createDevices");
+const createLocations = require("./utils/createLocations");
+const initializeEnvVars = require("./utils/initializeJsonServerEnvVars");
 
 module.exports = function createData () {
   const data = {
@@ -39,7 +41,7 @@ module.exports = function createData () {
     "cities": [],
     "streets": [],
 
-    "store-locations": [],
+    "store-pickup-points": [],
     "courier-schedules": [],
 
     "receivents": [],
@@ -49,6 +51,17 @@ module.exports = function createData () {
     "orders": [],
     "order-device-combinations": [],
   };
+
+  initializeEnvVars();
+  
+  createLocations().then(result => {
+    data["countries"] = result.countries;
+    data["regions"] = result.regions;
+    data["districts"] = result.districts;
+    data["cities"] = result.cities;
+    data["streets"] = result.streets;
+    data["store-pickup-points"] = result.storePickupPoints;
+  });
 
   createDevices().then(result => {
     console.log("finished");
