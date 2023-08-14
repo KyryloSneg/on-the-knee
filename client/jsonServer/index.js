@@ -1,4 +1,5 @@
 const createCourierSchedules = require("./utils/createCourierSchedules");
+const createDeliveries = require("./utils/createDeliveries");
 const createDevices = require("./utils/createDevices");
 const createLocations = require("./utils/createLocations");
 const initializeEnvVars = require("./utils/initializeJsonServerEnvVars");
@@ -51,6 +52,9 @@ module.exports = function createData () {
 
     "orders": [],
     "order-device-combinations": [],
+
+    "deliveries": [],
+    "delivery-types": [],
   };
 
   initializeEnvVars();
@@ -63,31 +67,32 @@ module.exports = function createData () {
     data["streets"] = result.streets;
     data["store-pickup-points"] = result.storePickupPoints;
 
-    data["courier-schedules"] = createCourierSchedules(result.cities);
+    const { deliveryTypes, deliveries, courierCities } = createDeliveries(result.cities);
+    data["delivery-types"] = deliveryTypes;
+    data["deliveries"] = deliveries;
+    data["courier-schedules"] = createCourierSchedules(courierCities);
   });
 
   createDevices().then(result => {
-    console.log("finished");
-
     data["devices"] = result.devices;
     data["device-feedbacks"] = result.deviceFeedbacks;
     data["device-feedback-replies"] = result.deviceFeedbackReplies;
     data["device-infos"] = result.deviceInfos;
     data["device-combinations"] = result.deviceCombinations;
-
+    
     data["stocks"] = result.stocks;
-
+    
     data["brands"] = result.brands;
     data["categories"] = result.categories;
-
+    
     data["sellers"] = result.sellers;
     data["seller-feedbacks"] = result.sellerFeedbacks;
     data["seller-feedback-replies"] = result.sellerFeedbackReplies;
-
+    
     data["attributes"] = result.attributes;
     data["attribute-names"] = result.attributeNames;
     data["attribute-values"] = result.attributeValues;
-
+    
     data["additional-services"] = result.additionalServices;
     data["additional-service-devices"] = result.additionalServiceDevices;
 
@@ -95,6 +100,8 @@ module.exports = function createData () {
     data["sale-types"] = result.saleTypes;
     data["sale-type-names"] = result.saleTypeNames;
     data["sale-devices"] = result.saleDevices;
+    
+    console.log("finished");
   });
   
   return data;
