@@ -1,3 +1,4 @@
+const createCourierSchedules = require("./utils/createCourierSchedules");
 const createDevices = require("./utils/createDevices");
 const createLocations = require("./utils/createLocations");
 const initializeEnvVars = require("./utils/initializeJsonServerEnvVars");
@@ -61,6 +62,8 @@ module.exports = function createData () {
     data["cities"] = result.cities;
     data["streets"] = result.streets;
     data["store-pickup-points"] = result.storePickupPoints;
+
+    data["courier-schedules"] = createCourierSchedules(result.cities);
   });
 
   createDevices().then(result => {
