@@ -68,8 +68,7 @@ module.exports = async () => {
       "brandId": brand.id,
       "categoryId": category.id,
       "sellerId": seller.id,
-      "isPreOrder": faker.number.int({ min: 1, max: 5 }) === 10, // 20% chance 
-    }
+    };
 
     devices.push(device);
   });
