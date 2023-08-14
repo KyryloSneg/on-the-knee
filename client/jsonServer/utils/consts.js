@@ -240,6 +240,22 @@ const STORE_LOCATIONS = {
 }
 
 const POSSIBLE_SALE_TYPE_NAMES = ["discount", "freeDelivery"];
+const POSSIBLE_SCHEDULE_TIME_RANGES = {
+  2: [
+    {
+      1: "10:00-16:00",
+      2: "16:00-22:00",
+    },
+    {
+      1: "11:00-17:00",
+      2: "17:00-23:00",
+    },
+    {
+      1: "9:00-15:00",
+      2: "15:00-21:00",
+    }
+  ]
+}
 
 const LOGO_HEIGHT = 40;
 const LOGO_WIDTH = 40;
@@ -272,6 +288,7 @@ module.exports = {
   POSSIBLE_DEVICE_INFOS,
   POSSIBLE_DEVICE_ATTRIBUTES,
   POSSIBLE_SALE_TYPE_NAMES,
+  POSSIBLE_SCHEDULE_TIME_RANGES,
   STORE_LOCATIONS,
 
   LOGO_HEIGHT,
