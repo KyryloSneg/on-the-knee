@@ -1,7 +1,6 @@
 const { faker } = require("@faker-js/faker");
 const { POSSIBLE_SALE_TYPE_NAMES, MIN_SALE_IMAGE_WIDTH, MAX_SALE_IMAGE_WIDTH, MAX_SALE_IMAGE_HEIGHT, MIN_SALE_IMAGE_HEIGHT } = require("./consts");
 const createSaleTypes = require("./createSaleTypes");
-const StringActions = require("./StringActions");
 const DateActions = require("./DateActions");
 
 module.exports = (sales, saleTypes, saleTypeNames) => {
