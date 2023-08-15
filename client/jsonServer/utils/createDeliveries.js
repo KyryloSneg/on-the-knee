@@ -19,7 +19,6 @@ module.exports = (cities) => {
   }
 
   for (let city of cities) {
-    console.log(city["isAccessible"]);
     if (!city["isAccessible"]) continue;
 
     let cityDelTypeIds = [];
