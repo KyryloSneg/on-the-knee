@@ -11,10 +11,6 @@ module.exports = () => {
   for (let i = 0; i < 10; i++) {
     const rating = createSellerFeedbacks(sellerFeedbacks, sellerFeedbackReplies, sellers.length + 1);
     const name = faker.company.name();
-
-    // let slug = name.replace( /\p{P}/gu, "").split(" "); // deleting every punctuation mark
-    // slug = slug.filter(word => word); // delete every empty string
-    // slug = slug.join("-").toLowerCase();
     const slug = StringActions.nameToSlug(name);
 
     const seller = {
