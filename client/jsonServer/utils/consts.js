@@ -238,6 +238,9 @@ const STORE_LOCATIONS = {
     }
   },
 }
+
+const USERS = []; // we must fill it up in the near future after we'll create real users
+
 const POSSIBLE_DELIVERY_TYPES = { "courier": 5, "self-delivery": 0 }; 
 const POSSIBLE_SALE_TYPE_NAMES = ["discount", "freeDelivery"];
 const POSSIBLE_SCHEDULE_TIME_RANGES = {
@@ -255,7 +258,8 @@ const POSSIBLE_SCHEDULE_TIME_RANGES = {
       2: "15:00-21:00",
     }
   ]
-}
+};
+const POSSIBLE_ORDER_STATUSES = ["Cancelled", "Pending", "Paid", "Confirmed", "Done"];
 
 const LOGO_HEIGHT = 40;
 const LOGO_WIDTH = 40;
@@ -285,6 +289,8 @@ const MAX_FEEDBACK_IMAGE_HEIGHT = 350;
 const MAX_FEEDBACK_IMAGE_WIDTH = 400;
 
 module.exports = {
+  USERS,
+
   POSSIBLE_DEVICE_INFOS,
   POSSIBLE_DEVICE_ATTRIBUTES,
 
@@ -292,6 +298,7 @@ module.exports = {
   POSSIBLE_SALE_TYPE_NAMES,
   POSSIBLE_SCHEDULE_TIME_RANGES,
   STORE_LOCATIONS,
+  POSSIBLE_ORDER_STATUSES,
 
   LOGO_HEIGHT,
   LOGO_WIDTH,
