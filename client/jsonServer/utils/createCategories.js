@@ -2,7 +2,7 @@ const { faker } = require("@faker-js/faker");
 const { MIN_CATEGORY_IMAGE_WIDTH, MAX_CATEGORY_IMAGE_WIDTH, MIN_CATEGORY_IMAGE_HEIGHT, MAX_CATEGORY_IMAGE_HEIGHT } = require("./consts");
 const StringActions = require("./StringActions");
 
-module.exports = (categorySlugs, brands) => {
+module.exports = (categorySlugs) => {
 	let categories = [];
 
 	for (let slug of categorySlugs) {
@@ -15,11 +15,7 @@ module.exports = (categorySlugs, brands) => {
 			parentId = faker.number.int({ min: 1, max: categories.length });
 		}
 
-		// let name = slug.split("-").join(" ");
-		// name = name[0].toUpperCase() + name.slice(1);
-
 		const name = StringActions.slugToName(slug);
-
 		const category = {
 			"id": categories.length + 1,
 			"parent-categoryId": parentId,

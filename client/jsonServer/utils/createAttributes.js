@@ -59,8 +59,6 @@ module.exports = (deviceId, categorySlug, attributes, attributeNames, attributeV
       }
 
       deviceAttributeValues[attrName.name] = tempValues;
-      // console.log(deviceAttributeValues);
-
     }
   }
 
