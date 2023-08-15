@@ -1,5 +1,7 @@
+const createCarts = require("./utils/createCarts");
 const createCourierSchedules = require("./utils/createCourierSchedules");
 const createDeliveries = require("./utils/createDeliveries");
+const createDesiredList = require("./utils/createDesiredList");
 const createDevices = require("./utils/createDevices");
 const createLocations = require("./utils/createLocations");
 const createOrders = require("./utils/createOrders");
@@ -35,7 +37,7 @@ module.exports = function createData () {
     "cart-devices": [],
 
     "desired-lists": [],
-    "desired-devices": [],
+    "desired-list-devices": [],
 
     "countries": [],
     "regions": [],
@@ -100,6 +102,14 @@ module.exports = function createData () {
     data["sale-types"] = result.saleTypes;
     data["sale-type-names"] = result.saleTypeNames;
     data["sale-devices"] = result.saleDevices;
+
+    const { carts, cartDevices } = createCarts(result.devices);
+    data["carts"] = carts;
+    data["cart-devices"] = cartDevices;
+
+    const { desiredLists, desiredListDevices } = createDesiredList(result.devices);
+    data["desired-lists"] = desiredLists;
+    data["desired-list-devices"] = desiredListDevices;
   });
   
   Promise.all([locationsPromise, devicesPromise]).then(() => {
