@@ -23,7 +23,6 @@ module.exports = function createData () {
     "categories": [],
     "brands": [],
     "device-infos": [],
-    "payment-infos": [],
 
     "additional-services": [],
     "additional-service-devices": [],
