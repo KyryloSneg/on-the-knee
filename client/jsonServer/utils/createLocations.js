@@ -38,11 +38,13 @@ module.exports = async () => {
         }
 
         const currentDistrict = districts[districts.length - 1];
+        const dbCityId = cities.length + 1;
+
         const dbCity = {
-          "id": cities.length + 1,
+          "id": dbCityId,
           "regionId": dbRegion.id,
           "districtId": currentDistrict.id,
-          "type": cityInfo.type,
+          "isAccessible": dbCityId === 1 || !faker.datatype.boolean(0.15), // we guarantee that there will be at least one accessible city
           "name": StringActions.capitalize(city),
         }
         cities.push(dbCity);
