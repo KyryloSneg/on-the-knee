@@ -34,6 +34,10 @@ module.exports = (deviceId, attributeValues, deviceCombinations, stocks) => {
 
       const id = deviceCombinations.length + 1;
 
+      const dollars = Number(faker.commerce.price({ min: 5, max: 4000 }).split(".")[0]);
+      const cents = faker.number.int({ min: 0, max: 9 }) / 10;
+      const price = (dollars + cents).toFixed(2);
+
       const stock = createStock(id, stocks);
       const deviceCombination = {
         "id": deviceCombinations.length + 1,
@@ -42,7 +46,8 @@ module.exports = (deviceId, attributeValues, deviceCombinations, stocks) => {
         "sku": faker.string.alphanumeric({ length: { min: 8, max: 15 } }),
         "deviceCode": faker.number.int({ min: 100000000, max: 999999999 }),
         "stockId": stock.id,
-        "price": faker.commerce.price(),
+        // Number() doesn't work properly 'cause of the json format, so we must parse it on the frontend side
+        "price": price,
         "thumbnail": thumbnail,
         "images": images,
         "default": combinationString.indexOf(combo) === defaultComboId,
