@@ -2,6 +2,7 @@ const createCourierSchedules = require("./utils/createCourierSchedules");
 const createDeliveries = require("./utils/createDeliveries");
 const createDevices = require("./utils/createDevices");
 const createLocations = require("./utils/createLocations");
+const createOrders = require("./utils/createOrders");
 const initializeEnvVars = require("./utils/initializeJsonServerEnvVars");
 
 module.exports = function createData () {
@@ -59,7 +60,7 @@ module.exports = function createData () {
 
   initializeEnvVars();
   
-  createLocations().then(result => {
+  const locationsPromise = createLocations().then(result => {
     data["countries"] = result.countries;
     data["regions"] = result.regions;
     data["districts"] = result.districts;
@@ -73,7 +74,7 @@ module.exports = function createData () {
     data["courier-schedules"] = createCourierSchedules(courierCities);
   });
 
-  createDevices().then(result => {
+  const devicesPromise = createDevices().then(result => {
     data["devices"] = result.devices;
     data["device-feedbacks"] = result.deviceFeedbacks;
     data["device-feedback-replies"] = result.deviceFeedbackReplies;
@@ -100,7 +101,15 @@ module.exports = function createData () {
     data["sale-types"] = result.saleTypes;
     data["sale-type-names"] = result.saleTypeNames;
     data["sale-devices"] = result.saleDevices;
-    
+  });
+  
+  Promise.all([locationsPromise, devicesPromise]).then(() => {
+    const orderResult = createOrders(data["devices"], data["device-combinations"], data["deliveries"],
+                                     data["delivery-types"], data["cities"], data["streets"],
+                                     data["store-pickup-points"], data["courier-schedules"]);
+    data["orders"] = orderResult.orders;
+    data["order-device-combinations"] = orderResult.orderDeviceCombinations;
+    data["receivents"] = orderResult.receivents;
     console.log("finished");
   });
   
