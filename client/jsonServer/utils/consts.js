@@ -240,6 +240,7 @@ const STORE_LOCATIONS = {
 }
 
 const USERS = []; // we must fill it up in the near future after we'll create real users
+const USER_IDS = ["something", "huhigu-uohy-f796734", "gyrt65-343-434665-ffdfd", "6564nn-jihg0-3434fd-f"]; // temporary solution
 
 const POSSIBLE_DELIVERY_TYPES = { "courier": 5, "self-delivery": 0 }; 
 const POSSIBLE_SALE_TYPE_NAMES = ["discount", "freeDelivery"];
@@ -290,6 +291,7 @@ const MAX_FEEDBACK_IMAGE_WIDTH = 400;
 
 module.exports = {
   USERS,
+  USER_IDS,
 
   POSSIBLE_DEVICE_INFOS,
   POSSIBLE_DEVICE_ATTRIBUTES,
