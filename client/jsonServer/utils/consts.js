@@ -151,10 +151,18 @@ const STORE_LOCATIONS = {
   },
 }
 
-const USERS = []; // we must fill it up in the near future after we'll create real users
-const USER_IDS = ["something", "huhigu-uohy-f796734", "gyrt65-343-434665-ffdfd", "6564nn-jihg0-3434fd-f"]; // temporary solution
+const USERS = [
+  {
+    "_id": { "$oid": "64e367f69f8167945dcb4a1b" },
+    "name": "user",
+    "surname": "user",
+    "roles": ["PUBLIC", "ORDER-MANAGER", "CONTENT-MANAGER", "SELLER", "OWNER"],
+    "email": "onthekneeauth@gmail.com",
+    "phoneNumber": "+380 95 532 9384"
+  },
+];
 
-const POSSIBLE_DELIVERY_TYPES = { "courier": 5, "self-delivery": 0 }; 
+const POSSIBLE_DELIVERY_TYPES = { "courier": 5, "self-delivery": 0 };
 const POSSIBLE_SALE_TYPE_NAMES = ["discount", "freeDelivery"];
 const POSSIBLE_SCHEDULE_TIME_RANGES = {
   2: [
@@ -203,7 +211,6 @@ const MAX_FEEDBACK_IMAGE_WIDTH = 400;
 
 module.exports = {
   USERS,
-  USER_IDS,
 
   POSSIBLE_DEVICE_INFOS,
   POSSIBLE_DEVICE_ATTRIBUTES,
@@ -237,7 +244,7 @@ module.exports = {
 
   MAX_CATEGORY_IMAGE_HEIGHT,
   MAX_CATEGORY_IMAGE_WIDTH,
-  
+
   MAX_FEEDBACK_IMAGE_HEIGHT,
   MAX_FEEDBACK_IMAGE_WIDTH,
 }

@@ -3,6 +3,7 @@ const createReceivents = require("./createReceivents");
 const { USERS, POSSIBLE_ORDER_STATUSES } = require("./consts");
 const createOrderDeviceCombinations = require("./createOrderDeviceCombinations");
 const createOrderName = require("./createOrderName");
+const { parsePhoneNumber } = require("libphonenumber-js");
 
 module.exports = (devices, deviceCombinations, deliveries, deliveryTypes, cities, streets, storePickupPoints, courierSchedules) => {
   let orders = [];
@@ -12,8 +13,11 @@ module.exports = (devices, deviceCombinations, deliveries, deliveryTypes, cities
   for (let i = 0; i < 30; i++) {
     const id = orders.length + 1;
     // both authorized and unauthorized users can checkout their order
-    // const user = null;
-    const user = faker.datatype.boolean(0.5) && USERS.length ? USERS[faker.number.int({ min: 0, max: USERS.length - 1 })] : null;
+    const isAuth = faker.datatype.boolean(0.5);
+    let user;
+    if (isAuth) {
+      user = USERS.length ? USERS[faker.number.int({ min: 0, max: USERS.length - 1 })] : USERS[0];
+    }
     const receivent = receivents[faker.number.int({ min: 0, max: receivents.length - 1 })];
 
     const delivery = deliveries[faker.number.int({ min: 0, max: deliveries.length - 1 })];
@@ -30,7 +34,17 @@ module.exports = (devices, deviceCombinations, deliveries, deliveryTypes, cities
     let phoneNumber = null;
     
     if (user) {
-      // TODO: if authorized user checkouted an order we must assign the user data to the next vars: name, surname, email and phoneNumber 
+      name = user.name;
+      surname = user.surname;
+      email = user.email;
+      phoneNumber = user.phoneNumber; 
+    } else {
+      name = faker.person.firstName();
+      surname = faker.person.lastName();
+      email = faker.internet.email();
+      const numberObj = parsePhoneNumber(faker.phone.number("+380 ## ### ####"));
+      const internationalNumber = numberObj.formatInternational();
+      phoneNumber = internationalNumber;
     }
     
     const info = faker.lorem.word({ length: { min: 8, max: 14 } });
@@ -67,7 +81,7 @@ module.exports = (devices, deviceCombinations, deliveries, deliveryTypes, cities
       "phoneNumber": phoneNumber,
       "devicesPrice": additionalInfo.sum,
       "deliveryPrice": deliveryPrice,
-      "totalPrice": additionalInfo.sum + deliveryPrice,
+      "totalPrice": (+additionalInfo.sum + +deliveryPrice).toFixed(2),
       "totalDeviceAmount": additionalInfo.amount,
       "status": status,
       "orderName": orderName,
