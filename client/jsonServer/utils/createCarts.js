@@ -1,15 +1,15 @@
 const { faker } = require("@faker-js/faker");
-const { USER_IDS } = require("./consts");
+const { USERS } = require("./consts");
 const createCartDevices = require("./createCartDevices");
 
 module.exports = (devices) => {
   let carts = [];
   let cartDevices = [];
 
-  for (let id of USER_IDS) { // TODO: change USER_IDS to USERS in future
+  for (let user of USERS) {
     const cart = {
       "id": faker.string.uuid(),
-      "userId": id,
+      "userId": user._id,
     };
 
     createCartDevices(cartDevices, cart.id, devices);
