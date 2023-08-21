@@ -16,8 +16,11 @@ const { parsePhoneNumber } = require('libphonenumber-js');
 
 class UserService {
     async registration(name, surname, password, email, phoneNumber, ip) {
+        const numberObj = parsePhoneNumber(phoneNumber);
+        const internationalNumber = numberObj.formatInternational();
+
         const emailCandidate = await UserAddressModel.findOne({email: email});
-        const phoneNumberCandidate = await UserAddressModel.findOne({phoneNumber: phoneNumber});
+        const phoneNumberCandidate = await UserAddressModel.findOne({phoneNumber: internationalNumber});
         if (emailCandidate || phoneNumberCandidate) {
             throw ApiError.BadRequest(`User with such a email ${email} or phone number ${phoneNumber} already exists`);
         }
@@ -27,8 +30,6 @@ class UserService {
         const userRole = await RoleModel.findOne({ value: "PUBLIC" });
         const user = await UserModel.create({ name: name, surname: surname, password: hashPassword, roles: [userRole.value]});
 
-        const numberObj = parsePhoneNumber(phoneNumber);
-        const internationalNumber = numberObj.formatInternational();
         const userAddress = await UserAddressModel.create({ user: user._id, email: email, phoneNumber: internationalNumber });
 
         const activationInfo = await ActivationInfoModel.create({ user: user._id, isActivated: false, activationLink: activationLink });
