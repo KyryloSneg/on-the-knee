@@ -25,5 +25,6 @@ module.exports = (combinations, orderId, devices, deviceCombinations) => {
     additionalInfo.amount += amount;
   }
 
+  additionalInfo.sum = additionalInfo.sum.toFixed(2);
   return { currOrderCombo, additionalInfo };
 }
