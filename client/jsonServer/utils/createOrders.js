@@ -5,7 +5,10 @@ const createOrderDeviceCombinations = require("./createOrderDeviceCombinations")
 const createOrderName = require("./createOrderName");
 const { parsePhoneNumber } = require("libphonenumber-js");
 
-module.exports = (devices, deviceCombinations, deliveries, deliveryTypes, cities, streets, storePickupPoints, courierSchedules) => {
+module.exports = (
+  devices, deviceCombinations, deliveries,
+  deliveryTypes, cities, streets, storePickupPoints,
+  courierSchedules, saleDevices, sales, saleTypes) => {
   let orders = [];
   let orderDeviceCombinations = [];
   const receivents = createReceivents();
@@ -24,7 +27,7 @@ module.exports = (devices, deviceCombinations, deliveries, deliveryTypes, cities
     const deliveryType = deliveryTypes[delivery["delivery-typeId"] - 1];
     const deliveryPrice = delivery.price || deliveryType.price;
     
-    const { additionalInfo } = createOrderDeviceCombinations(orderDeviceCombinations, id, devices, deviceCombinations);
+    const { additionalInfo } = createOrderDeviceCombinations(orderDeviceCombinations, id, devices, deviceCombinations, saleDevices, sales, saleTypes);
     const orderName = createOrderName(id, additionalInfo.names);
     const status = POSSIBLE_ORDER_STATUSES[faker.number.int({ min: 0, max: POSSIBLE_ORDER_STATUSES.length - 1 })];
     
