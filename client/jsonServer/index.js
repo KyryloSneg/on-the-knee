@@ -115,7 +115,8 @@ module.exports = function createData () {
   Promise.all([locationsPromise, devicesPromise]).then(() => {
     const orderResult = createOrders(data["devices"], data["device-combinations"], data["deliveries"],
                                      data["delivery-types"], data["cities"], data["streets"],
-                                     data["store-pickup-points"], data["courier-schedules"]);
+                                     data["store-pickup-points"], data["courier-schedules"],
+                                     data["sale-devices"], data["sales"], data["sale-types"]);
     data["orders"] = orderResult.orders;
     data["order-device-combinations"] = orderResult.orderDeviceCombinations;
     data["receivents"] = orderResult.receivents;
