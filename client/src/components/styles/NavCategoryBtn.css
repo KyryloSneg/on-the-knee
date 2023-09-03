@@ -1,16 +1,9 @@
-.nav-category-button {
-  background-color: #6d6d6d;
+button.nav-category-button {
   display: none;
-  flex: 1;
-  gap: 5px;
-}
-
-.nav-category-button:hover {
-  background-color: #929292;;
 }
 
 @media screen and (min-width: 550px) {
-  .nav-category-button {
+  button.nav-category-button {
     display: flex;
   }
 }

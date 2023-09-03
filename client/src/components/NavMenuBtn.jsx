@@ -1,4 +1,5 @@
 import navMenuIcon from "../assets/nav-menu.svg"
+import NavIconBtn from "./UI/navIconBtn/NavIconBtn";
 
 const NavMenuBtn = () => {
 
@@ -7,13 +8,7 @@ const NavMenuBtn = () => {
   }
 
   return (
-    <button 
-      className="nav-mini-button" 
-      aria-label="Navigation menu"
-      onClick={onClick}
-    >
-      <img src={navMenuIcon} alt="Menu" className="no-select" draggable="false" />
-    </button>
+    <NavIconBtn src={navMenuIcon} alt="Menu" aria-label="Navigation menu" onClick={onClick} />
   );
 }
 

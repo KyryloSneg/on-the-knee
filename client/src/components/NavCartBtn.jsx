@@ -1,10 +1,14 @@
 import cartBtnIcon from "../assets/show-cart-button.svg";
+import NavIconBtn from "./UI/navIconBtn/NavIconBtn";
 
 const NavCartBtn = () => {
+
+  function onClick() {
+    // open cart modal
+  }
+
   return (
-    <button className="show-cart-button nav-mini-button" aria-label="Product cart">
-      <img src={cartBtnIcon} className="no-select" draggable="false" alt="Product cart" />
-    </button>
+    <NavIconBtn src={cartBtnIcon} alt="Product cart" aria-label="Product cart" onClick={onClick} />
   );
 }
 

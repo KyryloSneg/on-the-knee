@@ -127,6 +127,22 @@ button:active {
   background-color: #a1a1a1;
 } */
 
+/* dark app's bg that appears on certain events */
+
+#app-dark-bg {
+  outline: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 20;
+  background-color: rgba(0, 0, 0, .5);
+  display: block;
+}
+
 /* General classes */
 
 .rotated {
@@ -153,6 +169,24 @@ button:active {
 
 .invalidInput {
   border: 2px red solid;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.link-colors, .link-colors-wrap a {
+  outline-color: #ff7e14;
+  color: #7373ff;
+}
+
+.link-colors:hover,
+.link-colors:active,
+.link-colors:focus,
+.link-colors-wrap a:hover,
+.link-colors-wrap a:active,
+.link-colors-wrap a:focus {
+  color: #bd5e10;
 }
 
 /* Scrollbar class */
@@ -197,7 +231,7 @@ header {
   padding: 10px 5px;
   display: grid;
   align-items: center;
-  z-index: 10;
+  z-index: 30;
   margin-bottom: 30px;
   position: sticky;
   top: 0;
@@ -209,7 +243,10 @@ header .skip-to-next-page-content:focus {
   left: 3%;
 }
 
-.delete-input-content-btn {
+/* delete input content and "back" buttons */
+
+.delete-input-content-btn,
+ .input-back-btn {
   align-self: center;
   display: grid;
   align-items: center;
@@ -218,8 +255,17 @@ header .skip-to-next-page-content:focus {
   padding: 0;
   margin: 0;
   position: absolute;
-  right: 5%;
   cursor: pointer;
+}
+
+.delete-input-content-btn {
+  right: 5%;
+}
+
+.input-back-btn {
+  box-sizing: border-box;
+  padding-left: 6px;
+  height: 100%;
 }
 
 .delete-input-content-btn svg {
@@ -228,6 +274,15 @@ header .skip-to-next-page-content:focus {
 }
 
 .delete-input-content-btn:hover svg {
+  fill: rgb(88, 103, 180);
+}
+
+.input-back-btn svg {
+  transition: 0.2s;
+  fill: rgb(50 63 125);
+}
+
+.input-back-btn:hover svg {
   fill: rgb(88, 103, 180);
 }
 

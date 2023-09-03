@@ -7,7 +7,7 @@ import useWindowWidth from "../hooks/useWindowWidth";
 import { useOutletContext } from "react-router-dom";
 
 const CatalogPage = () => {
-  const pageRef = useOutletContext();
+  const { pageRef } = useOutletContext();
   const windowWidth = useWindowWidth();
 
   return (
