@@ -8,7 +8,13 @@ const SortingFilterBtn = forwardRef(({ value, onClick, visible }, ref) => {
     <section className="sorting-filter-btn-wrap">
       <img src={sortIcon} alt="" className="no-select" draggable="false" />
       <p>Sort by:</p>
-      <button onClick={onClick} data-testid="dropdown-btn" aria-controls="dropdown-options" ref={ref}>
+      <button 
+        onClick={onClick} 
+        data-testid="dropdown-btn" 
+        aria-controls="dropdown-options" 
+        ref={ref} 
+        className={visible ? "active" : ""}
+      >
         <span>{value || "none"}</span>
         <img src={dropdownArrowIcon} className={visible ? "rotated" : ""} alt="" />
       </button>

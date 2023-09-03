@@ -33,12 +33,14 @@
 }
 
 .sorting-filter-btn-wrap button:hover,
- .sorting-filter-btn-wrap button:focus {
+.sorting-filter-btn-wrap button:focus,
+.sorting-filter-btn-wrap button.active {
   color: #bd5e10;
 }
 
 .sorting-filter-btn-wrap button:hover span,
- .sorting-filter-btn-wrap button:focus span {
+.sorting-filter-btn-wrap button:focus span,
+.sorting-filter-btn-wrap button.active span {
   border-bottom: 1px dashed #bd5e10;
 }
 
