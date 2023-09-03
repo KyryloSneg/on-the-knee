@@ -1,0 +1,32 @@
+/* Common nav buttons' styles */
+
+.nav-icon-button {
+  cursor: pointer;
+  align-self: center;
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border: none;
+  border-radius: 5px;
+  background: none;
+  color: white;
+  transition: 0.2s
+}
+
+.nav-icon-button:hover {
+  background-color: #6d6d6d;
+}
+
+/* if button has some text */
+
+.nav-icon-button-text {
+  background-color: #6d6d6d;
+  display: flex;
+  flex: 1;
+  gap: 5px;
+}
+
+.nav-icon-button-text:hover {
+  background-color: #929292;;
+}
