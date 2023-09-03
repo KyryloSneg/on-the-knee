@@ -1,22 +1,38 @@
 import Navbar from "./components/Navbar";
 import "./App.css";
 import MyFooter from "./components/MyFooter";
-import { useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { Outlet } from "react-router-dom";
+import { Context } from "./Context";
+import { observer } from "mobx-react-lite";
 
-function App() {
+const App = observer(() => {
+  const { app } = useContext(Context);
   // ref for the "skip to next page content" btn
-  const pageRef = useRef(null);
+  const pageRef = useRef(null);  
+  const context = { pageRef };
+
+  useEffect(() => {
+    if (app.isBlockedScroll) {
+      document.body.style.overflow = "hidden";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    }
+  }, [app.isBlockedScroll])
 
   return (
     <div>
+      {/* dark bg that shows up on certain events (like opening a modal window) */}
+      {app.darkBgVisible && <div id="app-dark-bg" tabIndex={0} data-testid="app-dark-bg" />}
       <header>
         <Navbar toFocusRef={pageRef} />
       </header>
-      <Outlet context={pageRef} />
+      <Outlet context={context} />
       <MyFooter />
     </div>  
   );
-}
+});
 
 export default App;

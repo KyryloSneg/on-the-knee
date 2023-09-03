@@ -3,7 +3,7 @@ import { useOutletContext } from "react-router-dom";
 const CheckoutPage = () => {
   // temporary ignoring linter
   // eslint-disable-next-line
-  const pageRef = useOutletContext();
+  const { pageRef } = useOutletContext();
 
   return (
     <div>

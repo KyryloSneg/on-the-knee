@@ -28,6 +28,17 @@ nav > div {
   justify-items: center;
 }
 
+/* if search bar is focused: */
+
+nav > div.focusedSearch {
+  grid-template-columns: 1fr;
+}
+
+nav > div.focusedSearch > button,
+ nav > div.focusedSearch > a {
+  display: none;
+}
+
 /* Skip to next page content */
  
 nav .skip-to-next-page-content {
@@ -38,26 +49,6 @@ nav .skip-to-next-page-content {
 
 nav .skip-to-next-page-content p {
   font-size: 1rem;
-}
-
-/* Nav buttons */
-
-.nav-mini-button {
-  cursor: pointer;
-  align-self: center;
-  display: grid;
-  align-items: center;
-  justify-content: center;
-  padding: 8px;
-  border: none;
-  border-radius: 5px;
-  background: none;
-  color: white;
-  transition: 0.2s
-}
-
-.nav-mini-button:hover {
-  background-color: #6d6d6d;
 }
 
 @media screen and (min-width: 230px) {
@@ -95,6 +86,12 @@ nav .skip-to-next-page-content p {
 
   nav {
     padding: 0 12px;
+  }
+}
+
+@media screen and (min-width: 700px) {
+  nav > div {
+    grid-template-columns: auto auto 1fr auto auto auto;
   }
 }
 

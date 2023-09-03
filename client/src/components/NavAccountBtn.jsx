@@ -1,20 +1,28 @@
 import accBtnIcon from "../assets/acc-button.svg";
+import homeIcon from "../assets/home.svg";
+import NavIconBtn from "./UI/navIconBtn/NavIconBtn";
 import "./styles/NavAccountBtn.css";
+import { USER_ROUTE } from "../utils/consts";
+import { useContext } from "react";
+import { Context } from "../Context";
 
 const NavAccountBtn = () => {
+  const { user } = useContext(Context);
 
   function onClick() {
     // open login-registration modal window or link to the user cabinet page
   }
 
   return (
-    <button 
-      className="acc-button nav-mini-button" 
-      aria-label="Your account"
-      onClick={onClick}
-    >
-      <img src={accBtnIcon} draggable="false" className="no-select" alt="Account" />
-    </button>
+    <NavIconBtn 
+      src={user.isAuth ? homeIcon : accBtnIcon}     
+      alt="Account"
+      className="acc-button"          
+      isLink="true"           
+      route={USER_ROUTE}      
+      aria-label="Your account"         
+      onClick={onClick} 
+    />
   );
 }
 

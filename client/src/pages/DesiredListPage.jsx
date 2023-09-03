@@ -1,15 +1,15 @@
 import { useOutletContext } from "react-router-dom";
 
-const MainPage = () => {
+const DesiredListPage = () => {
   // temporary ignoring linter
   // eslint-disable-next-line
   const { pageRef } = useOutletContext();
 
   return (
     <div>
-      MainPage
+      DesiredListPage
     </div>
   );
-};
+}
 
-export default MainPage;
+export default DesiredListPage;

@@ -1,0 +1,58 @@
+.search-product-results {
+  position: absolute;
+  top: 100%;
+  list-style-type: none;
+  display: grid;
+  grid-template-columns: 1fr;
+  padding: 5px 0;
+  margin: 0;
+  background-color: white;
+  border-top: 1px rgb(201, 201, 201) solid;
+  border-radius: 0 0 6px 6px;
+  width: 100%;
+}
+
+.no-search-results {
+  font-size: 1.1rem;
+  padding: 5px 14px;
+  color: rgb(102, 102, 102);
+}
+
+.search-product-results-group {
+  margin: 6px 0;
+  border-bottom: 1px rgb(235, 235, 235) solid;
+}
+
+.search-product-results-group ul {
+  margin: 2px 0 0 0;
+}
+
+.search-product-results-group p {
+  font-size: 1.2rem;
+  padding: 0 14px;
+  color: #080808;
+}
+
+.search-history-div {
+  box-sizing: content-box;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  padding: 0 14px;
+}
+
+.search-history-div > p {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.clear-search-results-history {
+  transition: 0.2s;
+  justify-self: end;
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.3rem;
+}
