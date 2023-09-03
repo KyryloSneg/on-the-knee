@@ -1,9 +1,10 @@
 import CatalogPage from "../pages/CatalogPage";
 import CheckoutPage from "../pages/CheckoutPage";
+import DesiredListPage from "../pages/DesiredListPage";
 import DevicePage from "../pages/DevicePage";
 import MainPage from "../pages/MainPage";
 import UserPage from "../pages/UserPage";
-import { CATALOG_ROUTE, CHECKOUT_ROUTE, DEVICE_ROUTE, USER_ROUTE } from "../utils/consts";
+import { CATALOG_ROUTE, CHECKOUT_ROUTE, DESIRED_LIST_ROUTE, DEVICE_ROUTE, USER_ROUTE } from "../utils/consts";
 
 export const PUBLIC_ROUTES = [
   {
@@ -29,4 +30,8 @@ export const PRIVATE_ROUTES = [
     path: USER_ROUTE,
     element: <UserPage />
   },
+  {
+    path: DESIRED_LIST_ROUTE,
+    element: <DesiredListPage />
+  }
 ];

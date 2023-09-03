@@ -5,16 +5,7 @@
   grid-template-columns: 1fr auto;
   width: 85%;
   max-width: 850px;
-  height: 35px;
-}
-
-.search-product-form.active {
-  position: absolute;
-  left: 0;
-  right: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 5;
+  height: 38px;
 }
 
 .search-product-form button[type="submit"] {
@@ -32,66 +23,21 @@
   background-color: #3a5eff;
 }
 
-/* Search line */
+/* if the search input is focused it covers almost all available space */
 
-nav .search-product-line-wrap {
+div.focusedSearch .search-product-form {
+  width: 95%;
+}
+
+/* Search line and the results */
+
+nav .search-product-with-results {
   display: grid;
-  grid-template-columns: 1fr auto;
-  border: none;
-  border-radius: 8px;
   position: relative;
-}
-
-nav .search-product-line {
-  box-sizing: border-box;
-  height: 100%;
-  width: 100%;
-  border: none;
-  border-radius: 8px 0 0 8px;
-}
-
-.search-product-line {
-  box-sizing: content-box;
-  justify-self: center;
-  height: auto;
-  width: 90%;
-  padding: 1px 8px;
-  margin: 0;
-  transition: background 0.2s;
-}
-
-nav .search-product-line.active {
-  width: 100%;
-}
-
-/* Delete input content button */
-
-nav .delete-input-content-btn {
-  background: none;
-  position: static;
-  display: grid;
-  align-items: center;
-  justify-content: center;
-  width: 25px;
-  height: 100%;
-  border-left: 1px solid #676767;
-  right: 2%;
-  background-color: #f3f3f3;
-  border-radius: 0 8px 8px 0;
-}
-
-@media screen and (min-width: 245px) {
-  nav .delete-input-content-btn {
-    width: 35px;
-  }
 }
 
 @media screen and (min-width: 395px) {
   .search-product-form button[type="submit"] {
     display: inline-block;
-  }
-
-  nav .delete-input-content-btn {
-    border-radius: 0;
   }
 }
