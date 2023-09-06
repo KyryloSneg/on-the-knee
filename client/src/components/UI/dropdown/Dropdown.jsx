@@ -1,13 +1,19 @@
 import { forwardRef, useState } from "react";
 import DropdownBtn from "./DropdownBtn";
 import "./Dropdown.css";
-import { sortingOptions } from "../../../utils/consts";
 import DropdownOptions from "./DropdownOptions";
+import URLActions from "../../../utils/URLActions";
+import { v4 } from "uuid";
+import useInitialDropdownValue from "../../../hooks/useInitialDropdownValue";
 
-const Dropdown = forwardRef(({ variant, options = sortingOptions, paramKey, placeHolder }, ref) => {
+const Dropdown = forwardRef(({ variant, options, paramKey = null, placeHolder }, ref) => {
   const [value, setValue] = useState(variant === "default-select" ? placeHolder : options[0].title);
   const [visible, setVisible] = useState(false);
   const [selectedId, setSelectedId] = useState(variant === "default-select" ? null : 0);
+  const dropdownOptionsId = `dropdown-options-${paramKey || v4()}`;
+
+  const paramValue = URLActions.getParamValue(paramKey);
+  useInitialDropdownValue(paramKey, paramValue, options, setValue, setSelectedId);
 
   function onClick(e) {
     e.stopPropagation();
@@ -16,7 +22,14 @@ const Dropdown = forwardRef(({ variant, options = sortingOptions, paramKey, plac
 
   return (
     <div className="dropdown" role="radiogroup">
-      <DropdownBtn variant={variant} value={value} onClick={onClick} visible={visible} ref={ref} />
+      <DropdownBtn 
+        variant={variant} 
+        value={value} 
+        onClick={onClick} 
+        visible={visible} 
+        dropdownOptionsId={dropdownOptionsId}
+        ref={ref} 
+      />
       {visible && (
           <DropdownOptions
             options={options}
@@ -26,6 +39,8 @@ const Dropdown = forwardRef(({ variant, options = sortingOptions, paramKey, plac
             selectedId={selectedId}
             setSelectedId={setSelectedId}
             paramKey={paramKey}
+            dropdownOptionsId={dropdownOptionsId}
+            variant={variant}
           />
         )
       }

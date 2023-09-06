@@ -14,7 +14,6 @@ class AppStore {
   setIsBlockedScroll(bool) {
     this._isBlockedScroll = bool;
   }
-
   
   get darkBgVisible() {
     return this._darkBgVisible;
