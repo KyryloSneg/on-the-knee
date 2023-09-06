@@ -1,12 +1,9 @@
-import {
-  createBrowserRouter,
-} from "react-router-dom";
 import ErrorPage from "../pages/ErrorPage";
 import { PUBLIC_ROUTES, PRIVATE_ROUTES } from "./routes";
 import { ROOT_ROUTE } from "../utils/consts";
 import App from "../App";
 
-export default function router(isAuth) {
+export default function routerConfig(isAuth) {
   const childrenRoutes = isAuth
       ? [
           ...PUBLIC_ROUTES.map(route => route),
@@ -25,5 +22,5 @@ export default function router(isAuth) {
     }
   ];
 
-  return createBrowserRouter(result);
+  return result;
 } 

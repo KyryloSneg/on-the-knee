@@ -20,7 +20,10 @@
   background-color: #1e47ff;
 }
 
+.dropdown-options a,
 .dropdown-options button {
+  display: block;
+  text-decoration: none;
   box-sizing: border-box;
   width: 100%;
   color: black;
@@ -31,23 +34,28 @@
   transition: 0.2s;
 }
 
+.dropdown-options li.active a,
 .dropdown-options li.active button {
   color: white;
 }
 
+.dropdown-options a:hover,
 .dropdown-options button:hover {
   background-color: #cecece;
 }
 
+.dropdown-options a:focus,
 .dropdown-options button:focus {
   outline: none;
   background-color: #cecece;
 }
 
+.dropdown-options li.active a:hover,
 .dropdown-options li.active button:hover {
   background-color: #5070ff;
 }
 
+.dropdown-options li.active a:focus,
 .dropdown-options li.active button:focus {
   background-color: #5070ff;
 }
