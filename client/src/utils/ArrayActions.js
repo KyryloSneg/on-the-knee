@@ -18,4 +18,9 @@ export default class ArrayActions {
     return result;
   }
 
+  static sortStringArray(array) {
+    const sortedArr = array.sort( (a, b) => a.localeCompare(b) );
+    return sortedArr;
+  }
+
 }
