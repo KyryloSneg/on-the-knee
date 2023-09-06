@@ -5,6 +5,7 @@ import "./styles/CatalogPage.css";
 import useWindowWidth from "../hooks/useWindowWidth";
 // import DeviceSection from "../components/DeviceSection";
 import { useOutletContext } from "react-router-dom";
+import { sortingOptions } from "../utils/consts";
 
 const CatalogPage = () => {
   const { pageRef } = useOutletContext();
@@ -17,13 +18,22 @@ const CatalogPage = () => {
       {windowWidth >= 800 
         ? (
           <div className="ref-purpose-only display-grid">
-            <Dropdown variant="sorting-filter" paramKey="sort" ref={pageRef} />
+            <Dropdown 
+              variant="sorting-filter" 
+              options={sortingOptions} 
+              paramKey="sort" 
+              ref={pageRef} 
+            />
           </div>
         )
         : (
           <div className="ref-purpose-only display-grid">
             <TopFilterBar ref={pageRef} />
-            <Dropdown variant="sorting-filter" paramKey="sort" />
+            <Dropdown 
+              variant="sorting-filter"
+              options={sortingOptions}  
+              paramKey="sort"
+            />
           </div>
         )
       }

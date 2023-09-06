@@ -14,22 +14,23 @@ export const sortingOptions = [
   {
     id: 0,
     title: "best rating",
-    value: "best-rating",
+    // comma will become %2C in the url
+    value: "desc,rating",
   },
   {
     id: 1,
     title: "worst rating",
-    value: "worst-rating",
+    value: "asc,rating",
   },
   {
     id: 2,
     title: "increasing price",
-    value: "increasing-price",
+    value: "asc,price",
   },
   {
     id: 3,
     title: "decreasing price",
-    value: "decreasing-price",
+    value: "desc,price",
   },
 ];
 

@@ -1,4 +1,4 @@
-import { fireEvent, screen, waitFor } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 import { mockContextValue } from '../../utils/consts';
 import getElemByClass from '../../utils/getElemByClass';
 import { act } from 'react-dom/test-utils';
@@ -11,7 +11,7 @@ describe("SearchProductsForm", () => {
 
     test("focus on not empty value", () => {
       // we must render EVERY element that contains a link like this:
-      const { container } = renderTestApp(mockContextValue);
+      const { container } = renderTestApp(mockContextValue, "/catalog");
 
       const input = getElemByClass(container, "search-product-line")
       act(() => {
