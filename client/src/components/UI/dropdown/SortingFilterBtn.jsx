@@ -6,8 +6,10 @@ import { forwardRef } from "react";
 const SortingFilterBtn = forwardRef(({ value, onClick, visible, dropdownOptionsId }, ref) => {
   return (
     <section className="sorting-filter-btn-wrap">
-      <img src={sortIcon} alt="" className="no-select" draggable="false" />
-      <p>Sort by:</p>
+      <div className="sort-paragraph">
+        <img src={sortIcon} alt="" className="no-select" draggable="false" />
+        <p>Sort by:</p>
+      </div>
       <button 
         onClick={onClick} 
         data-testid="dropdown-sorting-filter-btn" 
