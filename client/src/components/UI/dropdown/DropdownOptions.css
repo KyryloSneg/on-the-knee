@@ -8,7 +8,7 @@
   grid-template-columns: 1fr;
   justify-content: center;
   position: absolute;
-  top: 28px;
+  top: 56px;
   z-index: 2;
 }
 
@@ -78,4 +78,10 @@
 
 .options-end {
   bottom: 0;
+}
+
+@media screen and (min-width: 280px) {
+  .sorting-filter-btn-wrap + .dropdown-options {
+    top: 28px;
+  }
 }

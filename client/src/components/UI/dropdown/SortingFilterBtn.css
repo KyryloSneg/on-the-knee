@@ -8,11 +8,19 @@
   gap: 5px;
 }
 
+.sort-paragraph {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
 .sorting-filter-btn-wrap button {
   gap: 2px;
 }
 
 .sorting-filter-btn-wrap {
+  flex-direction: column;
   padding-right: 0;
 }
 
@@ -22,6 +30,7 @@
   cursor: pointer;
   color: #4444ef;
   transition: 0.2s;
+  flex-direction: row-reverse;
 }
 
 .sorting-filter-btn-wrap button span {
@@ -45,19 +54,19 @@
 }
 
 .sorting-filter-btn-wrap p {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
 }
 
 .sorting-filter-btn-wrap button {
-  font-size: 1.2rem;
+  font-size: 1.5rem;
 }
 
-@media screen and (min-width: 240px) {
-  .sorting-filter-btn-wrap p {
-    font-size: 1.8rem;
+@media screen and (min-width: 280px) {
+  .sorting-filter-btn-wrap {
+    flex-direction: row;
   }
-  
+
   .sorting-filter-btn-wrap button {
-    font-size: 1.5rem;
+    flex-direction: row;
   }
 }
