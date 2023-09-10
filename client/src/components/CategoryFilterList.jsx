@@ -29,7 +29,7 @@ const CategoryFilterList = observer(forwardRef(({ filter, optionRefs, filterCate
           filteredValues.map(value => {
             let active;
             
-            if (deviceStore.usedFilters[filter]) {
+            if (deviceStore.usedFilters?.[filter]) {
               active = deviceStore.usedFilters[filter].includes(value);
             }
 

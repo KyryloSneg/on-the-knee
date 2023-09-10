@@ -2,6 +2,7 @@ aside {
   display: none;
   flex-direction: column;
   gap: 20px;
+  max-width: 370px;
 }
 
 aside input, select {

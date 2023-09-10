@@ -1,22 +1,16 @@
-import { useContext } from "react";
 import removeIcon from "../assets/remove.svg";
-import { Context } from "../Context";
+import URLActions from "../utils/URLActions";
 import "./styles/FilterBtn.css";
-import { nextRemovedFilters } from "../utils/filterFunctions";
+import { Link } from "react-router-dom";
 
 const FilterBtn = ({ value, paramKey, testId }) => {
-  const { deviceStore } = useContext(Context);
-
-  function onClick() {
-    const nextFilters = nextRemovedFilters(deviceStore.usedFilters, paramKey, value);
-    deviceStore.setUsedFilters(nextFilters);
-  }
+  const to = URLActions.deleteParamValue(paramKey, value);
 
   return (
-    <button className="remove-filter" onClick={onClick} data-testid={testId}>
-      {value}
+    <Link to={to} className="remove-filter" data-testid={testId}>
+      {paramKey !== "price" ? value : `${value}$`}
       <img src={removeIcon} className="no-select" draggable="false" alt="" />
-    </button>
+    </Link>
   );
 }
 

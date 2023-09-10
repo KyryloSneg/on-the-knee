@@ -67,6 +67,8 @@ export const mockSearchResults = {
   ]
 };
 
+// params such a sort filter
+export const SPECIAL_QUERY_PARAMS = ["sort", "text"];
 // in production build the value should be greater than current one
 export const FILTERS_OPTIONS_LENGTH_LIMIT = 5;
 
@@ -81,18 +83,7 @@ deviceStoreInstance.setFilters({
   "hz": ["50", "60", "75", "120", "140", "144", "200", "240"],
 });
 
-deviceStoreInstance.setUsedFilters({
-  "category": [
-    "phones",
-  ],
-  "price": [
-    "10000-50000",
-  ],
-  "brand": [
-    "Apple",
-    "Samsung"
-  ],
-});
+deviceStoreInstance.setUsedFilters({});
 
 deviceStoreInstance.setInitialMinPrice(1300);
 deviceStoreInstance.setInitialMaxPrice(79900);
