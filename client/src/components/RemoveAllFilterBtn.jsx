@@ -1,19 +1,15 @@
-import { useContext } from "react";
-import { Context } from "../Context";
 import "./styles/RemoveAllFilterBtn.css";
+import { Link } from "react-router-dom";
+import URLActions from "../utils/URLActions";
 
 const RemoveAllFilterBtn = () => {
-  const { deviceStore } = useContext(Context);
-
-  function onClick() {
-    deviceStore.setUsedFilters({});
-  }
+  const to = URLActions.deleteAllDefaultParamValues();
 
   return (
     <li>
-      <button id="remove-all-filters" onClick={onClick} data-testid="remove-all-filters">
+      <Link to={to} id="remove-all-filters" data-testid="remove-all-filters">
         Remove all filters
-      </button>
+      </Link>
     </li>
   );
 }
