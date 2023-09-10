@@ -1,50 +1,47 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { act } from 'react-dom/test-utils';
 
-import UsedFilters from "../../components/UsedFilters";
-import Aside from '../../components/Aside';
 import { mockContextValue } from '../../utils/consts';
-import { Context } from '../../Context';
+import renderTestApp from '../../utils/renderTestApp';
 
+const route = "/catalog?category=phones&price=2000-50000&random=not_existing_query&text=special_query_value";
 describe("UsedFilters", () => {
-  test("render of the 'remove all filters' and 'remove filter' btns ", () => {
-    render(
-      <Context.Provider value={mockContextValue}>
-        <UsedFilters />
-      </Context.Provider>
-    );
+  test("render of the 'remove all filters' and a filter btns", () => {
+    renderTestApp(mockContextValue, { route: route });
 
     expect(screen.getByTestId("remove-all-filters")).toBeInTheDocument();
-    expect(screen.getByTestId("category: phones")).toBeInTheDocument();
+    expect(screen.getByTestId("filter-btn category: phones")).toBeInTheDocument();
+    expect(screen.getByTestId("filter-btn price: 2000-50000")).toBeInTheDocument();
   });
 
-  test("removing a filter", () => {
-    render(
-      <Context.Provider value={mockContextValue}>
-        <UsedFilters />
-      </Context.Provider>
-    );
+  test("not rendering non-existing filter", () => {
+    renderTestApp(mockContextValue, { route: route });
+    expect(screen.queryByTestId("filter-btn random: not_existing_query")).toBeNull();
+  });
 
+  test("not rendering special query params 'filters'", () => {
+    renderTestApp(mockContextValue, { route: route });
+    expect(screen.queryByTestId("filter-btn text: special_query_value")).toBeNull();
+  });
+
+  test("removing a filter", async () => {
+    renderTestApp(mockContextValue, { route: route });
     act(() => {
-      userEvent.click(screen.getByTestId("category: phones"));
+      userEvent.click(screen.getByTestId("filter-btn category: phones"));
     });
 
-    expect(screen.queryByTestId("category: phones")).toBeNull();
-  })
+    expect(screen.queryByTestId("filter-btn category: phones")).toBeNull();
+  });
 
-  test("removing all filters and hiding the 'used filters' section", async () => {
+  test("removing all filters and hiding the 'used filters' section", () => {
     // aside deciding: whether UsedFilters will be visible or not 
-    render(
-      <Context.Provider value={mockContextValue}>
-        <Aside />
-      </Context.Provider>
-    );
+    renderTestApp(mockContextValue, { route: route });
 
     act(() => {
       userEvent.click(screen.getByTestId("remove-all-filters"));
     });
     
-    await waitFor(() => expect(screen.queryByTestId("used-filters-section")).toBeNull());
-  })
+    expect(screen.queryByTestId("used-filters-section")).toBeNull()
+  });
 });

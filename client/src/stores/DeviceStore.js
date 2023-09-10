@@ -10,18 +10,21 @@ class DeviceStore {
     }
 
     // just example
-    this._usedFilters = {
-      "category": [
-        "phones",
-      ],
-      "price": [
-        "10000-50000",
-      ],
-      "brand": [
-        "Apple",
-        "Samsung"
-      ],
-    }
+
+    // this._usedFilters = {
+    //   "category": [
+    //     "phones",
+    //   ],
+    //   "price": [
+    //     "10000-50000",
+    //   ],
+    //   "brand": [
+    //     "Apple",
+    //     "Samsung"
+    //   ],
+    // }
+    
+    this._usedFilters = {};
     this._initialMinPrice = 1300;
     this._initialMaxPrice = 79900;
     // in the catalog page component or below in the tree we can use these states to calculate devices per page
