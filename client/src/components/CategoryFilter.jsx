@@ -1,28 +1,16 @@
-import { forwardRef, useContext } from "react";
-import { nextAddedFilters, nextRemovedFilters } from "../utils/filterFunctions";
+import { forwardRef } from "react";
 import "./styles/CategoryFilter.css";
-import { Context } from "../Context";
+import { Link } from "react-router-dom";
+import URLActions from "../utils/URLActions";
 
 const CategoryFilter = forwardRef(({ filter, value, active, onKeyDown, testId }, ref) => {
-  const { deviceStore } = useContext(Context);
+  const to = active ? URLActions.deleteParamValue(filter, value) : URLActions.addParamValue(filter, value);
   const className = active ? "filter-icon checked" : "filter-icon";
   const iconTestId = active ? testId + " - icon checked" : testId + " - icon";
 
-  function onClick() {
-    let next;
-
-    if (active) {
-      next = nextRemovedFilters(deviceStore.usedFilters, filter, value);
-    } else {
-      next = nextAddedFilters(deviceStore.usedFilters, filter, value);
-    }
-
-    deviceStore.setUsedFilters(next);
-  }
-
   return (
-    <button 
-      onClick={onClick} 
+    <Link 
+      to={to}
       onKeyDown={onKeyDown}
       role="checkbox"
       aria-checked={active ? "true" : "false"}
@@ -31,7 +19,7 @@ const CategoryFilter = forwardRef(({ filter, value, active, onKeyDown, testId },
     >
       <div className={className} aria-hidden="true" data-testid={iconTestId} />
       <p>{value[0].toUpperCase() + value.slice(1)}</p>
-    </button>
+    </Link>
   );
 });
 

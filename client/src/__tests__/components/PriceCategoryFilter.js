@@ -1,135 +1,95 @@
-import { Context } from "../../Context";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 import { mockContextValue } from "../../utils/consts";
-import FilterCategoryBlock from "../../components/FilterCategoryBlock";
 import { act } from "react-dom/test-utils";
+import renderTestApp from "../../utils/renderTestApp";
 
 describe("PriceCategoryFilter", () => {
-  test("correct rendering of initial min / max prices", async () => {
-    render(
-      <Context.Provider value={mockContextValue}>
-        <FilterCategoryBlock filter={"price"} filterCategoryBlockId={0} variant="price" />
-      </Context.Provider>
-    );
+  test("correct rendering of initial min / max prices", () => {
+    renderTestApp(mockContextValue, { route: "/catalog" });
 
-    await expect(
-      screen.getByDisplayValue("1300")
-    ).toBeInTheDocument();
-
-    await expect(
-      screen.getByDisplayValue("79900")
-    ).toBeInTheDocument();
+    expect(screen.getByTestId("price-category-min").value).toBe("1300");
+    expect(screen.getByTestId("price-category-max").value).toBe("79900");
   });
 
   describe("input some value", () => {
     it("replaces 0 with other non-zero number by adding it after zero", () => {
-      render(
-        <Context.Provider value={mockContextValue}>
-          <FilterCategoryBlock filter={"price"} filterCategoryBlockId={0} variant="price" />
-        </Context.Provider>
-      );
+      renderTestApp(mockContextValue, { route: "/catalog" });
 
       act(() => {
-        fireEvent.change(screen.getByDisplayValue("1300"), {target: {value: "0"}});
-        fireEvent.change(screen.getByDisplayValue("0"), {target: {value: "01"}});
+        fireEvent.change(screen.getByTestId("price-category-min"), {target: {value: "0"}});
+        fireEvent.change(screen.getByTestId("price-category-min"), {target: {value: "01"}});
       });
 
-      expect(screen.getByDisplayValue("1")).toBeInTheDocument();
+      expect(screen.getByTestId("price-category-min").value).toBe("1");
     });
 
     it("replaces empty string with 0", () => {
-      render(
-        <Context.Provider value={mockContextValue}>
-          <FilterCategoryBlock filter={"price"} filterCategoryBlockId={0} variant="price" />
-        </Context.Provider>
-      );
+      renderTestApp(mockContextValue, { route: "/catalog" });
 
       act(() => {
-        fireEvent.change(screen.getByDisplayValue("1300"), {target: {value: ""}});
+        fireEvent.change(screen.getByTestId("price-category-min"), {target: {value: ""}});
       });
 
-      expect(screen.getByDisplayValue("0")).toBeInTheDocument();
+      expect(screen.getByTestId("price-category-min").value).toBe("0");
     });
   });
 
   describe("validation", () => {
-    it("(disables / enables) submit btn when the max price is (lower / greater) than the min one", async () => {
-      render(
-        <Context.Provider value={mockContextValue}>
-          <FilterCategoryBlock filter={"price"} filterCategoryBlockId={0} variant="price" />
-        </Context.Provider>
-      );
+    it("(disables / enables) submit btn when the max price is (lower / greater) than the min one", () => {
+      renderTestApp(mockContextValue, { route: "/catalog" });
       
       act(() => {
-        fireEvent.change(screen.getByDisplayValue("79900"), {target: {value: "799"}});
+        fireEvent.change(screen.getByTestId("price-category-max"), {target: {value: "799"}});
       });
-      
       expect(screen.getByTestId("price-category-filter-btn")).toBeDisabled();
 
       act(() => {
-        fireEvent.change(screen.getByDisplayValue("799"), {target: {value: "79000"}});
+        fireEvent.change(screen.getByTestId("price-category-max"), {target: {value: "79000"}});
       });
-
       expect(screen.getByTestId("price-category-filter-btn")).not.toBeDisabled();
 
       act(() => {
-        fireEvent.change(screen.getByDisplayValue("1300"), {target: {value: "100000"}});
+        fireEvent.change(screen.getByTestId("price-category-min"), {target: {value: "100000"}});
       });
-
       expect(screen.getByTestId("price-category-filter-btn")).toBeDisabled();
     });
 
     it("(disables / enables) submit btn when the max price (is / isn't) equals to 0", () => {
-      render(
-        <Context.Provider value={mockContextValue}>
-          <FilterCategoryBlock filter={"price"} filterCategoryBlockId={0} variant="price" />
-        </Context.Provider>
-      );
+      renderTestApp(mockContextValue, { route: "/catalog" });
 
       act(() => {
-        fireEvent.change(screen.getByDisplayValue("79900"), {target: {value: "0"}});
+        fireEvent.change(screen.getByTestId("price-category-max"), {target: {value: "0"}});
       });
-
       expect(screen.getByTestId("price-category-filter-btn")).toBeDisabled();
 
       act(() => {
-        fireEvent.change(screen.getByDisplayValue("0"), {target: {value: "79000"}});
+        fireEvent.change(screen.getByTestId("price-category-max"), {target: {value: "79000"}});
       });
-
       expect(screen.getByTestId("price-category-filter-btn")).not.toBeDisabled();
     });
 
     it("(disables / enables) submit btn when the (min / max) price is (lower / greater) than initial value", () => {
-      render(
-        <Context.Provider value={mockContextValue}>
-          <FilterCategoryBlock filter={"price"} filterCategoryBlockId={0} variant="price" />
-        </Context.Provider>
-      );
+      renderTestApp(mockContextValue, { route: "/catalog" });
 
       act(() => {
-        fireEvent.change(screen.getByDisplayValue("1300"), {target: {value: "1000"}});
+        fireEvent.change(screen.getByTestId("price-category-min"), {target: {value: "1000"}});
       });
-
       expect(screen.getByTestId("price-category-filter-btn")).toBeDisabled();
 
       act(() => {
-        fireEvent.change(screen.getByDisplayValue("1000"), {target: {value: "1300"}});
+        fireEvent.change(screen.getByTestId("price-category-min"), {target: {value: "1300"}});
       });
-
       expect(screen.getByTestId("price-category-filter-btn")).not.toBeDisabled();
 
       act(() => {
-        fireEvent.change(screen.getByDisplayValue("79900"), {target: {value: "80000"}});
+        fireEvent.change(screen.getByTestId("price-category-max"), {target: {value: "80000"}});
       });
-
       expect(screen.getByTestId("price-category-filter-btn")).toBeDisabled();
 
       act(() => {
-        fireEvent.change(screen.getByDisplayValue("80000"), {target: {value: "79900"}});
+        fireEvent.change(screen.getByTestId("price-category-max"), {target: {value: "79900"}});
       });
-
       expect(screen.getByTestId("price-category-filter-btn")).not.toBeDisabled();
-
     });
   })
 });

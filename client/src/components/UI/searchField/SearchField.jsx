@@ -1,13 +1,10 @@
-import { forwardRef, useContext } from "react";
-import { Context } from "../../../Context";
+import { forwardRef } from "react";
 import useDebounce from "../../../hooks/useDebounce";
 import "./SearchField.css";
 
-const SearchField = forwardRef(({ query, setQuery, setFilteredValues, filter, filterCategoryBlockId }, ref) => {
-  const { deviceStore } = useContext(Context);
-
+const SearchField = forwardRef(({ query, setQuery, setFilteredValues, filter, initialFilters }, ref) => {
   function filterValues(query) {
-    const nextFilteredValues = deviceStore.filters[filter].filter(value => {
+    const nextFilteredValues = initialFilters.filter(value => {
       if (query === "") return true;
       return value.trim().toLowerCase().includes(query.trim().toLowerCase());
     });
@@ -26,13 +23,13 @@ const SearchField = forwardRef(({ query, setQuery, setFilteredValues, filter, fi
 
   function onClick() {
     setQuery("");
-    setFilteredValues(deviceStore.filters[filter]);
+    setFilteredValues(initialFilters);
   }
 
   function onKeyDown(e) {
     if (e.code === "Escape") {
       setQuery("");
-      setFilteredValues(deviceStore.filters[filter]);
+      setFilteredValues(initialFilters);
     }
   }
 
@@ -49,7 +46,7 @@ const SearchField = forwardRef(({ query, setQuery, setFilteredValues, filter, fi
           className="search-line"
           onKeyDown={onKeyDown}
           ref={ref}
-          data-testid={`search-field-input: ${filterCategoryBlockId}`}
+          data-testid={`search-field-input: ${filter}`}
         />
         {query && (
           <button
@@ -57,7 +54,7 @@ const SearchField = forwardRef(({ query, setQuery, setFilteredValues, filter, fi
             className="delete-input-content-btn active"
             aria-label="Delete input content"
             onClick={onClick}
-            data-testid={`delete-input-content-btn: ${filterCategoryBlockId}`}
+            data-testid={`delete-input-content-btn: ${filter}`}
           >
             {/* writing svg into the component to style it easily */}
             <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20">

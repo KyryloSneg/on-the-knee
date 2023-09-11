@@ -4,57 +4,47 @@ import CategoryFilterList from "./CategoryFilterList";
 import PriceCategoryFilter from "./PriceCategoryFilter";
 import "./styles/FilterCategoryBlock.css";
 
-const initialPriceClass = "price-range-form-wrap use-preety-scrollbar";
-const initialFiltersClass = "filters use-preety-scrollbar";
-
-const FilterCategoryBlock = ({ filter, filterCategoryBlockId, variant="default" }) => {
+const FilterCategoryBlock = ({ filter, variant = "default" }) => {
   const [visible, setVisible] = useState(true);
 
-  const optionRefs = useRef([]);
-  const [selectedByKeyboardId, setSelectedByKeyboardId] = useState(0);
-
-  const blockItemRef = useRef(null);
-  const [blockItemClassName, setBlockItemClassName] = useState(variant === "price" ? initialPriceClass: initialFiltersClass);
-
   const elemToFocusRef = useRef(null);
+  const className = "filter-category-block";
 
-  return (
-    <div className={"filter-category-block"}>
-      <FilterCategoryBtn 
-        filter={filter} 
-        visible={visible} 
-        setVisible={setVisible} 
-        blockItemRef={blockItemRef} 
-        optionRefs={optionRefs}
-        selectedByKeyboardId={selectedByKeyboardId}
-        filterCategoryBlockId={filterCategoryBlockId}
-        setBlockItemClassName={setBlockItemClassName}
-        variant={variant}
-        elemToFocusRef={elemToFocusRef}
-      />
-      {variant !== "price"
-        ? (
-          <CategoryFilterList 
-            filter={filter} 
-            ref={blockItemRef} 
-            optionRefs={optionRefs} 
-            selectedByKeyboardId={selectedByKeyboardId} 
-            setSelectedByKeyboardId={setSelectedByKeyboardId}
-            filterCategoryBlockId={filterCategoryBlockId}
-            className={blockItemClassName}
+  let testId = `${className} ${filter}`;
+  if (visible) {
+    testId += " expanded";
+  } else {
+    testId += " collapsed";
+  }
+
+  function renderFilters() {
+    if (visible) {
+
+      if (variant !== "price") {
+        return (
+          <CategoryFilterList
+            filter={filter}
             variant={variant}
             elemToFocusRef={elemToFocusRef}
           />
-        )
-        : (
-          <PriceCategoryFilter
-            className={blockItemClassName}
-            minPriceRef={elemToFocusRef}
-            ref={blockItemRef}
-          />
-        )
+        );
+      } else {
+        return (
+          <PriceCategoryFilter />
+        );
       }
 
+    }
+  }
+
+  return (
+    <div className={"filter-category-block"} data-testid={testId}>
+      <FilterCategoryBtn
+        filter={filter}
+        visible={visible}
+        setVisible={setVisible}
+      />
+      {renderFilters()}
     </div>
   );
 }
