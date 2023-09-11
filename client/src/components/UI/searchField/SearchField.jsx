@@ -1,13 +1,10 @@
-import { forwardRef, useContext } from "react";
-import { Context } from "../../../Context";
+import { forwardRef } from "react";
 import useDebounce from "../../../hooks/useDebounce";
 import "./SearchField.css";
 
-const SearchField = forwardRef(({ query, setQuery, setFilteredValues, filter }, ref) => {
-  const { deviceStore } = useContext(Context);
-
+const SearchField = forwardRef(({ query, setQuery, setFilteredValues, filter, initialFilters }, ref) => {
   function filterValues(query) {
-    const nextFilteredValues = deviceStore.filters[filter].filter(value => {
+    const nextFilteredValues = initialFilters.filter(value => {
       if (query === "") return true;
       return value.trim().toLowerCase().includes(query.trim().toLowerCase());
     });
@@ -26,13 +23,13 @@ const SearchField = forwardRef(({ query, setQuery, setFilteredValues, filter }, 
 
   function onClick() {
     setQuery("");
-    setFilteredValues(deviceStore.filters[filter]);
+    setFilteredValues(initialFilters);
   }
 
   function onKeyDown(e) {
     if (e.code === "Escape") {
       setQuery("");
-      setFilteredValues(deviceStore.filters[filter]);
+      setFilteredValues(initialFilters);
     }
   }
 
