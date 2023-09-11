@@ -23,4 +23,9 @@ export default class ArrayActions {
     return sortedArr;
   }
 
+  static sortAlphaNumArray(array) {
+    const sortedArr = array.sort( (a, b) => a.localeCompare(b, undefined, {numeric: true, sensitivity: 'base'}) );
+    return sortedArr;
+  }
+
 }

@@ -78,7 +78,6 @@ const userStoreInstance = new UserStore();
 
 deviceStoreInstance.setFilters({
   "category": ["phones", "TV", "computers"],
-  "price": ["20000", "100", "10800", "4030"],
   "brand": ["Apple", "Asus", "LG", "Samsung"],
   "hz": ["50", "60", "75", "120", "140", "144", "200", "240"],
 });

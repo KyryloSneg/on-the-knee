@@ -1,5 +1,5 @@
-.filters li button {
-  cursor: pointer;
+.filters li a {
+  text-decoration: none;
   box-sizing: border-box;
   width: 100%;
   padding: 8px;
@@ -15,26 +15,26 @@
   border: none;
 }
 
-.filters li button p {
+.filters li a p {
   text-align: start;
 }
 
-.filters li button:hover {
+.filters li a:hover {
   background-color: #dadada;
 }
 
-.filters li button:focus {
+.filters li a:focus {
   background-color: #dadada;
   outline: none;
 }
 
-.filters li button:hover .filter-icon,
-  .filters li button:focus .filter-icon {
+.filters li a:hover .filter-icon,
+  .filters li a:focus .filter-icon {
   border: 1px solid black;
 }
 
-.filters li button:hover .filter-icon.checked,
-  .filters li button:focus .filter-icon.checked {
+.filters li a:hover .filter-icon.checked,
+  .filters li a:focus .filter-icon.checked {
   border: 1px solid #7e95fa;
 }
 
