@@ -45,9 +45,10 @@ const CategoryFilterList = observer(({ filter, variant, elemToFocusRef = null })
         <SearchField
           query={query}
           setQuery={setQuery}
-          ref={elemToFocusRef}
           setFilteredValues={setFilteredValues}
           filter={filter}
+          initialFilters={deviceStore.filters[filter]}
+          ref={elemToFocusRef}
         />
         <ul className="filters use-preety-scrollbar" data-testid={testId}>
           {filteredValues.length !== 0
