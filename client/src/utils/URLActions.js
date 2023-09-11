@@ -142,7 +142,7 @@ export default class URLActions {
       if (SPECIAL_QUERY_PARAMS.includes(key) || key === "price") continue;
 
       for (let val of values) {
-        if (!filters[key]?.includes(val.toLowerCase())) {
+        if (!filters[key]?.includes(val)) {
           searchParams.delete(key);
           delete usedFilters[key];
           break;

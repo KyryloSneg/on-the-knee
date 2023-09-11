@@ -4,9 +4,8 @@ class DeviceStore {
   constructor() {
     this._filters = {
       "category": ["phones", "TV", "computers"],
-      "price": ["20000", "100", "10800", "4030"],
       "brand": ["Apple", "Asus", "LG", "Samsung"],
-      "hz": ["50", "60", "75", "120", "140", "144", "200", "240"],
+      "hz": ["50", "60", "75", "120", "140", "144", "200", "240 and more"],
     }
 
     // just example

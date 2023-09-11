@@ -1,67 +1,84 @@
-import { forwardRef, useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { Context } from "../Context";
 import CategoryFilter from "./CategoryFilter";
 import "./styles/CategoryFilterList.css";
 import { observer } from "mobx-react-lite";
-import { onKeyDown } from "../utils/dropdownOptionsControl";
 import SearchField from "./UI/searchField/SearchField";
+import ArrayActions from "../utils/ArrayActions";
 
-const CategoryFilterList = observer(forwardRef(({ filter, optionRefs, filterCategoryBlockId, className, variant, elemToFocusRef = null }, ref) => {
+const CategoryFilterList = observer(({ filter, variant, elemToFocusRef = null }) => {
+  const { deviceStore } = useContext(Context);
   const isWithSearchField = variant === "withSearchField";
-  const { deviceStore } =  useContext(Context);
   const [query, setQuery] = useState("");
   const [filteredValues, setFilteredValues] = useState(deviceStore.filters[filter]);
+  let testId = `CategoryFilterList: ${filter.toLowerCase()}`;
 
-  return (
-    <ul className={className} ref={ref} data-testid={`CategoryFilterList: ${filterCategoryBlockId}`}>
-      {isWithSearchField && (
-        <SearchField 
-          query={query} 
+  function renderFilters() {
+    let filters = [];
+    let sortedValues = ArrayActions.sortAlphaNumArray(filteredValues.slice());
+
+    sortedValues.forEach(value => {
+      let active = false;
+      if (deviceStore.usedFilters?.[filter]) {
+        active = deviceStore.usedFilters[filter].includes(value);
+      }
+
+      const testId = `${filter}: ${value} checked=${active}`;
+      filters.push(
+        <li key={`${filter}: ${value}`}>
+          <CategoryFilter
+            filter={filter}
+            value={value}
+            active={active}
+            testId={testId}
+          />
+        </li>
+      );
+    })
+
+    return filters;
+  }
+
+  if (isWithSearchField) {
+    return (
+      <div className="filters-search-field-wrap">
+        <SearchField
+          query={query}
           setQuery={setQuery}
           ref={elemToFocusRef}
           setFilteredValues={setFilteredValues}
           filter={filter}
-          filterCategoryBlockId={filterCategoryBlockId}
         />
-      )}
+        <ul className="filters use-preety-scrollbar" data-testid={testId}>
+          {filteredValues.length !== 0
+            ? (
+              renderFilters()
+            )
+            : (
+              <p className="empty-filters-msg">
+                We can't find such a filters
+              </p>
+            )
+          }
+        </ul>
+      </div>
+    );
+  }
+
+  return (
+    <ul className="filters use-preety-scrollbar" data-testid={testId}>
       {filteredValues.length !== 0
         ? (
-          filteredValues.map(value => {
-            let active;
-            
-            if (deviceStore.usedFilters?.[filter]) {
-              active = deviceStore.usedFilters[filter].includes(value);
-            }
-
-            if (optionRefs.current.length !== filteredValues.length) {
-              optionRefs.current = [];
-            }
-            
-            const id = filteredValues.indexOf(value);
-    
-            return (
-              <li key={`${filter}: ${value}`}>
-                <CategoryFilter
-                  filter={filter}
-                  value={value}
-                  active={active}
-                  onKeyDown={e => onKeyDown(e, id, filteredValues, optionRefs)}
-                  ref={ref => {
-                    if (!ref || optionRefs.current.includes(ref)) return;
-                    optionRefs.current.push(ref);
-                  }}
-                  testId={`${filter}: ${value}`}
-                />
-              </li>
-            );
-          })
+          renderFilters()
         )
-        : <p className="empty-filters-msg">
+        : (
+          <p className="empty-filters-msg">
             We can't find such a filters
           </p>
+        )
       }
     </ul>
   );
-}));
+});
 
 export default CategoryFilterList;
