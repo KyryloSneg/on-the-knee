@@ -3,21 +3,22 @@ import { observer } from "mobx-react-lite";
 import { Context } from "../Context";
 import FilterCategoryBlock from "./FilterCategoryBlock";
 import { FILTERS_OPTIONS_LENGTH_LIMIT } from "../utils/consts";
+import ArrayActions from "../utils/ArrayActions";
 
 const FilterCategoryBlocksList = observer(() => {
   const { deviceStore } = useContext(Context);
 
   function renderList() {
     let result = [];
+    const sortedFilterKeys = ArrayActions.sortStringArray(Object.keys(deviceStore.filters));
 
-    for (let filterKey in deviceStore.filters) {
+    for (let filterKey of sortedFilterKeys) {
       const isTooLong = deviceStore.filters[filterKey].length >= FILTERS_OPTIONS_LENGTH_LIMIT;
 
       result.push(
         <li key={filterKey}>
           <FilterCategoryBlock
             filter={filterKey}
-            filterCategoryBlockId={`${Object.keys(deviceStore.filters).findIndex(key => key === filterKey)}`}
             variant={isTooLong ? "withSearchField" : "default"}
           />
         </li>
@@ -32,7 +33,6 @@ const FilterCategoryBlocksList = observer(() => {
       <li>
         <FilterCategoryBlock
           filter="price"
-          filterCategoryBlockId="price"
           variant="price"
         />
       </li>

@@ -3,7 +3,7 @@ import { Context } from "../../../Context";
 import useDebounce from "../../../hooks/useDebounce";
 import "./SearchField.css";
 
-const SearchField = forwardRef(({ query, setQuery, setFilteredValues, filter, filterCategoryBlockId }, ref) => {
+const SearchField = forwardRef(({ query, setQuery, setFilteredValues, filter }, ref) => {
   const { deviceStore } = useContext(Context);
 
   function filterValues(query) {
@@ -49,7 +49,7 @@ const SearchField = forwardRef(({ query, setQuery, setFilteredValues, filter, fi
           className="search-line"
           onKeyDown={onKeyDown}
           ref={ref}
-          data-testid={`search-field-input: ${filterCategoryBlockId}`}
+          data-testid={`search-field-input: ${filter}`}
         />
         {query && (
           <button
@@ -57,7 +57,7 @@ const SearchField = forwardRef(({ query, setQuery, setFilteredValues, filter, fi
             className="delete-input-content-btn active"
             aria-label="Delete input content"
             onClick={onClick}
-            data-testid={`delete-input-content-btn: ${filterCategoryBlockId}`}
+            data-testid={`delete-input-content-btn: ${filter}`}
           >
             {/* writing svg into the component to style it easily */}
             <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20">

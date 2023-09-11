@@ -1,38 +1,39 @@
-import { forwardRef, useContext, useState } from "react";
+import { useContext, useState } from "react";
 import "./styles/PriceCategoryFilter.css";
 import MinMaxPrice from "./MinMaxPrice";
 import { Context } from "../Context";
 import { observer } from "mobx-react-lite";
+import URLActions from "../utils/URLActions";
+import { useNavigate } from "react-router-dom";
 
-const PriceCategoryFilter = observer(forwardRef(({ className, minPriceRef }, ref) => {
+const PriceCategoryFilter = observer(() => {
   const { deviceStore } = useContext(Context);
+  const navigate = useNavigate();
 
   const [minPriceValue, setMinPriceValue] = useState(deviceStore.initialMinPrice);
   const [maxPriceValue, setMaxPriceValue] = useState(deviceStore.initialMaxPrice);
   const [isValid, setIsValid] = useState(true)
 
-
   function onSubmit(e) {
     e.preventDefault();
     if (!isValid) return;
 
-    const nextUsedFilters = {
-      ...deviceStore.usedFilters,
-      priceRange: [`Price: ${minPriceValue}-${maxPriceValue}`]
-    }
+    // to prevent redundant redirects we can compare current price and new one
+    // and if they're equal to each other we skip redirect
+    const currentPrice = URLActions.getParamValue("price");
+    if (currentPrice === `${minPriceValue}-${maxPriceValue}`) return;
 
-    deviceStore.setUsedFilters(nextUsedFilters);
-
-    // we can set initialMin / Max prices after setting devices
+    const nextUrl = URLActions.setNewParam("price", `${minPriceValue}-${maxPriceValue}`);
+    const basename = process.env.REACT_APP_CLIENT_URL;
+    navigate(nextUrl.replace(basename, ""));
   }
 
   return (
-    <div className={className} ref={ref}>
+    <div className="price-range-form-wrap use-preety-scrollbar">
       <form className="price-range-filter-wrap" onSubmit={onSubmit}>
         <div>
           <MinMaxPrice 
             variant={"min"} 
-            ref={minPriceRef}
             value={minPriceValue}
             setValue={setMinPriceValue}
             isValid={isValid}
@@ -52,10 +53,12 @@ const PriceCategoryFilter = observer(forwardRef(({ className, minPriceRef }, ref
           />
         </div>
 
-        <button type="submit" disabled={!isValid} data-testid="price-category-filter-btn">OK</button>
+        <button type="submit" disabled={!isValid} data-testid="price-category-filter-btn">
+          OK
+        </button>
       </form>
     </div>
   );
-}));
+});
 
 export default PriceCategoryFilter;
