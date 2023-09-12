@@ -5,7 +5,7 @@ import NavMenuBtn from "./NavMenuBtn";
 import NavCategoryBtn from "./NavCategoryBtn";
 import NavAccountBtn from "./NavAccountBtn";
 import NavCartBtn from "./NavCartBtn";
-import SkipTonextPageContent from "./UI/skipToNextPageContent/SkipTonextPageContent";
+import SkipToNextPageContent from "./UI/skipToNextPageContent/SkipToNextPageContent";
 import NavDesiredListBtn from "./NavDesiredListBtn";
 import { useRef } from "react";
 
@@ -15,7 +15,7 @@ const Navbar = ({ toFocusRef }) => {
 
   return (
     <nav ref={navbarRef}>
-      <SkipTonextPageContent title="Skip to the products section" toFocusRef={toFocusRef} />
+      <SkipToNextPageContent title="Skip to the products section" toFocusRef={toFocusRef} />
       <StoreTitle title={"On the knee"} />
       <div ref={btnGroupRef} data-testid="navbar-btn-group">
         <NavMenuBtn />

@@ -12,7 +12,7 @@ const FilterCategoryBlocksList = observer(() => {
     let result = [];
     const sortedFilterKeys = ArrayActions.sortStringArray(Object.keys(deviceStore.filters));
 
-    for (let filterKey of sortedFilterKeys) {
+    sortedFilterKeys.forEach((filterKey, index) => {
       const isTooLong = deviceStore.filters[filterKey].length >= FILTERS_OPTIONS_LENGTH_LIMIT;
 
       result.push(
@@ -23,7 +23,7 @@ const FilterCategoryBlocksList = observer(() => {
           />
         </li>
       );
-    }
+    });
 
     return result;
   }
@@ -34,6 +34,7 @@ const FilterCategoryBlocksList = observer(() => {
         <FilterCategoryBlock
           filter="price"
           variant="price"
+          isFirst={true}
         />
       </li>
       {renderList()}
