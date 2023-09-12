@@ -8,6 +8,6 @@ const FilterCategories = () => {
       <FilterCategoryBlocksList />
     </section>
   );
-}
+};
 
 export default FilterCategories;

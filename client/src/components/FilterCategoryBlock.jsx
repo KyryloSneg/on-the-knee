@@ -4,13 +4,13 @@ import CategoryFilterList from "./CategoryFilterList";
 import PriceCategoryFilter from "./PriceCategoryFilter";
 import "./styles/FilterCategoryBlock.css";
 
-const FilterCategoryBlock = ({ filter, variant = "default" }) => {
+const FilterCategoryBlock = ({ filter, variant = "default", isFirst = false }) => {
   const [visible, setVisible] = useState(true);
 
   const elemToFocusRef = useRef(null);
-  const className = "filter-category-block";
+  let className = "filter-category-block";
 
-  let testId = `${className} ${filter}`;
+  let testId = `filter-category-block ${filter}`;
   if (visible) {
     testId += " expanded";
   } else {
@@ -38,11 +38,12 @@ const FilterCategoryBlock = ({ filter, variant = "default" }) => {
   }
 
   return (
-    <div className={"filter-category-block"} data-testid={testId}>
+    <div className={className} data-testid={testId}>
       <FilterCategoryBtn
         filter={filter}
         visible={visible}
         setVisible={setVisible}
+        isFirst={isFirst}
       />
       {renderFilters()}
     </div>
