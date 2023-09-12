@@ -145,6 +145,10 @@ button:active {
 
 /* General classes */
 
+.w-100 {
+  width: 100%;
+}
+
 .rotated {
   transform: rotate(180deg);
 }
