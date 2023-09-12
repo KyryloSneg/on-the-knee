@@ -39,7 +39,8 @@ const CatalogPage = () => {
       }
       <div id="wrapper">
         <Aside />
-        {/* <DeviceSection /> */}
+        {/* TODO: setting deviceSectionRef in useEffect of DeviceSection */}
+        {/* <DeviceSection ref={deviceSectionRef} /> */}
       </div>
     </div>
   );
