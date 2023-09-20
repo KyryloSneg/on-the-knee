@@ -17,6 +17,9 @@
 
 .filters li a p {
   text-align: start;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .filters li a:hover {
