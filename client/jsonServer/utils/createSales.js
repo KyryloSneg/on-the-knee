@@ -6,7 +6,7 @@ const DateActions = require("./DateActions");
 module.exports = (sales, saleTypes, saleTypeNames) => {
   
   if (!saleTypeNames.length) {
-    for (let name of POSSIBLE_SALE_TYPE_NAMES) {
+    for (let { name } of POSSIBLE_SALE_TYPE_NAMES) {
       const typeName = {
         "id": saleTypeNames.length + 1,
         "name": name,

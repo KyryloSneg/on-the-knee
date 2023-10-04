@@ -1,0 +1,24 @@
+.main-device-price-wrap {
+  gap: 6px;
+}
+
+.main-device-price b {
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.main-device-old-price {
+  color: #797878;
+}
+
+.main-device-old-price span:first-of-type {
+  text-decoration: line-through;
+}
+
+.main-device-old-price > .main-device-currency {
+  font-size: 1.2rem;
+}
+
+.main-device-currency {
+  padding-left: 1px;
+}

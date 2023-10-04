@@ -1,0 +1,20 @@
+.main-device-sale-icons {
+  display: flex;
+  gap: 6px;
+}
+
+.device-sale-icon-wrap {
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.3rem;
+  border-radius: 8px;
+}
+
+.device-sale-icon-wrap > img {
+  width: 100%;
+  height: 100%;
+  border-radius: 30%;
+}

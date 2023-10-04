@@ -1,0 +1,47 @@
+.attr-options {
+  display: flex;
+  flex-wrap: wrap;
+  flex: 1;
+  gap: 16px;
+}
+
+.attr-options a {
+  border: 1px solid black;
+  border-radius: 6px;
+  padding: 5px;
+  font-size: 1.2rem;
+  color: black;
+  display: block;
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.attr-options a.default-option {
+  border-color: #0047FF;
+}
+
+.attr-options a:not(.disabled-attr-option):hover,
+.attr-options a:not(.disabled-attr-option):focus {
+  border-color: #0047FF;
+}
+
+.attr-options .disabled-attr-option {
+  position: relative;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.attr-options .disabled-attr-option::before {
+  position: absolute;
+  display: block;
+  content: "";
+  top: 50%;
+  left: 50%;
+  /* fallback for old browsers */
+  width: 105%;
+  width: calc(100% + 2px);
+  height: 1px;
+  background-color: rgba(0, 0, 0, 0.2);
+  transform: rotate(155deg) translate(-50%,-50%);
+  transform-origin: 0;
+  z-index: 2;
+}

@@ -3,7 +3,7 @@ const createAllCombinationStrings = require("./createAllCombinationStrings");
 const { MIN_IMAGE_WIDTH, MAX_IMAGE_WIDTH, MIN_IMAGE_HEIGHT, MAX_IMAGE_HEIGHT } = require("./consts");
 const createStock = require("./createStock");
 
-module.exports = (deviceId, attributeValues, deviceCombinations, stocks) => {  
+module.exports = (deviceId, attributeValues, deviceCombinations, stocks) => {
   let attrValues = [];
   let combinationString = [];
 
@@ -22,14 +22,19 @@ module.exports = (deviceId, attributeValues, deviceCombinations, stocks) => {
       attrValues.push(temp);
     }
     createAllCombinationStrings(attrValues, combinationString);
-    
+
     const defaultComboId = faker.number.int({ min: 0, max: combinationString.length - 1 });
     for (let combo of combinationString) {
       const thumbnail = faker.image.url({ width, height });
 
       let images = [];
       for (let i = 0; i < imageAmount; i++) {
-        images.push(faker.image.url({ width, height }));
+        const newImg = {
+          src: faker.image.url({ width, height }),
+          alt: faker.lorem.sentence(),
+        }
+
+        images.push(newImg);
       }
 
       const id = deviceCombinations.length + 1;
@@ -52,7 +57,7 @@ module.exports = (deviceId, attributeValues, deviceCombinations, stocks) => {
         "images": images,
         "default": combinationString.indexOf(combo) === defaultComboId,
       }
-  
+
       deviceCombinations.push(deviceCombination);
     }
   } else {
@@ -60,7 +65,12 @@ module.exports = (deviceId, attributeValues, deviceCombinations, stocks) => {
 
     let images = [];
     for (let i = 0; i < imageAmount; i++) {
-      images.push(faker.image.url({ width, height }));
+      const newImg = {
+        src: faker.image.url({ width, height }),
+        alt: faker.lorem.sentence(),
+      }
+
+      images.push(newImg);
     }
 
     const id = deviceCombinations.length + 1;

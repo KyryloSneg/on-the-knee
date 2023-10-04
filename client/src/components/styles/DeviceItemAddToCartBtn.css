@@ -1,0 +1,20 @@
+.main-device-add-to-cart {
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  background-color: #00dd1d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  width: 100%;
+  min-width: 40px;
+  max-width: 66px;
+  height: 32px;
+  transition: 0.2s;
+  justify-self: end;
+}
+
+.main-device-add-to-cart:hover {
+  background-color: #00f521;
+}

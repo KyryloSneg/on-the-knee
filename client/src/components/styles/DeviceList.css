@@ -1,0 +1,13 @@
+.main-device-list {
+  padding: 0;
+  margin: 0;
+  display: grid;
+  /* different grid layouts later on */
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 20px;
+}
+
+.main-device-list > li {
+  /* using li as our device item placeholder ('cause the item is absolutely positioned on hover) */
+  position: relative;
+}

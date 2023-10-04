@@ -6,9 +6,9 @@ module.exports = (deviceId, categorySlug, attributes, attributeNames, attributeV
   let deviceAttributeValues = {};
 
   const attrs = POSSIBLE_DEVICE_ATTRIBUTES[categorySlug];
-  const hasAttributes = attrs ? faker.datatype.boolean(0.6): false; // 60% chance of having atributes if a device can possibly have them
+  // const hasAttributes = attrs ? faker.datatype.boolean(1): false; // 85% chance of having atributes if a device can possibly have them
 
-  if (hasAttributes) {
+  if (!!attrs) {
     for (let [name, values] of Object.entries(attrs)) {
       
       let attrName;

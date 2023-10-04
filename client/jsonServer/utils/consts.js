@@ -2,47 +2,47 @@ const POSSIBLE_DEVICE_INFOS = {
   "smartphones": [
     {
       "processor": "Qualcomm Snapdragon",
-      "phone-storage": "32GB",
+      "phoneStorage": "32GB",
       "hz": "75",
     },
     {
       "processor": "Apple",
-      "phone-storage": "64GB",
+      "phoneStorage": "64GB",
       "hz": "144",
     },
     {
       "processor": "Mediatek",
-      "phone-storage": "128GB",
+      "phoneStorage": "128GB",
       "hz": "240",
     },
     {
       "processor": "Mediatek",
-      "phone-storage": "256GB",
+      "phoneStorage": "256GB",
       "hz": "240",
     },
   ],
   "laptops": [
     {
-      "video-card": "GTX 360 RTX",
+      "videoCard": "GTX 360 RTX",
     },
     {
-      "video-card": "GTX 1550 TI",
+      "videoCard": "GTX 1550 TI",
     }
   ],
   "fragrances": [
     {
-      "fragrant-note": "Apple",
+      "fragrantNote": "Apple",
     },
     {
-      "fragrant-note": "Rose",
+      "fragrantNote": "Rose",
     }
   ],
   "skincare": [
     {
-      "skin-type": "dry"
+      "skinType": "dry"
     },
     {
-      "skin-type": "sensitive",
+      "skinType": "sensitive",
     },
   ],
   "groceries": [
@@ -81,18 +81,18 @@ const POSSIBLE_DEVICE_INFOS = {
 
 const POSSIBLE_DEVICE_ATTRIBUTES = {
   "smartphones": {
-    "phone-storage": ["32GB", "64GB", "128GB", "256GB"],
-    "color": ["red #FF0000", "purple #A020F0", "green #00FF00"],
+    "phoneStorage": ["32GB", "64GB", "128GB", "256GB"],
+    "color": ["red#FF0000", "purple#A020F0", "green#00FF00"],
   },
   "laptops": {
-    "hz": ["75", "144", "240"],
-    "color": ["brown #2B1700", "space-dark #333334", "white #FFFFFF"],
+    "hz": ["75hz", "144hz", "240hz"],
+    "color": ["brown#2B1700", "spacedark#333334", "white#FFFFFF"],
   },
   "furniture": {
-    "color": ["space-dark #333334", "purple #A020F0", "brown #2B1700", "white #FFFFFF"],
+    "color": ["spacedark#333334", "purple#A020F0", "brown#2B1700", "white#FFFFFF"],
   },
   "tops": {
-    "color": ["black #000000", "red #FF0000", "golden #FFD700", "grey #CECECE"],
+    "color": ["black#000000", "red#FF0000", "golden#FFD700", "grey#CECECE"],
   },
 }
 
@@ -163,7 +163,10 @@ const USERS = [
 ];
 
 const POSSIBLE_DELIVERY_TYPES = { "courier": 5, "self-delivery": 0 };
-const POSSIBLE_SALE_TYPE_NAMES = ["discount", "freeDelivery"];
+const POSSIBLE_SALE_TYPE_NAMES = [
+  {"name": "discount", "bgColor": "#ff1212"},
+  {"name": "freeDelivery", "logo": "https://loremflickr.com/40/40?lock=5239500858982400", "bgColor": "#ff1212"}
+];
 const POSSIBLE_SCHEDULE_TIME_RANGES = {
   2: [
     {

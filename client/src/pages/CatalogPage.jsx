@@ -3,7 +3,7 @@ import TopFilterBar from "../components/TopFilterBar";
 import Aside from "../components/Aside";
 import "./styles/CatalogPage.css";
 import useWindowWidth from "../hooks/useWindowWidth";
-// import DeviceSection from "../components/DeviceSection";
+import DeviceSection from "../components/DeviceSection";
 import { useOutletContext } from "react-router-dom";
 import { sortingOptions } from "../utils/consts";
 
@@ -40,7 +40,7 @@ const CatalogPage = () => {
       <div id="wrapper">
         <Aside />
         {/* TODO: setting deviceSectionRef in useEffect of DeviceSection */}
-        {/* <DeviceSection ref={deviceSectionRef} /> */}
+        <DeviceSection />
       </div>
     </div>
   );

@@ -19,12 +19,12 @@ module.exports = function iter(item, combinationStrings, initialItem = []) {
     const nextItem = initialItem.slice(initialItem.indexOf(arr) + 1); 
     // item: [ ["attr1", "attr2", "attr3"], ["attr1", "attr2"] ]
     // nextItem = [ ["attr1", "attr2"] ]
-
+    
     if (!nextItem.length) return arr;
-
+    
     let combos = [];
     const nextStrings = iter(nextItem, combinationStrings, initialItem);
-
+    
     for (let str of arr) {
       combos.push(...nextStrings.map(nextStr => str + "-" + StringActions.nameToDeviceCombination(nextStr)));
     }

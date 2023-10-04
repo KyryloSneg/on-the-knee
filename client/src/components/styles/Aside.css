@@ -2,17 +2,12 @@ aside {
   display: none;
   flex-direction: column;
   gap: 20px;
-  max-width: 370px;
+  /* max-width: 370px; */
 }
 
 aside input, select {
   font-family: 'Montserrat', sans-serif;
 }
-
-/* aside input:focus, select:focus {
-  border: 2px solid #7e95fa;
-  outline: none;
-} */
 
 aside > * {
   background-color: #f1f1f1;

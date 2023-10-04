@@ -9,7 +9,7 @@
   justify-content: center;
   position: absolute;
   top: 56px;
-  z-index: 2;
+  z-index: 10;
 }
 
 .dropdown-options li {
