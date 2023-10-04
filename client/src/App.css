@@ -66,7 +66,8 @@ input:focus, input:active {
   background-color: white;
 }
 
-.no-select {
+/* I added this rule for every img a bit late so there are redundant classes "no-select" */
+.no-select, img {
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none; /* Safari */
   -moz-user-select: none; /* Old versions of Firefox */
@@ -157,6 +158,10 @@ button:active {
   position: absolute;
   left: 50%;
   translate: 50% 0;
+}
+
+.display-flex {
+  display: flex;
 }
 
 .display-grid {

@@ -1,0 +1,9 @@
+.main-device-item .main-device-hidden-content {
+  display: none;
+}
+
+.main-device-item:hover .main-device-hidden-content {
+  display: block;
+  margin-top: 16px;
+  z-index: 5;
+}

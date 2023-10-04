@@ -1,0 +1,44 @@
+.device-color-options {
+  display: flex;
+  flex: 1;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.device-color-options a {
+  position: relative;
+  display: block;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  /* using not visible for user outline to prevent outline-width transition */
+  outline: 1px #fff solid;
+  outline-offset: 4px;
+  transition: 0.4s;
+}
+
+.device-color-options li:not(.disabled-color-option) a:hover,
+.device-color-options a:focus {
+  outline: 1px #7e95fa solid;
+}
+
+.device-color-options .disabled-color-option a {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  opacity: 0.5;
+}
+
+.device-color-options .disabled-color-option a::before {
+  position: absolute;
+  display: block;
+  content: "";
+  top: 49%;
+  left: 50%;
+  width: 125%;
+  height: 1px;
+  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.8);
+  transform: rotate(135deg) translate(-50%,-50%);
+  transform-origin: 0;
+  z-index: 2;
+}

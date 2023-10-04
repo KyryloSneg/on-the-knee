@@ -1,0 +1,19 @@
+.main-device-rating-wrap {
+  display: flex;
+}
+
+.main-device-rating {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  /* height: 20px; */
+  text-decoration: none;
+}
+
+.main-device-rating > * {
+  height: 100%;
+}
+
+.main-device-rating > span {
+  font-size: 1.2rem;
+}
