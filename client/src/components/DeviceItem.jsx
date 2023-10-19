@@ -4,15 +4,14 @@ import DeviceComboActions from "../utils/DeviceComboActions";
 import DeviceColorOptions from "./DeviceColorOptions";
 import DeviceItemAvgRating from "./DeviceItemAvgRating";
 import DeviceItemPrice from "./DeviceItemPrice";
-import { useContext } from "react";
-import { Context } from "../Context";
 import DeviceItemImage from "./DeviceItemImage";
 import DeviceItemAddToCartBtn from "./DeviceItemAddToCartBtn";
 import DeviceItemHiddenContent from "./DeviceItemHiddenContent";
 import DeviceSalesActions from "../utils/DeviceSalesActions";
+import useWindowWidth from "../hooks/useWindowWidth";
 
-const DeviceItem = ({ device, isInStock, defaultCombination }) => {
-  const { deviceStore } = useContext(Context);
+const DeviceItem = ({ device, isInStock, defaultCombination, stocks, sales, saleTypeNames }) => {
+  const screenWidth = useWindowWidth();
 
   // a device's combination string could be null, so we have to handle it 
   const defaultComboColorHrefs = defaultCombination.combinationString
@@ -20,31 +19,40 @@ const DeviceItem = ({ device, isInStock, defaultCombination }) => {
       defaultCombination,
       device["device-combinations"],
       device.id,
-      deviceStore.stocks,
+      stocks,
       ["color"],
       false,
     )
     : null;
 
-  const defaultComboColorHrefObjects = 
-    DeviceComboActions.getComboColorHrefObjects(defaultComboColorHrefs, device, deviceStore.stocks);
+  const defaultComboColorHrefObjects =
+    DeviceComboActions.getComboColorHrefObjects(defaultComboColorHrefs, device, stocks);
 
   let attributesList = [];
-  if (defaultCombination.combinationString) {
-    attributesList = DeviceComboActions.getAttributesList(
-      defaultCombination,
-      deviceStore.stocks,
-      device
-    );
+  let discountPercentage = null;
+  let textSaleTypes = [];
+  let logoSaleTypes = [];
+
+  if (screenWidth > 960) {
+
+    if (defaultCombination.combinationString) {
+      attributesList = DeviceComboActions.getAttributesList(
+        defaultCombination,
+        stocks,
+        device
+      );
+    }
+
+    const {
+      deviceSaleTypes,
+      discountPercentage: saleDiscountPercentage
+    } = DeviceSalesActions.getSaleTypesAndDiscount(device, sales, saleTypeNames);
+
+    textSaleTypes = deviceSaleTypes.filter(type => !type.logo);
+    logoSaleTypes = deviceSaleTypes.filter(type => type.logo);
+    
+    discountPercentage = saleDiscountPercentage;
   }
-
-  const { 
-    deviceSaleTypes, 
-    discountPercentage
-  } = DeviceSalesActions.getSaleTypesAndDiscount(device, deviceStore.sales, deviceStore.saleTypeNames);
-
-  const textSaleTypes = deviceSaleTypes.filter(type => !type.logo);
-  const logoSaleTypes = deviceSaleTypes.filter(type => type.logo);
 
   // some hardcoded url route if combination string is null
   const to = `${device.id}/${defaultCombination?.combinationString || "default"}`;
@@ -68,7 +76,7 @@ const DeviceItem = ({ device, isInStock, defaultCombination }) => {
         : <div className="device-color-options-placeholder" />
       }
       <Link to={to} className="main-device-name">
-        {device.name}
+        {`${device.name} (${defaultCombination.sku})`}
       </Link>
       <DeviceItemAvgRating
         rating={device.rating}
@@ -79,12 +87,19 @@ const DeviceItem = ({ device, isInStock, defaultCombination }) => {
         <DeviceItemPrice price={defaultCombination.price} discountPercentage={discountPercentage} />
         <DeviceItemAddToCartBtn />
       </div>
-      <DeviceItemHiddenContent
-        logoSaleTypes={logoSaleTypes}
-        deviceId={device.id}
-        attributesList={attributesList}
-        defaultCombo={defaultCombination}
-      />
+      {!isInStock
+        ? <p className="main-device-stock-alert">Not in stock</p>
+        : <div className="main-device-stock-alert-placeholder" />
+      }
+      {screenWidth >= 960 &&
+        <DeviceItemHiddenContent
+          logoSaleTypes={logoSaleTypes}
+          deviceId={device.id}
+          attributesList={attributesList}
+          defaultCombo={defaultCombination}
+          deviceInfos={device["device-infos"]}
+        />
+      }
     </section>
   );
 };

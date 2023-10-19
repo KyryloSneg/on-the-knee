@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import AddToDesiredListBtn from "./AddToDesiredListBtn";
 import DeviceItemSaleIcons from "./DeviceItemSaleIcons";
+import "./styles/DeviceItemImage.css";
 
 const DeviceItemImage = ({ thumbnail, to, deviceId, textSaleTypes }) => {
   return (
@@ -10,9 +11,9 @@ const DeviceItemImage = ({ thumbnail, to, deviceId, textSaleTypes }) => {
         deviceId={deviceId}
         className="main-device-icons-absolute"
       />
-      <AddToDesiredListBtn />
+      <AddToDesiredListBtn deviceId={deviceId} />
       <Link to={to} className="main-device-img-wrap">
-        <img src={thumbnail.src} alt={thumbnail.alt} />
+        <img src={thumbnail.src} alt={thumbnail.alt} draggable="false" />
       </Link>
     </div>
   );

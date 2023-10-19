@@ -9,21 +9,13 @@
   position: relative;
 }
 
-.main-device-item:hover {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 5;
-}
-
-.main-device-item.out-of-stock {
-  opacity: 0.55;
-}
-
 .main-device-item > * {
   /* using this to control the gap between some child items */
   margin-bottom: 8px;
+}
+
+.main-device-item.out-of-stock > * {
+  opacity: 0.4;
 }
 
 .main-device-img-wrap {
@@ -33,7 +25,10 @@
 
 .main-device-img-wrap img {
   max-width: 85%;
-  max-height: 85%;
+  /* making every image same height */
+  height: 18vh;
+  /* keeping up proportions */
+  object-fit: cover;
   justify-self: center;
   align-self: center;
 }
@@ -44,12 +39,13 @@
   text-decoration: none;
   font-size: 1.5rem;
   height: 37px;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   overflow: hidden;
 }
 
 .device-color-options-placeholder {
-  margin: 0 0 28px 0;
+  margin: 0 0 38px 0;
+  height: 0;
 }
 
 ul.main-device-icons-absolute {
@@ -58,7 +54,7 @@ ul.main-device-icons-absolute {
   right: 12px;
   top: 14px;
   z-index: 1;
-  
+
   /* making wrap of child content not possible to prevent particular hiding of it */
   overflow: hidden;
   max-height: 32px;
@@ -74,4 +70,26 @@ ul.main-device-icons-absolute {
   grid-template-columns: auto 1fr;
   gap: 10px;
   margin-bottom: 0;
+}
+
+.main-device-stock-alert {
+  font-size: 1.5rem;
+  margin-bottom: 0;
+}
+
+.main-device-stock-alert-placeholder {
+  height: 0;
+  margin: 0 0 16px 0;
+}
+
+@media screen and (min-width: 960px) {
+  .main-device-item:hover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 5;
+    box-sizing: content-box;
+    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.35);
+  }
 }

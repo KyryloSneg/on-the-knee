@@ -1,0 +1,50 @@
+main {
+  position: relative;
+  display: grid;
+}
+
+.device-section-error {
+  margin-top: 24px;
+}
+
+.device-section-error > p {
+  font-size: 1.5rem;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.device-section-error button {
+  font-size: 1.5rem;
+  color: #4444ef;
+  cursor: pointer;
+  transition: 0.2s;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+main > .spinner-border {
+  position: absolute;
+  bottom: 0;
+  margin-top: 24px;
+}
+
+main .spinner-border.error-retry-spinner {
+  position: static;
+  margin-top: 18px;
+  margin-bottom: 0;
+  /* top: 30px; */
+  justify-self: center;
+}
+
+@media screen and (min-width: 600px) {
+  .device-section-error > p,
+  .device-section-error button  {
+    font-size: 2.2rem;
+  }
+
+  main > .spinner-border.error-retry-spinner {
+    margin-top: 30px;
+    margin-bottom: 4px;
+  }
+}

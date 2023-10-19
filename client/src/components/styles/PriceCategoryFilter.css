@@ -11,6 +11,7 @@
   justify-content: center;
   gap: 10px;
   padding: 4px 6px;
+  flex-direction: row;
 }
 
 .price-range-filter-wrap > div {
@@ -52,6 +53,7 @@
   cursor: pointer;
   transition: 0.2s;
   outline: none;
+  align-self: end;
 }
 
 .price-range-filter-wrap > button:disabled {
@@ -62,14 +64,4 @@
   .price-range-filter-wrap > button:enabled:active,
     .price-range-filter-wrap > button:enabled:focus {
   background-color: #5171ff;
-}
-
-@media screen and (min-width: 1240px) {
-  .price-range-filter-wrap {
-    flex-direction: row;
-  }
-
-  .price-range-filter-wrap > button {
-    align-self: end;
-  }
 }
