@@ -10,6 +10,9 @@ export const USER_ROUTE = "/user";
 export const DESIRED_LIST_ROUTE = "/desired";
 // to do routing for user cabinet
 
+export const DEVICE_API_URL = "/devices?_embed=device-combinations&_embed=device-feedbacks&_embed=device-infos&_embed=sale-devices";
+export const SALES_API_URL = "/sales?_embed=sale-types";
+
 export const sortingOptions = [
   {
     id: 0,
@@ -68,9 +71,12 @@ export const mockSearchResults = {
 };
 
 // params such a sort filter
-export const SPECIAL_QUERY_PARAMS = ["sort", "text"];
+export const SPECIAL_QUERY_PARAMS = ["sort", "text", "page", "pagesToFetch"];
 // in production build the value should be greater than current one
 export const FILTERS_OPTIONS_LENGTH_LIMIT = 5;
+export const DEVICE_ITEM_INFO_AMOUNT_LIMIT = 6;
+export const DEVICE_ITEMS_MOBILE_LIMIT = 30;
+export const DEVICE_ITEMS_DESKTOP_LIMIT = 60;
 
 // set up mock stores
 const deviceStoreInstance = new DeviceStore();

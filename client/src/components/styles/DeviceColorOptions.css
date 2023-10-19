@@ -34,10 +34,10 @@
   content: "";
   top: 49%;
   left: 50%;
-  width: 125%;
+  width: 130%;
   height: 1px;
   border-radius: 10px;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgb(0, 0, 0);
   transform: rotate(135deg) translate(-50%,-50%);
   transform-origin: 0;
   z-index: 2;

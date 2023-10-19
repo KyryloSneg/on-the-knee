@@ -2,6 +2,13 @@
   gap: 6px;
 }
 
+.main-device-price,
+.main-device-old-price {
+  text-overflow: ellipsis;
+  white-space: pre;
+  overflow: hidden;
+}
+
 .main-device-price b {
   font-size: 2rem;
   font-weight: 600;
@@ -15,7 +22,7 @@
   text-decoration: line-through;
 }
 
-.main-device-old-price > .main-device-currency {
+.main-device-old-price>.main-device-currency {
   font-size: 1.2rem;
 }
 
