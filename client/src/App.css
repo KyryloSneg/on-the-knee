@@ -289,7 +289,7 @@ header {
   padding: 10px 5px;
   display: grid;
   align-items: center;
-  z-index: 30;
+  z-index: 2000;
   margin-bottom: 30px;
   position: sticky;
   top: 0;
@@ -402,16 +402,61 @@ header .skip-to-next-page-content:focus {
   animation: none;
 }
 
-.global-loading {
-  opacity: 0.5;
+#app-global-loading-bg {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: rgb(190, 190, 190);
+  opacity: 0.4;
+}
+
+.app-global-loading-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2001;
+  height: 6px;
+  padding: 0;
+  margin: 0;
+  background-color: rgb(255, 255, 255);
+}
+
+.app-global-loading-bar-rect {
+  background-color: #1e47ff;
+  width: 25%;
+  height: 100%;
+  animation: 0.35s linear infinite app-global-loading;
+}
+
+@media screen and (min-width: 1000px) {
+  .app-global-loading-bar-rect {
+    animation: 0.3s linear infinite app-global-loading;
+  }
+}
+
+@keyframes app-global-loading {
+  from {
+    /* doing this to make start of the animation smoother */
+    margin-left: -65px;
+  }
+
+  to {
+    /* fallback for old browsers */
+    margin-left: 100%;
+    margin-left: calc(100% - 25%);
+  }
 }
 
 @keyframes spinner-border {
-  0% {
+  from {
     transform: rotate(0deg);
   }
 
-  100% {
+  to {
     transform: rotate(360deg);
   }
 }

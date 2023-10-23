@@ -27,10 +27,20 @@ const App = observer(() => {
     }
   }, [app.isBlockedScroll])
 
-  const className = app.isGlobalLoading ? "global-loading" : "";
-  console.log(app.isGlobalLoading);
   return (
-    <div className={className}>
+    <div>
+      {/* our gray bg on global loading */}
+      {app.isGlobalLoading &&
+        <div id="app-global-loading-bg" />
+      }
+      {/* our global loading loader bar */}
+      {app.isGlobalLoading &&
+        <div className="app-global-loading-bar">
+          {/* rectangle that moves along the bar */}
+          <div className="app-global-loading-bar-rect" />
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      }
       {/* dark bg that shows up on certain events (like opening a modal window) */}
       {app.darkBgVisible && <div id="app-dark-bg" tabIndex={0} data-testid="app-dark-bg" />}
       <header ref={headerRef}>
