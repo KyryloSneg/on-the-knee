@@ -79,10 +79,11 @@ ul.main-device-icons-absolute {
 
 .main-device-stock-alert-placeholder {
   height: 0;
-  margin: 0 0 16px 0;
+  margin: 0 0 19px 0;
 }
 
 @media screen and (min-width: 960px) {
+  .main-device-item.js-focused,
   .main-device-item:hover {
     position: absolute;
     top: 0;

@@ -202,7 +202,7 @@ button:active {
   display: grid;
 }
 
-.visually-hidden {
+.visually-hidden, .visually-hidden * {
   width: 0;
   height: 0;
   padding: 0;
@@ -222,6 +222,10 @@ button:active {
 
 .invalidInput {
   border: 2px red solid;
+}
+
+.disabled-link {
+  pointer-events: none;
 }
 
 .bold {
@@ -390,6 +394,16 @@ header .skip-to-next-page-content:focus {
   animation: 0.75s linear infinite spinner-border;
   border-radius: 50%;
   display: inline-block;
+}
+
+/* loader placeholder */
+.spinner-border.placeholder {
+  border: 0.8rem solid rgb(220, 220, 220);
+  animation: none;
+}
+
+.global-loading {
+  opacity: 0.5;
 }
 
 @keyframes spinner-border {

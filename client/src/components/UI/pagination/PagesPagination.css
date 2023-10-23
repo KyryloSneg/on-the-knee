@@ -1,0 +1,37 @@
+.pages-pagination {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  gap: 12px;
+}
+
+.page-pagination-link {
+  outline: none;
+  display: block;
+  min-width: 25px;
+  font-size: 1.8rem;
+  text-align: center;
+  padding: 11px;
+  border: 2px solid black;
+  border-radius: 8px;
+}
+
+.page-pagination-link:hover,
+.page-pagination-link:focus,
+.page-pagination-link:active {
+  color: #004cf1;
+}
+
+.page-pagination-link.active,
+.page-pagination-link:focus {
+  border: 2px solid #0061e0;
+}
+
+.page-pagination-link:focus {
+  font-weight: bold;
+}
+
+@media screen and (min-width: 620px) {
+  .pages-pagination {
+    display: flex;
+  }
+}

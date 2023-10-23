@@ -9,8 +9,13 @@ import { observer } from "mobx-react-lite";
 const App = observer(() => {
   const { app } = useContext(Context);
   // ref for the "skip to next page content" btn
-  const pageRef = useRef(null);  
+  const pageRef = useRef(null);
+  const headerRef = useRef(null);  
   const context = { pageRef };
+
+  useEffect(() => {
+    app.setHeaderRef(headerRef);
+  }, [headerRef]);
 
   useEffect(() => {
     if (app.isBlockedScroll) {
@@ -22,11 +27,13 @@ const App = observer(() => {
     }
   }, [app.isBlockedScroll])
 
+  const className = app.isGlobalLoading ? "global-loading" : "";
+  console.log(app.isGlobalLoading);
   return (
-    <div>
+    <div className={className}>
       {/* dark bg that shows up on certain events (like opening a modal window) */}
       {app.darkBgVisible && <div id="app-dark-bg" tabIndex={0} data-testid="app-dark-bg" />}
-      <header>
+      <header ref={headerRef}>
         <Navbar toFocusRef={pageRef} />
       </header>
       <Outlet context={context} />
