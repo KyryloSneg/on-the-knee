@@ -9,9 +9,13 @@ import DeviceItemAddToCartBtn from "./DeviceItemAddToCartBtn";
 import DeviceItemHiddenContent from "./DeviceItemHiddenContent";
 import DeviceSalesActions from "../utils/DeviceSalesActions";
 import useWindowWidth from "../hooks/useWindowWidth";
+import { WIDTH_TO_SHOW_DEV_HID_CONTENT } from "../utils/consts";
+import { useRef, useState } from "react";
 
 const DeviceItem = ({ device, isInStock, defaultCombination, stocks, sales, saleTypeNames }) => {
   const screenWidth = useWindowWidth();
+  const deviceRef = useRef(null); 
+  const [isVisibleHidContent, setIsVisibleHidContent] = useState(false);
 
   // a device's combination string could be null, so we have to handle it 
   const defaultComboColorHrefs = defaultCombination.combinationString
@@ -33,7 +37,7 @@ const DeviceItem = ({ device, isInStock, defaultCombination, stocks, sales, sale
   let textSaleTypes = [];
   let logoSaleTypes = [];
 
-  if (screenWidth > 960) {
+  if (screenWidth >= WIDTH_TO_SHOW_DEV_HID_CONTENT) {
 
     if (defaultCombination.combinationString) {
       attributesList = DeviceComboActions.getAttributesList(
@@ -63,8 +67,34 @@ const DeviceItem = ({ device, isInStock, defaultCombination, stocks, sales, sale
     className += " out-of-stock";
   }
 
+  if (isVisibleHidContent) {
+    className += " js-focused"
+  }
+
+  function showHiddenContent() {
+    if (screenWidth < WIDTH_TO_SHOW_DEV_HID_CONTENT) return;
+    if (isVisibleHidContent) return;
+
+    setIsVisibleHidContent(true);
+  }
+
+  function hideHiddenContent(e) {
+    if (screenWidth < WIDTH_TO_SHOW_DEV_HID_CONTENT) return;
+    if (!isVisibleHidContent) return;
+    // if the element that gained the focus is descendant of device section node
+    // ignore hiding the content
+    if (deviceRef.current.contains(e.relatedTarget)) return;
+
+    setIsVisibleHidContent(false);
+  }
+
   return (
-    <section className={className}>
+    <section 
+      className={className}
+      onFocus={showHiddenContent}
+      onBlurCapture={hideHiddenContent}
+      ref={deviceRef}
+    >
       <DeviceItemImage
         thumbnail={thumbnail}
         to={to}
@@ -91,7 +121,7 @@ const DeviceItem = ({ device, isInStock, defaultCombination, stocks, sales, sale
         ? <p className="main-device-stock-alert">Not in stock</p>
         : <div className="main-device-stock-alert-placeholder" />
       }
-      {screenWidth >= 960 &&
+      {screenWidth >= WIDTH_TO_SHOW_DEV_HID_CONTENT &&
         <DeviceItemHiddenContent
           logoSaleTypes={logoSaleTypes}
           deviceId={device.id}

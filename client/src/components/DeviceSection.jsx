@@ -13,6 +13,7 @@ import useGettingPaginationParams from "../hooks/useGettingPaginationParams";
 
 const DeviceSection = observer(() => {
   const { app, deviceStore } = useContext(Context);
+  const mainRef = useRef(null);
   const deviceSectionRef = useRef(null);
   const totalPages = getTotalPages(deviceStore.totalCount, deviceStore.limit);
   const canLoadMore = isCanLoadMoreContent(
@@ -21,7 +22,7 @@ const DeviceSection = observer(() => {
     (deviceStore.page - 1) * deviceStore._limit
   );
 
-  const [isLoading, error, fetching] = useDeviceSectionFetching(deviceStore);
+  const [isLoading, error, fetching] = useDeviceSectionFetching(deviceStore, app, "");
   if (error) console.log(error);
 
   useEffect(() => {
@@ -35,7 +36,7 @@ const DeviceSection = observer(() => {
   }
 
   return (
-    <main>
+    <main ref={mainRef}>
       {/* <DevicePageList /> */}
       <DeviceList
         devices={deviceStore.devices}
@@ -72,13 +73,15 @@ const DeviceSection = observer(() => {
       {canLoadMore &&
         <ButtonPagination
           isLoading={isLoading}
-          className={"device-section-fetch-btn"}
         />
       }
       {!!(+deviceStore.totalCount) &&
         <PagesPagination
           totalPages={totalPages}
-          currentPage={1}
+          currentPage={deviceStore.page}
+          pagesToFetch={deviceStore.pagesToFetch}
+          scrollElem={mainRef.current}
+          ariaLabel="Device pages"
         />
       }
     </main>

@@ -7,6 +7,7 @@
   margin-bottom: 12px;
 }
 
+.main-device-item.js-focused .main-device-hidden-content,
 .main-device-item:hover .main-device-hidden-content {
   display: block;
   margin-top: 8px;

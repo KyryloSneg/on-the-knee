@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function useFetching(callback, settingIsLoadingDelay = 0) {
+function useFetching(callback, settingIsLoadingDelay = 0, finallyCallback = null) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -13,6 +13,7 @@ function useFetching(callback, settingIsLoadingDelay = 0) {
     } catch (e) {
       setError(e.message);
     } finally {
+      if (finallyCallback) finallyCallback();
       setTimeout(() => {
         setIsLoading(false); 
       }, settingIsLoadingDelay);
