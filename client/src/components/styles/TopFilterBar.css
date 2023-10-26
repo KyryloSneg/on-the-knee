@@ -69,7 +69,7 @@
   }
 }
 
-@media screen and (min-width: 800px) {
+@media screen and (min-width: 960px) {
   #top-filter-bar {
     display: none;
   }

@@ -2,12 +2,71 @@
   padding: 0;
   margin: 0;
   display: grid;
-  /* different grid layouts later on */
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
   gap: 20px;
+  margin-bottom: 24px;
 }
 
 .main-device-list > li {
   /* using li as our device item placeholder ('cause the item is absolutely positioned on hover) */
   position: relative;
+  /* fallback */
+  height: 380px;
+  height: calc(210px + 18vh);
+  justify-self: center;
+  width: 100%;
+}
+
+@media screen and (min-width: 250px) {
+  .main-device-list > li {
+    width: 95%;
+  }
+}
+
+@media screen and (min-width: 430px) {
+  .main-device-list > li {
+    width: 70%;
+  }
+}
+
+@media screen and (min-width: 550px) {
+  .main-device-list {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .main-device-list > li {
+    width: 100%;
+    justify-self: auto;
+  }
+}
+
+@media screen and (min-width: 820px) {
+  .main-device-list {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+@media screen and (min-width: 960px) {
+  .main-device-list {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media screen and (min-width: 1120px) {
+  .main-device-list {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+@media screen and (min-width: 1390px) {
+  .main-device-list {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+}
+
+@media screen and (min-width: 1920px) {
+  .main-device-list {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  }
 }
