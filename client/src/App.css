@@ -6,7 +6,7 @@ html {
   background: #f0f0f0;
 }
 
-html > *:focus {
+html>*:focus {
   outline: solid;
 }
 
@@ -15,15 +15,24 @@ body {
 }
 
 ::selection {
-  background-color: #b9c6ff; /* WebKit/Blink Browsers */
+  background-color: #b9c6ff;
+  /* WebKit/Blink Browsers */
 }
+
 ::-moz-selection {
-  background-color: #b9c6ff; /* Gecko Browsers */
+  background-color: #b9c6ff;
+  /* Gecko Browsers */
 }
 
 /* Typography */
 
-h1, h2 {
+a {
+  text-decoration: none;
+  color: black;
+}
+
+h1,
+h2 {
   font-family: 'Roboto', 'Arial', serif;
 }
 
@@ -41,7 +50,11 @@ h2 {
   font-size: 1.8rem;
 } */
 
-p, label, input, select, button {
+p,
+label,
+input,
+select,
+button {
   font-size: 1.5rem;
 }
 
@@ -62,17 +75,24 @@ input:not(input[type="checkbox"]):focus {
   outline: none;
 }
 
-input:focus, input:active {
+input:focus,
+input:active {
   background-color: white;
 }
 
 /* I added this rule for every img a bit late so there are redundant classes "no-select" */
-.no-select, img {
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none; /* Safari */
-  -moz-user-select: none; /* Old versions of Firefox */
-  -ms-user-select: none; /* Internet Explorer/Edge */
-  user-select: none; /* Non-prefixed version, currently
+.no-select,
+img {
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Safari */
+  -moz-user-select: none;
+  /* Old versions of Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently
                                   supported by Chrome, Edge, Opera and Firefox */
 }
 
@@ -85,10 +105,15 @@ input::-webkit-inner-spin-button {
 
 /* clears the ‘X’ from Internet Explorer */
 input[type=search]::-ms-clear {
-   display: none; width : 0; height: 0; 
+  display: none;
+  width: 0;
+  height: 0;
 }
+
 input[type=search]::-ms-reveal {
-   display: none; width : 0; height: 0; 
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 /* clears the ‘X’ from Chrome */
@@ -96,7 +121,7 @@ input[type="search"]::-webkit-search-decoration,
 input[type="search"]::-webkit-search-cancel-button,
 input[type="search"]::-webkit-search-results-button,
 input[type="search"]::-webkit-search-results-decoration {
-   display: none; 
+  display: none;
 }
 
 /* Firefox */
@@ -105,7 +130,8 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 
-input, select {
+input,
+select {
   min-height: 25px;
 }
 
@@ -160,12 +186,30 @@ button:active {
   translate: 50% 0;
 }
 
+.justify-center {
+  justify-self: center;
+}
+
+.align-center {
+  align-self: center;
+}
+
 .display-flex {
   display: flex;
 }
 
 .display-grid {
   display: grid;
+}
+
+.visually-hidden, .visually-hidden * {
+  width: 0;
+  height: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: 0;
+  font-size: 0;
 }
 
 .display-none {
@@ -180,11 +224,16 @@ button:active {
   border: 2px red solid;
 }
 
+.disabled-link {
+  pointer-events: none;
+}
+
 .bold {
   font-weight: bold;
 }
 
-.link-colors, .link-colors-wrap a {
+.link-colors,
+.link-colors-wrap a {
   outline-color: #ff7e14;
   color: #7373ff;
 }
@@ -240,7 +289,7 @@ header {
   padding: 10px 5px;
   display: grid;
   align-items: center;
-  z-index: 30;
+  z-index: 2000;
   margin-bottom: 30px;
   position: sticky;
   top: 0;
@@ -255,7 +304,7 @@ header .skip-to-next-page-content:focus {
 /* delete input content and "back" buttons */
 
 .delete-input-content-btn,
- .input-back-btn {
+.input-back-btn {
   align-self: center;
   display: grid;
   align-items: center;
@@ -316,7 +365,7 @@ header .skip-to-next-page-content:focus {
 }
 
 .skip-to-next-page-content:hover,
- .skip-to-next-page-content:active {
+.skip-to-next-page-content:active {
   background-color: rgb(51, 84, 231);
 }
 
@@ -330,6 +379,86 @@ header .skip-to-next-page-content:focus {
 
 .skip-to-next-page-content svg {
   fill: white;
+}
+
+/* some styles from bootstrap because i can't import the loader's styles separately */
+.spinner-border {
+  width: 2.8rem;
+  height: 2.8rem;
+  vertical-align: -0.125em;
+  border: 0.8rem solid rgb(12, 101, 235);
+  border-right: 0.8rem solid #0000;
+}
+
+.spinner-border {
+  animation: 0.75s linear infinite spinner-border;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* loader placeholder */
+.spinner-border.placeholder {
+  border: 0.8rem solid rgb(220, 220, 220);
+  animation: none;
+}
+
+#app-global-loading-bg {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: rgb(190, 190, 190);
+  opacity: 0.4;
+}
+
+.app-global-loading-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2001;
+  height: 6px;
+  padding: 0;
+  margin: 0;
+  background-color: rgb(255, 255, 255);
+}
+
+.app-global-loading-bar-rect {
+  background-color: #1e47ff;
+  width: 25%;
+  height: 100%;
+  animation: 0.35s linear infinite app-global-loading;
+}
+
+@media screen and (min-width: 1000px) {
+  .app-global-loading-bar-rect {
+    animation: 0.3s linear infinite app-global-loading;
+  }
+}
+
+@keyframes app-global-loading {
+  from {
+    /* doing this to make start of the animation smoother */
+    margin-left: -65px;
+  }
+
+  to {
+    /* fallback for old browsers */
+    margin-left: 100%;
+    margin-left: calc(100% - 25%);
+  }
+}
+
+@keyframes spinner-border {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes fade-in {

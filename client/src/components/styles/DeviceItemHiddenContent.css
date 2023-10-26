@@ -1,9 +1,15 @@
 .main-device-item .main-device-hidden-content {
+  margin-bottom: 0;
   display: none;
 }
 
+.main-device-item .main-device-hidden-content>* {
+  margin-bottom: 12px;
+}
+
+.main-device-item.js-focused .main-device-hidden-content,
 .main-device-item:hover .main-device-hidden-content {
   display: block;
-  margin-top: 16px;
+  margin-top: 8px;
   z-index: 5;
 }

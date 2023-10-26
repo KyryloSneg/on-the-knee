@@ -1,8 +1,10 @@
+import { DEVICE_ITEM_INFO_AMOUNT_LIMIT } from "../utils/consts";
 import DeviceItemAttrOptionSection from "./DeviceItemAttrOptionSection";
+import DeviceItemInfo from "./DeviceItemInfo";
 import DeviceItemSaleIcons from "./DeviceItemSaleIcons";
 import "./styles/DeviceItemHiddenContent.css";
 
-const DeviceItemHiddenContent = ({ logoSaleTypes, deviceId, attributesList, defaultCombo }) => {
+const DeviceItemHiddenContent = ({ logoSaleTypes, deviceId, attributesList, defaultCombo, deviceInfos }) => {
   return (
     <div className="main-device-hidden-content">
       <DeviceItemSaleIcons
@@ -16,7 +18,10 @@ const DeviceItemHiddenContent = ({ logoSaleTypes, deviceId, attributesList, defa
           defaultCombo={defaultCombo}
         />
       }
-      {/* device info */}
+      <DeviceItemInfo 
+        deviceInfos={deviceInfos.slice(0, DEVICE_ITEM_INFO_AMOUNT_LIMIT)} 
+        deviceId={deviceId} 
+      />
     </div>
   );
 }

@@ -151,8 +151,6 @@ class DeviceComboActions {
         [name],
       );
 
-      console.log(attrHrefsInStock);
-
       const attrValues = this.getAttrValuesFromComboStrings(combinationStrings, name, device.id);
       const valuesObj = attrValues.map(value => {
         const comboStr = this.getDefaultComboStrByAttr(name, value, defaultCombination.combinationString);

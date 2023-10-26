@@ -2,9 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import UserStore from './stores/UserStore';
 import DeviceStore from './stores/DeviceStore';
+import AppStore from './stores/AppStore';
 import { Context } from "./Context";
 import AppRouterProvider from './components/AppRouterProvider';
-import AppStore from './stores/AppStore';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

@@ -1,25 +1,28 @@
-import { useContext } from "react";
-import { Context } from "../Context";
 import DeviceItem from "./DeviceItem";
 import "./styles/DeviceList.css";
 import DeviceComboActions from "../utils/DeviceComboActions";
 
-const DeviceList = () => {
-  const { deviceStore } = useContext(Context);
+const DeviceList = ({ devices, stocks, sales, saleTypeNames }) => {
+  let className = "main-device-list";
+  if (!devices.length) className += " display-none";
+
   return (
-    <ul className="main-device-list">
-      {deviceStore.devices.map(dev => {
+    <ul className={className}>
+      {devices.map(dev => {
         const { 
           defaultCombinationInStock: defaultCombination,
           isInStock
-        } = DeviceComboActions.findDefaultCombination(dev, deviceStore.stocks); 
+        } = DeviceComboActions.findDefaultCombination(dev, stocks); 
         
         return (
           <li key={`deviceItem: ${dev.id}`}>
             <DeviceItem 
               device={dev} 
               isInStock={isInStock} 
-              defaultCombination={defaultCombination} 
+              defaultCombination={defaultCombination}
+              stocks={stocks}
+              sales={sales}
+              saleTypeNames={saleTypeNames} 
             />
           </li>
         );
