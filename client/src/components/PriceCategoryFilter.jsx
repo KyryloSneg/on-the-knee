@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "./styles/PriceCategoryFilter.css";
 import MinMaxPrice from "./MinMaxPrice";
 import { Context } from "../Context";
@@ -12,7 +12,26 @@ const PriceCategoryFilter = observer(() => {
 
   const [minPriceValue, setMinPriceValue] = useState(deviceStore.initialMinPrice);
   const [maxPriceValue, setMaxPriceValue] = useState(deviceStore.initialMaxPrice);
-  const [isValid, setIsValid] = useState(true)
+  const [isValid, setIsValid] = useState(true);
+
+  useEffect(() => {
+    // resetting input's values and "price" query param on devices min price or max one change
+    const nextMinPrice = deviceStore.initialMinPrice;
+    const nextMaxPrice = deviceStore.initialMaxPrice;
+
+    setMinPriceValue(nextMinPrice);
+    setMaxPriceValue(nextMaxPrice);
+    
+    const [queryMinPrice, queryMaxPrice] = URLActions.getParamValue("price")?.split("-") || [];
+    const isSettedQueryPrice = queryMinPrice && queryMaxPrice;
+    const resettedURL = URLActions.deleteParamValue("price", `${minPriceValue}-${maxPriceValue}`);
+    const basename = process.env.REACT_APP_CLIENT_URL;
+
+    if (resettedURL && 
+      (isSettedQueryPrice && (+queryMinPrice !== nextMinPrice || +queryMaxPrice !== nextMaxPrice))) {
+      navigate(resettedURL.replace(basename, ""), { replace: true });
+    } 
+  }, [deviceStore.initialMinPrice, deviceStore.initialMaxPrice]);
 
   function onSubmit(e) {
     e.preventDefault();

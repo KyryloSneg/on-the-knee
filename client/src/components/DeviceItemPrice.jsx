@@ -1,9 +1,9 @@
+import getDiscountedPrice from "../utils/getDiscountedPrice";
 import "./styles/DeviceItemPrice.css";
 
 const DeviceItemPrice = ({ price, discountPercentage = 0 }) => {
   if (discountPercentage > 0) {
-    let discountedPrice = price * ( (100 - discountPercentage) / 100 );
-    discountedPrice = discountedPrice.toFixed(2);
+    const discountedPrice = getDiscountedPrice(price, discountPercentage);
 
     return (
       <div className="main-device-price-wrap display-flex">

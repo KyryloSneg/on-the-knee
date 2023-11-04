@@ -10,6 +10,7 @@ import PagesPagination from "./UI/pagination/PagesPagination";
 import { Spinner } from "react-bootstrap";
 import isCanLoadMoreContent from "../utils/isCanLoadMoreContent";
 import useGettingPaginationParams from "../hooks/useGettingPaginationParams";
+import URLActions from "../utils/URLActions";
 
 const DeviceSection = observer(() => {
   const { app, deviceStore } = useContext(Context);
@@ -22,7 +23,8 @@ const DeviceSection = observer(() => {
     (deviceStore.page - 1) * deviceStore._limit
   );
 
-  const [isLoading, error, fetching] = useDeviceSectionFetching(deviceStore, app, "");
+  const [minPrice, maxPrice] = URLActions.getParamValue("price")?.split("-") || [];
+  const [isLoading, error, fetching] = useDeviceSectionFetching(deviceStore, app, "", minPrice, maxPrice);
   if (error) console.log(error);
 
   useEffect(() => {
@@ -74,6 +76,9 @@ const DeviceSection = observer(() => {
         <ButtonPagination
           isLoading={isLoading}
         />
+      }
+      {(!canLoadMore && isLoading) &&
+        <div className="visually-hidden" tabIndex={0} />
       }
       {!!(+deviceStore.totalCount) &&
         <PagesPagination
