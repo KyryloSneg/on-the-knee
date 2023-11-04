@@ -6,8 +6,9 @@ class AppStore {
     this._isBlockedScroll = false;
     this._isGlobalLoading = false;
     // some important app refs below to skip a big amount of props passing
+    this._pageRef = null;
     this._deviceSectionRef = null;
-    this._asideBeginningRef = null;
+    this._asideRef = null;
     this._headerRef = null;
     makeAutoObservable(this);
   }
@@ -24,12 +25,16 @@ class AppStore {
     this._isGlobalLoading = bool;
   }
 
+  setPageRef(ref) {
+    this._pageRef = ref;
+  }
+
   setDeviceSectionRef(ref) {
     this._deviceSectionRef = ref;
   }
 
-  setAsideBeginningRef(ref) {
-    this._asideBeginningRef = ref;
+  setAsideRef(ref) {
+    this._asideRef = ref;
   }
 
   setHeaderRef(ref) {
@@ -48,12 +53,16 @@ class AppStore {
     return this._isGlobalLoading;
   }
   
+  get pageRef() {
+    return this._pageRef;
+  }
+
   get deviceSectionRef() {
     return this._deviceSectionRef;
   }
 
-  get asideBeginningRef() {
-    return this._asideBeginningRef;
+  get asideRef() {
+    return this._asideRef;
   }
 
   get headerRef() {

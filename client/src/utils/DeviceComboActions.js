@@ -1,3 +1,5 @@
+import filterByPriceRange from "./filterByPriceRange";
+
 class DeviceComboActions {
 
   static getColor(combinationString) {
@@ -107,7 +109,7 @@ class DeviceComboActions {
     return comboStr;
   }
 
-  static getAttrValuesFromComboStrings(combinationStrings, attrName, deviceId) {
+  static getAttrValuesFromComboStrings(combinationStrings, attrName) {
     let attrs = [];
 
     for (let comboStr of combinationStrings) {
@@ -150,8 +152,8 @@ class DeviceComboActions {
         stocks,
         [name],
       );
-
-      const attrValues = this.getAttrValuesFromComboStrings(combinationStrings, name, device.id);
+      
+      const attrValues = this.getAttrValuesFromComboStrings(combinationStrings, name);
       const valuesObj = attrValues.map(value => {
         const comboStr = this.getDefaultComboStrByAttr(name, value, defaultCombination.combinationString);
         const href = `${device.id}/${comboStr}`;

@@ -4,7 +4,7 @@ import CategoryFilterList from "./CategoryFilterList";
 import PriceCategoryFilter from "./PriceCategoryFilter";
 import "./styles/FilterCategoryBlock.css";
 
-const FilterCategoryBlock = ({ filter, variant = "default", isFirst = false }) => {
+const FilterCategoryBlock = ({ filter, variant = "default" }) => {
   const [visible, setVisible] = useState(true);
 
   const elemToFocusRef = useRef(null);
@@ -43,7 +43,6 @@ const FilterCategoryBlock = ({ filter, variant = "default", isFirst = false }) =
         filter={filter}
         visible={visible}
         setVisible={setVisible}
-        isFirst={isFirst}
       />
       {renderFilters()}
     </div>

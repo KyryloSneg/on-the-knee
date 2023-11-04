@@ -1,13 +1,13 @@
-const SkipToNextPageContent = ({ title, toFocusRef, testId = null, ...props }) => {
+const SkipToNextPageContent = ({ title, elemToFocus, testId = null, ...props }) => {
   let className = "skip-to-next-page-content";
   if (props.className) {
     className += ` ${props.className}`;
   }
 
   function onClick() {
-    // to focus ref element
-    // adding "?." to not throw an error when a ref is not implemented atm 
-    toFocusRef?.current?.focus();
+    // to focus element
+    // adding "?." to not throw an error when an elem is not implemented atm 
+    elemToFocus?.focus();
   }
 
   return (
