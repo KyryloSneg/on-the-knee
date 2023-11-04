@@ -10,10 +10,10 @@ import PagesPagination from "./UI/pagination/PagesPagination";
 import { Spinner } from "react-bootstrap";
 import isCanLoadMoreContent from "../utils/isCanLoadMoreContent";
 import useGettingPaginationParams from "../hooks/useGettingPaginationParams";
+import URLActions from "../utils/URLActions";
 
 const DeviceSection = observer(() => {
   const { app, deviceStore } = useContext(Context);
-  const mainRef = useRef(null);
   const deviceSectionRef = useRef(null);
   const totalPages = getTotalPages(deviceStore.totalCount, deviceStore.limit);
   const canLoadMore = isCanLoadMoreContent(
@@ -22,7 +22,8 @@ const DeviceSection = observer(() => {
     (deviceStore.page - 1) * deviceStore._limit
   );
 
-  const [isLoading, error, fetching] = useDeviceSectionFetching(deviceStore, app, "");
+  const [minPrice, maxPrice] = URLActions.getParamValue("price")?.split("-") || [];
+  const [isLoading, error, fetching] = useDeviceSectionFetching(deviceStore, app, "", minPrice, maxPrice);
   if (error) console.log(error);
 
   useEffect(() => {
@@ -36,7 +37,7 @@ const DeviceSection = observer(() => {
   }
 
   return (
-    <main ref={mainRef}>
+    <main ref={deviceSectionRef}>
       {/* <DevicePageList /> */}
       <DeviceList
         devices={deviceStore.devices}
@@ -75,12 +76,15 @@ const DeviceSection = observer(() => {
           isLoading={isLoading}
         />
       }
+      {(!canLoadMore && isLoading) &&
+        <div className="visually-hidden" tabIndex={0} />
+      }
       {!!(+deviceStore.totalCount) &&
         <PagesPagination
           totalPages={totalPages}
           currentPage={deviceStore.page}
           pagesToFetch={deviceStore.pagesToFetch}
-          scrollElem={mainRef.current}
+          scrollElem={deviceSectionRef.current}
           ariaLabel="Device pages"
         />
       }

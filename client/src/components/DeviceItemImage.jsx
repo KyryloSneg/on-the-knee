@@ -11,7 +11,7 @@ const DeviceItemImage = ({ thumbnail, to, deviceId, textSaleTypes }) => {
         deviceId={deviceId}
         className="main-device-icons-absolute"
       />
-      <AddToDesiredListBtn deviceId={deviceId} />
+      <AddToDesiredListBtn />
       <Link to={to} className="main-device-img-wrap">
         <img src={thumbnail.src} alt={thumbnail.alt} draggable="false" />
       </Link>

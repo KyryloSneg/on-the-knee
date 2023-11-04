@@ -5,13 +5,17 @@ import { useContext, useEffect, useRef } from "react";
 import { Outlet } from "react-router-dom";
 import { Context } from "./Context";
 import { observer } from "mobx-react-lite";
+import getAllFocusableElements from "./utils/getAllFocusableElements";
 
 const App = observer(() => {
   const { app } = useContext(Context);
   // ref for the "skip to next page content" btn
-  const pageRef = useRef(null);
   const headerRef = useRef(null);  
-  const context = { pageRef };
+
+  let pageElemToFocus;
+  if (app.pageRef?.current) {
+    pageElemToFocus = getAllFocusableElements(app.pageRef.current)[0];
+  }
 
   useEffect(() => {
     app.setHeaderRef(headerRef);
@@ -44,9 +48,9 @@ const App = observer(() => {
       {/* dark bg that shows up on certain events (like opening a modal window) */}
       {app.darkBgVisible && <div id="app-dark-bg" tabIndex={0} data-testid="app-dark-bg" />}
       <header ref={headerRef}>
-        <Navbar toFocusRef={pageRef} />
+        <Navbar elemToFocus={pageElemToFocus} />
       </header>
-      <Outlet context={context} />
+      <Outlet />
       <MyFooter />
     </div>  
   );

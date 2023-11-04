@@ -58,6 +58,7 @@
 
 .price-range-filter-wrap > button:disabled {
   background-color: #676767;
+  cursor: auto;
 }
 
 .price-range-filter-wrap > button:enabled:hover,
