@@ -28,7 +28,7 @@ class DeviceStore {
     this._usedFilters = {};
 
     this._initialMinPrice = 0;
-    this._initialMaxPrice = 1;
+    this._initialMaxPrice = 0;
 
     this._devices = [];
     this._stocks = [];

@@ -1,13 +1,13 @@
 import _ from "lodash";
 import { useEffect, useRef } from "react";
-import { getDevices } from "../http/DeviceApi";
+import { getDeviceMinMaxPrices, getDevices } from "../http/DeviceApi";
 import { getStocks } from "../http/StocksAPI";
 import { getSaleTypeNames, getSales } from "../http/SalesAPI";
-import findMinMaxPrices from "../utils/findMinMaxPrices";
 import useFetching from "./useFetching";
+import filterByPriceRange from "../utils/filterByPriceRange";
 
 // query params without pagination ones
-function useDeviceSectionFetching(deviceStore, app, stringQueryParams = "") {
+function useDeviceSectionFetching(deviceStore, app, stringQueryParams = "", minQueryPrice = null, maxQueryPrice = null) {
   const prevStringQueryParams = useRef(stringQueryParams);
   const isInitialFetch = !deviceStore.devices.length || stringQueryParams !== prevStringQueryParams.current
 
@@ -23,16 +23,26 @@ function useDeviceSectionFetching(deviceStore, app, stringQueryParams = "") {
     const sales = await getSales();
     const saleTypeNames = await getSaleTypeNames();
 
+    if (minQueryPrice && maxQueryPrice) {
+      for (let dev of devices) {
+        const filteredCombos = filterByPriceRange(dev["device-combinations"], minQueryPrice, maxQueryPrice);
+        const defaultCombo = filteredCombos.map(combo => combo.default);
+        if (!defaultCombo) {
+          // setting a default combo (some random combination)
+          filteredCombos[0].default = true;
+        }
+        dev["device-combinations"] = filteredCombos;
+      }
+    }
+
     let deviceInfos = [];
     for (let dev of devices) {
-      const prices = dev["device-combinations"].map(combo => combo.price);
-      const { minPrice, maxPrice } = findMinMaxPrices(prices);
-
-      deviceStore.setInitialMinPrice(minPrice);
-      deviceStore.setInitialMaxPrice(maxPrice);
-
       deviceInfos.push(...dev["device-infos"])
     }
+
+    const { minPrice, maxPrice } = await getDeviceMinMaxPrices(stringQueryParams, sales, saleTypeNames);
+    deviceStore.setInitialMinPrice(minPrice);
+    deviceStore.setInitialMaxPrice(maxPrice);
 
     deviceStore.setDevices(devices);
     deviceStore.setDeviceInfos(deviceInfos);
