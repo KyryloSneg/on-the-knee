@@ -7,17 +7,31 @@ import { Context } from "../Context";
 import { useLocation, useNavigate } from "react-router-dom";
 import URLActions from "../utils/URLActions";
 import SkipToNextPageContent from "./UI/skipToNextPageContent/SkipToNextPageContent";
+import getAllFocusableElements from "../utils/getAllFocusableElements";
 
 const Aside = observer(() => {
   const { deviceStore, app, isTest } = useContext(Context);
-  const asideBeginningRef = useRef(null);
+  const asideRef = useRef(null);
 
   const location = useLocation();
   const navigate = useNavigate();
 
+  let deviceSectionElemToFocus;
+  let asideElemToFocus;
+
+  if (app.deviceSectionRef?.current) {
+    deviceSectionElemToFocus = getAllFocusableElements(app.deviceSectionRef.current)[0];
+  }
+
+  if (app.asideRef?.current) {
+    // getting element with index "1" because we do not want focusing 
+    // "skip to the next page section" button at the start of aside bar
+    asideElemToFocus = getAllFocusableElements(app.asideRef.current)[1];
+  }
+
   useEffect(() => {
-    app.setAsideBeginningRef(asideBeginningRef);
-  }, [app]);
+    app.setAsideRef(asideRef);
+  }, [app, deviceStore.filters, deviceStore.usedFilters]);
 
   useEffect(() => {
     const { usedFilters, url } = URLActions.getUsedFilters(deviceStore.filters);
@@ -35,10 +49,10 @@ const Aside = observer(() => {
   }, [location.search, deviceStore, navigate, location.pathname, isTest]);
 
   return (
-    <aside>
+    <aside ref={asideRef}>
       <SkipToNextPageContent 
         title="skip to the device section" 
-        toFocusRef={app.deviceSectionRef} 
+        elemToFocus={deviceSectionElemToFocus} 
         testId="skip-to-the-next-page-btn aside start"
         className="w-100"
       />
@@ -53,7 +67,7 @@ const Aside = observer(() => {
       }
       <SkipToNextPageContent 
         title="skip to the filter bar beginning" 
-        toFocusRef={app.asideBeginningRef} 
+        elemToFocus={asideElemToFocus} 
         testId="skip-to-the-next-page-btn aside end"
         className="w-100"
       />

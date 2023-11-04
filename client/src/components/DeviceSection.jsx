@@ -14,7 +14,6 @@ import URLActions from "../utils/URLActions";
 
 const DeviceSection = observer(() => {
   const { app, deviceStore } = useContext(Context);
-  const mainRef = useRef(null);
   const deviceSectionRef = useRef(null);
   const totalPages = getTotalPages(deviceStore.totalCount, deviceStore.limit);
   const canLoadMore = isCanLoadMoreContent(
@@ -38,7 +37,7 @@ const DeviceSection = observer(() => {
   }
 
   return (
-    <main ref={mainRef}>
+    <main ref={deviceSectionRef}>
       {/* <DevicePageList /> */}
       <DeviceList
         devices={deviceStore.devices}
@@ -85,7 +84,7 @@ const DeviceSection = observer(() => {
           totalPages={totalPages}
           currentPage={deviceStore.page}
           pagesToFetch={deviceStore.pagesToFetch}
-          scrollElem={mainRef.current}
+          scrollElem={deviceSectionRef.current}
           ariaLabel="Device pages"
         />
       }
