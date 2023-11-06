@@ -1,9 +1,13 @@
-import { useOutletContext } from "react-router-dom";
+import { useContext, useEffect, useRef } from "react";
+import { Context } from "../Context";
 
 const DevicePage = () => {
-  // temporary ignoring linter
-  // eslint-disable-next-line
-  const { pageRef } = useOutletContext();
+  const { app } = useContext(Context);
+  const pageRef = useRef(null);
+
+  useEffect(() => {
+    app.setPageRef(pageRef);
+  }, [app]);
 
   return (
     <div>
