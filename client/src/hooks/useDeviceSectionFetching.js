@@ -18,35 +18,60 @@ function useDeviceSectionFetching(deviceStore, app, stringQueryParams = "", minQ
 
     const start = deviceStore.limit * (deviceStore.page - 1);
     const limit = deviceStore.limit * deviceStore.pagesToFetch;
-    const { devices, totalCount } = await getDevices(`_start=${start}&_limit=${limit}&${stringQueryParams}`);
+
+    const toFilterByPrice = minQueryPrice && maxQueryPrice;
+    const deviceFetchPath = toFilterByPrice 
+      ? `${stringQueryParams}` 
+      : `_start=${start}&_limit=${limit}&${stringQueryParams}`; 
+    const { devices, totalCount } = await getDevices(deviceFetchPath);
+
     const stocks = await getStocks();
     const sales = await getSales();
     const saleTypeNames = await getSaleTypeNames();
 
-    if (minQueryPrice && maxQueryPrice) {
+    let filteredDevices = [];
+    let pageFilteredDevices = [];
+
+    if (toFilterByPrice) {
+      filteredDevices = [];
+
       for (let dev of devices) {
         const filteredCombos = filterByPriceRange(dev["device-combinations"], minQueryPrice, maxQueryPrice);
-        const defaultCombo = filteredCombos.map(combo => combo.default);
-        if (!defaultCombo) {
-          // setting a default combo (some random combination)
+        // if device has no combos we don't push it to the filteredDevices array
+        if (!filteredCombos.length) continue;
+
+        const defaultCombo = filteredCombos.filter(combo => combo.default);
+        if (!defaultCombo.length) {
+          // setting a default combo (some random combination that left after the filtration)
           filteredCombos[0].default = true;
         }
+
         dev["device-combinations"] = filteredCombos;
+        filteredDevices.push(dev);
       }
+
+      // getting devices for the current page
+      pageFilteredDevices = filteredDevices.slice(start, (start + limit));
+      console.log(pageFilteredDevices);
     }
 
     let deviceInfos = [];
-    for (let dev of devices) {
+    for (let dev of filteredDevices) {
       deviceInfos.push(...dev["device-infos"])
     }
 
     const { minPrice, maxPrice } = await getDeviceMinMaxPrices(stringQueryParams, sales, saleTypeNames);
-    deviceStore.setInitialMinPrice(minPrice);
-    deviceStore.setInitialMaxPrice(maxPrice);
+    if (minPrice !== deviceStore.initialMinPrice) {
+      deviceStore.setInitialMinPrice(minPrice);
+    }
 
-    deviceStore.setDevices(devices);
+    if (maxPrice !== deviceStore.initialMaxPrice) {
+      deviceStore.setInitialMaxPrice(maxPrice);
+    }
+
+    deviceStore.setDevices(pageFilteredDevices.length ? pageFilteredDevices : devices);
     deviceStore.setDeviceInfos(deviceInfos);
-    deviceStore.setTotalCount(totalCount);
+    deviceStore.setTotalCount(filteredDevices.length || totalCount);
 
     if (!_.isEqual(deviceStore.stocks.slice(), stocks)) {
       deviceStore.setStocks(stocks);
@@ -78,7 +103,8 @@ function useDeviceSectionFetching(deviceStore, app, stringQueryParams = "", minQ
   }, [
     deviceStore.stocks, deviceStore.sales,
     deviceStore.saleTypeNames, deviceStore.limit,
-    deviceStore.page, deviceStore.pagesToFetch
+    deviceStore.page, deviceStore.pagesToFetch,
+    deviceStore.usedFilters
   ]);
 
   return [isLoading, error, fetching];

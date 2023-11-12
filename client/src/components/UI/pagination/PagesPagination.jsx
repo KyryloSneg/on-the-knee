@@ -29,36 +29,43 @@ const PagesPagination = ({
     // do not check the code below pls it's a big mistake
 
     // HINT: "[some name]" is a page button
-    if (currentPage - 5 > 0 && currentPage + 5 <= totalPages) {
-      // [1] [...] [4] [5] [6 *selected*] [7] [8] [...] [60 *total pages*]
-
-      pushPages(currentPage - 2, currentPage + 2);
-      pages.unshift({ name: "...", value: currentPage - 3 });
-      pages.push({ name: "...", value: currentPage + 3 });
-    } else if (currentPage - 5 > 0) {
-      // [1] [...] [4] [5] [6 *selected*] [7] [8] [9] [10 *total pages*]
-
-      pushPages(totalPages - 6, totalPages - 1);
-      pages.unshift({ name: "...", value: totalPages - 7 });
-    } else if (currentPage + 5 <= totalPages) {
-      // [1] [2] [3] [4] [5 *selected*] [6] [7] [...] [10 *total pages*]
-
-      pushPages(2, 7);
-      pages.push({ name: "...", value: 8 });
-    } else if (totalPages > 2) {
-      // [1] [2 *selected*] [3]
-      pushPages(2, totalPages - 1);
+    if (totalPages > 1) {
+      if (currentPage - 5 > 0 && currentPage + 5 <= totalPages) {
+        // [1] [...] [4] [5] [6 *selected*] [7] [8] [...] [60 *total pages*]
+  
+        pushPages(currentPage - 2, currentPage + 2);
+        pages.unshift({ name: "...", value: currentPage - 3 });
+        pages.push({ name: "...", value: currentPage + 3 });
+      } else if (currentPage - 5 > 0) {
+        // [1] [...] [4] [5] [6 *selected*] [7] [8] [9] [10 *total pages*]
+  
+        pushPages(totalPages - 6, totalPages - 1);
+        pages.unshift({ name: "...", value: totalPages - 7 });
+      } else if (currentPage + 5 <= totalPages) {
+        // [1] [2] [3] [4] [5 *selected*] [6] [7] [...] [10 *total pages*]
+  
+        pushPages(2, 7);
+        pages.push({ name: "...", value: 8 });
+      } else if (totalPages > 2) {
+        // [1] [2 *selected*] [3]
+        pushPages(2, totalPages - 1);
+      }
+  
+      pages.unshift({
+        name: "1",
+        value: 1
+      });
+  
+      pages.push({
+        name: `${totalPages}`,
+        value: totalPages
+      });
+    } else {
+      pages.push({
+        name: "1",
+        value: 1
+      });
     }
-
-    pages.unshift({
-      name: "1",
-      value: 1
-    });
-
-    pages.push({
-      name: `${totalPages}`,
-      value: totalPages
-    });
     return pages;
   }
 

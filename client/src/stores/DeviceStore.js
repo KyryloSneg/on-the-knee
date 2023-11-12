@@ -39,8 +39,8 @@ class DeviceStore {
     this._page = 1;
     this._pagesToFetch = 1;
     this._totalCount = 0;
-    // i can't import the DEVICE_ITEMS_MOBILE_LIMIT variable because of some weird webpack-bootstrap error
-    // it happens because of some cyclical imports ig (i can't find them)
+    // i can't import the DEVICE_ITEMS_MOBILE_LIMIT variable because of webpack-bootstrap error
+    // it happens because of some cyclical imports (i'm lazy to fix this)
     this._limit = 30;
     makeAutoObservable(this);
   }

@@ -22,7 +22,8 @@ const DeviceSection = observer(() => {
     (deviceStore.page - 1) * deviceStore._limit
   );
 
-  const [minPrice, maxPrice] = URLActions.getParamValue("price")?.split("-") || [];
+  const [minPrice, maxPrice] = 
+    URLActions.getParamValue("price")?.split("-").map(price => +price) || [];
   const [isLoading, error, fetching] = useDeviceSectionFetching(deviceStore, app, "", minPrice, maxPrice);
   if (error) console.log(error);
 
@@ -46,8 +47,7 @@ const DeviceSection = observer(() => {
         saleTypeNames={deviceStore.saleTypeNames}
       />
       {/* spinner on "retry" fetch */}
-      {((error && isLoading)
-        || !!(deviceStore.devices.length === deviceStore.totalCount && deviceStore.totalCount)) &&
+      {(error && isLoading) &&
         <Spinner
           animation="border"
           variant="primary"
@@ -59,7 +59,7 @@ const DeviceSection = observer(() => {
         </Spinner>
       }
       {/* create "try again" btn */}
-      {(error && !isLoading) &&
+      {(!!error && !isLoading) &&
         <div className="device-section-error">
           <p>
             Oops! Something went wrong while getting devices.
