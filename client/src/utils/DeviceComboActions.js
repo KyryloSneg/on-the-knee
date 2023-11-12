@@ -1,5 +1,3 @@
-import filterByPriceRange from "./filterByPriceRange";
-
 class DeviceComboActions {
 
   static getColor(combinationString) {

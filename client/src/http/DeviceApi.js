@@ -6,7 +6,7 @@ import { $mockApi } from "./index";
 
 export async function getDevices(stringQueryParams = "") {
   const res = await $mockApi.get(`${DEVICE_API_URL}&${stringQueryParams}`);
-  const totalCount = res.headers["x-total-count"];
+  const totalCount = res.headers["x-total-count"] || res.data.length;
   return { devices: res.data, totalCount: totalCount };
 }
 

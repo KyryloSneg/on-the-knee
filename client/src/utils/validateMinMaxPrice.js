@@ -1,9 +1,9 @@
-function validateMinMaxPrice(setIsValid, isMin, nextValue, initMinPrice, initMaxPrice, minPriceValue, maxPriceValue) {
+function validateMinMaxPrice(isMin, nextValue, initMinPrice, initMaxPrice, minPriceValue, maxPriceValue) {
   let nextIsValid;
 
-  if (isMin && (+nextValue < initMinPrice || maxPriceValue > initMaxPrice)) {
+  if (isMin && (+nextValue < initMinPrice || +maxPriceValue > initMaxPrice)) {
     nextIsValid = false;
-  } else if (!isMin && (+nextValue > initMaxPrice || minPriceValue < initMinPrice)) {
+  } else if (!isMin && (+nextValue > initMaxPrice || +minPriceValue < initMinPrice)) {
     nextIsValid = false;
   } else if (isMin && +nextValue > +maxPriceValue) {
     nextIsValid = false;
@@ -15,7 +15,7 @@ function validateMinMaxPrice(setIsValid, isMin, nextValue, initMinPrice, initMax
     nextIsValid = true;
   }
 
-  setIsValid(nextIsValid);
+  return nextIsValid;
 }
 
 export default validateMinMaxPrice;

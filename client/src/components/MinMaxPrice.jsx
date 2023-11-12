@@ -23,8 +23,7 @@ const MinMaxPrice = ({ variant, value, setValue, isValid, setIsValid, minPriceVa
       nextValue = e.target.value;
     }
 
-    validateMinMaxPrice(
-      setIsValid, 
+    const nextIsValid = validateMinMaxPrice(
       isMin, 
       nextValue, 
       deviceStore.initialMinPrice, 
@@ -32,7 +31,9 @@ const MinMaxPrice = ({ variant, value, setValue, isValid, setIsValid, minPriceVa
       minPriceValue, 
       maxPriceValue
     );
-    setValue(nextValue)
+
+    setIsValid(nextIsValid);
+    setValue(+nextValue);
   }
 
   return (
