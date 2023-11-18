@@ -23,7 +23,7 @@ const PriceCategoryFilter = observer(() => {
     if (!deviceStore.initialMinPrice || !deviceStore.initialMaxPrice) return;
 
     const [queryMinPrice, queryMaxPrice] = URLActions.getParamValue("price")?.split("-") || [];
-    if (!queryMinPrice || !queryMaxPrice) return;
+    if (queryMinPrice === null || queryMaxPrice === null) return;
 
     const isValidQueryMinPrice = validateMinMaxPrice(
       true,
@@ -42,17 +42,12 @@ const PriceCategoryFilter = observer(() => {
       queryMinPrice,
       queryMaxPrice
     );
-    
+
     if (!isValidQueryMinPrice || !isValidQueryMaxPrice) {
-
-      if (+queryMinPrice !== deviceStore.initialMinPrice || +queryMaxPrice !== deviceStore.initialMaxPrice) {
-        window.history.back();
-      } else {
-        const basename = process.env.REACT_APP_CLIENT_URL;
-        const nextURL = URLActions.deleteParamValue("price", `${minPriceValue}-${maxPriceValue}`);
-        navigate(nextURL.replace(basename, ""), { replace: true });
-      }
-
+      // renavigating user to the url without the price filter if out query prices aren't valid
+      const basename = process.env.REACT_APP_CLIENT_URL;
+      const nextURL = URLActions.deleteParamValue("price", `${minPriceValue}-${maxPriceValue}`);
+      navigate(nextURL.replace(basename, ""), { replace: true });
     }
 
     // eslint-disable-next-line
@@ -65,7 +60,7 @@ const PriceCategoryFilter = observer(() => {
 
     setMinPriceValue(nextMinPrice);
     setMaxPriceValue(nextMaxPrice);
-    
+
     const isInitialPricesAreSame = prevInitialMinPrice !== nextMinPrice || prevInitialMinPrice !== nextMaxPrice;
     if (isInitialPricesAreSame) return;
 
@@ -76,7 +71,7 @@ const PriceCategoryFilter = observer(() => {
 
     if (resettedURL && isSettedQueryPrice) {
       navigate(resettedURL.replace(basename, ""), { replace: true });
-    } 
+    }
 
     prevInitialMinPrice.current = nextMinPrice;
     prevInitialMaxPrice.current = nextMaxPrice;
@@ -89,9 +84,10 @@ const PriceCategoryFilter = observer(() => {
 
     // to prevent redundant redirects we can compare current price and new one
     // and if they're equal to each other we skip redirect (or if we submitted the same price as initial one)
+
     const currentPrice = URLActions.getParamValue("price");
-    if (currentPrice === `${minPriceValue}-${maxPriceValue}` 
-        || (minPriceValue === deviceStore.initialMinPrice && maxPriceValue === deviceStore.initialMaxPrice)) return;
+    if (currentPrice === `${minPriceValue}-${maxPriceValue}`
+      || (minPriceValue === deviceStore.initialMinPrice && maxPriceValue === deviceStore.initialMaxPrice)) return;
 
     const nextUrl = URLActions.setNewParam("price", `${minPriceValue}-${maxPriceValue}`);
     const basename = process.env.REACT_APP_CLIENT_URL;
@@ -102,8 +98,8 @@ const PriceCategoryFilter = observer(() => {
     <div className="price-range-form-wrap use-preety-scrollbar">
       <form className="price-range-filter-wrap" onSubmit={onSubmit}>
         <div>
-          <MinMaxPrice 
-            variant={"min"} 
+          <MinMaxPrice
+            variant={"min"}
             value={minPriceValue}
             setValue={setMinPriceValue}
             isValid={isValid}
@@ -112,7 +108,7 @@ const PriceCategoryFilter = observer(() => {
             maxPriceValue={maxPriceValue}
           />
           <span className="price-divider no-select"> - </span>
-          <MinMaxPrice 
+          <MinMaxPrice
             variant={"max"}
             value={maxPriceValue}
             setValue={setMaxPriceValue}
