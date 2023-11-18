@@ -6,8 +6,12 @@ main {
   gap: 22px;
 }
 
-.device-section-error {
+.device-section-error, .no-devices-message {
   margin-top: 24px;
+}
+
+.no-devices-message {
+  font-size: 1.5rem;
 }
 
 .device-section-error > p {
@@ -34,7 +38,8 @@ main .spinner-border.error-retry-spinner {
 
 @media screen and (min-width: 600px) {
   .device-section-error > p,
-  .device-section-error button  {
+  .device-section-error button,
+  .no-devices-message  {
     font-size: 2.2rem;
   }
 

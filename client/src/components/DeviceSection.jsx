@@ -17,12 +17,12 @@ const DeviceSection = observer(() => {
   const deviceSectionRef = useRef(null);
   const totalPages = getTotalPages(deviceStore.totalCount, deviceStore.limit);
   const canLoadMore = isCanLoadMoreContent(
-    deviceStore.totalCount, 
-    deviceStore.devices.length, 
+    deviceStore.totalCount,
+    deviceStore.devices.length,
     (deviceStore.page - 1) * deviceStore._limit
   );
 
-  const [minPrice, maxPrice] = 
+  const [minPrice, maxPrice] =
     URLActions.getParamValue("price")?.split("-").map(price => +price) || [];
   const [isLoading, error, fetching] = useDeviceSectionFetching(deviceStore, app, "", minPrice, maxPrice);
   if (error) console.log(error);
@@ -40,12 +40,22 @@ const DeviceSection = observer(() => {
   return (
     <main ref={deviceSectionRef}>
       {/* <DevicePageList /> */}
-      <DeviceList
-        devices={deviceStore.devices}
-        stocks={deviceStore.stocks}
-        sales={deviceStore.sales}
-        saleTypeNames={deviceStore.saleTypeNames}
-      />
+      {deviceStore.devices.length
+        ? (
+          <DeviceList
+            devices={deviceStore.devices}
+            stocks={deviceStore.stocks}
+            sales={deviceStore.sales}
+            saleTypeNames={deviceStore.saleTypeNames}
+          />
+        )
+        : (
+          <p className="no-devices-message">
+            We haven't found devices with such a filters {":("}
+          </p>
+        )
+      }
+
       {/* spinner on "retry" fetch */}
       {(error && isLoading) &&
         <Spinner

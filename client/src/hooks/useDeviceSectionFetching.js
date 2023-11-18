@@ -16,21 +16,23 @@ function useDeviceSectionFetching(deviceStore, app, stringQueryParams = "", minQ
       app.setIsGlobalLoading(true);
     }
 
+    
     const start = deviceStore.limit * (deviceStore.page - 1);
     const limit = deviceStore.limit * deviceStore.pagesToFetch;
-
+    
     const toFilterByPrice = minQueryPrice && maxQueryPrice;
+    console.log(toFilterByPrice);
     const deviceFetchPath = toFilterByPrice 
       ? `${stringQueryParams}` 
-      : `_start=${start}&_limit=${limit}&${stringQueryParams}`; 
-    const { devices, totalCount } = await getDevices(deviceFetchPath);
+      : `_start=${start}&_limit=${limit}&${stringQueryParams}`;
+    const { devices } = await getDevices(deviceFetchPath);
 
     const stocks = await getStocks();
     const sales = await getSales();
     const saleTypeNames = await getSaleTypeNames();
 
     let filteredDevices = [];
-    let pageFilteredDevices = [];
+    let pageFilteredDevices = [...devices];
 
     if (toFilterByPrice) {
       filteredDevices = [];
@@ -52,7 +54,6 @@ function useDeviceSectionFetching(deviceStore, app, stringQueryParams = "", minQ
 
       // getting devices for the current page
       pageFilteredDevices = filteredDevices.slice(start, (start + limit));
-      console.log(pageFilteredDevices);
     }
 
     let deviceInfos = [];
@@ -62,16 +63,17 @@ function useDeviceSectionFetching(deviceStore, app, stringQueryParams = "", minQ
 
     const { minPrice, maxPrice } = await getDeviceMinMaxPrices(stringQueryParams, sales, saleTypeNames);
     if (minPrice !== deviceStore.initialMinPrice) {
-      deviceStore.setInitialMinPrice(minPrice);
+      deviceStore.setInitialMinPrice(+(minPrice.toFixed(2)));
     }
 
     if (maxPrice !== deviceStore.initialMaxPrice) {
-      deviceStore.setInitialMaxPrice(maxPrice);
+      deviceStore.setInitialMaxPrice(+(maxPrice.toFixed(2)));
+      console.log(maxPrice);
     }
 
-    deviceStore.setDevices(pageFilteredDevices.length ? pageFilteredDevices : devices);
+    deviceStore.setDevices(pageFilteredDevices);
     deviceStore.setDeviceInfos(deviceInfos);
-    deviceStore.setTotalCount(filteredDevices.length || totalCount);
+    deviceStore.setTotalCount(filteredDevices.length);
 
     if (!_.isEqual(deviceStore.stocks.slice(), stocks)) {
       deviceStore.setStocks(stocks);
