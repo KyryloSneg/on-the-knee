@@ -49,7 +49,7 @@ const DeviceSection = observer(() => {
             saleTypeNames={deviceStore.saleTypeNames}
           />
         )
-        : (
+        : !error && (
           <p className="no-devices-message">
             We haven't found devices with such a filters {":("}
           </p>

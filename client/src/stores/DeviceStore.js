@@ -2,11 +2,13 @@ import { makeAutoObservable } from "mobx";
 
 class DeviceStore {
   constructor() {
-    this._filters = {
-      "category": ["phones", "TV", "computers"],
-      "brand": ["Apple", "Asus", "LG", "Samsung"],
-      "hz": ["50", "60", "75", "120", "140", "144", "200", "240 and more"],
-    }
+    this._filters = {};
+
+    // {
+    //   "category": ["phones", "TV", "computers"],
+    //   "brand": ["Apple", "Asus", "LG", "Samsung"],
+    //   "hz": ["50", "60", "75", "120", "140", "144", "200", "240 and more"],
+    // }
 
     // just example
 

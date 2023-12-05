@@ -174,7 +174,7 @@ class DeviceComboActions {
 
   static findDefaultCombination(device, stocks) {
     const defaultCombination = device["device-combinations"].find(combo => combo.default);
-    let defaultCombinationInStock = defaultCombination;
+    let defaultCombinationInStock = {...defaultCombination};
 
     function getStock(stockId) {
       return stocks.find(stock => stock.id === stockId);

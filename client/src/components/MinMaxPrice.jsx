@@ -33,6 +33,7 @@ const MinMaxPrice = ({ variant, value, setValue, isValid, setIsValid, minPriceVa
       <label htmlFor={inputIdName}>{labelText}</label>
       <input
         type="text"
+        autoComplete="off"
         name={inputIdName}
         className={!isValid ? "invalidInput" : ""}
         id={inputIdName}

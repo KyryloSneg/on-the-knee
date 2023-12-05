@@ -28,4 +28,9 @@ export default class ArrayActions {
     return sortedArr;
   }
 
+  static sortAlphaNumObjectArray(array, fieldName) {
+    const sortedArr = array.sort( (a, b) => a[fieldName].localeCompare(b[fieldName], undefined, {numeric: true, sensitivity: 'base'}) );
+    return sortedArr;
+  }
+
 }
