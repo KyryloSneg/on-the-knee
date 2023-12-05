@@ -12,6 +12,7 @@ export const DESIRED_LIST_ROUTE = "/desired";
 
 export const DEVICE_API_URL = "/devices?_embed=device-combinations&_embed=device-feedbacks&_embed=device-infos&_embed=sale-devices";
 export const SALES_API_URL = "/sales?_embed=sale-types";
+export const ATRIBUTES_API_URL = "/attributes?_expand=attribute-value&_expand=attribute-name";
 
 export const sortingOptions = [
   {

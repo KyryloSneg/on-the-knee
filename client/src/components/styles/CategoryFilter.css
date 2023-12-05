@@ -3,11 +3,10 @@
   box-sizing: border-box;
   width: 100%;
   padding: 8px;
-  display: grid;
-  grid-template-columns: auto 1fr;
+  display: flex;
+  grid-template-columns: auto 1fr auto;
   gap: 8px;
   align-items: center;
-  justify-content: center;
   color: black;
   text-decoration: none;
   border-radius: 5px;
@@ -56,4 +55,10 @@
   background-image: url(../../assets/check.svg);
   background-position: center;
   background-size: 14px 14px;
+}
+
+.filter-devices-amount {
+  font-weight: bold;
+  font-size: 1.3rem;
+  color: #525252;
 }

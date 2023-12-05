@@ -44,19 +44,19 @@ const Aside = observer(() => {
     // so it's better to skip the block below
     if (location.pathname !== url && !isTest) {
       const basename = process.env.REACT_APP_CLIENT_URL;
-      navigate(url.replace(basename, ""), { replace: true });
+      navigate(url.replace(basename, "").replaceAll("%2C", ","), { replace: true });
     }
-  }, [location.search, deviceStore, navigate, location.pathname, isTest]);
+  }, [location.search, deviceStore.filters, deviceStore.filters, navigate, location.pathname, isTest]);
 
   return (
     <aside ref={asideRef}>
-      <SkipToNextPageContent 
-        title="skip to the device section" 
-        elemToFocus={deviceSectionElemToFocus} 
+      <SkipToNextPageContent
+        title="skip to the device section"
+        elemToFocus={deviceSectionElemToFocus}
         testId="skip-to-the-next-page-btn aside start"
         className="w-100"
       />
-      {Object.keys(deviceStore.usedFilters).length > 0 
+      {Object.keys(deviceStore.usedFilters).length > 0
         ? [
           <UsedFilters key={"usedFiltersSection"} />,
           <FilterCategories key={"filterCategoriesSection"} />
@@ -65,9 +65,9 @@ const Aside = observer(() => {
           <FilterCategories />
         )
       }
-      <SkipToNextPageContent 
-        title="skip to the filter bar beginning" 
-        elemToFocus={asideElemToFocus} 
+      <SkipToNextPageContent
+        title="skip to the filter bar beginning"
+        elemToFocus={asideElemToFocus}
         testId="skip-to-the-next-page-btn aside end"
         className="w-100"
       />

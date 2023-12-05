@@ -23,7 +23,7 @@ const PriceCategoryFilter = observer(() => {
     if (!deviceStore.initialMinPrice || !deviceStore.initialMaxPrice) return;
 
     const [queryMinPrice, queryMaxPrice] = URLActions.getParamValue("price")?.split("-") || [];
-    if (queryMinPrice === null || queryMaxPrice === null) return;
+    if (queryMinPrice === undefined || queryMaxPrice === undefined) return;
 
     const isValidQueryMinPrice = validateMinMaxPrice(
       true,
@@ -47,7 +47,7 @@ const PriceCategoryFilter = observer(() => {
       // renavigating user to the url without the price filter if out query prices aren't valid
       const basename = process.env.REACT_APP_CLIENT_URL;
       const nextURL = URLActions.deleteParamValue("price", `${minPriceValue}-${maxPriceValue}`);
-      navigate(nextURL.replace(basename, ""), { replace: true });
+      navigate(nextURL.replace(basename, "").replaceAll("%2C", ","), { replace: true });
     }
 
     // eslint-disable-next-line
@@ -70,7 +70,7 @@ const PriceCategoryFilter = observer(() => {
     const basename = process.env.REACT_APP_CLIENT_URL;
 
     if (resettedURL && isSettedQueryPrice) {
-      navigate(resettedURL.replace(basename, ""), { replace: true });
+      navigate(resettedURL.replace(basename, "").replaceAll("%2C", ","), { replace: true });
     }
 
     prevInitialMinPrice.current = nextMinPrice;
@@ -91,7 +91,7 @@ const PriceCategoryFilter = observer(() => {
 
     const nextUrl = URLActions.setNewParam("price", `${minPriceValue}-${maxPriceValue}`);
     const basename = process.env.REACT_APP_CLIENT_URL;
-    navigate(nextUrl.replace(basename, ""));
+    navigate(nextUrl.replaceAll(basename, "").replaceAll("%2C", ","));
   }
 
   return (

@@ -4,9 +4,9 @@ import "./SearchField.css";
 
 const SearchField = forwardRef(({ query, setQuery, setFilteredValues, filter, initialFilters }, ref) => {
   function filterValues(query) {
-    const nextFilteredValues = initialFilters.filter(value => {
+    const nextFilteredValues = initialFilters.filter(info => {
       if (query === "") return true;
-      return value.trim().toLowerCase().includes(query.trim().toLowerCase());
+      return info.value.trim().toLowerCase().includes(query.trim().toLowerCase());
     });
 
     setFilteredValues(nextFilteredValues);
