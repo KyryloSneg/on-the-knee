@@ -1,6 +1,6 @@
 import _ from "lodash";
 import ArrayActions from "./ArrayActions";
-import { SPECIAL_QUERY_PARAMS } from "./consts";
+import { SPECIAL_QUERY_PARAMS, SPECIAL_TO_HANDLE_FILTERS } from "./consts";
 
 export default class URLActions {
 
@@ -157,7 +157,9 @@ export default class URLActions {
         if (SPECIAL_QUERY_PARAMS.includes(key) || key === "price") continue;
 
         // if the category filter that we used does not exist, delete it
-        if (!filters[key]) {
+        if (!filters[key] && SPECIAL_TO_HANDLE_FILTERS.includes(key)) {
+          continue;
+        } else if (!filters[key]) {
           searchParams.delete(key);
           delete usedFilters[key];
           break;

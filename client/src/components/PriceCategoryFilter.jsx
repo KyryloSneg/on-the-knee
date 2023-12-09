@@ -44,7 +44,7 @@ const PriceCategoryFilter = observer(() => {
     );
 
     if (!isValidQueryMinPrice || !isValidQueryMaxPrice) {
-      // renavigating user to the url without the price filter if out query prices aren't valid
+      // renavigating user to the url without the price filter if our query prices aren't valid
       const basename = process.env.REACT_APP_CLIENT_URL;
       const nextURL = URLActions.deleteParamValue("price", `${minPriceValue}-${maxPriceValue}`);
       navigate(nextURL.replace(basename, "").replaceAll("%2C", ","), { replace: true });

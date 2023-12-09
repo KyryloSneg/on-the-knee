@@ -1,13 +1,15 @@
 import _ from "lodash";
 import { useEffect, useRef } from "react";
-import { getDeviceMinMaxPrices, getDevices } from "../http/DeviceApi";
+import { getDevices } from "../http/DeviceApi";
 import { getStocks } from "../http/StocksAPI";
 import { getSaleTypeNames, getSales } from "../http/SalesAPI";
 import useFetching from "./useFetching";
-import filterByPriceRange from "../utils/filterByPriceRange";
-import { SPECIAL_QUERY_PARAMS } from "../utils/consts";
+import { FILTERS_IN_SPECIAL_COMPONENTS, SPECIAL_TO_HANDLE_FILTERS } from "../utils/consts";
 import { getAttributesInfo } from "../http/AttributesAPI";
 import { useLocation } from "react-router-dom";
+import getDiscountedPrice from "../utils/getDiscountedPrice";
+import DeviceSalesActions from "../utils/DeviceSalesActions";
+import DeviceComboActions from "../utils/DeviceComboActions";
 
 // query params without pagination ones
 function useDeviceSectionFetching(deviceStore, app, stringQueryParams = "", minQueryPrice = null, maxQueryPrice = null) {
@@ -25,6 +27,7 @@ function useDeviceSectionFetching(deviceStore, app, stringQueryParams = "", minQ
     const limit = deviceStore.limit * deviceStore.pagesToFetch;
 
     const toFilterByPrice = minQueryPrice && maxQueryPrice;
+    const toFilterByStock = !!deviceStore.usedFilters["stock"]?.length;
 
     const deviceFetchPath = `${stringQueryParams}`;
     const { devices } = await getDevices(deviceFetchPath);
@@ -34,28 +37,60 @@ function useDeviceSectionFetching(deviceStore, app, stringQueryParams = "", minQ
     const saleTypeNames = await getSaleTypeNames();
 
     // TODO: add there other "special" filters (that requires separate implementation) later on
-    const isSpecialFilters = toFilterByPrice;
+    const isSpecialFilters = toFilterByPrice || toFilterByStock;
 
     let filteredDevices = [...devices];
     let pageFilteredDevices = [];
 
-    if (toFilterByPrice) {
-      filteredDevices = [];
-
-      for (let dev of devices) {
-        const filteredCombos = filterByPriceRange(dev["device-combinations"], minQueryPrice, maxQueryPrice);
+    function filterDeviceCombinations(filterFn, array) {
+      console.log(array);
+      const filteredDevices = array.filter(dev => {
+        // passing dev in the filterFn below to get access to it (like in filtering by price)
+        const filteredCombos = dev["device-combinations"].filter((combo) => filterFn(combo, dev));
         // if device has no combos we don't push it to the filteredDevices array
-        if (!filteredCombos.length) continue;
-
-        const defaultCombo = filteredCombos.filter(combo => combo.default);
-        if (!defaultCombo.length) {
+        if (!filteredCombos.length) return false;
+        
+        const defaultCombo = filteredCombos.find(combo => combo.default);
+        if (!defaultCombo?.length) {
           // setting a default combo (some random combination that left after the filtration)
           filteredCombos[0].default = true;
         }
-
+        
         dev["device-combinations"] = filteredCombos;
-        filteredDevices.push(dev);
-      }
+        return true;
+      });
+
+      return filteredDevices;
+    }
+
+    if (toFilterByPrice) {
+      filteredDevices = filterDeviceCombinations(
+        (item, dev) => {
+          const { discountPercentage } = DeviceSalesActions.getSaleTypesAndDiscount(dev, sales, saleTypeNames)
+
+          let discountedPrice;
+          if (discountPercentage) {
+            discountedPrice = getDiscountedPrice(item.price, discountPercentage);
+          }
+
+          const priceToCompare = discountedPrice || item.price;
+          return (priceToCompare >= minQueryPrice && priceToCompare <= maxQueryPrice)
+        },
+        [...devices],
+      );
+    }
+
+    if (toFilterByStock) {
+      // cloning filteredDevices array to prevent bugs
+      // that can be possibly caused by changing it inside the loop
+
+      filteredDevices = filterDeviceCombinations(
+        item => {
+          const stock = stocks.find(s => s["device-combinationId"] === item.id);
+          return deviceStore.usedFilters["stock"].includes(stock.stockStatus);
+        },
+        [...filteredDevices],
+      );
     }
 
     let deviceInfos = [];
@@ -102,35 +137,38 @@ function useDeviceSectionFetching(deviceStore, app, stringQueryParams = "", minQ
       }
     }
 
+    function pushValueToFiltersObj(filtersObj, name, value) {
+      if (FILTERS_IN_SPECIAL_COMPONENTS.includes(name)) return;
+      if (!filtersObj[name]) {
+        filtersObj[name] = [{ "value": value, "count": 1 }];
+        return;
+      }
+      const filtersValues = filtersObj[name].map(item => item.value);
+
+      // if the current info value is in it's corresponding array in the filters, increment the value count
+      if (filtersValues.includes(value)) {
+        // finding info that we've just found to replace it with incremented count value
+        filtersObj[name] = filtersObj[name].map(item => {
+          if (item.value !== value) return item;
+
+          return {
+            "value": value,
+            "count": item.count + 1
+          };
+        });
+      } else {
+        // else push it there with count 1
+        filtersObj[name].push({
+          "value": value,
+          "count": 1
+        });
+      }
+    }
+
     function pushFilters(filtersObj, array) {
 
       for (let info of array) {
-        if (SPECIAL_QUERY_PARAMS.includes(info.name) || info.name === "price") continue;
-        if (!filtersObj[info.name]) {
-          filtersObj[info.name] = [{ "value": info.value, "count": 1 }];
-          continue;
-        }
-
-        const filtersValues = filtersObj[info.name].map(item => item.value);
-
-        // if the current info value is in it's corresponding array in the filters, increment the value count
-        if (filtersValues.includes(info.value)) {
-          // finding info that we've just found to replace it with incremented count value
-          filtersObj[info.name] = filtersObj[info.name].map(item => {
-            if (item.value !== info.value) return item;
-
-            return {
-              "value": info.value,
-              "count": item.count + 1
-            };
-          });
-        } else {
-          // else push it there with count 1
-          filtersObj[info.name].push({
-            "value": info.value,
-            "count": 1
-          });
-        }
+        pushValueToFiltersObj(filtersObj, info.name, info.value);
       }
 
       for (let [key, value] of Object.entries(filtersObj)) {
@@ -141,12 +179,26 @@ function useDeviceSectionFetching(deviceStore, app, stringQueryParams = "", minQ
     }
 
     let filters = {};
+
+    for (let dev of devices) {
+      let stockStatuses = [];
+      for (let combo of dev["device-combinations"]) {
+        const stock = stocks.find(s => s["device-combinationId"] === combo.id);
+        stockStatuses.push(stock.stockStatus);
+      };
+
+      const uniqueStatuses = Array.from(new Set(stockStatuses));
+      for (let status of uniqueStatuses) {
+        pushValueToFiltersObj(filters, "stock", status);
+      }
+    }
+
     pushFilters(filters, deviceInfos);
     pushFilters(filters, attributes);
 
     let filtersWithoutSpecial = {};
     for (let [key, value] of Object.entries({ ...deviceStore.usedFilters })) {
-      if (SPECIAL_QUERY_PARAMS.includes(key) || key === "price") continue;
+      if (SPECIAL_TO_HANDLE_FILTERS.includes(key)) continue;
       filtersWithoutSpecial[key] = value;
     }
 
@@ -175,14 +227,6 @@ function useDeviceSectionFetching(deviceStore, app, stringQueryParams = "", minQ
 
         if (!allDeviceInfo[key]) return false;
 
-        // const isInfoIncluded = !!allDeviceInfo[key].find(deviceInfoValue => {
-        //   const infoToCheck = key === "color"
-        //     ? deviceInfoValue?.split("#")[0]
-        //     : deviceInfoValue;
-
-        //   return values.includes(infoToCheck);
-        // });
-
         for (let info of allDeviceInfo[key]) {
           const infoToCheck = key === "color"
             ? info?.split("#")[0]
@@ -203,7 +247,6 @@ function useDeviceSectionFetching(deviceStore, app, stringQueryParams = "", minQ
               });
 
               if (!device["device-combinations"].length) return false;
-              console.log(device);
 
               const defaultCombo = device["device-combinations"].find(combo => combo.default);
               if (!defaultCombo) {
@@ -222,13 +265,12 @@ function useDeviceSectionFetching(deviceStore, app, stringQueryParams = "", minQ
 
     if (Object.keys(filtersWithoutSpecial).length) {
       // if we have used filters, do filtration
-      console.log(filteredDevices);
       filteredDevices = filteredDevices.filter(filterDevicesFn);
     }
     // getting devices for the current page
     pageFilteredDevices = filteredDevices.slice(start, (start + limit));
 
-    const { minPrice, maxPrice } = await getDeviceMinMaxPrices(stringQueryParams, sales, saleTypeNames);
+    const { minPrice, maxPrice } = DeviceComboActions.getDeviceMinMaxPrices(filteredDevices, sales, saleTypeNames);
     if (minPrice !== deviceStore.initialMinPrice) {
       // rounding min and max numbers up to 2 digits after comma
       deviceStore.setInitialMinPrice((Math.round(minPrice * 100) / 100).toFixed(2));
