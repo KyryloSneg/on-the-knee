@@ -71,8 +71,15 @@ export const mockSearchResults = {
   ]
 };
 
-// params such a sort filter
-export const SPECIAL_QUERY_PARAMS = ["sort", "text", "page", "pagesToFetch"];
+// params that don't appear in used filters like a sort filter
+export const SPECIAL_QUERY_PARAMS = ["sort", "page", "pagesToFetch"];
+
+// filters that have unique filtration logic
+export const SPECIAL_TO_HANDLE_FILTERS = ["stock", "price", "text"];
+
+// filters that aren't placed in category filters
+export const FILTERS_IN_SPECIAL_COMPONENTS = ["price", "text"];
+
 // in production build the value should be greater than current one
 export const FILTERS_OPTIONS_LENGTH_LIMIT = 5;
 export const DEVICE_ITEM_INFO_AMOUNT_LIMIT = 6;

@@ -1,3 +1,7 @@
+import DeviceSalesActions from "./DeviceSalesActions";
+import findMinMaxPrices from "./findMinMaxPrices";
+import getDiscountedPrice from "./getDiscountedPrice";
+
 class DeviceComboActions {
 
   static getColor(combinationString) {
@@ -200,6 +204,28 @@ class DeviceComboActions {
 
     let isInStock = !!getStock(defaultCombinationInStock.stockId).totalStock;
     return { defaultCombinationInStock, isInStock };
+  }
+
+  static getDeviceMinMaxPrices(devices, sales = [], saleTypeNames = []) {
+    let prices = [];
+  
+    for (let dev of devices) {
+      const { discountPercentage } = DeviceSalesActions.getSaleTypesAndDiscount(dev, sales, saleTypeNames);
+      
+      for (let combo of dev["device-combinations"]) {
+        let price;
+        if (discountPercentage) {
+          price = getDiscountedPrice(combo.price, discountPercentage);
+        } else {
+          price = combo.price;
+        }
+  
+        prices.push(price);
+      }
+    }
+  
+    const { minPrice, maxPrice } = findMinMaxPrices(prices);
+    return { minPrice, maxPrice };
   }
 
 }
