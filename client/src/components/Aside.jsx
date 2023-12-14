@@ -44,9 +44,9 @@ const Aside = observer(() => {
     // so it's better to skip the block below
     if (location.pathname !== url && !isTest) {
       const basename = process.env.REACT_APP_CLIENT_URL;
-      navigate(url.replace(basename, "").replaceAll("%2C", ","), { replace: true });
+      navigate(url.replace(basename, "").replaceAll("%2C", ",").replaceAll("%3B", ";"), { replace: true });
     }
-  }, [location.search, deviceStore.filters, deviceStore.filters, navigate, location.pathname, isTest]);
+  }, [location.search, deviceStore, deviceStore.filters, deviceStore.filters, navigate, location.pathname, isTest]);
 
   return (
     <aside ref={asideRef}>

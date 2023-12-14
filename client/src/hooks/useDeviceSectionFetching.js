@@ -10,6 +10,8 @@ import { useLocation } from "react-router-dom";
 import getDiscountedPrice from "../utils/getDiscountedPrice";
 import DeviceSalesActions from "../utils/DeviceSalesActions";
 import DeviceComboActions from "../utils/DeviceComboActions";
+import { getSellers } from "../http/SellersAPI";
+import { getBrands } from "../http/BrandsAPI";
 
 // query params without pagination ones
 function useDeviceSectionFetching(deviceStore, app, stringQueryParams = "", minQueryPrice = null, maxQueryPrice = null) {
@@ -28,6 +30,8 @@ function useDeviceSectionFetching(deviceStore, app, stringQueryParams = "", minQ
 
     const toFilterByPrice = minQueryPrice && maxQueryPrice;
     const toFilterByStock = !!deviceStore.usedFilters["stock"]?.length;
+    const toFilterBySeller = !!deviceStore.usedFilters["seller"]?.length;
+    const toFilterByBrand = !!deviceStore.usedFilters["brand"]?.length;
 
     const deviceFetchPath = `${stringQueryParams}`;
     const { devices } = await getDevices(deviceFetchPath);
@@ -36,26 +40,28 @@ function useDeviceSectionFetching(deviceStore, app, stringQueryParams = "", minQ
     const sales = await getSales();
     const saleTypeNames = await getSaleTypeNames();
 
+    const sellers = await getSellers();
+    const brands = await getBrands();
+
     // TODO: add there other "special" filters (that requires separate implementation) later on
-    const isSpecialFilters = toFilterByPrice || toFilterByStock;
+    const isSpecialFilters = toFilterByPrice || toFilterByStock || toFilterBySeller || toFilterByBrand;
 
     let filteredDevices = [...devices];
     let pageFilteredDevices = [];
 
     function filterDeviceCombinations(filterFn, array) {
-      console.log(array);
       const filteredDevices = array.filter(dev => {
         // passing dev in the filterFn below to get access to it (like in filtering by price)
         const filteredCombos = dev["device-combinations"].filter((combo) => filterFn(combo, dev));
         // if device has no combos we don't push it to the filteredDevices array
         if (!filteredCombos.length) return false;
-        
+
         const defaultCombo = filteredCombos.find(combo => combo.default);
         if (!defaultCombo?.length) {
           // setting a default combo (some random combination that left after the filtration)
           filteredCombos[0].default = true;
         }
-        
+
         dev["device-combinations"] = filteredCombos;
         return true;
       });
@@ -87,10 +93,24 @@ function useDeviceSectionFetching(deviceStore, app, stringQueryParams = "", minQ
       filteredDevices = filterDeviceCombinations(
         item => {
           const stock = stocks.find(s => s["device-combinationId"] === item.id);
-          return deviceStore.usedFilters["stock"].includes(stock.stockStatus);
+          return deviceStore.usedFilters["stock"]?.includes(stock.stockStatus);
         },
         [...filteredDevices],
       );
+    }
+
+    if (toFilterBySeller) {
+      filteredDevices = [...filteredDevices].filter(dev => {
+        const seller = sellers.find(s => s.id === dev.sellerId);
+        return deviceStore.usedFilters["seller"]?.includes(seller.name);
+      });
+    }
+
+    if (toFilterByBrand) {
+      filteredDevices = [...filteredDevices].filter(dev => {
+        const brand = brands.find(b => b.id === dev.brandId);
+        return deviceStore.usedFilters["brand"]?.includes(brand.name);
+      });
     }
 
     let deviceInfos = [];
@@ -180,6 +200,7 @@ function useDeviceSectionFetching(deviceStore, app, stringQueryParams = "", minQ
 
     let filters = {};
 
+    // pushing device combinations' stocks and device's sellers with brands
     for (let dev of devices) {
       let stockStatuses = [];
       for (let combo of dev["device-combinations"]) {
@@ -191,6 +212,12 @@ function useDeviceSectionFetching(deviceStore, app, stringQueryParams = "", minQ
       for (let status of uniqueStatuses) {
         pushValueToFiltersObj(filters, "stock", status);
       }
+
+      const seller = sellers.find(s => s.id === dev.sellerId);
+      const brand = brands.find(b => b.id === dev.brandId);
+
+      pushValueToFiltersObj(filters, "seller", seller.name);
+      pushValueToFiltersObj(filters, "brand", brand.name);
     }
 
     pushFilters(filters, deviceInfos);
@@ -232,7 +259,7 @@ function useDeviceSectionFetching(deviceStore, app, stringQueryParams = "", minQ
             ? info?.split("#")[0]
             : info;
 
-          const isIncluded = values.includes(infoToCheck);
+          const isIncluded = values?.includes(infoToCheck);
           if (!isIncluded) {
             if (allDeviceInfo[key].length === 1) return false;
             // else leaving only device combinations that have such an attribute

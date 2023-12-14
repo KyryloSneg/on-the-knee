@@ -19,10 +19,10 @@ export default class URLActions {
 
     if (searchParams.toString()) {
       // replacing percentage-decoded commas with normal ones to make the URL less ugly
-      let queryParams = searchParams.toString().replaceAll("%2C", ",");
+      let queryParams = searchParams.toString().replaceAll("%2C", ",").replaceAll("%3B", ";");
       // replacing spaces with underlines
-      queryParams = queryParams.replaceAll("%20", "_");
-      queryParams = queryParams.replaceAll("+", "_");
+      queryParams = queryParams.replaceAll("%20", "__");
+      queryParams = queryParams.replaceAll("+", "__");
 
       newUrl = `${urlWithoutParams}?${queryParams}`;
     } else {
@@ -43,11 +43,11 @@ export default class URLActions {
       const paramPairs = Array.from(url.searchParams.entries());
       for (let [key, pairValue] of paramPairs) {
         if (key !== name) continue;
-        // if a value was "apple" and new value is "orange" we'll get "apple,orange" param value
+        // if a value was "apple" and new value is "orange" we'll get "apple;;orange" param value
         // (do not forget about auto encoding url)
-        const valueArray = [...pairValue.split(","), value];
+        const valueArray = [...pairValue.split(";;"), value];
         const sortedValueArray = ArrayActions.sortStringArray(valueArray);
-        const newValue = sortedValueArray.join(",");
+        const newValue = sortedValueArray.join(";;");
 
         searchParams.set(key, newValue)
       }
@@ -67,16 +67,16 @@ export default class URLActions {
     const searchParams = new URLSearchParams(url.search);
 
     // replacing spaces in value with underlines to match it with url param values
-    value = value.replaceAll(" ", "_");
+    value = value.replaceAll(" ", "__");
     // almost redundant but i'll keep it here to reduce possible weird bugs in future
-    value = value.replaceAll("+", "_");
+    value = value.replaceAll("+", "__");
 
-    const isMultipleValues = searchParams.get(name)?.split(",").length > 1;
+    const isMultipleValues = searchParams.get(name)?.split(";;").length > 1;
     if (isMultipleValues) {
       const paramValue = searchParams.get(name);
-      const strToReplace = paramValue.startsWith(value) ? `${value},` : `,${value}`;
+      const strToReplace = paramValue.startsWith(value) ? `${value};;` : `;;${value}`;
 
-      // if a value was "apple,orange" and value to delete is "orange" we'll get "apple" param value
+      // if a value was "apple;;orange" and value to delete is "orange" we'll get "apple" param value
       const newValue = paramValue.replace(strToReplace, "");
       searchParams.set(name, newValue);
 
@@ -134,8 +134,8 @@ export default class URLActions {
       if (SPECIAL_QUERY_PARAMS.includes(key)) continue;
 
       let filterValues = [];
-      for (let val of value.split(",")) {
-        filterValues.push(val.replaceAll("_", " "));
+      for (let val of value.split(";;")) {
+        filterValues.push(val.replaceAll("__", " "));
       }
 
       usedFilters[key] = filterValues;
@@ -175,6 +175,12 @@ export default class URLActions {
           return !!filter;
         });
 
+        if (!values.length) {
+          searchParams.delete(key);
+          delete usedFilters[key];
+          break;
+        }
+
         const uniqueValues = Array.from(new Set(values));
         const sortedUniqueValues = ArrayActions.sortStringArray(uniqueValues);
 
@@ -183,7 +189,7 @@ export default class URLActions {
           searchParams.delete(key);
 
           // making a new "value" for it without redundant filters
-          const newValue = sortedUniqueValues.join(",");
+          const newValue = sortedUniqueValues.join(";;");
           searchParams.set(key, newValue);
 
           usedFilters[key] = sortedUniqueValues;

@@ -75,10 +75,10 @@ export const mockSearchResults = {
 export const SPECIAL_QUERY_PARAMS = ["sort", "page", "pagesToFetch"];
 
 // filters that have unique filtration logic
-export const SPECIAL_TO_HANDLE_FILTERS = ["stock", "price", "text"];
+export const SPECIAL_TO_HANDLE_FILTERS = ["sort", "price", "text", "stock", "seller", "brand"];
 
 // filters that aren't placed in category filters
-export const FILTERS_IN_SPECIAL_COMPONENTS = ["price", "text"];
+export const FILTERS_IN_SPECIAL_COMPONENTS = ["sort", "price", "text"];
 
 // in production build the value should be greater than current one
 export const FILTERS_OPTIONS_LENGTH_LIMIT = 5;
