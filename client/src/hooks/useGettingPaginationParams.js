@@ -17,26 +17,26 @@ function useGettingPaginationParams(deviceStore, totalPages) {
       if (+nextPage < 1 || nextPage[0] === "0") {
         nextPage = 1;
         const url = URLActions.setNewParam("page", nextPage);
-        navigate(url.replace(basename, "").replaceAll("%2C", ","), { replace: true });
+        navigate(url.replace(basename, "").replaceAll("%2C", ",").replaceAll("%3B", ";"), { replace: true });
       } 
       
       if (+nextPage > totalPages && totalPages) {
         nextPage = totalPages;
         const url = URLActions.setNewParam("page", nextPage);
-        navigate(url.replace(basename, "").replaceAll("%2C", ","), { replace: true });
+        navigate(url.replace(basename, "").replaceAll("%2C", ",").replaceAll("%3B", ";"), { replace: true });
       };
 
       const maxPagesToFetch = getPossiblePagesToFetch(nextPage);
       if (+nextPagesToFetch < 1 || nextPagesToFetch[0] === "0") {
         nextPagesToFetch = 1;
         const url = URLActions.setNewParam("pagesToFetch", nextPagesToFetch);
-        navigate(url.replace(basename, "").replaceAll("%2C", ","), { replace: true });
+        navigate(url.replace(basename, "").replaceAll("%2C", ",").replaceAll("%3B", ";"), { replace: true });
       };
       
       if (+nextPagesToFetch > maxPagesToFetch && totalPages) {
         nextPagesToFetch = maxPagesToFetch;
         const url = URLActions.setNewParam("pagesToFetch", nextPagesToFetch);
-        navigate(url.replace(basename, "").replaceAll("%2C", ","), { replace: true });
+        navigate(url.replace(basename, "").replaceAll("%2C", ",").replaceAll("%3B", ";"), { replace: true });
       };
     }
 
