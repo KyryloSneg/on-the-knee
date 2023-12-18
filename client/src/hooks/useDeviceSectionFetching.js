@@ -12,29 +12,44 @@ import DeviceSalesActions from "../utils/DeviceSalesActions";
 import DeviceComboActions from "../utils/DeviceComboActions";
 import { getSellers } from "../http/SellersAPI";
 import { getBrands } from "../http/BrandsAPI";
+import URLActions from "../utils/URLActions";
+import compareNumbers from "../utils/compareNumbers";
 
 // query params without pagination ones
-function useDeviceSectionFetching(deviceStore, app, stringQueryParams = "", minQueryPrice = null, maxQueryPrice = null) {
+function useDeviceSectionFetching(deviceStore, app) {
   const location = useLocation();
-
+  
   const prevUsedFilters = useRef(deviceStore.usedFilters);
   const isInitialFetch = !deviceStore.devices.length || deviceStore.usedFilters !== prevUsedFilters.current
-
+  
   async function fetchingCallback() {
     if (isInitialFetch) {
       app.setIsGlobalLoading(true);
     }
+    
+    const [minQueryPrice, maxQueryPrice] =
+      URLActions.getParamValue("price")?.split("-").map(price => +price) || [];
 
     const start = deviceStore.limit * (deviceStore.page - 1);
     const limit = deviceStore.limit * deviceStore.pagesToFetch;
-
+    
     const toFilterByPrice = minQueryPrice && maxQueryPrice;
     const toFilterByStock = !!deviceStore.usedFilters["stock"]?.length;
     const toFilterBySeller = !!deviceStore.usedFilters["seller"]?.length;
     const toFilterByBrand = !!deviceStore.usedFilters["brand"]?.length;
 
-    const deviceFetchPath = `${stringQueryParams}`;
-    const { devices } = await getDevices(deviceFetchPath);
+    const sortFilter = URLActions.getParamValue("sort");
+
+    let fetchStringQueryParams = ``;
+    const splittedSortFilter = sortFilter?.split(",");
+
+    if (!splittedSortFilter) {
+      fetchStringQueryParams = `_sort=rating&_order=desc`;
+    } else if (splittedSortFilter?.[1] === "rating") {
+      fetchStringQueryParams = `_sort=rating&_order=${splittedSortFilter[0]}`;
+    }
+
+    const { devices } = await getDevices(fetchStringQueryParams);
 
     const stocks = await getStocks();
     const sales = await getSales();
@@ -69,22 +84,7 @@ function useDeviceSectionFetching(deviceStore, app, stringQueryParams = "", minQ
       return filteredDevices;
     }
 
-    if (toFilterByPrice) {
-      filteredDevices = filterDeviceCombinations(
-        (item, dev) => {
-          const { discountPercentage } = DeviceSalesActions.getSaleTypesAndDiscount(dev, sales, saleTypeNames)
-
-          let discountedPrice;
-          if (discountPercentage) {
-            discountedPrice = getDiscountedPrice(item.price, discountPercentage);
-          }
-
-          const priceToCompare = discountedPrice || item.price;
-          return (priceToCompare >= minQueryPrice && priceToCompare <= maxQueryPrice)
-        },
-        [...devices],
-      );
-    }
+    // sasa
 
     if (toFilterByStock) {
       // cloning filteredDevices array to prevent bugs
@@ -111,6 +111,25 @@ function useDeviceSectionFetching(deviceStore, app, stringQueryParams = "", minQ
         const brand = brands.find(b => b.id === dev.brandId);
         return deviceStore.usedFilters["brand"]?.includes(brand.name);
       });
+    }
+
+    // finding min / max prices before filtering by device's cost
+    const { minPrice, maxPrice } = DeviceComboActions.getDeviceMinMaxPrices(filteredDevices, sales, saleTypeNames);
+    if (toFilterByPrice) {
+      filteredDevices = filterDeviceCombinations(
+        (item, dev) => {
+          const { discountPercentage } = DeviceSalesActions.getSaleTypesAndDiscount(dev, sales, saleTypeNames)
+
+          let discountedPrice;
+          if (discountPercentage) {
+            discountedPrice = getDiscountedPrice(item.price, discountPercentage);
+          }
+
+          const priceToCompare = discountedPrice || item.price;
+          return (priceToCompare >= minQueryPrice && priceToCompare <= maxQueryPrice)
+        },
+        [...devices],
+      );
     }
 
     let deviceInfos = [];
@@ -294,10 +313,41 @@ function useDeviceSectionFetching(deviceStore, app, stringQueryParams = "", minQ
       // if we have used filters, do filtration
       filteredDevices = filteredDevices.filter(filterDevicesFn);
     }
+
+    if (splittedSortFilter?.[1] === "price") {
+      filteredDevices.sort((firstDev, secondDev) => {
+        const { defaultCombinationInStock: firstDefaultCombo } = DeviceComboActions.findDefaultCombination(firstDev, stocks); 
+        const { defaultCombinationInStock: secondDefaultCombo } = DeviceComboActions.findDefaultCombination(secondDev, stocks); 
+
+        // just some device discount routine below
+        const { discountPercentage: firstDiscount } = DeviceSalesActions.getSaleTypesAndDiscount(firstDev, sales, saleTypeNames);
+        const { discountPercentage: secondDiscount } = DeviceSalesActions.getSaleTypesAndDiscount(secondDev, sales, saleTypeNames);
+
+        let firstDiscountedPrice;
+        if (firstDiscount) {
+          firstDiscountedPrice = +getDiscountedPrice(+firstDefaultCombo.price, firstDiscount);
+        }
+
+        let secondDiscountedPrice;
+        if (secondDiscount) {
+          secondDiscountedPrice = +getDiscountedPrice(+secondDefaultCombo.price, secondDiscount);
+        }
+
+        return compareNumbers(
+          firstDiscountedPrice || +firstDefaultCombo.price, 
+          secondDiscountedPrice || +secondDefaultCombo.price
+        );
+      })
+
+      if (splittedSortFilter[0] === "desc") {
+        filteredDevices.reverse();
+      }
+    }
+
     // getting devices for the current page
     pageFilteredDevices = filteredDevices.slice(start, (start + limit));
 
-    const { minPrice, maxPrice } = DeviceComboActions.getDeviceMinMaxPrices(filteredDevices, sales, saleTypeNames);
+
     if (minPrice !== deviceStore.initialMinPrice) {
       // rounding min and max numbers up to 2 digits after comma
       deviceStore.setInitialMinPrice((Math.round(minPrice * 100) / 100).toFixed(2));

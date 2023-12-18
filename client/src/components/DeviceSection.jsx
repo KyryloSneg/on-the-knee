@@ -10,7 +10,6 @@ import PagesPagination from "./UI/pagination/PagesPagination";
 import { Spinner } from "react-bootstrap";
 import isCanLoadMoreContent from "../utils/isCanLoadMoreContent";
 import useGettingPaginationParams from "../hooks/useGettingPaginationParams";
-import URLActions from "../utils/URLActions";
 
 const DeviceSection = observer(() => {
   const { app, deviceStore } = useContext(Context);
@@ -22,9 +21,7 @@ const DeviceSection = observer(() => {
     (deviceStore.page - 1) * deviceStore._limit
   );
 
-  const [minPrice, maxPrice] =
-    URLActions.getParamValue("price")?.split("-").map(price => +price) || [];
-  const [isLoading, error, fetching] = useDeviceSectionFetching(deviceStore, app, "", minPrice, maxPrice);
+  const [isLoading, error, fetching] = useDeviceSectionFetching(deviceStore, app);
   if (error) console.log(error);
 
   useEffect(() => {

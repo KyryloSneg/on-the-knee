@@ -5,7 +5,7 @@ import { Context } from "../Context";
 import { observer } from "mobx-react-lite";
 import URLActions from "../utils/URLActions";
 import { useLocation, useNavigate } from "react-router-dom";
-import validateMinMaxPrice from "../utils/validateMinMaxPrice";
+import checkMinMaxPricesValidity from "../utils/checkMinMaxPricesValidity";
 
 const PriceCategoryFilter = observer(() => {
   const { deviceStore } = useContext(Context);
@@ -19,35 +19,29 @@ const PriceCategoryFilter = observer(() => {
   const [maxPriceValue, setMaxPriceValue] = useState(deviceStore.initialMaxPrice);
   const [isValid, setIsValid] = useState(true);
 
+
+  // idk how it even works but it does
   useEffect(() => {
-    if (!deviceStore.initialMinPrice || !deviceStore.initialMaxPrice) return;
+    const result = checkMinMaxPricesValidity(deviceStore.initialMinPrice, deviceStore.initialMaxPrice);
+    if (result) {
+      const {
+        isValidQueryMinPrice,
+        isValidQueryMaxPrice,
+        isChangedMinInitPrice,
+        isChangedMaxInitPrice,
+      } = result;
 
-    const [queryMinPrice, queryMaxPrice] = URLActions.getParamValue("price")?.split("-") || [];
-    if (queryMinPrice === undefined || queryMaxPrice === undefined) return;
-
-    const isValidQueryMinPrice = validateMinMaxPrice(
-      true,
-      queryMinPrice,
-      deviceStore.initialMinPrice,
-      deviceStore.initialMaxPrice,
-      queryMinPrice,
-      queryMaxPrice
-    );
-
-    const isValidQueryMaxPrice = validateMinMaxPrice(
-      false,
-      queryMaxPrice,
-      deviceStore.initialMinPrice,
-      deviceStore.initialMaxPrice,
-      queryMinPrice,
-      queryMaxPrice
-    );
-
-    if (!isValidQueryMinPrice || !isValidQueryMaxPrice) {
-      // renavigating user to the url without the price filter if our query prices aren't valid
+      // because we set initial min / max prices by discounted ones our price used in price filter
+      // can be invalid very often (when min price < initial min price; same with max price),
+      // so renavigate our user to page with initial prices setted on
       const basename = process.env.REACT_APP_CLIENT_URL;
-      const nextURL = URLActions.deleteParamValue("price", `${minPriceValue}-${maxPriceValue}`);
-      navigate(nextURL.replace(basename, "").replaceAll("%2C", ",").replaceAll("%3B", ";"), { replace: true });
+
+      if (isChangedMinInitPrice || isChangedMaxInitPrice) return;
+      if (!isValidQueryMinPrice || !isValidQueryMaxPrice) {
+        // renavigating user to the url without the price filter if our query prices aren't valid
+        const nextURL = URLActions.deleteParamValue("price", `${minPriceValue}-${maxPriceValue}`);
+        navigate(nextURL.replace(basename, "").replaceAll("%2C", ",").replaceAll("%3B", ";"), { replace: true });
+      }
     }
 
     // eslint-disable-next-line
