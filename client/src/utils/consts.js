@@ -14,6 +14,8 @@ export const DEVICE_API_URL = "/devices?_embed=device-combinations&_embed=device
 export const SALES_API_URL = "/sales?_embed=sale-types";
 export const ATRIBUTES_API_URL = "/attributes?_expand=attribute-value&_expand=attribute-name";
 
+
+// value: (asc / desc),(rating / price)
 export const sortingOptions = [
   {
     id: 0,

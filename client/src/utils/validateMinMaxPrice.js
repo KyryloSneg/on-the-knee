@@ -1,11 +1,14 @@
 function validateMinMaxPrice(isMin, nextValue, initMinPrice, initMaxPrice, minPriceValue, maxPriceValue) {
   let nextIsValid;
+  let isChangedInitPrice = false;
 
   if (isNaN(+nextValue)) {
     nextIsValid = false;
   } else if (isMin && (+nextValue < initMinPrice || +maxPriceValue > initMaxPrice)) {
+    isChangedInitPrice = true;
     nextIsValid = false;
   } else if (!isMin && (+nextValue > initMaxPrice || +minPriceValue < initMinPrice)) {
+    isChangedInitPrice = true;
     nextIsValid = false;
   } else if (isMin && +nextValue > +maxPriceValue) {
     nextIsValid = false;
@@ -17,7 +20,7 @@ function validateMinMaxPrice(isMin, nextValue, initMinPrice, initMaxPrice, minPr
     nextIsValid = true;
   }
 
-  return nextIsValid;
+  return { nextIsValid, isChangedInitPrice };
 }
 
 export default validateMinMaxPrice;

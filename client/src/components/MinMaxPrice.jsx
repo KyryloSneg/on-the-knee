@@ -15,7 +15,7 @@ const MinMaxPrice = ({ variant, value, setValue, isValid, setIsValid, minPriceVa
   function onChange(e) {
     let nextValue = e.target.value;
     
-    const nextIsValid = validateMinMaxPrice(
+    const { nextIsValid } = validateMinMaxPrice(
       isMin,
       nextValue,
       deviceStore.initialMinPrice,

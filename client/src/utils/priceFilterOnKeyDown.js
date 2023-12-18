@@ -9,12 +9,12 @@ function priceFilterOnKeyDown(e, value, isMin, initialMinPrice, initialMaxPrice,
   switch (e.key) {
     case "ArrowDown":
       e.preventDefault();
+
+      // do not handle adding / substracting value if it is not a number
+      if (isNaN(+value)) break;
       if (+value - changeNumber > 0) {
         nextValue = +value - changeNumber;
-      } else if (+value - 1 > 0) {
-        // if the (value - 10) is less than 0, try (value - 1) else if it passes the condition
-        nextValue = +value - 1;
-      } else if (+value <= 1) {
+      } else {
         nextValue = 0;
       }
       
@@ -29,7 +29,7 @@ function priceFilterOnKeyDown(e, value, isMin, initialMinPrice, initialMaxPrice,
   }
 
   if (!nextValue && nextValue !== 0) return;
-  const nextIsValid = validateMinMaxPrice(
+  const { nextIsValid } = validateMinMaxPrice(
     isMin,
     nextValue,
     initialMinPrice,
