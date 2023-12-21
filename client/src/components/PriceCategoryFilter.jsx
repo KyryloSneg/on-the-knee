@@ -1,76 +1,28 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useMemo, useState } from "react";
 import "./styles/PriceCategoryFilter.css";
 import MinMaxPrice from "./MinMaxPrice";
 import { Context } from "../Context";
 import { observer } from "mobx-react-lite";
 import URLActions from "../utils/URLActions";
-import { useLocation, useNavigate } from "react-router-dom";
-import checkMinMaxPricesValidity from "../utils/checkMinMaxPricesValidity";
+import { useNavigate } from "react-router-dom";
+import useResettingMinMaxPrices from "../hooks/useResettingMinMaxPrices";
 
 const PriceCategoryFilter = observer(() => {
   const { deviceStore } = useContext(Context);
-  const location = useLocation();
   const navigate = useNavigate();
 
-  const prevInitialMinPrice = useRef(deviceStore.initialMinPrice);
-  const prevInitialMaxPrice = useRef(deviceStore.initialMaxPrice);
+  const [queryMinPrice, queryMaxPrice] = URLActions.getParamValue("price")?.split("-") || [];
+  const initialMinPriceValue = useMemo(() => queryMinPrice || deviceStore.initialMinPrice, [queryMinPrice, deviceStore.initialMinPrice]) ;
+  const initialMaxPriceValue = useMemo(() => queryMaxPrice || deviceStore.initialMaxPrice, [queryMaxPrice, deviceStore.initialMaxPrice]);
 
-  const [minPriceValue, setMinPriceValue] = useState(deviceStore.initialMinPrice);
-  const [maxPriceValue, setMaxPriceValue] = useState(deviceStore.initialMaxPrice);
+  const [minPriceValue, setMinPriceValue] = useState(initialMinPriceValue);
+  const [maxPriceValue, setMaxPriceValue] = useState(initialMaxPriceValue);
   const [isValid, setIsValid] = useState(true);
 
-
-  // idk how it even works but it does
-  useEffect(() => {
-    const result = checkMinMaxPricesValidity(deviceStore.initialMinPrice, deviceStore.initialMaxPrice);
-    if (result) {
-      const {
-        isValidQueryMinPrice,
-        isValidQueryMaxPrice,
-        isChangedMinInitPrice,
-        isChangedMaxInitPrice,
-      } = result;
-
-      // because we set initial min / max prices by discounted ones our price used in price filter
-      // can be invalid very often (when min price < initial min price; same with max price),
-      // so renavigate our user to page with initial prices setted on
-      const basename = process.env.REACT_APP_CLIENT_URL;
-
-      if (isChangedMinInitPrice || isChangedMaxInitPrice) return;
-      if (!isValidQueryMinPrice || !isValidQueryMaxPrice) {
-        // renavigating user to the url without the price filter if our query prices aren't valid
-        const nextURL = URLActions.deleteParamValue("price", `${minPriceValue}-${maxPriceValue}`);
-        navigate(nextURL.replace(basename, "").replaceAll("%2C", ",").replaceAll("%3B", ";"), { replace: true });
-      }
-    }
-
-    // eslint-disable-next-line
-  }, [location.search, navigate, deviceStore, deviceStore.initialMinPrice, deviceStore.initialMaxPrice]);
-
-  useEffect(() => {
-    // resetting input's values and "price" query param on devices min price or max one change
-    const nextMinPrice = deviceStore.initialMinPrice;
-    const nextMaxPrice = deviceStore.initialMaxPrice;
-
-    setMinPriceValue(nextMinPrice);
-    setMaxPriceValue(nextMaxPrice);
-
-    const isInitialPricesAreSame = prevInitialMinPrice !== nextMinPrice || prevInitialMinPrice !== nextMaxPrice;
-    if (isInitialPricesAreSame) return;
-
-    const [queryMinPrice, queryMaxPrice] = URLActions.getParamValue("price")?.split("-") || [];
-    const isSettedQueryPrice = queryMinPrice && queryMaxPrice;
-    const resettedURL = URLActions.deleteParamValue("price", `${minPriceValue}-${maxPriceValue}`);
-    const basename = process.env.REACT_APP_CLIENT_URL;
-
-    if (resettedURL && isSettedQueryPrice) {
-      navigate(resettedURL.replace(basename, "").replaceAll("%2C", ",").replaceAll("%3B", ";"), { replace: true });
-    }
-
-    prevInitialMinPrice.current = nextMinPrice;
-    prevInitialMaxPrice.current = nextMaxPrice;
-    // eslint-disable-next-line
-  }, [deviceStore.initialMinPrice, deviceStore.initialMaxPrice]);
+  useResettingMinMaxPrices(
+    deviceStore.initialMinPrice, deviceStore.initialMaxPrice,
+    minPriceValue, maxPriceValue,
+  );
 
   function onSubmit(e) {
     e.preventDefault();

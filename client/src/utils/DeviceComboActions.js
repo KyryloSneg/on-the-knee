@@ -1,6 +1,5 @@
-import DeviceSalesActions from "./DeviceSalesActions";
 import findMinMaxPrices from "./findMinMaxPrices";
-import getDiscountedPrice from "./getDiscountedPrice";
+import { getDiscountedPriceOrDefaultOne } from "./getDiscountedPrice";
 
 class DeviceComboActions {
 
@@ -210,16 +209,8 @@ class DeviceComboActions {
     let prices = [];
   
     for (let dev of devices) {
-      const { discountPercentage } = DeviceSalesActions.getSaleTypesAndDiscount(dev, sales, saleTypeNames);
-      
       for (let combo of dev["device-combinations"]) {
-        let price;
-        if (discountPercentage) {
-          price = getDiscountedPrice(combo.price, discountPercentage);
-        } else {
-          price = combo.price;
-        }
-  
+        const price = getDiscountedPriceOrDefaultOne(combo, dev, sales, saleTypeNames);
         prices.push(price);
       }
     }

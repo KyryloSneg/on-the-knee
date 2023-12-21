@@ -1,4 +1,4 @@
-import getDiscountedPrice from "../utils/getDiscountedPrice";
+import { getDiscountedPrice } from "../utils/getDiscountedPrice";
 import "./styles/DeviceItemPrice.css";
 
 const DeviceItemPrice = ({ price, discountPercentage = 0 }) => {
