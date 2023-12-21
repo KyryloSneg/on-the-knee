@@ -78,15 +78,21 @@ const DeviceSection = observer(() => {
           </p>
         </div>
       }
-      {canLoadMore &&
+      {/* using "!!" to prevent "0" appearing instead of empty space */}
+      {/* if there's more devices to load and devices are fetched */}
+      {(!!canLoadMore && !!deviceStore.devices.length) &&
         <ButtonPagination
           isLoading={isLoading}
         />
       }
-      {(!canLoadMore && isLoading) &&
+      
+      {/* i don't really remember what is this */}
+      {/* {(!canLoadMore && isLoading) &&
         <div className="visually-hidden" tabIndex={0} />
-      }
-      {!!(+deviceStore.totalCount) &&
+      } */}
+
+      {/* if devices are fetched and we've got totalCount (usually these conditions returns true at the same moment) */}
+      {(!!(+deviceStore.totalCount) && !!deviceStore.devices.length) &&
         <PagesPagination
           totalPages={totalPages}
           currentPage={deviceStore.page}
