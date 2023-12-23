@@ -1,10 +1,11 @@
 import { useEffect } from "react";
 import URLActions from "../utils/URLActions";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import useNavigateToEncodedURL from "./useNavigateToEncodedURL";
 
 function useGettingPaginationParams(deviceStore, totalPages) {
   const location = useLocation();
-  const navigate = useNavigate();
+  const navigate = useNavigateToEncodedURL();
 
   useEffect(() => {
     function getPossiblePagesToFetch(page) {

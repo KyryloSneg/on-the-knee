@@ -3,9 +3,10 @@ function findMinMaxPrices(prices) {
   let maxPrice = null;
 
   for (let price of prices) {
-    if (price < minPrice || minPrice === null) {
+    if (+price < minPrice || minPrice === null) {
       minPrice = +price;
-    } else if (price > maxPrice || maxPrice === null) {
+    } 
+    if (+price > maxPrice || maxPrice === null) {
       maxPrice = +price;
     }
   }

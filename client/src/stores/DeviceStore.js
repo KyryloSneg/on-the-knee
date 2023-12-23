@@ -2,11 +2,13 @@ import { makeAutoObservable } from "mobx";
 
 class DeviceStore {
   constructor() {
-    this._filters = {
-      "category": ["phones", "TV", "computers"],
-      "brand": ["Apple", "Asus", "LG", "Samsung"],
-      "hz": ["50", "60", "75", "120", "140", "144", "200", "240 and more"],
-    }
+    this._filters = {};
+
+    // {
+    //   "category": ["phones", "TV", "computers"],
+    //   "brand": ["Apple", "Asus", "LG", "Samsung"],
+    //   "hz": ["50", "60", "75", "120", "140", "144", "200", "240 and more"],
+    // }
 
     // just example
 
@@ -39,8 +41,8 @@ class DeviceStore {
     this._page = 1;
     this._pagesToFetch = 1;
     this._totalCount = 0;
-    // i can't import the DEVICE_ITEMS_MOBILE_LIMIT variable because of some weird webpack-bootstrap error
-    // it happens because of some cyclical imports ig (i can't find them)
+    // i can't import the DEVICE_ITEMS_MOBILE_LIMIT variable because of webpack-bootstrap error
+    // it happens because of some cyclical imports (i'm lazy to fix this)
     this._limit = 30;
     makeAutoObservable(this);
   }

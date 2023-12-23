@@ -1,58 +1,49 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import "./styles/PriceCategoryFilter.css";
 import MinMaxPrice from "./MinMaxPrice";
 import { Context } from "../Context";
 import { observer } from "mobx-react-lite";
 import URLActions from "../utils/URLActions";
-import { useNavigate } from "react-router-dom";
+import useResettingMinMaxPrices from "../hooks/useResettingMinMaxPrices";
+import useNavigateToEncodedURL from "../hooks/useNavigateToEncodedURL";
 
 const PriceCategoryFilter = observer(() => {
   const { deviceStore } = useContext(Context);
-  const navigate = useNavigate();
+  const navigate = useNavigateToEncodedURL();
 
   const [minPriceValue, setMinPriceValue] = useState(deviceStore.initialMinPrice);
   const [maxPriceValue, setMaxPriceValue] = useState(deviceStore.initialMaxPrice);
+
   const [isValid, setIsValid] = useState(true);
 
-  useEffect(() => {
-    // resetting input's values and "price" query param on devices min price or max one change
-    const nextMinPrice = deviceStore.initialMinPrice;
-    const nextMaxPrice = deviceStore.initialMaxPrice;
-
-    setMinPriceValue(nextMinPrice);
-    setMaxPriceValue(nextMaxPrice);
-    
-    const [queryMinPrice, queryMaxPrice] = URLActions.getParamValue("price")?.split("-") || [];
-    const isSettedQueryPrice = queryMinPrice && queryMaxPrice;
-    const resettedURL = URLActions.deleteParamValue("price", `${minPriceValue}-${maxPriceValue}`);
-    const basename = process.env.REACT_APP_CLIENT_URL;
-
-    if (resettedURL && 
-      (isSettedQueryPrice && (+queryMinPrice !== nextMinPrice || +queryMaxPrice !== nextMaxPrice))) {
-      navigate(resettedURL.replace(basename, ""), { replace: true });
-    } 
-  }, [deviceStore.initialMinPrice, deviceStore.initialMaxPrice]);
+  useResettingMinMaxPrices(
+    deviceStore.initialMinPrice, deviceStore.initialMaxPrice,
+    minPriceValue, maxPriceValue,
+    setMinPriceValue, setMaxPriceValue,
+  );
 
   function onSubmit(e) {
     e.preventDefault();
     if (!isValid) return;
 
     // to prevent redundant redirects we can compare current price and new one
-    // and if they're equal to each other we skip redirect
+    // and if they're equal to each other we skip redirect (or if we submitted the same price as initial one)
+
     const currentPrice = URLActions.getParamValue("price");
-    if (currentPrice === `${minPriceValue}-${maxPriceValue}`) return;
+    if (currentPrice === `${minPriceValue}-${maxPriceValue}`
+      || (minPriceValue === deviceStore.initialMinPrice && maxPriceValue === deviceStore.initialMaxPrice)) return;
 
     const nextUrl = URLActions.setNewParam("price", `${minPriceValue}-${maxPriceValue}`);
     const basename = process.env.REACT_APP_CLIENT_URL;
-    navigate(nextUrl.replace(basename, ""));
+    navigate(nextUrl.replaceAll(basename, ""));
   }
 
   return (
     <div className="price-range-form-wrap use-preety-scrollbar">
       <form className="price-range-filter-wrap" onSubmit={onSubmit}>
         <div>
-          <MinMaxPrice 
-            variant={"min"} 
+          <MinMaxPrice
+            variant={"min"}
             value={minPriceValue}
             setValue={setMinPriceValue}
             isValid={isValid}
@@ -61,7 +52,7 @@ const PriceCategoryFilter = observer(() => {
             maxPriceValue={maxPriceValue}
           />
           <span className="price-divider no-select"> - </span>
-          <MinMaxPrice 
+          <MinMaxPrice
             variant={"max"}
             value={maxPriceValue}
             setValue={setMaxPriceValue}

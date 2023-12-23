@@ -12,7 +12,10 @@ export const DESIRED_LIST_ROUTE = "/desired";
 
 export const DEVICE_API_URL = "/devices?_embed=device-combinations&_embed=device-feedbacks&_embed=device-infos&_embed=sale-devices";
 export const SALES_API_URL = "/sales?_embed=sale-types";
+export const ATRIBUTES_API_URL = "/attributes?_expand=attribute-value&_expand=attribute-name";
 
+
+// value: (asc / desc),(rating / price)
 export const sortingOptions = [
   {
     id: 0,
@@ -70,8 +73,15 @@ export const mockSearchResults = {
   ]
 };
 
-// params such a sort filter
-export const SPECIAL_QUERY_PARAMS = ["sort", "text", "page", "pagesToFetch"];
+// params that don't appear in used filters like a sort filter
+export const SPECIAL_QUERY_PARAMS = ["sort", "page", "pagesToFetch"];
+
+// filters that have unique filtration logic
+export const SPECIAL_TO_HANDLE_FILTERS = ["sort", "price", "text", "stock", "seller", "brand"];
+
+// filters that aren't placed in category filters
+export const FILTERS_IN_SPECIAL_COMPONENTS = ["sort", "price", "text"];
+
 // in production build the value should be greater than current one
 export const FILTERS_OPTIONS_LENGTH_LIMIT = 5;
 export const DEVICE_ITEM_INFO_AMOUNT_LIMIT = 6;

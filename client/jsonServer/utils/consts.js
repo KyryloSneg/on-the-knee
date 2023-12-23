@@ -2,23 +2,23 @@ const POSSIBLE_DEVICE_INFOS = {
   "smartphones": [
     {
       "processor": "Qualcomm Snapdragon",
-      "phoneStorage": "32GB",
-      "hz": "75",
+      "phoneStorage": "32 GB",
+      "refreshRate": "75 hz",
     },
     {
       "processor": "Apple",
-      "phoneStorage": "64GB",
-      "hz": "144",
+      "phoneStorage": "64 GB",
+      "refreshRate": "144 hz",
     },
     {
       "processor": "Mediatek",
-      "phoneStorage": "128GB",
-      "hz": "240",
+      "phoneStorage": "128 GB",
+      "refreshRate": "240 hz",
     },
     {
       "processor": "Mediatek",
-      "phoneStorage": "256GB",
-      "hz": "240",
+      "phoneStorage": "256 GB",
+      "refreshRate": "240 hz",
     },
   ],
   "laptops": [
@@ -81,11 +81,11 @@ const POSSIBLE_DEVICE_INFOS = {
 
 const POSSIBLE_DEVICE_ATTRIBUTES = {
   "smartphones": {
-    "phoneStorage": ["32GB", "64GB", "128GB", "256GB"],
+    "phoneStorage": ["32 GB", "64 GB", "128 GB", "256 GB"],
     "color": ["red#FF0000", "purple#A020F0", "green#00FF00"],
   },
   "laptops": {
-    "hz": ["75hz", "144hz", "240hz"],
+    "refreshRate": ["75 hz", "144 hz", "240 hz"],
     "color": ["brown#2B1700", "spacedark#333334", "white#FFFFFF"],
   },
   "furniture": {

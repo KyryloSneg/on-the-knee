@@ -8,7 +8,7 @@ module.exports = (deviceId, categorySlug, deviceInfos, attributeNames) => {
   if (possibleDeviceInfos) {
     const deviceInfosIndex = faker.number.int({ min: 0, max: possibleDeviceInfos.length - 1 });
     for (let [name, value] of Object.entries(possibleDeviceInfos[deviceInfosIndex])) {
-      if (attributeNames.includes(name)) continue;
+      if (Object.keys(attributeNames).includes(name)) continue;
 
       const info = {
         "id": deviceInfos.length + 1,

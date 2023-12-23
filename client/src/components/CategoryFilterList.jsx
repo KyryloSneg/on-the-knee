@@ -10,25 +10,30 @@ const CategoryFilterList = observer(({ filter, variant, elemToFocusRef = null })
   const { deviceStore } = useContext(Context);
   const isWithSearchField = variant === "withSearchField";
   const [query, setQuery] = useState("");
+
   const [filteredValues, setFilteredValues] = useState(deviceStore.filters[filter]);
   let testId = `CategoryFilterList: ${filter.toLowerCase()}`;
 
   function renderFilters() {
     let filters = [];
-    let sortedValues = ArrayActions.sortAlphaNumArray(filteredValues.slice());
+    const sortedValues = ArrayActions.sortAlphaNumObjectArray(filteredValues.slice(), "value");
 
-    sortedValues.forEach(value => {
+    // info contains such fields as "value" and "count"
+    sortedValues.forEach(info => {
+      
       let active = false;
       if (deviceStore.usedFilters?.[filter]) {
-        active = deviceStore.usedFilters[filter].includes(value);
+        const valueToCheck = filter === "color" ? info.value.split("#")[0] : info.value;
+        active = deviceStore.usedFilters[filter].includes(valueToCheck);
       }
-
-      const testId = `${filter}: ${value} checked=${active}`;
+      
+      const testId = `${filter}: ${info.value} checked=${active}`;
       filters.push(
-        <li key={`${filter}: ${value}`}>
+        <li key={`${filter}: ${info.value}`}>
           <CategoryFilter
             filter={filter}
-            value={value}
+            value={info.value}
+            count={info.count}
             active={active}
             testId={testId}
           />

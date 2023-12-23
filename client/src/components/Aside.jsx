@@ -4,17 +4,18 @@ import "./styles/Aside.css";
 import FilterCategories from "./FilterCategories";
 import { useContext, useEffect, useRef } from "react";
 import { Context } from "../Context";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import URLActions from "../utils/URLActions";
 import SkipToNextPageContent from "./UI/skipToNextPageContent/SkipToNextPageContent";
 import getAllFocusableElements from "../utils/getAllFocusableElements";
+import useNavigateToEncodedURL from "../hooks/useNavigateToEncodedURL";
 
 const Aside = observer(() => {
   const { deviceStore, app, isTest } = useContext(Context);
   const asideRef = useRef(null);
 
   const location = useLocation();
-  const navigate = useNavigate();
+  const navigate = useNavigateToEncodedURL();
 
   let deviceSectionElemToFocus;
   let asideElemToFocus;
@@ -46,17 +47,18 @@ const Aside = observer(() => {
       const basename = process.env.REACT_APP_CLIENT_URL;
       navigate(url.replace(basename, ""), { replace: true });
     }
-  }, [location.search, deviceStore, navigate, location.pathname, isTest]);
+
+  }, [location.search, deviceStore, deviceStore.filters, deviceStore.filters, location.pathname, navigate, isTest]);
 
   return (
     <aside ref={asideRef}>
-      <SkipToNextPageContent 
-        title="skip to the device section" 
-        elemToFocus={deviceSectionElemToFocus} 
+      <SkipToNextPageContent
+        title="skip to the device section"
+        elemToFocus={deviceSectionElemToFocus}
         testId="skip-to-the-next-page-btn aside start"
         className="w-100"
       />
-      {Object.keys(deviceStore.usedFilters).length > 0 
+      {Object.keys(deviceStore.usedFilters).length > 0
         ? [
           <UsedFilters key={"usedFiltersSection"} />,
           <FilterCategories key={"filterCategoriesSection"} />
@@ -65,9 +67,9 @@ const Aside = observer(() => {
           <FilterCategories />
         )
       }
-      <SkipToNextPageContent 
-        title="skip to the filter bar beginning" 
-        elemToFocus={asideElemToFocus} 
+      <SkipToNextPageContent
+        title="skip to the filter bar beginning"
+        elemToFocus={asideElemToFocus}
         testId="skip-to-the-next-page-btn aside end"
         className="w-100"
       />

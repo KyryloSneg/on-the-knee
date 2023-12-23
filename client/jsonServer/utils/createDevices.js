@@ -54,9 +54,9 @@ module.exports = async () => {
     const seller = sellers[faker.number.int({ min: 0, max: sellers.length - 1 })];
 
     const rating = createDeviceFeedbacks(deviceFeedbacks, deviceFeedbackReplies, dev.id);
-    const { deviceAttributeNames, deviceAttributeValues } = createAttributes(dev.id, category.slug, attributes, attributeNames, attributeValues);
+    const { deviceAttributeValues } = createAttributes(dev.id, category.slug, attributes, attributeNames, attributeValues);
 
-    createDeviceInfos(dev.id, category.slug, deviceInfos, deviceAttributeNames);
+    createDeviceInfos(dev.id, category.slug, deviceInfos, deviceAttributeValues);
     createDeviceCombinations(dev.id, deviceAttributeValues, deviceCombinations, stocks);
     createAdditionalServices(dev.id, devices, additionalServices, additionalServiceDevices);
 

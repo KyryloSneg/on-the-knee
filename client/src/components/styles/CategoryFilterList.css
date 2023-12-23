@@ -1,5 +1,5 @@
 .filters {
-  max-height: 268px;
+  max-height: 284px;
   overflow-y: auto;
   margin: 0;
   position: relative;
@@ -7,7 +7,7 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: 4px;
-  padding: 0 0 6px 0;
+  /* padding: 0 0 6px 0; */
   overflow-anchor: none;
   /* transition: max-height 0.35s linear 0.2s; */
 }

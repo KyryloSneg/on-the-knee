@@ -3,6 +3,7 @@ import StringActions from "../utils/StringActions";
 import "./styles/FilterCategoryBtn.css";
 
 const FilterCategoryBtn = ({ filter, visible, setVisible }) => {
+  const filterName = StringActions.capitalize(StringActions.splitByUpperCaseLetters(filter));
 
   function onClick() {
     const nextVisible = !visible;
@@ -13,7 +14,7 @@ const FilterCategoryBtn = ({ filter, visible, setVisible }) => {
     <button 
       onClick={onClick}
       data-testid={`CategoryBlockBtn: ${filter}`}>
-      <p>{StringActions.capitalize(filter)}</p>
+      <p>{filterName}</p>
       <img src={dropdownArrowIcon} alt="" className={visible ? "rotated" : ""} draggable="false" />
     </button>
   );
