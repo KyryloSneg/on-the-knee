@@ -1,11 +1,12 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import URLActions from "../utils/URLActions";
 import checkMinMaxPricesValidity from "../utils/checkMinMaxPricesValidity";
 import { useEffect, useRef } from "react";
+import useNavigateToEncodedURL from "./useNavigateToEncodedURL";
 
-function useResettingMinMaxPrices(initialMinPrice, initialMaxPrice, minPriceValue, maxPriceValue) {
+function useResettingMinMaxPrices(initialMinPrice, initialMaxPrice, minPriceValue, maxPriceValue, setMinPriceValue, setMaxPriceValue) {
   const location = useLocation();
-  const navigate = useNavigate();
+  const navigate = useNavigateToEncodedURL();
 
   const prevInitialMinPrice = useRef(initialMinPrice);
   const prevInitialMaxPrice = useRef(initialMaxPrice);
@@ -24,13 +25,14 @@ function useResettingMinMaxPrices(initialMinPrice, initialMaxPrice, minPriceValu
       // because of submitting price filter initial min / max prices are changing to new ones
       // our submitted prices can be invalid very often (when min price < initial min price; same thing with max price),
       // so renavigate our user to page with initial prices setted on
-      const basename = process.env.REACT_APP_CLIENT_URL;
 
       if (isChangedMinInitPrice || isChangedMaxInitPrice) return;
       if (!isValidQueryMinPrice || !isValidQueryMaxPrice) {
         // renavigating user to the url without the price filter if our query prices aren't valid
+        const basename = process.env.REACT_APP_CLIENT_URL;
         const nextURL = URLActions.deleteParamValue("price", `${minPriceValue}-${maxPriceValue}`);
-        navigate(nextURL.replace(basename, "").replaceAll("%2C", ",").replaceAll("%3B", ";"), { replace: true });
+        
+        navigate(nextURL.replace(basename, ""), { replace: true });
       }
     }
 
@@ -42,6 +44,9 @@ function useResettingMinMaxPrices(initialMinPrice, initialMaxPrice, minPriceValu
     const nextMinPrice = initialMinPrice;
     const nextMaxPrice = initialMaxPrice;
 
+    setMinPriceValue(nextMinPrice);
+    setMaxPriceValue(nextMaxPrice);
+
     const isInitialPricesAreSame = prevInitialMinPrice !== nextMinPrice || prevInitialMinPrice !== nextMaxPrice;
     if (isInitialPricesAreSame) return;
 
@@ -51,7 +56,7 @@ function useResettingMinMaxPrices(initialMinPrice, initialMaxPrice, minPriceValu
     const basename = process.env.REACT_APP_CLIENT_URL;
 
     if (resettedURL && isSettedQueryPrice) {
-      navigate(resettedURL.replace(basename, "").replaceAll("%2C", ",").replaceAll("%3B", ";"), { replace: true });
+      navigate(resettedURL.replace(basename, ""), { replace: true });
     }
 
     prevInitialMinPrice.current = nextMinPrice;
