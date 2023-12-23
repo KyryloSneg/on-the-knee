@@ -10,20 +10,18 @@ import PagesPagination from "./UI/pagination/PagesPagination";
 import { Spinner } from "react-bootstrap";
 import isCanLoadMoreContent from "../utils/isCanLoadMoreContent";
 import useGettingPaginationParams from "../hooks/useGettingPaginationParams";
-import URLActions from "../utils/URLActions";
 
 const DeviceSection = observer(() => {
   const { app, deviceStore } = useContext(Context);
   const deviceSectionRef = useRef(null);
   const totalPages = getTotalPages(deviceStore.totalCount, deviceStore.limit);
   const canLoadMore = isCanLoadMoreContent(
-    deviceStore.totalCount, 
-    deviceStore.devices.length, 
+    deviceStore.totalCount,
+    deviceStore.devices.length,
     (deviceStore.page - 1) * deviceStore._limit
   );
 
-  const [minPrice, maxPrice] = URLActions.getParamValue("price")?.split("-") || [];
-  const [isLoading, error, fetching] = useDeviceSectionFetching(deviceStore, app, "", minPrice, maxPrice);
+  const [isLoading, error, fetching] = useDeviceSectionFetching(deviceStore, app);
   if (error) console.log(error);
 
   useEffect(() => {
@@ -39,15 +37,24 @@ const DeviceSection = observer(() => {
   return (
     <main ref={deviceSectionRef}>
       {/* <DevicePageList /> */}
-      <DeviceList
-        devices={deviceStore.devices}
-        stocks={deviceStore.stocks}
-        sales={deviceStore.sales}
-        saleTypeNames={deviceStore.saleTypeNames}
-      />
+      {deviceStore.devices.length
+        ? (
+          <DeviceList
+            devices={deviceStore.devices}
+            stocks={deviceStore.stocks}
+            sales={deviceStore.sales}
+            saleTypeNames={deviceStore.saleTypeNames}
+          />
+        )
+        : !error && (
+          <p className="no-devices-message">
+            We haven't found devices with such a filters {":("}
+          </p>
+        )
+      }
+
       {/* spinner on "retry" fetch */}
-      {((error && isLoading)
-        || !!(deviceStore.devices.length === deviceStore.totalCount && deviceStore.totalCount)) &&
+      {(error && isLoading) &&
         <Spinner
           animation="border"
           variant="primary"
@@ -59,7 +66,7 @@ const DeviceSection = observer(() => {
         </Spinner>
       }
       {/* create "try again" btn */}
-      {(error && !isLoading) &&
+      {(!!error && !isLoading) &&
         <div className="device-section-error">
           <p>
             Oops! Something went wrong while getting devices.
@@ -71,15 +78,21 @@ const DeviceSection = observer(() => {
           </p>
         </div>
       }
-      {canLoadMore &&
+      {/* using "!!" to prevent "0" appearing instead of empty space */}
+      {/* if there's more devices to load and devices are fetched */}
+      {(!!canLoadMore && !!deviceStore.devices.length) &&
         <ButtonPagination
           isLoading={isLoading}
         />
       }
-      {(!canLoadMore && isLoading) &&
+      
+      {/* i don't really remember what is this */}
+      {/* {(!canLoadMore && isLoading) &&
         <div className="visually-hidden" tabIndex={0} />
-      }
-      {!!(+deviceStore.totalCount) &&
+      } */}
+
+      {/* if devices are fetched and we've got totalCount (usually these conditions returns true at the same moment) */}
+      {(!!(+deviceStore.totalCount) && !!deviceStore.devices.length) &&
         <PagesPagination
           totalPages={totalPages}
           currentPage={deviceStore.page}

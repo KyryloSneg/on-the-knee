@@ -1,4 +1,5 @@
-import filterByPriceRange from "./filterByPriceRange";
+import findMinMaxPrices from "./findMinMaxPrices";
+import { getDiscountedPriceOrDefaultOne } from "./getDiscountedPrice";
 
 class DeviceComboActions {
 
@@ -176,7 +177,7 @@ class DeviceComboActions {
 
   static findDefaultCombination(device, stocks) {
     const defaultCombination = device["device-combinations"].find(combo => combo.default);
-    let defaultCombinationInStock = defaultCombination;
+    let defaultCombinationInStock = {...defaultCombination};
 
     function getStock(stockId) {
       return stocks.find(stock => stock.id === stockId);
@@ -202,6 +203,20 @@ class DeviceComboActions {
 
     let isInStock = !!getStock(defaultCombinationInStock.stockId).totalStock;
     return { defaultCombinationInStock, isInStock };
+  }
+
+  static getDeviceMinMaxPrices(devices, sales = [], saleTypeNames = []) {
+    let prices = [];
+  
+    for (let dev of devices) {
+      for (let combo of dev["device-combinations"]) {
+        const price = getDiscountedPriceOrDefaultOne(combo, dev, sales, saleTypeNames);
+        prices.push(price);
+      }
+    }
+  
+    const { minPrice, maxPrice } = findMinMaxPrices(prices);
+    return { minPrice, maxPrice };
   }
 
 }
