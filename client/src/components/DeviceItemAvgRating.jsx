@@ -10,7 +10,11 @@ const DeviceItemAvgRating = ({ rating = null, feedbackAmount = null, id = null }
     const correctedFeedbackForm = feedbackAmount === 1 ? "feedback" : "feedbacks";
     return (
       <div className="main-device-rating-wrap">
-        <Link to={to} className="main-device-rating link-colors">
+        <Link 
+          to={to} 
+          className="main-device-rating link-colors" 
+          aria-label={`${rating} stars of 5; go to device's feedbacks section`}
+        >
           <ReadOnlyStarRating value={+rating} id={id} />
           <span className="device-item-feedback-num">{feedbackAmount} {correctedFeedbackForm}</span>
         </Link>
