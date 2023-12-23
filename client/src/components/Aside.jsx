@@ -4,17 +4,18 @@ import "./styles/Aside.css";
 import FilterCategories from "./FilterCategories";
 import { useContext, useEffect, useRef } from "react";
 import { Context } from "../Context";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import URLActions from "../utils/URLActions";
 import SkipToNextPageContent from "./UI/skipToNextPageContent/SkipToNextPageContent";
 import getAllFocusableElements from "../utils/getAllFocusableElements";
+import useNavigateToEncodedURL from "../hooks/useNavigateToEncodedURL";
 
 const Aside = observer(() => {
   const { deviceStore, app, isTest } = useContext(Context);
   const asideRef = useRef(null);
 
   const location = useLocation();
-  const navigate = useNavigate();
+  const navigate = useNavigateToEncodedURL();
 
   let deviceSectionElemToFocus;
   let asideElemToFocus;
@@ -44,9 +45,10 @@ const Aside = observer(() => {
     // so it's better to skip the block below
     if (location.pathname !== url && !isTest) {
       const basename = process.env.REACT_APP_CLIENT_URL;
-      navigate(url.replace(basename, "").replaceAll("%2C", ",").replaceAll("%3B", ";"), { replace: true });
+      navigate(url.replace(basename, ""), { replace: true });
     }
-  }, [location.search, deviceStore, deviceStore.filters, deviceStore.filters, navigate, location.pathname, isTest]);
+
+  }, [location.search, deviceStore, deviceStore.filters, deviceStore.filters, location.pathname, navigate, isTest]);
 
   return (
     <aside ref={asideRef}>

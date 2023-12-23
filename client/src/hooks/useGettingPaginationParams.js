@@ -1,10 +1,11 @@
 import { useEffect } from "react";
 import URLActions from "../utils/URLActions";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import useNavigateToEncodedURL from "./useNavigateToEncodedURL";
 
 function useGettingPaginationParams(deviceStore, totalPages) {
   const location = useLocation();
-  const navigate = useNavigate();
+  const navigate = useNavigateToEncodedURL();
 
   useEffect(() => {
     function getPossiblePagesToFetch(page) {
@@ -17,26 +18,26 @@ function useGettingPaginationParams(deviceStore, totalPages) {
       if (+nextPage < 1 || nextPage[0] === "0") {
         nextPage = 1;
         const url = URLActions.setNewParam("page", nextPage);
-        navigate(url.replace(basename, "").replaceAll("%2C", ",").replaceAll("%3B", ";"), { replace: true });
+        navigate(url.replace(basename, ""), { replace: true });
       } 
       
       if (+nextPage > totalPages && totalPages) {
         nextPage = totalPages;
         const url = URLActions.setNewParam("page", nextPage);
-        navigate(url.replace(basename, "").replaceAll("%2C", ",").replaceAll("%3B", ";"), { replace: true });
+        navigate(url.replace(basename, ""), { replace: true });
       };
 
       const maxPagesToFetch = getPossiblePagesToFetch(nextPage);
       if (+nextPagesToFetch < 1 || nextPagesToFetch[0] === "0") {
         nextPagesToFetch = 1;
         const url = URLActions.setNewParam("pagesToFetch", nextPagesToFetch);
-        navigate(url.replace(basename, "").replaceAll("%2C", ",").replaceAll("%3B", ";"), { replace: true });
+        navigate(url.replace(basename, ""), { replace: true });
       };
       
       if (+nextPagesToFetch > maxPagesToFetch && totalPages) {
         nextPagesToFetch = maxPagesToFetch;
         const url = URLActions.setNewParam("pagesToFetch", nextPagesToFetch);
-        navigate(url.replace(basename, "").replaceAll("%2C", ",").replaceAll("%3B", ";"), { replace: true });
+        navigate(url.replace(basename, ""), { replace: true });
       };
     }
 

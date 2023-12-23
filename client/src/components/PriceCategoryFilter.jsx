@@ -1,27 +1,25 @@
-import { useContext, useMemo, useState } from "react";
+import { useContext, useState } from "react";
 import "./styles/PriceCategoryFilter.css";
 import MinMaxPrice from "./MinMaxPrice";
 import { Context } from "../Context";
 import { observer } from "mobx-react-lite";
 import URLActions from "../utils/URLActions";
-import { useNavigate } from "react-router-dom";
 import useResettingMinMaxPrices from "../hooks/useResettingMinMaxPrices";
+import useNavigateToEncodedURL from "../hooks/useNavigateToEncodedURL";
 
 const PriceCategoryFilter = observer(() => {
   const { deviceStore } = useContext(Context);
-  const navigate = useNavigate();
+  const navigate = useNavigateToEncodedURL();
 
-  const [queryMinPrice, queryMaxPrice] = URLActions.getParamValue("price")?.split("-") || [];
-  const initialMinPriceValue = useMemo(() => queryMinPrice || deviceStore.initialMinPrice, [queryMinPrice, deviceStore.initialMinPrice]) ;
-  const initialMaxPriceValue = useMemo(() => queryMaxPrice || deviceStore.initialMaxPrice, [queryMaxPrice, deviceStore.initialMaxPrice]);
+  const [minPriceValue, setMinPriceValue] = useState(deviceStore.initialMinPrice);
+  const [maxPriceValue, setMaxPriceValue] = useState(deviceStore.initialMaxPrice);
 
-  const [minPriceValue, setMinPriceValue] = useState(initialMinPriceValue);
-  const [maxPriceValue, setMaxPriceValue] = useState(initialMaxPriceValue);
   const [isValid, setIsValid] = useState(true);
 
   useResettingMinMaxPrices(
     deviceStore.initialMinPrice, deviceStore.initialMaxPrice,
     minPriceValue, maxPriceValue,
+    setMinPriceValue, setMaxPriceValue,
   );
 
   function onSubmit(e) {
@@ -37,7 +35,7 @@ const PriceCategoryFilter = observer(() => {
 
     const nextUrl = URLActions.setNewParam("price", `${minPriceValue}-${maxPriceValue}`);
     const basename = process.env.REACT_APP_CLIENT_URL;
-    navigate(nextUrl.replaceAll(basename, "").replaceAll("%2C", ",").replaceAll("%3B", ";") );
+    navigate(nextUrl.replaceAll(basename, ""));
   }
 
   return (
