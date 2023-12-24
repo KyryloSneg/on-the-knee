@@ -6,7 +6,7 @@ import URLActions from "../../../utils/URLActions";
 import { v4 } from "uuid";
 import useInitialDropdownValue from "../../../hooks/useInitialDropdownValue";
 
-const Dropdown = forwardRef(({ variant, options, paramKey = null, placeHolder }, ref) => {
+const Dropdown = forwardRef(({ variant, options, paramKey = null, placeHolder, ...props }, ref) => {
   const [value, setValue] = useState(variant === "default-select" ? placeHolder : options[0].title);
   const [visible, setVisible] = useState(false);
   const [selectedId, setSelectedId] = useState(variant === "default-select" ? null : 0);
@@ -21,7 +21,7 @@ const Dropdown = forwardRef(({ variant, options, paramKey = null, placeHolder },
   }
 
   return (
-    <div className="dropdown" role="radiogroup">
+    <div className="dropdown">
       <DropdownBtn 
         variant={variant} 
         value={value} 
@@ -29,6 +29,7 @@ const Dropdown = forwardRef(({ variant, options, paramKey = null, placeHolder },
         visible={visible} 
         dropdownOptionsId={dropdownOptionsId}
         ref={ref} 
+        {...props}
       />
       {visible && (
           <DropdownOptions

@@ -2,3 +2,11 @@
   padding: 4px;
   border-top: 1px solid #676767;
 }
+
+.filter-categories.sidebar-version .filter-category-block {
+  border-right: 1px solid #676767;
+}
+
+.filter-categories.sidebar-version > ul > li:last-child > .filter-category-block {
+  border-bottom: 1px solid #676767;
+}

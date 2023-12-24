@@ -258,6 +258,7 @@ button:active {
 .use-preety-scrollbar::-webkit-scrollbar {
   border-radius: 5px;
   width: 6px;
+  height: 6px;
   background-color: #d4d4d4;
 }
 
@@ -269,7 +270,6 @@ button:active {
   border-radius: 5px;
   background-color: rgb(103, 103, 103, 0.3);
 }
-
 
 /* li {
   display: grid;
@@ -289,7 +289,7 @@ header {
   padding: 10px 5px;
   display: grid;
   align-items: center;
-  z-index: 2000;
+  z-index: 15;
   margin-bottom: 30px;
   position: sticky;
   top: 0;
@@ -379,6 +379,10 @@ header .skip-to-next-page-content:focus {
 
 .skip-to-next-page-content svg {
   fill: white;
+}
+
+.closer-than-darkbg {
+  z-index: 9000;
 }
 
 /* some styles from bootstrap because i can't import the loader's styles separately */
