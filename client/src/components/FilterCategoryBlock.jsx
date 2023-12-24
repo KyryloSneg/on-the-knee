@@ -4,8 +4,8 @@ import CategoryFilterList from "./CategoryFilterList";
 import PriceCategoryFilter from "./PriceCategoryFilter";
 import "./styles/FilterCategoryBlock.css";
 
-const FilterCategoryBlock = ({ filter, variant = "default" }) => {
-  const [visible, setVisible] = useState(true);
+const FilterCategoryBlock = ({ filter, variant = "default", isInitiallyVisible }) => {
+  const [visible, setVisible] = useState(isInitiallyVisible);
 
   const elemToFocusRef = useRef(null);
   let className = "filter-category-block";

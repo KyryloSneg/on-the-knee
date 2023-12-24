@@ -29,6 +29,7 @@ const DropdownOptions = (props) => {
       id={props.dropdownOptionsId}
       data-testid={props.dropdownOptionsId}
       aria-live="polite"
+      role="radiogroup"
       ref={ulRef}
     >
       <div className="options-start" data-testid="options-start" tabIndex={0} onFocus={props.hide} />

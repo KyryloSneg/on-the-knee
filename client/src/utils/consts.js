@@ -88,8 +88,13 @@ export const DEVICE_ITEM_INFO_AMOUNT_LIMIT = 6;
 export const DEVICE_ITEMS_MOBILE_LIMIT = 30;
 export const DEVICE_ITEMS_DESKTOP_LIMIT = 60;
 
+
+// unfortunately we can't use consts in css, so on changing the values below
+// we must change it in css manually
+
 // min-widths
 export const WIDTH_TO_SHOW_DEV_HID_CONTENT = 960;
+export const WIDTH_TO_SHOW_ASIDE = 960;
 export const WIDTH_TO_SHOW_LOADING_BTN_PAGINATION = 260;
 
 // set up mock stores
