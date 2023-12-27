@@ -4,8 +4,9 @@ import { Context } from "../Context";
 import FilterCategoryBlock from "./FilterCategoryBlock";
 import { FILTERS_OPTIONS_LENGTH_LIMIT, SPECIAL_TO_HANDLE_FILTERS } from "../utils/consts";
 import ArrayActions from "../utils/ArrayActions";
+import "./styles/FilterCategoryBlocksList.css";
 
-const FilterCategoryBlocksList = observer(() => {
+const FilterCategoryBlocksList = observer(({ areInitiallyVisible }) => {
   const { deviceStore } = useContext(Context);
 
   function renderList() {
@@ -27,6 +28,7 @@ const FilterCategoryBlocksList = observer(() => {
           <FilterCategoryBlock
             filter={filterKey}
             variant={isTooLong ? "withSearchField" : "default"}
+            isInitiallyVisible={areInitiallyVisible}
           />
         </li>
       );
@@ -41,6 +43,7 @@ const FilterCategoryBlocksList = observer(() => {
         <FilterCategoryBlock
           filter="price"
           variant="price"
+          isInitiallyVisible={areInitiallyVisible}
         />
       </li>
       {renderList()}

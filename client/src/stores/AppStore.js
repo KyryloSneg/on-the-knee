@@ -5,6 +5,8 @@ class AppStore {
     this._darkBgVisible = false;
     this._isBlockedScroll = false;
     this._isGlobalLoading = false;
+    this._isVisibleFiltersSidebar = false;
+    this._isVisibleUsedFiltersSidebar = false;
     // some important app refs below to skip a big amount of props passing
     this._pageRef = null;
     this._deviceSectionRef = null;
@@ -23,6 +25,14 @@ class AppStore {
 
   setIsGlobalLoading(bool) {
     this._isGlobalLoading = bool;
+  }
+
+  setIsVisibleFiltersSidebar(bool) {
+    this._isVisibleFiltersSidebar = bool;
+  }
+
+  setIsVisibleUsedFiltersSidebar(bool) {
+    this._isVisibleUsedFiltersSidebar = bool;
   }
 
   setPageRef(ref) {
@@ -51,6 +61,14 @@ class AppStore {
 
   get isGlobalLoading() {
     return this._isGlobalLoading;
+  }
+
+  get isVisibleFiltersSidebar() {
+    return this._isVisibleFiltersSidebar;
+  }
+
+  get isVisibleUsedFiltersSidebar() {
+    return this._isVisibleUsedFiltersSidebar;
   }
   
   get pageRef() {

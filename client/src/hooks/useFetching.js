@@ -10,7 +10,9 @@ function useFetching(callback, settingIsLoadingDelay = 0, finallyCallback = null
       await callback(...args)
       // if everything is ok and we fetched some data there's no error
       setError('');
-    }  finally {
+    } catch(e) {
+      setError(e.message);
+    } finally {
       if (finallyCallback) finallyCallback();
       setTimeout(() => {
         setIsLoading(false); 
