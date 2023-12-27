@@ -1,53 +1,95 @@
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useRef } from "react";
 import useClickOnTheDarkBg from "../../../hooks/useClickOnTheDarkBg";
 import { Context } from "../../../Context";
 import "./Sidebar.css";
-// import { animate } from "../../../utils/animation";
+import { animate, easeIn } from "../../../utils/animation";
+import useSidebarOpening from "../../../hooks/useSidebarOpening";
+import { addListenerOnCloseAnimationEnd, addListenerOnCloseFrameEnd } from "../../../utils/addSidebarEventListeners";
+import getTimeForLeftInterruptedAnim from "../../../utils/getTimeForLeftInterruptedAnim";
 
 const Sidebar = ({ children, closeSidebar, headerText = "", className = "" }) => {
   const { app } = useContext(Context);
   const sidebarRef = useRef(null);
 
-  let sectionClassName = "sidebar closer-than-darkbg";
+  const isEndedOpeningAnim = useRef(false);
+  const isRunningClosingAnim = useRef(false);
+
+  let sectionClassName = "sidebar closer-than-darkbg use-preety-scrollbar";
   if (className) {
     sectionClassName = ` ${className}`
   }
 
-  useEffect(() => {
-    // animate({
-    //   timing: ease
-    // })
-  }, []);
+  // caution: do not change the code below for the God's sake
+  const animationsDuration = 800;
+  useSidebarOpening(sidebarRef, animationsDuration, isEndedOpeningAnim);
 
-  function onClickOnTheDarkBg() {
-    // sidebarRef.current.className += " animation-right-to-left";
+  function onClosingSidebar() {
+    if (isRunningClosingAnim.current) return;
 
     // 800 ms - time for the end of the animation
-    setTimeout(() => {
-      closeSidebar();
-      // sidebarRef.current.className = sectionClassName; 
-    }, 800);
-  }
+    function animateClosing(timeForLeftInterruptedAnim = 0) {
+      animate({
+        timing: easeIn,
+        draw: draw,
+        duration: animationsDuration,
+        elem: sidebarRef.current,
+        uniqueEventId: "closing",
+        timeForLeftInterruptedOppositeAnim: timeForLeftInterruptedAnim,
+      });
+    }
 
-  useClickOnTheDarkBg(onClickOnTheDarkBg, app.darkBgVisible);
+    function draw(progress) {
+      // 0% => -100%
+      if (!sidebarRef.current) return;
+      sidebarRef.current.style.left = (-progress * 100) + "%";
+    }
+
+    function onOpeningAnimFrameEnd(event, isEndedAnim = false) {      
+      let timeForLeftInterruptedAnim = 0;
+      if (!isEndedAnim) {
+        function endOpeningAnimation() {
+          cancelAnimationFrame(event.detail.outerRequestId);
+          cancelAnimationFrame(event.detail.innerRequestId);
+        }
+
+        endOpeningAnimation();
+        timeForLeftInterruptedAnim = getTimeForLeftInterruptedAnim(isEndedAnim, animationsDuration, event.detail.currentTime);
+      }
+      
+      animateClosing(timeForLeftInterruptedAnim);
+      addListenerOnCloseFrameEnd(sidebarRef.current, isRunningClosingAnim);
+      addListenerOnCloseAnimationEnd(sidebarRef.current, closeSidebar, isRunningClosingAnim);
+
+      if (!isEndedAnim) sidebarRef.current.removeEventListener("jsFrameEnd-opening", onOpeningAnimFrameEnd);
+    }
+    
+    if (isEndedOpeningAnim.current) {
+      onOpeningAnimFrameEnd(null, true);
+    } else {
+      sidebarRef.current.addEventListener("jsFrameEnd-opening", onOpeningAnimFrameEnd);
+    }
+
+  }
+  
+  useClickOnTheDarkBg(onClosingSidebar, app.darkBgVisible);
 
   return (
     <section className={sectionClassName} ref={sidebarRef}>
       <header>
-        <button 
-          onClick={closeSidebar} 
-          className="close-sidebar-btn" 
+        <button
+          onClick={onClosingSidebar}
+          className="close-sidebar-btn"
           aria-label="close sidebar"
         >
           {/* using svg element to change its fill color */}
           <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20">
-            <path d="m330-444 201 201-51 51-288-288 288-288 51 51-201 201h438v72H330Z"/>
+            <path d="m330-444 201 201-51 51-288-288 288-288 51 51-201 201h438v72H330Z" />
           </svg>
           {/* <img src={backArrowIcon} alt="" /> */}
           <h2>{headerText}</h2>
         </button>
       </header>
-        
+
       {children}
     </section>
   );

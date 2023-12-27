@@ -14,6 +14,15 @@ body {
   margin: 0;
 }
 
+/* implementing the scroll blocking like this, so the scroll bar doesn't disappears */
+.global-blocked-scroll {
+  left: 0px;
+  top: 0px;
+  position: fixed;
+  width: 100%;
+  overflow-y: scroll;
+}
+
 ::selection {
   background-color: #b9c6ff;
   /* WebKit/Blink Browsers */
@@ -45,10 +54,6 @@ h2 {
   color: #3c3cd5;
   text-align: center;
 }
-
-/* li {
-  font-size: 1.8rem;
-} */
 
 p,
 label,
@@ -140,20 +145,6 @@ ul {
   padding: 0;
 }
 
-/* button {
-  border: 1px solid #676767FF;
-  background-color: rgba(224, 224, 224);
-  transition: 0.2s;
-}
-
-button:hover {
-  background-color: #cecece;
-}
-
-button:active {
-  background-color: #a1a1a1;
-} */
-
 /* dark app's bg that appears on certain events */
 
 #app-dark-bg {
@@ -202,7 +193,8 @@ button:active {
   display: grid;
 }
 
-.visually-hidden, .visually-hidden * {
+.visually-hidden,
+.visually-hidden * {
   width: 0;
   height: 0;
   padding: 0;
@@ -270,12 +262,6 @@ button:active {
   border-radius: 5px;
   background-color: rgb(103, 103, 103, 0.3);
 }
-
-/* li {
-  display: grid;
-  grid-template-columns: 1fr;
-  justify-items: center;
-} */
 
 /* Header */
 

@@ -40,10 +40,12 @@ const SearchProductsForm = observer(({ btnGroupRef, navbarRef }) => {
   const [isInputFocused, setIsInputFocused] = useState(false);
 
   useEffect(() => {
-    if (isFocused) {
-      app.headerRef.current.className = "closer-than-darkbg";
-    } else {
-      app.headerRef.current.className = "";
+    if (app.headerRef) {
+      if (isFocused) {
+        app.headerRef.current.className = "closer-than-darkbg";
+      } else {
+        app.headerRef.current.className = "";
+      }
     }
   }, [isFocused, app]);
 

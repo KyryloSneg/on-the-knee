@@ -3,14 +3,8 @@
   height: 100%;
   position: fixed;
   overflow-y: scroll;
-  left: 0;
-  /* left: -100%; */
+  left: -100%;
   background-color: #f1f1f1;
-  /* animation: leftToRight 0.8s ease-out 0s; */
-}
-
-.sidebar.animation-right-to-left {
-  /* animation: rightToLeft 0.8s ease-in 0s; */
 }
 
 .sidebar > * {
@@ -47,24 +41,15 @@
   fill: #4444ef;
 }
 
-@keyframes leftToRight {
-  from {
-    left: -100%;
-  }
-
-  to {
-    left: 0%;
-  }
+.sidebar.use-preety-scrollbar {
+  scrollbar-color: #bebebe rgb(103, 103, 103, 0.3);
+  scrollbar-width: thin;
 }
 
-@keyframes rightToLeft {
-  from {
-    left: 0%;
-  }
-
-  to {
-    left: -100%;
-  }
+/* Webkit syntax */
+.sidebar.use-preety-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  background-color: #bebebe;
 }
 
 @media screen and (min-width: 500px) {
