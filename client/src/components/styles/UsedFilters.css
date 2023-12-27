@@ -1,7 +1,15 @@
+.used-filters {
+  background-color: #f1f1f1;
+}
+
 .used-filters ul {
   padding: 5px;
   display: flex;
   flex-wrap: wrap;
   gap: 15px;
   justify-content: flex-start;
+}
+
+.used-filters.sidebar-version ul {
+  padding: 5px 15px;
 }

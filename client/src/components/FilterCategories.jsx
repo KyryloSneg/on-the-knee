@@ -1,11 +1,16 @@
 import "./styles/FilterCategories.css";
 import FilterCategoryBlocksList from "./FilterCategoryBlocksList";
 
-const FilterCategories = () => {
+const FilterCategories = ({ areInitiallyVisible = true, isSidebarVersion = false }) => {
+  let className = "filter-categories";
+  if (isSidebarVersion) {
+    className += ` sidebar-version`
+  }
+
   return (
-    <section className="filter-categories">
-      <h2>Select filters</h2>
-      <FilterCategoryBlocksList />
+    <section className={className}>
+      {!isSidebarVersion && <h2>Select filters</h2>}
+      <FilterCategoryBlocksList areInitiallyVisible={areInitiallyVisible} />
     </section>
   );
 };

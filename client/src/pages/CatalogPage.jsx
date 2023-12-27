@@ -4,7 +4,7 @@ import Aside from "../components/Aside";
 import "./styles/CatalogPage.css";
 import useWindowWidth from "../hooks/useWindowWidth";
 import DeviceSection from "../components/DeviceSection";
-import { DEVICE_ITEMS_DESKTOP_LIMIT, DEVICE_ITEMS_MOBILE_LIMIT, sortingOptions } from "../utils/consts";
+import { DEVICE_ITEMS_DESKTOP_LIMIT, DEVICE_ITEMS_MOBILE_LIMIT, WIDTH_TO_SHOW_ASIDE, sortingOptions } from "../utils/consts";
 import { useContext, useEffect, useRef } from "react";
 import { Context } from "../Context";
 
@@ -27,14 +27,17 @@ const CatalogPage = () => {
 
   return (
     <div className="display-grid" ref={pageRef}>
-      {windowWidth <= 960 &&
-        <TopFilterBar />
-      }
-      <Dropdown
-        variant="sorting-filter"
-        options={sortingOptions}
-        paramKey="sort"
-      />
+      <div className="sort-and-filter-bar-wrap">
+        {windowWidth < WIDTH_TO_SHOW_ASIDE &&
+          <TopFilterBar />
+        }
+        <Dropdown
+          variant="sorting-filter"
+          options={sortingOptions}
+          paramKey="sort"
+          className="device-sorting-filter"
+        />
+      </div>
       <div id="wrapper">
         <Aside />
         <DeviceSection />

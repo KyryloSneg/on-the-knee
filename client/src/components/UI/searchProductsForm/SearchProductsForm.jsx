@@ -1,4 +1,4 @@
-import { useCallback, useContext, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import "./SearchProductsForm.css";
 import { Context } from "../../../Context";
 import { observer } from "mobx-react-lite";
@@ -39,6 +39,16 @@ const SearchProductsForm = observer(({ btnGroupRef, navbarRef }) => {
   // the "real" input focus
   const [isInputFocused, setIsInputFocused] = useState(false);
 
+  useEffect(() => {
+    if (app.headerRef) {
+      if (isFocused) {
+        app.headerRef.current.className = "closer-than-darkbg";
+      } else {
+        app.headerRef.current.className = "";
+      }
+    }
+  }, [isFocused, app]);
+
   // using the useCallback hook below to use the function in the useEffect hook without any linter warnings
   
   // focusing input (making it wider, showing the dark bg)
@@ -65,7 +75,8 @@ const SearchProductsForm = observer(({ btnGroupRef, navbarRef }) => {
   useFnOnSomeValue(value, focusInput, null);
   useFnOnSomeValue(isResultsAndValue, null, onEmptyResultsAndValue);
 
-  useClickOnTheDarkBg(blurInput, app.darkBgVisible);
+  const onClickOnTheDarkBg = isFocused ? blurInput : null;
+  useClickOnTheDarkBg(onClickOnTheDarkBg, app.darkBgVisible);
   useDeleteValueOnEsc(setValue, setBackupValue, isFocused);
 
   function filterResults(nextBackupValue, mockResults) {

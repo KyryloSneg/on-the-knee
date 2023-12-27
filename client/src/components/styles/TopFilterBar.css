@@ -1,18 +1,14 @@
 /* Filter shortcuts */
 
 #top-filter-bar {
-  width: 80%;
+  width: 100%;
   justify-self: center;
   background-color: #f1f1f1;
-  border: 2px solid #676767;
-  border-radius: 10px;
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  justify-items: center;
   gap: 20px;
-  padding: 20px 15px;
-  margin-bottom: 30px;
 }
 
 #top-filter-bar > * {
@@ -22,7 +18,7 @@
 
 .show-categories-select, .used-filters-shortcut {
   position: relative;
-  height: 40px;
+  height: 38px;
   padding: 2px 6px;
   display: grid;
   grid-template-columns: auto auto;
@@ -63,9 +59,15 @@
   background-color: #880c0c;
 }
 
-@media screen and (min-width: 380px) {
+@media screen and (min-width: 360px) {
   #top-filter-bar {
-    grid-template-columns: 1fr 1fr;
+    flex-direction: row;
+  }
+}
+
+@media screen and (min-width: 590px) {
+  #top-filter-bar {
+    justify-content: start;
   }
 }
 
