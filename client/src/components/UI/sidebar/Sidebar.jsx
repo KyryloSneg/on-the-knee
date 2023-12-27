@@ -44,7 +44,7 @@ const Sidebar = ({ children, closeSidebar, headerText = "", className = "" }) =>
       sidebarRef.current.style.left = (-progress * 100) + "%";
     }
 
-    function onOpeningAnimFrameEnd(event, isEndedAnim = false) {      
+    function onOpeningAnimFrameEnd(event, isEndedAnim = false) {
       let timeForLeftInterruptedAnim = 0;
       if (!isEndedAnim) {
         function endOpeningAnimation() {
@@ -55,14 +55,14 @@ const Sidebar = ({ children, closeSidebar, headerText = "", className = "" }) =>
         endOpeningAnimation();
         timeForLeftInterruptedAnim = getTimeForLeftInterruptedAnim(isEndedAnim, animationsDuration, event.detail.currentTime);
       }
-      
+
       animateClosing(timeForLeftInterruptedAnim);
       addListenerOnCloseFrameEnd(sidebarRef.current, isRunningClosingAnim);
       addListenerOnCloseAnimationEnd(sidebarRef.current, closeSidebar, isRunningClosingAnim);
 
       if (!isEndedAnim) sidebarRef.current.removeEventListener("jsFrameEnd-opening", onOpeningAnimFrameEnd);
     }
-    
+
     if (isEndedOpeningAnim.current) {
       onOpeningAnimFrameEnd(null, true);
     } else {
@@ -70,7 +70,7 @@ const Sidebar = ({ children, closeSidebar, headerText = "", className = "" }) =>
     }
 
   }
-  
+
   useClickOnTheDarkBg(onClosingSidebar, app.darkBgVisible);
 
   return (
@@ -82,8 +82,8 @@ const Sidebar = ({ children, closeSidebar, headerText = "", className = "" }) =>
           aria-label="close sidebar"
         >
           {/* using svg element to change its fill color */}
-          <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20">
-            <path d="m330-444 201 201-51 51-288-288 288-288 51 51-201 201h438v72H330Z" />
+          <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+            <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/>
           </svg>
           {/* <img src={backArrowIcon} alt="" /> */}
           <h2>{headerText}</h2>
