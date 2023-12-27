@@ -10,7 +10,11 @@ import Sidebar from "./components/UI/sidebar/Sidebar";
 import FilterCategories from "./components/FilterCategories";
 import UsedFilters from "./components/UsedFilters";
 import useWindowWidth from "./hooks/useWindowWidth";
-import { WIDTH_TO_SHOW_ASIDE } from "./utils/consts";
+import useClosingFiltersSidebarWidth from "./hooks/useClosingFiltersSidebarWidth";
+import useClosingUsedFiltersBarWidth from "./hooks/useClosingUsedFiltersBarWidth";
+import useClosingFiltersBarEmptyValue from "./hooks/useClosingFiltersBarEmptyValue";
+import useClosingUsedFiltersBarValue from "./hooks/useClosingUsedFiltersBarValue";
+import useBlockingScroll from "./hooks/useBlockingScroll";
  
 const App = observer(() => {
   const { app, deviceStore } = useContext(Context);
@@ -39,43 +43,13 @@ const App = observer(() => {
     app.setHeaderRef(headerRef);
   }, [app, headerRef]);
 
-  // closing (filters / used filters) sidebar on rotating mobile phone
-  // if the window width after rotate is (>= WIDTH_TO_SHOW_ASIDE)
-  useEffect(() => {
-    if (windowWidth >= WIDTH_TO_SHOW_ASIDE && app.isVisibleFiltersSidebar) {
-      closeFiltersSidebar();
-    }
-    
-    if (windowWidth >= WIDTH_TO_SHOW_ASIDE && app.isVisibleUsedFiltersSidebar) {
-      closeUsedFiltersSidebar();
-    }
+  useClosingFiltersSidebarWidth(windowWidth, app.isVisibleFiltersSidebar, closeFiltersSidebar);
+  useClosingUsedFiltersBarWidth(windowWidth, app.isVisibleUsedFiltersSidebar, closeUsedFiltersSidebar);
 
-    // eslint-disable-next-line
-  }, [windowWidth, closeFiltersSidebar, closeUsedFiltersSidebar]);
+  useClosingFiltersBarEmptyValue(deviceStore.filters, app.isVisibleFiltersSidebar, closeFiltersSidebar);
+  useClosingUsedFiltersBarValue(deviceStore.usedFilters, app.isVisibleUsedFiltersSidebar, closeUsedFiltersSidebar);
 
-  // closing one of the sidebars if their values are empty ((filters / used filters) object is empty) 
-  useEffect(() => {
-    if (!Object.keys(deviceStore.filters).length && app.isVisibleFiltersSidebar) {
-      closeFiltersSidebar();
-    }
-
-    if (!Object.keys(deviceStore.usedFilters).length && app.isVisibleUsedFiltersSidebar) {
-      closeUsedFiltersSidebar();
-    }
-
-    // eslint-disable-next-line
-  }, [deviceStore.filters, deviceStore.usedFilters, app.isVisibleFiltersSidebar, app.isVisibleUsedFiltersSidebar])
-
-  useEffect(() => {
-    if (app.isBlockedScroll) {
-      document.body.style.overflow = "hidden";
-    }
-
-    return () => {
-      document.body.style.overflow = "auto";
-    }
-  }, [app.isBlockedScroll])
-
+  useBlockingScroll(app.isBlockedScroll);
   return (
     <div>
       {/* our gray bg on global loading */}
