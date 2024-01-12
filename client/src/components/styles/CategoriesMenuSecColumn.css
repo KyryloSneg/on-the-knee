@@ -1,0 +1,8 @@
+.category-menu-sec-column {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: hidden;
+}

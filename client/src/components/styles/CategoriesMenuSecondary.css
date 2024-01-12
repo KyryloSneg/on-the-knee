@@ -1,0 +1,38 @@
+.categories-menu-secondary {
+  display: grid;
+  grid-template-columns: 1fr;
+  border-radius: 0 0 6px 0;
+  justify-items: end;
+  position: relative;
+}
+
+.categories-menu-secondary > *:not("skip-to-next-page-content") {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.categories-menu-sec-cols {
+  display: flex;
+  padding: 6px 12px 4px 12px;
+  margin: 0;
+  height: 400px;
+  box-sizing: border-box;
+  overflow: hidden;
+  width: 100%;
+}
+
+.categories-menu-sec-cols > li {
+  width: 33.3%;
+}
+
+.menu-all-categories {
+  font-size: 1.5rem;
+}
+
+.categories-menu-secondary > .skip-to-next-page-content:focus {
+  position: absolute;
+  min-width: 33.3%;
+  top: 6px;
+  left: 12px;
+  height: 39px;
+}

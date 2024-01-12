@@ -6,10 +6,17 @@ import { animate, easeIn } from "../../../utils/animation";
 import useSidebarOpening from "../../../hooks/useSidebarOpening";
 import { addListenerOnCloseAnimationEnd, addListenerOnCloseFrameEnd } from "../../../utils/addSidebarEventListeners";
 import getTimeForLeftInterruptedAnim from "../../../utils/getTimeForLeftInterruptedAnim";
+import useFocusTraps from "../../../hooks/useFocusTraps";
+import useWindowInvisibleFocus from "../../../hooks/useWindowInvisibleFocus";
 
-const Sidebar = ({ children, closeSidebar, headerText = "", className = "" }) => {
+const Sidebar = ({ children, closeSidebar, shortcutRef, headerText = "", className = "", id = "" }) => {
   const { app } = useContext(Context);
+
   const sidebarRef = useRef(null);
+  const closeSidebarBtnRef = useRef(null);
+
+  const firstFocusTrapRef = useRef(null);
+  const lastFocusTrapRef = useRef(null);
 
   const isEndedOpeningAnim = useRef(false);
   const isRunningClosingAnim = useRef(false);
@@ -18,6 +25,10 @@ const Sidebar = ({ children, closeSidebar, headerText = "", className = "" }) =>
   if (className) {
     sectionClassName = ` ${className}`
   }
+
+  useFocusTraps(firstFocusTrapRef, lastFocusTrapRef, sidebarRef);
+  // using "invisible" focus to not annoy users that using pointer click 
+  useWindowInvisibleFocus(closeSidebarBtnRef);
 
   // caution: do not change the code below for the God's sake
   const animationsDuration = 800;
@@ -56,9 +67,14 @@ const Sidebar = ({ children, closeSidebar, headerText = "", className = "" }) =>
         timeForLeftInterruptedAnim = getTimeForLeftInterruptedAnim(isEndedAnim, animationsDuration, event.detail.currentTime);
       }
 
+      function closeSidebarAndFocusShortcut() {
+        closeSidebar();
+        shortcutRef?.current?.focus();
+      }
+
       animateClosing(timeForLeftInterruptedAnim);
       addListenerOnCloseFrameEnd(sidebarRef.current, isRunningClosingAnim);
-      addListenerOnCloseAnimationEnd(sidebarRef.current, closeSidebar, isRunningClosingAnim);
+      addListenerOnCloseAnimationEnd(sidebarRef.current, closeSidebarAndFocusShortcut, isRunningClosingAnim);
 
       if (!isEndedAnim) sidebarRef.current.removeEventListener("jsFrameEnd-opening", onOpeningAnimFrameEnd);
     }
@@ -72,14 +88,15 @@ const Sidebar = ({ children, closeSidebar, headerText = "", className = "" }) =>
   }
 
   useClickOnTheDarkBg(onClosingSidebar, app.darkBgVisible);
-
   return (
-    <section className={sectionClassName} ref={sidebarRef}>
+    <section className={sectionClassName} id={id} ref={sidebarRef}>
       <header>
+        <div className="visually-hidden" tabIndex={0} ref={firstFocusTrapRef} />
         <button
           onClick={onClosingSidebar}
           className="close-sidebar-btn"
           aria-label="close sidebar"
+          ref={closeSidebarBtnRef}
         >
           {/* using svg element to change its fill color */}
           <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
@@ -89,8 +106,8 @@ const Sidebar = ({ children, closeSidebar, headerText = "", className = "" }) =>
           <h2>{headerText}</h2>
         </button>
       </header>
-
       {children}
+      <div className="visually-hidden" tabIndex={0} ref={lastFocusTrapRef} />
     </section>
   );
 }

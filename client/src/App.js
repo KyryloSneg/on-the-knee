@@ -15,11 +15,15 @@ import useClosingUsedFiltersBarWidth from "./hooks/useClosingUsedFiltersBarWidth
 import useClosingFiltersBarEmptyValue from "./hooks/useClosingFiltersBarEmptyValue";
 import useClosingUsedFiltersBarValue from "./hooks/useClosingUsedFiltersBarValue";
 import useBlockingScroll from "./hooks/useBlockingScroll";
+import CategoriesMenu from "./components/CategoriesMenu";
+import useInitialDataFetching from "./hooks/useInitialDataFetching";
+import useClosingCategoriesMenuWidth from "./hooks/useClosingCategoriesMenuWidth";
  
 const App = observer(() => {
   const { app, deviceStore } = useContext(Context);
   // ref for the "skip to next page content" btn
   const headerRef = useRef(null);
+  const navCategoryBtnRef = useRef(null);
   const windowWidth = useWindowWidth();
 
   let pageElemToFocus;
@@ -37,14 +41,18 @@ const App = observer(() => {
     app.setDarkBgVisible(false);
     app.setIsBlockedScroll(false);
     app.setIsVisibleUsedFiltersSidebar(false);
+  
   }, [app]);
 
   useEffect(() => {
     app.setHeaderRef(headerRef);
   }, [app, headerRef]);
 
+  useInitialDataFetching();
+
   useClosingFiltersSidebarWidth(windowWidth, app.isVisibleFiltersSidebar, closeFiltersSidebar);
   useClosingUsedFiltersBarWidth(windowWidth, app.isVisibleUsedFiltersSidebar, closeUsedFiltersSidebar);
+  useClosingCategoriesMenuWidth(windowWidth, app.isVisibleCategoriesMenu, app);
 
   useClosingFiltersBarEmptyValue(deviceStore.filters, app.isVisibleFiltersSidebar, closeFiltersSidebar);
   useClosingUsedFiltersBarValue(deviceStore.usedFilters, app.isVisibleUsedFiltersSidebar, closeUsedFiltersSidebar);
@@ -70,20 +78,27 @@ const App = observer(() => {
         <Sidebar
           children={<FilterCategories areInitiallyVisible={false} isSidebarVersion={true} />}
           closeSidebar={closeFiltersSidebar}
+          shortcutRef={app.filtersShortcutRef}
           headerText="Filters"
+          id="filters-sidebar"
         />
       }
       {app.isVisibleUsedFiltersSidebar &&
         <Sidebar
           children={<UsedFilters isSidebarVersion={true} />}
           closeSidebar={closeUsedFiltersSidebar}
+          shortcutRef={app.usedFiltersShortcutRef}
           headerText="Used filters"
+          id="used-filters-sidebar"
         />
       }
       <header ref={headerRef}>
-        <Navbar elemToFocus={pageElemToFocus} />
+        <Navbar elemToFocus={pageElemToFocus} navCategoryBtnRef={navCategoryBtnRef} />
+        {(app.isVisibleCategoriesMenu && !!Object.keys(deviceStore.categories).length) && 
+          <CategoriesMenu navCategoryBtnRef={navCategoryBtnRef} />
+        }
       </header>
-      <Outlet />
+      <Outlet />  
       <MyFooter />
     </div>
   );

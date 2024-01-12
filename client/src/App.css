@@ -16,8 +16,6 @@ body {
 
 /* implementing the scroll blocking like this, so the scroll bar doesn't disappears */
 .global-blocked-scroll {
-  left: 0px;
-  top: 0px;
   position: fixed;
   width: 100%;
   overflow-y: scroll;
@@ -185,6 +183,10 @@ ul {
   align-self: center;
 }
 
+.p-absolute {
+  position: absolute;
+}
+
 .display-flex {
   display: flex;
 }
@@ -222,6 +224,10 @@ ul {
 
 .bold {
   font-weight: bold;
+}
+
+.invisible-focus:focus {
+  outline: none;
 }
 
 .link-colors,
@@ -271,7 +277,6 @@ header {
 }
 
 header {
-  position: relative;
   padding: 10px 5px;
   display: grid;
   align-items: center;
@@ -279,12 +284,6 @@ header {
   margin-bottom: 30px;
   position: sticky;
   top: 0;
-}
-
-header .skip-to-next-page-content:focus {
-  position: absolute;
-  align-self: center;
-  left: 3%;
 }
 
 /* delete input content and "back" buttons */

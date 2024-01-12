@@ -4,6 +4,7 @@
   position: fixed;
   overflow-y: scroll;
   left: -100%;
+  top: 0;
   background-color: #f1f1f1;
 }
 
@@ -36,7 +37,7 @@
 
 .close-sidebar-btn:active > *,
 .close-sidebar-btn:hover > *,
-.close-sidebar-btn:focus > * {
+.close-sidebar-btn:not(.invisible-focus):focus > * {
   color: #bd5e10;
   fill: #4444ef;
 }
