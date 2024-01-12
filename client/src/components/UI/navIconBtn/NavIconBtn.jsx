@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import "./NavIconBtn.css";
+import { forwardRef } from "react";
 
-const NavIconBtn = ({ src, alt = "", text = "", isLink = false, route = null, ...params }) => {
+const NavIconBtn = forwardRef(({ src, alt = "", text = "", isLink = false, route = null, ...params }, ref) => {
   let className = "nav-icon-button";
   if (text) {
     className += " nav-icon-button-text";
@@ -14,7 +15,7 @@ const NavIconBtn = ({ src, alt = "", text = "", isLink = false, route = null, ..
 
   if (isLink) {
     return (
-      <Link to={route} className={className} {...params}>
+      <Link to={route} className={className} {...params} ref={ref}>
         {text && <span>{text}</span>}
         <img src={src} alt={alt} className="no-select" draggable="false"/>
       </Link>
@@ -22,11 +23,11 @@ const NavIconBtn = ({ src, alt = "", text = "", isLink = false, route = null, ..
   }
 
   return (
-    <button className={className} {...params}>
+    <button className={className} ref={ref} {...params} >
       {text && <span>{text}</span>}
       <img src={src} alt={alt} className="no-select" draggable="false"/>
     </button>
   );
-}
+});
 
 export default NavIconBtn;

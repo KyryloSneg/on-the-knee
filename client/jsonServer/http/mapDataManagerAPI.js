@@ -18,7 +18,6 @@ async function getLocationCoords(country, region, district, city, street, houseN
     console.log(e.message);
   }
 
-
   const { lat, lng } = response.results[0].locations[0].displayLatLng;
   return { lat, lng };
 }

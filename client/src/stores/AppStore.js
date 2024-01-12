@@ -7,11 +7,14 @@ class AppStore {
     this._isGlobalLoading = false;
     this._isVisibleFiltersSidebar = false;
     this._isVisibleUsedFiltersSidebar = false;
+    this._isVisibleCategoriesMenu = false;
     // some important app refs below to skip a big amount of props passing
     this._pageRef = null;
     this._deviceSectionRef = null;
     this._asideRef = null;
     this._headerRef = null;
+    this._filtersShortcutRef = null;
+    this._usedFiltersShortcutRef = null;
     makeAutoObservable(this);
   }
 
@@ -34,6 +37,9 @@ class AppStore {
   setIsVisibleUsedFiltersSidebar(bool) {
     this._isVisibleUsedFiltersSidebar = bool;
   }
+  setIsVisibleCategoriesMenu(bool) {
+    this._isVisibleCategoriesMenu = bool;
+  }
 
   setPageRef(ref) {
     this._pageRef = ref;
@@ -49,6 +55,14 @@ class AppStore {
 
   setHeaderRef(ref) {
     this._headerRef = ref;
+  }
+
+  setFiltersShortcutRef(ref) {
+    this._filtersShortcutRef = ref;
+  }
+
+  setUsedFiltersShortcutRef(ref) {
+    this._usedFiltersShortcutRef = ref;
   }
   
   get darkBgVisible() {
@@ -70,6 +84,9 @@ class AppStore {
   get isVisibleUsedFiltersSidebar() {
     return this._isVisibleUsedFiltersSidebar;
   }
+  get isVisibleCategoriesMenu() {
+    return this._isVisibleCategoriesMenu;
+  }
   
   get pageRef() {
     return this._pageRef;
@@ -85,6 +102,14 @@ class AppStore {
 
   get headerRef() {
     return this._headerRef;
+  }
+
+  get filtersShortcutRef() {
+    return this._filtersShortcutRef;
+  }
+
+  get usedFiltersShortcutRef() {
+    return this._usedFiltersShortcutRef;
   }
 }
 

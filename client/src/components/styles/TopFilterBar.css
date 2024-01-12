@@ -11,9 +11,13 @@
   gap: 20px;
 }
 
-#top-filter-bar > * {
+#top-filter-bar > button {
   width: 100%;
   max-width: 150px;
+}
+
+#top-filter-bar > button:focus {
+  outline: 2px solid black;
 }
 
 .show-categories-select, .used-filters-shortcut {

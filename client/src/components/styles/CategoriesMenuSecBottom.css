@@ -1,0 +1,13 @@
+.categories-menu-bottom-bar {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 24px;
+  align-items: center;
+  box-sizing: border-box;
+  position: relative;
+  align-self: end;
+  z-index: 1;
+  border-top: 1px solid #cccccc;
+  padding: 8px 14px;
+  width: 100%;
+}
