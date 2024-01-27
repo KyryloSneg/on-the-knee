@@ -7,6 +7,7 @@ import DeviceSection from "../components/DeviceSection";
 import { DEVICE_ITEMS_DESKTOP_LIMIT, DEVICE_ITEMS_MOBILE_LIMIT, WIDTH_TO_SHOW_ASIDE, sortingOptions } from "../utils/consts";
 import { useContext, useEffect, useRef } from "react";
 import { Context } from "../Context";
+import useClosingAllWindows from "../hooks/useClosingAllWindows";
 
 const CatalogPage = () => {
   const { deviceStore, app } = useContext(Context);
@@ -25,6 +26,7 @@ const CatalogPage = () => {
     }
   }, [deviceStore, windowWidth]);
 
+  useClosingAllWindows();
   return (
     <div className="display-grid" ref={pageRef}>
       <div className="sort-and-filter-bar-wrap">

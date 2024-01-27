@@ -1,5 +1,6 @@
 import { useContext, useEffect, useRef } from "react";
 import { Context } from "../Context";
+import useClosingAllWindows from "../hooks/useClosingAllWindows";
 
 const MainPage = () => {
   const { app } = useContext(Context);
@@ -9,6 +10,7 @@ const MainPage = () => {
     app.setPageRef(pageRef);
   }, [app]);
 
+  useClosingAllWindows();
   return (
     <div>
       MainPage

@@ -3,9 +3,11 @@ import showCategoriesIcon from "../assets/show-categories-select.svg";
 import usedFiltersIcon from "../assets/used-filters-shortcut.svg";
 import "./styles/TopFilterBar.css";
 import { Context } from "../Context";
+import setFiltersSidebarVisibility from "../utils/setFiltersSidebarVisibility";
+import setUsedFiltersBarVisibility from "../utils/setUsedFiltersBarVisibility";
+import { observer } from "mobx-react-lite";
 
-// we don't use "observer" because catalog page already has one
-const TopFilterBar = () => {
+const TopFilterBar = observer(() => {
   const { app, deviceStore } = useContext(Context);
   const filtersShortcutRef = useRef(null);
   const usedFiltersShortcutRef = useRef(null);
@@ -21,17 +23,13 @@ const TopFilterBar = () => {
   function showCategories() {
     if (!Object.keys(deviceStore.filters).length) return;
 
-    // open sidebar that contains various categories with simple animation
-    app.setDarkBgVisible(true);
-    app.setIsBlockedScroll(true);
-    app.setIsVisibleFiltersSidebar(true);
+    // open sidebar that contains various categories filters with simple animation
+    setFiltersSidebarVisibility(true, app);
   }
 
   function showUsedFilters() {
     // open sidebar that contains used filters with simple animation
-    app.setDarkBgVisible(true);
-    app.setIsBlockedScroll(true);
-    app.setIsVisibleUsedFiltersSidebar(true);
+    setUsedFiltersBarVisibility(true, app);
   }
 
   return (
@@ -39,7 +37,6 @@ const TopFilterBar = () => {
       <button 
         className="show-categories-select" 
         onClick={showCategories}
-        aria-controls="filters-sidebar"
         ref={filtersShortcutRef}
       >
         <img src={showCategoriesIcon} alt="" />
@@ -49,7 +46,6 @@ const TopFilterBar = () => {
         <button 
           className="used-filters-shortcut" 
           onClick={showUsedFilters}
-          aria-controls="used-filters-sidebar"
           ref={usedFiltersShortcutRef}
         >
           <img src={usedFiltersIcon} alt="" />
@@ -58,6 +54,6 @@ const TopFilterBar = () => {
       }
     </section>
   );
-};
+});
 
 export default TopFilterBar;

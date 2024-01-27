@@ -1,5 +1,5 @@
 import { forwardRef, useContext } from "react";
-import categoryBtnIcon from "../assets/category-button.svg";
+import categoryBtnIcon from "../assets/category-button-white.svg";
 import closeIcon from "../assets/close-24x24-w-400-white.svg";
 import NavIconBtn from "./UI/navIconBtn/NavIconBtn";
 import "./styles/NavCategoryBtn.css";

@@ -1,5 +1,5 @@
 const { faker } = require("@faker-js/faker");
-const { MIN_CATEGORY_IMAGE_WIDTH, MAX_CATEGORY_IMAGE_WIDTH, MIN_CATEGORY_IMAGE_HEIGHT, MAX_CATEGORY_IMAGE_HEIGHT, MAIN_CATEGORIES_AMOUNT, CATEGORIES_NEST_3_AMOUNT } = require("./consts");
+const { MIN_CATEGORY_IMAGE_WIDTH, MAX_CATEGORY_IMAGE_WIDTH, MIN_CATEGORY_IMAGE_HEIGHT, MAX_CATEGORY_IMAGE_HEIGHT, MAIN_CATEGORIES_AMOUNT, START_CATEGORIES_NEST_3_AMOUNT } = require("./consts");
 const StringActions = require("./StringActions");
 
 module.exports = (categorySlugObjects) => {
@@ -15,13 +15,13 @@ module.exports = (categorySlugObjects) => {
 		const height = faker.number.int({ min: MIN_CATEGORY_IMAGE_HEIGHT, max: MAX_CATEGORY_IMAGE_HEIGHT });
 
 		// the categories array length from which we start creating "nest level 3 (and more nested ones)" categories
-		const startNestLevelThreeNum = CATEGORIES_NEST_3_AMOUNT + MAIN_CATEGORIES_AMOUNT;
+		const startNestLevelThreeNum = START_CATEGORIES_NEST_3_AMOUNT + MAIN_CATEGORIES_AMOUNT;
 
 		if (categories.length >= MAIN_CATEGORIES_AMOUNT && categories.length < startNestLevelThreeNum) {
-			parentId = faker.number.int({ min: 1, max: 2 });
+			parentId = faker.number.int({ min: 1, max: MAIN_CATEGORIES_AMOUNT });
 		} else if (categories.length >= startNestLevelThreeNum) {
 			// startNestLevelThreeNum - 1
-			parentId = faker.number.int({ min: MAIN_CATEGORIES_AMOUNT + 1, max: categories.length });
+			parentId = faker.number.int({ min: startNestLevelThreeNum - 1, max: categories.length });
 		}
 
 		// treeParentIds could not have a "real" parentId, but i won't handle such a behaviour in the mock server

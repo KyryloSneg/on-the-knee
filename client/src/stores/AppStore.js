@@ -5,14 +5,19 @@ class AppStore {
     this._darkBgVisible = false;
     this._isBlockedScroll = false;
     this._isGlobalLoading = false;
+    this._modalVisible = false;
+
+    this._isVisibleMenu = false;
     this._isVisibleFiltersSidebar = false;
     this._isVisibleUsedFiltersSidebar = false;
     this._isVisibleCategoriesMenu = false;
+    this._isVisibleCategoriesModal = false;
     // some important app refs below to skip a big amount of props passing
     this._pageRef = null;
     this._deviceSectionRef = null;
     this._asideRef = null;
     this._headerRef = null;
+    this._menuShortcutRef = null;
     this._filtersShortcutRef = null;
     this._usedFiltersShortcutRef = null;
     makeAutoObservable(this);
@@ -30,15 +35,28 @@ class AppStore {
     this._isGlobalLoading = bool;
   }
 
+  setModalVisible(bool) {
+    this._modalVisible = bool;
+  }
+
   setIsVisibleFiltersSidebar(bool) {
     this._isVisibleFiltersSidebar = bool;
+  }
+
+  setIsVisibleMenu(bool) {
+    this._isVisibleMenu = bool;
   }
 
   setIsVisibleUsedFiltersSidebar(bool) {
     this._isVisibleUsedFiltersSidebar = bool;
   }
+
   setIsVisibleCategoriesMenu(bool) {
     this._isVisibleCategoriesMenu = bool;
+  }
+
+  setIsVisibleCategoriesModal(bool) {
+    this._isVisibleCategoriesModal = bool;
   }
 
   setPageRef(ref) {
@@ -55,6 +73,10 @@ class AppStore {
 
   setHeaderRef(ref) {
     this._headerRef = ref;
+  }
+
+  setMenuShortcutRef(ref) {
+    this._menuShortcutRef = ref;
   }
 
   setFiltersShortcutRef(ref) {
@@ -77,6 +99,14 @@ class AppStore {
     return this._isGlobalLoading;
   }
 
+  get modalVisible() {
+    return this._modalVisible;
+  }
+
+  get isVisibleMenu() {
+    return this._isVisibleMenu;
+  }
+
   get isVisibleFiltersSidebar() {
     return this._isVisibleFiltersSidebar;
   }
@@ -84,8 +114,13 @@ class AppStore {
   get isVisibleUsedFiltersSidebar() {
     return this._isVisibleUsedFiltersSidebar;
   }
+
   get isVisibleCategoriesMenu() {
     return this._isVisibleCategoriesMenu;
+  }
+
+  get isVisibleCategoriesModal() {
+    return this._isVisibleCategoriesModal;
   }
   
   get pageRef() {
@@ -102,6 +137,10 @@ class AppStore {
 
   get headerRef() {
     return this._headerRef;
+  }
+
+  get menuShortcutRef() {
+    return this._menuShortcutRef;
   }
 
   get filtersShortcutRef() {
