@@ -38,8 +38,8 @@ class DeviceStore {
     this._sales = [];
     this._saleTypeNames = [];
 
-    this._categories = {};
-    this._brands = {};
+    this._categories = [];
+    this._brands = [];
     
     this._page = 1;
     this._pagesToFetch = 1;

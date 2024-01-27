@@ -8,8 +8,9 @@ import { addListenerOnCloseAnimationEnd, addListenerOnCloseFrameEnd } from "../.
 import getTimeForLeftInterruptedAnim from "../../../utils/getTimeForLeftInterruptedAnim";
 import useFocusTraps from "../../../hooks/useFocusTraps";
 import useWindowInvisibleFocus from "../../../hooks/useWindowInvisibleFocus";
+import { observer } from "mobx-react-lite";
 
-const Sidebar = ({ children, closeSidebar, shortcutRef, headerText = "", className = "", id = "" }) => {
+const Sidebar = observer(({ children, closeSidebar, shortcutRef, id, headerText = "", className = "" }) => {
   const { app } = useContext(Context);
 
   const sidebarRef = useRef(null);
@@ -21,7 +22,17 @@ const Sidebar = ({ children, closeSidebar, shortcutRef, headerText = "", classNa
   const isEndedOpeningAnim = useRef(false);
   const isRunningClosingAnim = useRef(false);
 
-  let sectionClassName = "sidebar closer-than-darkbg use-preety-scrollbar";
+  const headingId = `${id}-heading`;
+  let placeholderClassName = "sidebar-placeholder"
+  let sectionClassName = "sidebar window use-preety-scrollbar";
+
+  // in every single case if modal window is opened, previously opened sidebar becomes behind dark bg
+  // console.log(app.modalVisible);
+  if (!app.modalVisible) {
+    placeholderClassName += " closer-than-darkbg";
+    sectionClassName += " closer-than-darkbg";
+  }
+
   if (className) {
     sectionClassName = ` ${className}`
   }
@@ -31,13 +42,12 @@ const Sidebar = ({ children, closeSidebar, shortcutRef, headerText = "", classNa
   useWindowInvisibleFocus(closeSidebarBtnRef);
 
   // caution: do not change the code below for the God's sake
-  const animationsDuration = 800;
+  const animationsDuration = 550;
   useSidebarOpening(sidebarRef, animationsDuration, isEndedOpeningAnim);
 
   function onClosingSidebar() {
     if (isRunningClosingAnim.current) return;
 
-    // 800 ms - time for the end of the animation
     function animateClosing(timeForLeftInterruptedAnim = 0) {
       animate({
         timing: easeIn,
@@ -87,9 +97,25 @@ const Sidebar = ({ children, closeSidebar, shortcutRef, headerText = "", classNa
 
   }
 
-  useClickOnTheDarkBg(onClosingSidebar, app.darkBgVisible);
-  return (
-    <section className={sectionClassName} id={id} ref={sidebarRef}>
+  function onClickOnTheDarkBg() {
+    if (app.modalVisible) return;
+    onClosingSidebar();
+  }
+
+  useClickOnTheDarkBg(onClickOnTheDarkBg, app.darkBgVisible);
+
+  // if user clicked on the area of future sidebar while it's opening, do not close it 
+  // (so we need sidebar placeholder for such behaviour)
+  return [
+    <div className={placeholderClassName} aria-hidden="true" key="sidebar-placeholder" />,
+    <section 
+      className={sectionClassName} 
+      id={id}
+      role="dialog"
+      aria-labelledby={headingId}
+      ref={sidebarRef} 
+      key="sidebar"
+    >
       <header>
         <div className="visually-hidden" tabIndex={0} ref={firstFocusTrapRef} />
         <button
@@ -102,14 +128,13 @@ const Sidebar = ({ children, closeSidebar, shortcutRef, headerText = "", classNa
           <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
             <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/>
           </svg>
-          {/* <img src={backArrowIcon} alt="" /> */}
-          <h2>{headerText}</h2>
+          <h2 id={headingId}>{headerText}</h2>
         </button>
       </header>
       {children}
       <div className="visually-hidden" tabIndex={0} ref={lastFocusTrapRef} />
     </section>
-  );
-}
+  ];
+});
 
 export default Sidebar;

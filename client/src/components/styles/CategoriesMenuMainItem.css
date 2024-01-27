@@ -12,6 +12,12 @@
   font-size: 1.6rem;
 }
 
+.categories-menu-main-item > img {
+  display: block;
+  width: 24px;
+  height: 24px;
+}
+
 .categories-menu-main-item > svg {
   justify-self: end;
 }

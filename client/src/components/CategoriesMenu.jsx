@@ -45,13 +45,16 @@ const CategoriesMenu = ({ navCategoryBtnRef }) => {
     if (!allFocusableMenuElements) return;
     if (!allFocusableMenuElements.includes(e.relatedTarget)) {
       closeMenu();
-      navCategoryBtnRef.current.focus();
+
+      // idk why but if user clicks on any interactive element activeElement is equals to body
+      // (so we can state that user left categories menu by mouse click and we must not focus the button)
+      if (document.activeElement !== document.body) navCategoryBtnRef.current.focus();
     }
 
   }
 
   return (
-    <section id="categories-menu" ref={categoriesMenuRef} onBlurCapture={onBlurCapture}>
+    <section id="categories-menu" className="window" ref={categoriesMenuRef} onBlurCapture={onBlurCapture}>
       <CategoriesMenuMain 
         setSelectedId={setSelectedId} 
         navCategoryBtnRef={navCategoryBtnRef} 

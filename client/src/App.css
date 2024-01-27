@@ -146,6 +146,8 @@ ul {
 /* dark app's bg that appears on certain events */
 
 #app-dark-bg {
+  background-color: rgba(0, 0, 0, .5);
+  display: block;
   outline: none;
   position: fixed;
   top: 0;
@@ -154,9 +156,7 @@ ul {
   bottom: 0;
   width: 100%;
   height: 100%;
-  z-index: 20;
-  background-color: rgba(0, 0, 0, .5);
-  display: block;
+  z-index: 8000;
 }
 
 /* General classes */
@@ -269,14 +269,14 @@ ul {
   background-color: rgb(103, 103, 103, 0.3);
 }
 
-/* Header */
+/* navigation header */
 
-header {
+#root > div > header {
   padding: 10px;
   background-color: #333333;
 }
 
-header {
+#root > div > header {
   padding: 10px 5px;
   display: grid;
   align-items: center;
@@ -284,6 +284,10 @@ header {
   margin-bottom: 30px;
   position: sticky;
   top: 0;
+}
+
+#root > div > header.closer-than-darkbg {
+  z-index: 9000;
 }
 
 /* delete input content and "back" buttons */
@@ -421,6 +425,12 @@ header {
   animation: 0.35s linear infinite app-global-loading;
 }
 
+/* device categories modal */
+
+#categories-modal {
+  width: 700px;
+}
+
 @media screen and (min-width: 1000px) {
   .app-global-loading-bar-rect {
     animation: 0.3s linear infinite app-global-loading;
@@ -451,6 +461,16 @@ header {
 }
 
 @keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
   from {
     opacity: 0;
   }
