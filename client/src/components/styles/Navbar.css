@@ -1,7 +1,6 @@
 nav {
   display: grid;
-  /* grid-template-columns: 1fr; > (some pxs) => auto 1fr */
-  grid-template-columns: 1fr; /* > (some pxs) => auto 1fr */
+  grid-template-columns: 1fr;
   align-items: center;
   justify-content: space-around;
   gap: 12px;
@@ -18,8 +17,6 @@ nav img {
 
 nav > div {
   display: grid;
-  /* display: flex;
-  flex: 1; */
   width: 100%;
   gap: 5px;
   grid-template-columns: auto 1fr auto;
@@ -41,13 +38,13 @@ nav > div.focusedSearch > button,
 
 /* Skip to next page content */
  
-nav .skip-to-next-page-content {
-  top: 0;
-  width: 93%;
-  margin-top: 5px;
+nav > .skip-to-next-page-content:focus {
+  position: absolute;
+  height: 36px;
+  top: 5px;
 }
 
-nav .skip-to-next-page-content p {
+nav > .skip-to-next-page-content p {
   font-size: 1rem;
 }
 
@@ -58,7 +55,7 @@ nav .skip-to-next-page-content p {
 }
 
 @media screen and (min-width: 250px) {
-  nav .skip-to-next-page-content p {
+  nav > .skip-to-next-page-content p {
     font-size: 1.5rem;
   }
 }
@@ -81,7 +78,7 @@ nav .skip-to-next-page-content p {
 
 @media screen and (min-width: 550px) {
   nav > div {
-    grid-template-columns: auto auto 1fr auto auto;
+    grid-template-columns: auto 1fr auto auto;
   }
 
   nav {
@@ -91,7 +88,7 @@ nav .skip-to-next-page-content p {
 
 @media screen and (min-width: 700px) {
   nav > div {
-    grid-template-columns: auto auto 1fr auto auto auto;
+    grid-template-columns: auto 1fr auto auto auto;
   }
 }
 
@@ -103,13 +100,23 @@ nav .skip-to-next-page-content p {
     padding: 0 40px;
   }
 
-  nav .skip-to-next-page-content {
+  nav > .skip-to-next-page-content:focus {
     top: auto;
-    left: auto;
-    right: auto;
-    width: auto;
-    margin-left: 7px;
-    margin-top: 0;
+    align-self: center;
+    left: 40px;
+    height: 40px;
+  }
+}
+
+@media screen and (min-width: 1000px) {
+  nav > .skip-to-next-page-content:focus {
+    min-width: 221px;
+  }
+}
+
+@media screen and (min-width: 1080px) {
+  nav > div {
+    grid-template-columns: auto auto 1fr auto auto auto;
   }
 }
 
@@ -117,11 +124,19 @@ nav .skip-to-next-page-content p {
   nav {
     padding: 0 100px;
   }
+
+  nav > .skip-to-next-page-content:focus {
+    left: 100px;
+  }
 }
 
 @media screen and (min-width: 1500px) {
   nav {
     padding: 0 200px;
+  }
+
+  nav > .skip-to-next-page-content:focus {
+    left: 200px;
   }
 }
 
@@ -129,10 +144,18 @@ nav .skip-to-next-page-content p {
   nav {
     padding: 0 300px;
   }
+
+  nav > .skip-to-next-page-content:focus {
+    left: 300px;
+  }
 }
 
 @media screen and (min-width: 2000px) {
   nav {
     padding: 0 400px;
+  }
+
+  nav > .skip-to-next-page-content:focus {
+    left: 400px;
   }
 }

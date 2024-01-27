@@ -1,0 +1,19 @@
+.categories-menu-main {
+  display: grid;
+  position: relative;
+  width: 320px;
+  border-radius: 0 0 0 6px;
+  border-right: 1px solid #cccccc;
+}
+
+.categories-menu-main > ul  {
+  display: flex;
+  flex-direction: column;
+}
+
+.categories-menu-main > .skip-to-next-page-content:focus {
+  position: absolute;
+  width: 95%;
+  top: 10px;
+  justify-self: center;
+}

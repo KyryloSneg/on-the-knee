@@ -16,8 +16,6 @@ body {
 
 /* implementing the scroll blocking like this, so the scroll bar doesn't disappears */
 .global-blocked-scroll {
-  left: 0px;
-  top: 0px;
   position: fixed;
   width: 100%;
   overflow-y: scroll;
@@ -148,6 +146,8 @@ ul {
 /* dark app's bg that appears on certain events */
 
 #app-dark-bg {
+  background-color: rgba(0, 0, 0, .5);
+  display: block;
   outline: none;
   position: fixed;
   top: 0;
@@ -156,9 +156,7 @@ ul {
   bottom: 0;
   width: 100%;
   height: 100%;
-  z-index: 20;
-  background-color: rgba(0, 0, 0, .5);
-  display: block;
+  z-index: 8000;
 }
 
 /* General classes */
@@ -183,6 +181,10 @@ ul {
 
 .align-center {
   align-self: center;
+}
+
+.p-absolute {
+  position: absolute;
 }
 
 .display-flex {
@@ -224,6 +226,10 @@ ul {
   font-weight: bold;
 }
 
+.invisible-focus:focus {
+  outline: none;
+}
+
 .link-colors,
 .link-colors-wrap a {
   outline-color: #ff7e14;
@@ -263,15 +269,14 @@ ul {
   background-color: rgb(103, 103, 103, 0.3);
 }
 
-/* Header */
+/* navigation header */
 
-header {
+#root > div > header {
   padding: 10px;
   background-color: #333333;
 }
 
-header {
-  position: relative;
+#root > div > header {
   padding: 10px 5px;
   display: grid;
   align-items: center;
@@ -281,10 +286,8 @@ header {
   top: 0;
 }
 
-header .skip-to-next-page-content:focus {
-  position: absolute;
-  align-self: center;
-  left: 3%;
+#root > div > header.closer-than-darkbg {
+  z-index: 9000;
 }
 
 /* delete input content and "back" buttons */
@@ -422,6 +425,12 @@ header .skip-to-next-page-content:focus {
   animation: 0.35s linear infinite app-global-loading;
 }
 
+/* device categories modal */
+
+#categories-modal {
+  width: 700px;
+}
+
 @media screen and (min-width: 1000px) {
   .app-global-loading-bar-rect {
     animation: 0.3s linear infinite app-global-loading;
@@ -452,6 +461,16 @@ header .skip-to-next-page-content:focus {
 }
 
 @keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
   from {
     opacity: 0;
   }

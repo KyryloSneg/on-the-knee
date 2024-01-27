@@ -6,14 +6,18 @@ export const ROOT_ROUTE = "/";
 export const CATALOG_ROUTE = "/catalog";
 export const DEVICE_ROUTE = "/catalog/"; // + :deviceId
 export const CHECKOUT_ROUTE = "/checkout";
-export const USER_ROUTE = "/user";
 export const DESIRED_LIST_ROUTE = "/desired";
-// to do routing for user cabinet
+export const USER_ROUTE = "/user";
+// TODO: routing for user cabinet
+
+// TODO: remake catalog route in next branches
+export const CATEGORY_CATALOG_ROUTE = "/"; // + ":categoryIdSlug" (1-smartphones for example)
+export const BRAND_CATALOG_ROUTE = "/brand/" // + ":brandIdSlug" (2-asus for example);
+export const SEARCH_CATALOG_ROUTE = "/search/" // + ?text=value;
 
 export const DEVICE_API_URL = "/devices?_embed=device-combinations&_embed=device-feedbacks&_embed=device-infos&_embed=sale-devices";
 export const SALES_API_URL = "/sales?_embed=sale-types";
 export const ATRIBUTES_API_URL = "/attributes?_expand=attribute-value&_expand=attribute-name";
-
 
 // value: (asc / desc),(rating / price)
 export const sortingOptions = [
@@ -82,12 +86,15 @@ export const SPECIAL_TO_HANDLE_FILTERS = ["sort", "price", "text", "stock", "sel
 // filters that aren't placed in category filters
 export const FILTERS_IN_SPECIAL_COMPONENTS = ["sort", "price", "text"];
 
-// in production build the value should be greater than current one
+// categories menu consts
+// we use the const below on one of the columns overflow
+export const CATEGORIES_COL_LVL_THREE_LIMIT = 8;
+
+// in production build the values should be greater than current ones
 export const FILTERS_OPTIONS_LENGTH_LIMIT = 5;
 export const DEVICE_ITEM_INFO_AMOUNT_LIMIT = 6;
 export const DEVICE_ITEMS_MOBILE_LIMIT = 30;
 export const DEVICE_ITEMS_DESKTOP_LIMIT = 60;
-
 
 // unfortunately we can't use consts in css, so on changing the values below
 // we must change it in css manually
@@ -96,6 +103,7 @@ export const DEVICE_ITEMS_DESKTOP_LIMIT = 60;
 export const WIDTH_TO_SHOW_DEV_HID_CONTENT = 960;
 export const WIDTH_TO_SHOW_ASIDE = 960;
 export const WIDTH_TO_SHOW_LOADING_BTN_PAGINATION = 260;
+export const WIDTH_TO_SHOW_CATEGORIES_MENU = 1080;
 
 // set up mock stores
 const deviceStoreInstance = new DeviceStore();

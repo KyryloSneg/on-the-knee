@@ -15,11 +15,23 @@ import useClosingUsedFiltersBarWidth from "./hooks/useClosingUsedFiltersBarWidth
 import useClosingFiltersBarEmptyValue from "./hooks/useClosingFiltersBarEmptyValue";
 import useClosingUsedFiltersBarValue from "./hooks/useClosingUsedFiltersBarValue";
 import useBlockingScroll from "./hooks/useBlockingScroll";
+import CategoriesMenu from "./components/CategoriesMenu";
+import useInitialDataFetching from "./hooks/useInitialDataFetching";
+import useClosingCategoriesMenuWidth from "./hooks/useClosingCategoriesMenuWidth";
+import Menu from "./components/Menu";
+import setMenuVisibility from "./utils/setMenuVisibility";
+import setCategoriesModalVisibility from "./utils/setCategoriesModalVisibility";
+import ModalWindow from "./components/UI/modalWindow/ModalWindow";
+import CategoriesModalContent from "./components/CategoriesModalContent";
+import setFiltersSidebarVisibility from "./utils/setFiltersSidebarVisibility";
+import setUsedFiltersBarVisibility from "./utils/setUsedFiltersBarVisibility";
+import useClosingCategoriesModalWidth from "./hooks/useClosingCategoriesModalWidth";
  
 const App = observer(() => {
   const { app, deviceStore } = useContext(Context);
   // ref for the "skip to next page content" btn
   const headerRef = useRef(null);
+  const navCategoryBtnRef = useRef(null);
   const windowWidth = useWindowWidth();
 
   let pageElemToFocus;
@@ -28,23 +40,31 @@ const App = observer(() => {
   }
 
   const closeFiltersSidebar = useCallback(() => {
-    app.setDarkBgVisible(false);
-    app.setIsBlockedScroll(false);
-    app.setIsVisibleFiltersSidebar(false);
+    setFiltersSidebarVisibility(false, app)
   }, [app]);
 
   const closeUsedFiltersSidebar = useCallback(() => {
-    app.setDarkBgVisible(false);
-    app.setIsBlockedScroll(false);
-    app.setIsVisibleUsedFiltersSidebar(false);
+    setUsedFiltersBarVisibility(false, app);
   }, [app]);
+
+  function setIsCategoriesModalVisible(isVisible) {
+    setCategoriesModalVisibility(isVisible, app);
+  }
+
+  function closeMenuSidebar() {
+    setMenuVisibility(false, app);
+  }
 
   useEffect(() => {
     app.setHeaderRef(headerRef);
   }, [app, headerRef]);
 
+  useInitialDataFetching();
+
   useClosingFiltersSidebarWidth(windowWidth, app.isVisibleFiltersSidebar, closeFiltersSidebar);
   useClosingUsedFiltersBarWidth(windowWidth, app.isVisibleUsedFiltersSidebar, closeUsedFiltersSidebar);
+  useClosingCategoriesMenuWidth(windowWidth, app.isVisibleCategoriesMenu, app);
+  useClosingCategoriesModalWidth(windowWidth, app.isVisibleCategoriesModal, app);
 
   useClosingFiltersBarEmptyValue(deviceStore.filters, app.isVisibleFiltersSidebar, closeFiltersSidebar);
   useClosingUsedFiltersBarValue(deviceStore.usedFilters, app.isVisibleUsedFiltersSidebar, closeUsedFiltersSidebar);
@@ -65,25 +85,48 @@ const App = observer(() => {
         </div>
       }
       {/* dark bg that shows up on certain events (like opening a modal window) */}
-      {app.darkBgVisible && <div id="app-dark-bg" tabIndex={0} data-testid="app-dark-bg" />}
+      {app.darkBgVisible && <div id="app-dark-bg" className="visible" tabIndex={0} data-testid="app-dark-bg" />}
+      {app.isVisibleMenu &&
+        <Sidebar
+          children={<Menu />}
+          closeSidebar={closeMenuSidebar}
+          shortcutRef={app.menuShortcutRef}
+          headerText="Menu"
+          id="menu-sidebar"
+        />
+      }
       {app.isVisibleFiltersSidebar &&
         <Sidebar
           children={<FilterCategories areInitiallyVisible={false} isSidebarVersion={true} />}
           closeSidebar={closeFiltersSidebar}
+          shortcutRef={app.filtersShortcutRef}
           headerText="Filters"
+          id="filter-categories-sidebar"
         />
       }
       {app.isVisibleUsedFiltersSidebar &&
         <Sidebar
           children={<UsedFilters isSidebarVersion={true} />}
           closeSidebar={closeUsedFiltersSidebar}
+          shortcutRef={app.usedFiltersShortcutRef}
           headerText="Used filters"
+          id="used-filters-sidebar"
         />
       }
+      <ModalWindow
+        isVisible={app.isVisibleCategoriesModal} 
+        setIsVisible={setIsCategoriesModalVisible}
+        children={<CategoriesModalContent />}
+        headerText="Categories"
+        id="categories-modal"
+      />
       <header ref={headerRef}>
-        <Navbar elemToFocus={pageElemToFocus} />
+        <Navbar elemToFocus={pageElemToFocus} navCategoryBtnRef={navCategoryBtnRef} />
+        {(app.isVisibleCategoriesMenu && !!Object.keys(deviceStore.categories).length) && 
+          <CategoriesMenu navCategoryBtnRef={navCategoryBtnRef} />
+        }
       </header>
-      <Outlet />
+      <Outlet />  
       <MyFooter />
     </div>
   );

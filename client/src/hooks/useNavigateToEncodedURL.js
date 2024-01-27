@@ -1,15 +1,12 @@
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import encodeUrl from "../utils/encodeUrl";
 
 function useNavigateToEncodedURL() {
   const navigate = useNavigate();
 
   function encodedNavigate(url, options) {
     navigate(encodeUrl(url), options);
-  }
-
-  function encodeUrl(url) {
-    return url.replaceAll("%2C", ",").replaceAll("%3B", ";");
   }
 
   const encodedNavigateCallback = useCallback(encodedNavigate, [navigate]);

@@ -32,8 +32,8 @@ export default class URLActions {
     return decodeURI(encodeURI(newUrl));
   }
 
-  static addParamValue(name, value) {
-    const decodedURL = decodeURIComponent(window.location.href);
+  static addParamValue(name, value, href = window.location.href) {
+    const decodedURL = decodeURIComponent(href);
     const url = new URL(decodedURL);
     const searchParams = new URLSearchParams(url.search);
     const isNameAlreadyExists = searchParams.has(name);
@@ -61,8 +61,8 @@ export default class URLActions {
     return newUrl;
   }
 
-  static deleteParamValue(name, value) {
-    const decodedURL = decodeURIComponent(window.location.href);
+  static deleteParamValue(name, value, href = window.location.href) {
+    const decodedURL = decodeURIComponent(href);
     const url = new URL(decodedURL);
     const searchParams = new URLSearchParams(url.search);
 
@@ -88,8 +88,8 @@ export default class URLActions {
     return newUrl;
   }
 
-  static deleteAllDefaultParamValues() {
-    const decodedURL = decodeURIComponent(window.location.href);
+  static deleteAllDefaultParamValues(href = window.location.href) {
+    const decodedURL = decodeURIComponent(href);
     const url = new URL(decodedURL);
     const searchParams = new URLSearchParams(url.search);
     const paramPairs = Array.from(url.searchParams.entries());
@@ -103,8 +103,8 @@ export default class URLActions {
     return newUrl;
   }
 
-  static setNewParam(name, value) {
-    const decodedURL = decodeURIComponent(window.location.href);
+  static setNewParam(name, value, href = window.location.href) {
+    const decodedURL = decodeURIComponent(href);
     const url = new URL(decodedURL);
     const searchParams = new URLSearchParams(url.search);
 
@@ -115,8 +115,8 @@ export default class URLActions {
     return newUrl;
   }
 
-  static getParamValue(name) {
-    const decodedURL = decodeURIComponent(window.location.href);
+  static getParamValue(name, href = window.location.href) {
+    const decodedURL = decodeURIComponent(href);
     const url = new URL(decodedURL);
     const searchParams = new URLSearchParams(url.search);
 
@@ -124,8 +124,8 @@ export default class URLActions {
     return value;
   }
 
-  static getUsedFilters(filters) {
-    const decodedURL = decodeURIComponent(window.location.href);
+  static getUsedFilters(filters, href = window.location.href) {
+    const decodedURL = decodeURIComponent(href);
     const url = new URL(decodedURL);
     const searchParams = new URLSearchParams(url.search);
 
@@ -145,8 +145,8 @@ export default class URLActions {
     return { usedFilters, url: newUrl };
   }
 
-  static deleteAllRedundantFilters(filters, usedFilters) {
-    const decodedURL = decodeURIComponent(window.location.href);
+  static deleteAllRedundantFilters(filters, usedFilters, href = window.location.href) {
+    const decodedURL = decodeURIComponent(href);
     const url = new URL(decodedURL);
     const searchParams = new URLSearchParams(url.search);
 

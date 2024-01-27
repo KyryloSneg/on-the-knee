@@ -1,0 +1,44 @@
+.categories-menu-main-item {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 14px;
+  transition: 0.2s;
+  outline: 0;
+}
+
+.categories-menu-main-item > p {
+  font-size: 1.6rem;
+}
+
+.categories-menu-main-item > img {
+  display: block;
+  width: 24px;
+  height: 24px;
+}
+
+.categories-menu-main-item > svg {
+  justify-self: end;
+}
+
+.categories-menu-main-item:hover,
+.categories-menu-main-item:active,
+.categories-menu-main-item:focus-visible {
+  background-color: #ffe0cc;
+}
+
+.categories-menu-main-item:hover,
+.categories-menu-main-item:active,
+.categories-menu-main-item:focus-visible {
+  color: #4444ef;
+  fill: #4444ef;
+}
+
+.categories-menu-main-item > .skip-to-next-page-content:focus {
+  position: absolute;
+  height: 28px;
+  width: auto;
+  right: 10px;
+  padding: 2px;
+}

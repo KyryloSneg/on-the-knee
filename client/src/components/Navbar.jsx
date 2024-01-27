@@ -9,7 +9,7 @@ import SkipToNextPageContent from "./UI/skipToNextPageContent/SkipToNextPageCont
 import NavDesiredListBtn from "./NavDesiredListBtn";
 import { useRef } from "react";
 
-const Navbar = ({ elemToFocus }) => {
+const Navbar = ({ elemToFocus, navCategoryBtnRef }) => {
   const btnGroupRef = useRef(null);
   const navbarRef = useRef(null);
 
@@ -19,7 +19,7 @@ const Navbar = ({ elemToFocus }) => {
       <StoreTitle title={"On the knee"} />
       <div ref={btnGroupRef} data-testid="navbar-btn-group">
         <NavMenuBtn />
-        <NavCategoryBtn />
+        <NavCategoryBtn ref={navCategoryBtnRef} />
         <SearchProductsForm btnGroupRef={btnGroupRef} navbarRef={navbarRef} />
         <NavAccountBtn />
         <NavDesiredListBtn />
