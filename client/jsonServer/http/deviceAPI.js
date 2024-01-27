@@ -5,12 +5,12 @@ async function getAllDevices() {
   return data.products;
 }
 
-async function getAllCategories() {
+async function getAllCategorySlugs() {
   const { data } = await axios.get("https://dummyjson.com/products/categories");
   return data;
 }
 
 module.exports = {
   getAllDevices,
-  getAllCategories,
+  getAllCategorySlugs,
 }

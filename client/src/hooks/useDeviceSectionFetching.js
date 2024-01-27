@@ -1,6 +1,5 @@
 import _ from "lodash";
 import { useEffect, useRef } from "react";
-import { getDevices } from "../http/DeviceApi";
 import { getStocks } from "../http/StocksAPI";
 import { getSaleTypeNames, getSales } from "../http/SalesAPI";
 import useFetching from "./useFetching";
@@ -8,13 +7,13 @@ import { SPECIAL_TO_HANDLE_FILTERS } from "../utils/consts";
 import { useLocation } from "react-router-dom";
 import DeviceComboActions from "../utils/DeviceComboActions";
 import { getSellers } from "../http/SellersAPI";
-import { getBrands } from "../http/BrandsAPI";
 import URLActions from "../utils/URLActions";
 import { filterDevicesByBrands, filterDevicesByPrice, filterDevicesBySellers, filterDevicesByStock } from "../utils/filterDevicesBySpecialFilters";
 import getDeviceStructuredAttributes from "../utils/getDeviceStructuredAttributes";
 import getDeviceFiltersObj from "../utils/getDeviceFiltersObj";
 import filterDevicesWithCommonFilters from "../utils/filterDevicesWithCommonFilters";
 import sortDevicesByPrice from "../utils/sortDevicesByPrice";
+import { getDevices } from "../http/DeviceApi";
 
 // query params without pagination ones
 function useDeviceSectionFetching(deviceStore, app) {
@@ -57,7 +56,7 @@ function useDeviceSectionFetching(deviceStore, app) {
     const saleTypeNames = await getSaleTypeNames();
 
     const sellers = await getSellers();
-    const brands = await getBrands();
+    const brands = deviceStore.brands;
 
     // TODO: add there other "special" filters (that requires separate implementation) later on
     const isSpecialFilters = toFilterByPrice || toFilterByStock || toFilterBySeller || toFilterByBrand;

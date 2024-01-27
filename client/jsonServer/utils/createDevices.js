@@ -1,4 +1,4 @@
-const { getAllDevices, getAllCategories } = require("../http/deviceAPI");
+const { getAllDevices, getAllCategorySlugs } = require("../http/deviceAPI");
 const { faker } = require('@faker-js/faker');
 const createDeviceFeedbacks = require('./createDeviceFeedbacks');
 const createBrands = require('./createBrands');
@@ -10,11 +10,12 @@ const createDeviceCombinations = require("./createDeviceCombinations");
 const createAdditionalServices = require("./createAdditionalServices");
 const createSales = require("./createSales");
 const createSaleDevices = require("./createSaleDevices");
+const { MAIN_CATEGORIES_AMOUNT } = require("./consts");
 
 module.exports = async () => {
 
   const dummyDevices = await getAllDevices();
-  const dummyCategorySlugs = await getAllCategories();
+  const dummyCategorySlugs = await getAllCategorySlugs();
   const dummyUnfilteredBrandNames = dummyDevices.map(d => d.brand);
 
   let dummyBrandNames = [];  
@@ -24,7 +25,22 @@ module.exports = async () => {
   }
 
   const brands = createBrands(dummyBrandNames);
-  const categories = createCategories(dummyCategorySlugs, brands);
+  let categorySlugs = [];
+
+  for (let slug of dummyCategorySlugs) {
+    const slugObj = { slug: slug, type: "category" };
+    categorySlugs.push(slugObj);
+  }
+
+  for (let brand of brands) {
+    const isBrandInCategory = faker.datatype.boolean(0.5);
+    if (!isBrandInCategory) continue;
+
+    const slugObj = { slug: brand.slug, type: "brand", brand: brand };
+    categorySlugs.push(slugObj);
+  }
+
+  const categories = createCategories(categorySlugs, brands);
   const { sellers, sellerFeedbacks, sellerFeedbackReplies } = createSellers();
 
   let devices = [];
@@ -50,7 +66,7 @@ module.exports = async () => {
   
   dummyDevices.map((dev, i) => {
     const brand = brands[faker.number.int({ min: 0, max: brands.length - 1 })];
-    const category = categories[faker.number.int({ min: 0, max: categories.length - 1 })];
+    const category = categories[faker.number.int({ min: MAIN_CATEGORIES_AMOUNT + 1, max: categories.length - 1 })];
     const seller = sellers[faker.number.int({ min: 0, max: sellers.length - 1 })];
 
     const rating = createDeviceFeedbacks(deviceFeedbacks, deviceFeedbackReplies, dev.id);
@@ -73,8 +89,38 @@ module.exports = async () => {
     devices.push(device);
   });
 
-  const saleDevices = createSaleDevices(sales, devices);
+  let categoriesMaxMainBrandsAmount = {};
+  for (let category of categories) {
+    if (category.parentCategoryId !== null) continue;
 
+    const mainBrandsAmount = faker.number.int({ min: 2, max: 6 });
+    categoriesMaxMainBrandsAmount[category.id] = mainBrandsAmount;
+  }
+
+  function findParentMainCategory(category) {
+    let parentId = category.parentCategoryId;
+    let parentMainCategory = categories.find(cat => cat.id === parentId);
+
+    while (parentId !== null) {
+      parentMainCategory = categories.find(cat => cat.id === parentId);
+      parentId = parentMainCategory.parentCategoryId;
+    }
+
+    return parentMainCategory || category;
+  }
+
+  for (let dev of devices) {
+    const category = categories.find(cat => +cat.id === +dev.categoryId);
+    
+    // only main categories can have main brands
+    const parentMainCategory = findParentMainCategory(category);
+    const mainBrands = parentMainCategory.mainBrands;
+
+    if (mainBrands.length > categoriesMaxMainBrandsAmount[parentMainCategory.id]) continue;
+    if (!mainBrands.includes(dev.brandId)) mainBrands.push(dev.brandId);
+  }
+
+  const saleDevices = createSaleDevices(sales, devices);
   return {
     devices,
     deviceFeedbacks,

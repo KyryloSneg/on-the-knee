@@ -1,0 +1,13 @@
+.categories-menu-main-brands {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 15px;
+  margin: 0;
+  min-height: 36px;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.categories-menu-main-brand > img {
+  display: block;
+}

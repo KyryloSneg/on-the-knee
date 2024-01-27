@@ -183,10 +183,13 @@ const POSSIBLE_SCHEDULE_TIME_RANGES = {
     }
   ]
 };
-const POSSIBLE_ORDER_STATUSES = ["Cancelled", "Pending", "Paid", "Confirmed", "Done"];
 
-const LOGO_HEIGHT = 40;
-const LOGO_WIDTH = 40;
+const POSSIBLE_ORDER_STATUSES = ["Cancelled", "Pending", "Paid", "Confirmed", "Done"];
+const MAIN_CATEGORIES_AMOUNT = 3;
+const START_CATEGORIES_NEST_3_AMOUNT = 20;
+
+const LOGO_HEIGHT = 34;
+const LOGO_WIDTH = 34;
 
 const MIN_SALE_IMAGE_HEIGHT = 300;
 const MIN_SALE_IMAGE_WIDTH = 300;
@@ -223,6 +226,8 @@ module.exports = {
   POSSIBLE_SCHEDULE_TIME_RANGES,
   STORE_LOCATIONS,
   POSSIBLE_ORDER_STATUSES,
+  MAIN_CATEGORIES_AMOUNT,
+  START_CATEGORIES_NEST_3_AMOUNT,
 
   LOGO_HEIGHT,
   LOGO_WIDTH,

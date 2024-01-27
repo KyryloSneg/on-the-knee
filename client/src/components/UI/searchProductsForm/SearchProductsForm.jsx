@@ -5,12 +5,12 @@ import { observer } from "mobx-react-lite";
 import SearchProductLine from "./SearchProductLine";
 import SearchResults from "./SearchResults";
 import useFnOnSomeValue from "../../../hooks/useFnOnSomeValue";
-import useClickOnTheDarkBg from "../../../hooks/useClickOnTheDarkBg";
 import { mockSearchResults } from "../../../utils/consts";
 import useDeleteValueOnEsc from "../../../hooks/useDeleteValueOnEsc";
 import useMinMaxIds from "../../../hooks/useMinMaxIds";
 import filterSearchResultFn from "../../../utils/filterSearchResultFn";
 import StringActions from "../../../utils/StringActions";
+import useClickOnEverything from "../../../hooks/useClickOnEverything";
 
 const SearchProductsForm = observer(({ btnGroupRef, navbarRef }) => {
   const { app, isTest, isEmptySearchResults } = useContext(Context);
@@ -42,9 +42,9 @@ const SearchProductsForm = observer(({ btnGroupRef, navbarRef }) => {
   useEffect(() => {
     if (app.headerRef) {
       if (isFocused) {
-        app.headerRef.current.className = "closer-than-darkbg";
+        app.headerRef.current.classList.add("closer-than-darkbg");
       } else {
-        app.headerRef.current.className = "";
+        app.headerRef.current.classList.remove("closer-than-darkbg");
       }
     }
   }, [isFocused, app]);
@@ -75,8 +75,8 @@ const SearchProductsForm = observer(({ btnGroupRef, navbarRef }) => {
   useFnOnSomeValue(value, focusInput, null);
   useFnOnSomeValue(isResultsAndValue, null, onEmptyResultsAndValue);
 
-  const onClickOnTheDarkBg = isFocused ? blurInput : null;
-  useClickOnTheDarkBg(onClickOnTheDarkBg, app.darkBgVisible);
+  const onClickOnEverything = isFocused ? blurInput : null;
+  useClickOnEverything(onClickOnEverything, formRef);
   useDeleteValueOnEsc(setValue, setBackupValue, isFocused);
 
   function filterResults(nextBackupValue, mockResults) {
@@ -192,10 +192,8 @@ const SearchProductsForm = observer(({ btnGroupRef, navbarRef }) => {
       // TODO: error handling
     } finally {
       setBackupValue(value);
-
-      inputRef.current.input.blur();
       setIsInputFocused(false);
-      setIsFocused(false);
+      blurInput();
     }
   }
 

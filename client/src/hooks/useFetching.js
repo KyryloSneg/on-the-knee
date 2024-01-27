@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 function useFetching(callback, settingIsLoadingDelay = 0, finallyCallback = null) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const fetching = async (...args) => {
+  const fetching = useCallback(async (...args) => {
     try {
       setIsLoading(true)
       await callback(...args)
@@ -18,7 +18,7 @@ function useFetching(callback, settingIsLoadingDelay = 0, finallyCallback = null
         setIsLoading(false); 
       }, settingIsLoadingDelay);
     }
-  }
+  }, []);
 
   return [fetching, isLoading, error]
 }

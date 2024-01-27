@@ -1,5 +1,6 @@
 const { faker } = require("@faker-js/faker");
 const { LOGO_WIDTH, LOGO_HEIGHT } = require("./consts");
+const StringActions = require("./StringActions");
 
 module.exports = (brandNames) => {
   let brands = [];
@@ -8,6 +9,7 @@ module.exports = (brandNames) => {
     const brand = {
       "id": brands.length + 1,
       "name": name,
+      "slug": StringActions.nameToSlug(name),
       "logo": faker.image.url({ width: LOGO_WIDTH, height: LOGO_HEIGHT }),
     };
 
