@@ -150,12 +150,12 @@ function useDeviceSectionFetching(deviceStore, app) {
 
   useEffect(() => {
     fetching();
-    // do not use fetching in dependency list
+    // do not use fetching, stocks, sales and saleTypeNames in dependency list
     // eslint-disable-next-line
   }, [
-    deviceStore.stocks, deviceStore.sales,
-    deviceStore.saleTypeNames, deviceStore.limit,
-    deviceStore.page, deviceStore.pagesToFetch,
+    deviceStore.limit,
+    deviceStore.page, 
+    deviceStore.pagesToFetch,
     // if param queries have changed, re-fetch devices
     location.search,
   ]);
