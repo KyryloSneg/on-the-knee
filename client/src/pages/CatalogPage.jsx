@@ -1,6 +1,6 @@
 import Dropdown from "../components/UI/dropdown/Dropdown";
 import TopFilterBar from "../components/TopFilterBar";
-import Aside from "../components/Aside";
+import FiltersAside from "../components/FiltersAside";
 import "./styles/CatalogPage.css";
 import useWindowWidth from "../hooks/useWindowWidth";
 import DeviceSection from "../components/DeviceSection";
@@ -41,7 +41,7 @@ const CatalogPage = () => {
         />
       </div>
       <div id="wrapper">
-        <Aside />
+        <FiltersAside />
         <DeviceSection />
       </div>
     </div>

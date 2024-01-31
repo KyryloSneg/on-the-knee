@@ -1,6 +1,6 @@
 import UsedFilters from "./UsedFilters";
 import { observer } from "mobx-react-lite";
-import "./styles/Aside.css";
+import "./styles/FiltersAside.css";
 import FilterCategories from "./FilterCategories";
 import { useContext, useEffect, useRef } from "react";
 import { Context } from "../Context";
@@ -10,7 +10,7 @@ import SkipToNextPageContent from "./UI/skipToNextPageContent/SkipToNextPageCont
 import getAllFocusableElements from "../utils/getAllFocusableElements";
 import useNavigateToEncodedURL from "../hooks/useNavigateToEncodedURL";
 
-const Aside = observer(() => {
+const FiltersAside = observer(() => {
   const { deviceStore, app, isTest } = useContext(Context);
   const asideRef = useRef(null);
 
@@ -24,14 +24,14 @@ const Aside = observer(() => {
     deviceSectionElemToFocus = getAllFocusableElements(app.deviceSectionRef.current)[0];
   }
 
-  if (app.asideRef?.current) {
+  if (app.filtersAsideRef?.current) {
     // getting element with index "1" because we do not want focusing 
     // "skip to the next page section" button at the start of aside bar
-    asideElemToFocus = getAllFocusableElements(app.asideRef.current)[1];
+    asideElemToFocus = getAllFocusableElements(app.filtersAsideRef.current)[1];
   }
 
   useEffect(() => {
-    app.setAsideRef(asideRef);
+    app.setFiltersAsideRef(asideRef);
   }, [app, deviceStore.filters, deviceStore.usedFilters]);
 
   useEffect(() => {
@@ -51,7 +51,7 @@ const Aside = observer(() => {
   }, [location.search, deviceStore, deviceStore.filters, deviceStore.filters, location.pathname, navigate, isTest]);
 
   return (
-    <aside ref={asideRef}>
+    <aside className="filters-aside" ref={asideRef}>
       <SkipToNextPageContent
         title="skip to the device section"
         elemToFocus={deviceSectionElemToFocus}
@@ -77,4 +77,4 @@ const Aside = observer(() => {
   );
 });
 
-export default Aside;
+export default FiltersAside;
