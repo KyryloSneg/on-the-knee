@@ -15,7 +15,7 @@ class AppStore {
     // some important app refs below to skip a big amount of props passing
     this._pageRef = null;
     this._deviceSectionRef = null;
-    this._asideRef = null;
+    this._filtersAsideRef = null;
     this._headerRef = null;
     this._menuShortcutRef = null;
     this._filtersShortcutRef = null;
@@ -67,8 +67,8 @@ class AppStore {
     this._deviceSectionRef = ref;
   }
 
-  setAsideRef(ref) {
-    this._asideRef = ref;
+  setFiltersAsideRef(ref) {
+    this._filtersAsideRef = ref;
   }
 
   setHeaderRef(ref) {
@@ -131,8 +131,8 @@ class AppStore {
     return this._deviceSectionRef;
   }
 
-  get asideRef() {
-    return this._asideRef;
+  get filtersAsideRef() {
+    return this._filtersAsideRef;
   }
 
   get headerRef() {

@@ -1,15 +1,15 @@
-aside {
+.filters-aside {
   display: none;
   flex-direction: column;
   gap: 20px;
 }
 
-aside input,
+.filters-aside input,
 select {
   font-family: 'Montserrat', sans-serif;
 }
 
-aside>* {
+.filters-aside>* {
   background-color: #f1f1f1;
   border: 2px solid #676767;
   padding: 10px;
@@ -21,7 +21,7 @@ aside>* {
 }
 
 @media screen and (min-width: 960px) {
-  aside {
+  .filters-aside {
     display: flex;
   }
 }

@@ -7,14 +7,8 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: 4px;
-  /* padding: 0 0 6px 0; */
   overflow-anchor: none;
-  /* transition: max-height 0.35s linear 0.2s; */
 }
-
-/* .filter-category-block.collapsed > ul {
-  max-height: 0;
-} */
 
 /* Scrollbar */
 
@@ -46,7 +40,6 @@
 }
 
 .empty-filters-msg {
-  /* color: grey; */
   text-align: center;
   font-size: 1.3rem;
 }
