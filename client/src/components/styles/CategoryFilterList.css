@@ -1,20 +1,14 @@
 .filters {
-  max-height: 284px;
-  overflow-y: auto;
+  /* max-height: 284px; */
+  /* overflow-y: auto; */
   margin: 0;
   position: relative;
 
   display: grid;
   grid-template-columns: 1fr;
   gap: 4px;
-  /* padding: 0 0 6px 0; */
   overflow-anchor: none;
-  /* transition: max-height 0.35s linear 0.2s; */
 }
-
-/* .filter-category-block.collapsed > ul {
-  max-height: 0;
-} */
 
 /* Scrollbar */
 
@@ -46,9 +40,30 @@
 }
 
 .empty-filters-msg {
-  /* color: grey; */
   text-align: center;
   font-size: 1.3rem;
+}
+
+.filters-show-more-btn {
+  display: flex;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 2px;
+  width: 100%;
+}
+
+.filters-show-more-btn > span {
+  justify-self: start;
+  border-bottom: 1px dashed #4444ef;
+  transition: 0.2s;
+  margin: 6px 0 6px 8px;
+}
+
+.filters-show-more-btn:hover > span,
+.filters-show-more-btn:active > span,
+.filters-show-more-btn:focus > span {
+  border-bottom: 1px dashed #bd5e10;
 }
 
 @media screen and (min-width: 1090px) {
