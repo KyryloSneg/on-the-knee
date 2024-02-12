@@ -1,7 +1,9 @@
 .filters-aside {
-  display: none;
+  display: flex;
   flex-direction: column;
   gap: 20px;
+  width: 100%;
+  height: calc(100vh - 90px);
 }
 
 .filters-aside input,
@@ -9,19 +11,27 @@ select {
   font-family: 'Montserrat', sans-serif;
 }
 
-.filters-aside>* {
-  background-color: #f1f1f1;
-  border: 2px solid #676767;
-  padding: 10px;
+.filters-aside>*:not(.skip-to-next-page-content) {
+  background-color: #ffffff;
   position: relative;
   border-radius: 20px;
   min-width: 320px;
   width: 100%;
   box-sizing: border-box;
+  margin-top: -1px;
+  -webkit-box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.15);
+  -moz-box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.15);
+  box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.15);
 }
 
-@media screen and (min-width: 960px) {
-  .filters-aside {
-    display: flex;
-  }
+.filters-aside > .skip-to-next-page-content:focus {
+  min-height: 34px;
+}
+
+.filters-aside > .skip-to-next-page-content:first-of-type {
+  border-radius: 20px 20px 0 0;
+}
+
+.filters-aside > .skip-to-next-page-content:last-of-type {
+  border-radius: 0 0 20px 20px;
 }

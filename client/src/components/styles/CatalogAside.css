@@ -1,0 +1,19 @@
+.filters-aside-wrapper {
+  display: none;
+  position: sticky;
+  height: 88.5vh;
+  width: 100%;
+  /* height: max-content; */
+  top: 76px;
+  padding: 1px 1px;
+  margin-bottom: 76px;
+  border-radius: 20px;
+  border-top: 1px solid rgba(0, 0, 0, 0.15);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+@media screen and (min-width: 960px) {
+  .filters-aside-wrapper {
+    display: flex;
+  }
+}

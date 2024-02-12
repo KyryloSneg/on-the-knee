@@ -8,6 +8,7 @@ import { DEVICE_ITEMS_DESKTOP_LIMIT, DEVICE_ITEMS_MOBILE_LIMIT, WIDTH_TO_SHOW_AS
 import { useContext, useEffect, useRef } from "react";
 import { Context } from "../Context";
 import useClosingAllWindows from "../hooks/useClosingAllWindows";
+import CatalogAside from "../components/CatalogAside";
 
 const CatalogPage = () => {
   const { deviceStore, app } = useContext(Context);
@@ -41,7 +42,8 @@ const CatalogPage = () => {
         />
       </div>
       <div id="wrapper">
-        <FiltersAside />
+        {/* <FiltersAside /> */}
+        <CatalogAside />
         <DeviceSection />
       </div>
     </div>

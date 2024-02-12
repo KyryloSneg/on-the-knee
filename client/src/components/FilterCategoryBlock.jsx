@@ -26,6 +26,7 @@ const FilterCategoryBlock = ({ filter, variant = "default", isInitiallyVisible }
             filter={filter}
             variant={variant}
             elemToFocusRef={elemToFocusRef}
+            key={filter}
           />
         );
       } else {
