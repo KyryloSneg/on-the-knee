@@ -12,6 +12,7 @@
   border-radius: 5px;
   transition: 0.2s;
   border: none;
+  outline: none;
 }
 
 .filters li a p {
@@ -27,7 +28,10 @@
 
 .filters li a:focus {
   background-color: #dadada;
-  outline: none;
+}
+
+.filters li a.invisible-focus:focus {
+  background: none;
 }
 
 .filters li a:hover .filter-icon,

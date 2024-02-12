@@ -1,0 +1,8 @@
+.preety-scrollbar-wrap {
+  display: flex;
+}
+
+.preety-scrollbar-wrap > *:first-child {
+  overflow-y: auto;
+  scrollbar-width: none;
+}
