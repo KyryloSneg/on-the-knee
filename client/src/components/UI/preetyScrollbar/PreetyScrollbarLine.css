@@ -1,0 +1,20 @@
+.preety-scrollbar-line {
+  /* height: 100%; */
+  width: 6px;
+  border-radius: 6px;
+  background-color: #d4d4d4;
+  overflow-y: hidden;
+}
+
+.preety-scrollbar-thumb {
+  position: relative;
+  top: 100px;
+  height: 80px;
+  width: 6px;
+  border-radius: 6px;
+  background-color: rgb(103, 103, 103, 0.3);
+}
+
+.preety-scrollbar-wrap.filters-aside-scrollbar > .preety-scrollbar-line {
+  margin: 16px 0;
+}

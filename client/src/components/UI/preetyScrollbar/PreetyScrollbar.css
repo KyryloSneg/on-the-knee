@@ -1,8 +1,18 @@
 .preety-scrollbar-wrap {
   display: flex;
+  height: max-content;
 }
 
 .preety-scrollbar-wrap > *:first-child {
   overflow-y: auto;
   scrollbar-width: none;
+}
+
+.preety-scrollbar-wrap.filters-aside-scrollbar {
+  position: sticky;
+  top: 76px;
+  /* border-radius: 20px 29px 20px 29px; */
+  border-radius: 20px;
+  overflow-y: hidden;
+  min-width: 324px;
 }
