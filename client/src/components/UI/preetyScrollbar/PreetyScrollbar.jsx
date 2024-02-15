@@ -9,7 +9,7 @@ const PreetyScrollbar = ({ children, className = "" }) => {
   }
 
   return (
-    <div className={wrapperClassName} aria-hidden="true">
+    <div className={wrapperClassName}>
       {children}
       {true && <PreetyScrollbarLine offset={0} />}
     </div>
