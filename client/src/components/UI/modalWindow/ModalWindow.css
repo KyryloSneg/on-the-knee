@@ -8,6 +8,9 @@
   transform: translate(-50%, -50%);
   background-color: #f1f1f1;
   animation: fade-in 0.35s ease-in;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto 1fr auto;
 }
 
 .modal-window.not-visible-modal {
@@ -48,6 +51,18 @@
 .close-modal-btn:active > svg,
 .close-modal-btn:focus:not(.invisible-focus) > svg {
   fill: #a10e0e;
+}
+
+.modal-child-positioning {
+  position: relative;
+}
+
+.modal-child-positioning > div {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 
 @media screen and (min-width: 500px) {

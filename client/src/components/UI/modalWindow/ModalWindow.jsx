@@ -5,6 +5,7 @@ import useFocusTraps from "../../../hooks/useFocusTraps";
 import useClickOnTheDarkBg from "../../../hooks/useClickOnTheDarkBg";
 import { observer } from "mobx-react-lite";
 import useWindowInvisibleFocus from "../../../hooks/useWindowInvisibleFocus";
+import PreetyScrollbar from "../preetyScrollbar/PreetyScrollbar";
 
 const ModalWindow = observer(({ isVisible, setIsVisible, children, headerText, id }) => {
   const { app } = useContext(Context)
@@ -58,7 +59,14 @@ const ModalWindow = observer(({ isVisible, setIsVisible, children, headerText, i
           </svg>
         </button>
       </header>
-      {children}
+      <div className="modal-child-positioning">
+        <PreetyScrollbar
+          children={children}
+          id={`${id}-scrollbar`}
+          isRect={true}
+        />
+      </div>
+      {/* {children} */}
       <div className="visually-hidden" tabIndex={0} ref={lastFocusTrapRef} />
     </section>
   );

@@ -13,7 +13,10 @@
 .sidebar {
   left: -100%;
   background-color: #f1f1f1;
-  overflow-y: scroll;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr;
+  /* overflow-y: scroll; */
 }
 
 .sidebar-placeholder {
@@ -28,6 +31,18 @@
   margin: 0;
   padding: 14px 5px;
   border-bottom: 1px solid #676767;
+}
+
+.sidebar-child-positioning {
+  position: relative;
+}
+
+.sidebar-child-positioning > div {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 
 .close-sidebar-btn h2 {
@@ -53,17 +68,6 @@
 .close-sidebar-btn:not(.invisible-focus):focus > * {
   color: #bd5e10;
   fill: #4444ef;
-}
-
-.sidebar.use-preety-scrollbar {
-  scrollbar-color: #bebebe rgb(103, 103, 103, 0.3);
-  scrollbar-width: thin;
-}
-
-/* Webkit syntax */
-.sidebar.use-preety-scrollbar::-webkit-scrollbar {
-  width: 4px;
-  background-color: #bebebe;
 }
 
 @media screen and (min-width: 500px) {

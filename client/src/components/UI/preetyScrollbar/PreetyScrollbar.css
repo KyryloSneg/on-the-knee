@@ -1,18 +1,98 @@
-.preety-scrollbar-wrap {
-  display: flex;
-  height: max-content;
+.filters-aside-scroll {
+  width: 100%;
 }
 
-.preety-scrollbar-wrap > *:first-child {
-  overflow-y: auto;
+.filters-aside-scroll > .rcs-outer-container {
+  /* using position relative here to position scrollbar later */
+  /* because rcs-positioning doesn't work properly with filters-aside */
+  position: relative;
+  border-top: 1px solid rgba(0, 0, 0, 0.15);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+  padding: 0px 1px;
+  width: 100%;
+}
+
+.filters-aside-scroll.circle-version > .rcs-outer-container {
+  border-radius: 20px; 
+}
+
+.rcs-custom-scroll .rcs-outer-container {
+  overflow: hidden;
+}
+
+.rcs-custom-scroll.with-scrollbar-placeholder .rcs-outer-container::before {
+  content: "";
+  position: absolute;  
+  height: 100%;
+  width: 6px;
+  right: 0;
+  background-color: #d4d4d4;
+  z-index: 1;
+  padding: 6px 0;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+.rcs-custom-scroll.with-scrollbar-placeholder .rcs-outer-container::after {
+  content: "";
+  position: absolute;  
+  width: 6px;
+  height: 35%;
+  z-index: 2;
+  top: 0;
+  right: 0;
+  background-color: rgb(103, 103, 103, 0.3);
+}
+
+.rcs-custom-scroll.circle-version.with-scrollbar-placeholder .rcs-outer-container::after {
+  border-radius: 6px;
+}
+
+.rcs-custom-scroll .rcs-custom-scrollbar {
+  position: absolute;
+  height: 100%;
+  width: 6px;
+  right: 0;
+  background-color: #d4d4d4;
+  z-index: 1;
+  padding: 6px 0;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+.rcs-custom-scroll.with-scrollbar-placeholder .rcs-custom-scrollbar {
+  display: none;
+}
+
+.rcs-custom-scroll .rcs-custom-scroll-handle {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  background-color: rgb(103, 103, 103, 0.3);
+}
+
+.rcs-custom-scroll.circle-version .rcs-custom-scroll-handle {
+  border-radius: 6px;
+}
+
+.rcs-custom-scroll .rcs-inner-container {
+  overflow-x: clip;
+  overflow-y: scroll;
   scrollbar-width: none;
 }
 
-.preety-scrollbar-wrap.filters-aside-scrollbar {
-  position: sticky;
-  top: 76px;
-  /* border-radius: 20px 29px 20px 29px; */
-  border-radius: 20px;
-  overflow-y: hidden;
-  min-width: 324px;
+.filters-aside-scroll > .rcs-outer-container > .rcs-inner-container {
+  width: 100%;
+}
+
+.rcs-inner-container > div {
+  padding: 0 1px;
+}
+
+.filters-aside-scroll > .rcs-outer-container > .rcs-inner-container > div {
+  width: 100%;
+}
+
+.sidebar-child-positioning > div > .rcs-custom-scroll > .rcs-outer-container > .rcs-inner-container > div {
+  padding: 0;
 }

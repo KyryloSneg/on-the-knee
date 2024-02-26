@@ -4,14 +4,9 @@ import "./styles/CatalogAside.css";
 
 const CatalogAside = () => {
   return (
-    <PreetyScrollbar 
-      children={
-        <div className="filters-aside-wrapper">
-          <FiltersAside />
-        </div>
-      }
-      className="filters-aside-scrollbar"
-    />
+    <div className="filters-aside-wrapper">
+      <PreetyScrollbar children={<FiltersAside />} id={"filters-aside-scroll"} className="filters-aside-scroll" />
+    </div>
   );
 }
 
