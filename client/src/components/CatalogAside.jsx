@@ -3,11 +3,11 @@ import PreetyScrollbar from "./UI/preetyScrollbar/PreetyScrollbar";
 import "./styles/CatalogAside.css";
 
 const CatalogAside = () => {
-  return <PreetyScrollbar children={
+  return (
     <div className="filters-aside-wrapper">
-      <FiltersAside />
+      <PreetyScrollbar children={<FiltersAside />} id={"filters-aside-scroll"} className="filters-aside-scroll" />
     </div>
-  }/>
+  );
 }
 
 export default CatalogAside;

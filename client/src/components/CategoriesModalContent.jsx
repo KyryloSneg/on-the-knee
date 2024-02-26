@@ -11,7 +11,7 @@ const CategoriesModalContent = observer(() => {
   return (
     <section className="categories-modal-content">
       {mainCategories &&
-        <ul className="categories-modal-content-list use-preety-scrollbar">
+        <ul className="categories-modal-content-list">
           {mainCategories.map(category =>
             <li key={category.id}>
               <CategoriesModalItem category={category} />

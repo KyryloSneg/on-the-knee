@@ -32,7 +32,6 @@ const CategoryFilterList = observer(({ filter, variant, elemToFocusRef = null })
       const filtersElems = getAllFocusableElements(filterListRef.current);
 
       if (isToShowMore) {
-        console.log("yippee");
         invisibleFocusElem.current = filtersElems[6];
       } else {
         invisibleFocusElem.current = null;
@@ -92,7 +91,7 @@ const CategoryFilterList = observer(({ filter, variant, elemToFocusRef = null })
           ref={elemToFocusRef}
         />
         <ul 
-          className="filters use-preety-scrollbar" 
+          className="filters" 
           data-testid={testId} 
           ref={filterListRef}
         >
@@ -125,7 +124,7 @@ const CategoryFilterList = observer(({ filter, variant, elemToFocusRef = null })
   return (
     <div>
       <ul
-        className="filters use-preety-scrollbar"
+        className="filters"
         data-testid={testId}
         key="filters-list"
         ref={filterListRef}

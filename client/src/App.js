@@ -1,5 +1,6 @@
 import Navbar from "./components/Navbar";
 import "./App.css";
+import "./styles/ReactCustomScroll.css";
 import MyFooter from "./components/MyFooter";
 import { useCallback, useContext, useEffect, useRef } from "react";
 import { Outlet } from "react-router-dom";

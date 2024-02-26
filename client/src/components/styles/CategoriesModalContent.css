@@ -7,22 +7,11 @@
 .categories-modal-content-list {
   display: grid;
   grid-template-columns: 1fr;
-  max-height: 90%;
-  overflow-y: auto;
+  /* max-height: 90%; */
+  /* overflow-y: auto; */
   gap: 10px;
   margin: 0;
   padding: 4px 10px;
-}
-
-.categories-modal-content-list.use-preety-scrollbar {
-  scrollbar-color: #bebebe rgb(103, 103, 103, 0.3);
-  scrollbar-width: thin;
-}
-
-/* Webkit syntax */
-.categories-modal-content-list.use-preety-scrollbar::-webkit-scrollbar {
-  width: 4px;
-  background-color: #bebebe;
 }
 
 @media screen and (min-width: 300px) {
