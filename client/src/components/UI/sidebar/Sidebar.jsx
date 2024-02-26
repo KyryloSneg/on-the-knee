@@ -9,6 +9,7 @@ import getTimeForLeftInterruptedAnim from "../../../utils/getTimeForLeftInterrup
 import useFocusTraps from "../../../hooks/useFocusTraps";
 import useWindowInvisibleFocus from "../../../hooks/useWindowInvisibleFocus";
 import { observer } from "mobx-react-lite";
+import PreetyScrollbar from "../preetyScrollbar/PreetyScrollbar";
 
 const Sidebar = observer(({ children, closeSidebar, shortcutRef, id, headerText = "", className = "" }) => {
   const { app } = useContext(Context);
@@ -24,10 +25,9 @@ const Sidebar = observer(({ children, closeSidebar, shortcutRef, id, headerText 
 
   const headingId = `${id}-heading`;
   let placeholderClassName = "sidebar-placeholder"
-  let sectionClassName = "sidebar window use-preety-scrollbar";
+  let sectionClassName = "sidebar window";
 
   // in every single case if modal window is opened, previously opened sidebar becomes behind dark bg
-  // console.log(app.modalVisible);
   if (!app.modalVisible) {
     placeholderClassName += " closer-than-darkbg";
     sectionClassName += " closer-than-darkbg";
@@ -108,12 +108,12 @@ const Sidebar = observer(({ children, closeSidebar, shortcutRef, id, headerText 
   // (so we need sidebar placeholder for such behaviour)
   return [
     <div className={placeholderClassName} aria-hidden="true" key="sidebar-placeholder" />,
-    <section 
-      className={sectionClassName} 
+    <section
+      className={sectionClassName}
       id={id}
       role="dialog"
       aria-labelledby={headingId}
-      ref={sidebarRef} 
+      ref={sidebarRef}
       key="sidebar"
     >
       <header>
@@ -126,12 +126,19 @@ const Sidebar = observer(({ children, closeSidebar, shortcutRef, id, headerText 
         >
           {/* using svg element to change its fill color */}
           <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
-            <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/>
+            <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" />
           </svg>
           <h2 id={headingId}>{headerText}</h2>
         </button>
       </header>
-      {children}
+      <div className="sidebar-child-positioning">
+        <PreetyScrollbar
+          children={children}
+          id={`${id}-scrollbar`}
+          isRect={true}
+        />
+      </div>
+      {/* {children} */}
       <div className="visually-hidden" tabIndex={0} ref={lastFocusTrapRef} />
     </section>
   ];

@@ -39,7 +39,7 @@ const PriceCategoryFilter = observer(() => {
   }
 
   return (
-    <div className="price-range-form-wrap use-preety-scrollbar">
+    <div className="price-range-form-wrap">
       <form className="price-range-filter-wrap" onSubmit={onSubmit}>
         <div>
           <MinMaxPrice
