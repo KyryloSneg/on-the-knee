@@ -63,6 +63,7 @@ const PreetyScrollbar = ({ children, id, isRect = false, heightRelativeToParent 
 
     resizeObserver.observe(childrenElem);
     return () => resizeObserver.disconnect();
+    // eslint-disable-next-line
   }, []);
 
   function onScroll() {
@@ -73,7 +74,7 @@ const PreetyScrollbar = ({ children, id, isRect = false, heightRelativeToParent 
   }
 
   return (
-    <div ref={scrollWrapRef} id={id}>
+    <div ref={scrollWrapRef} className="w-100" id={id}>
       <CustomScroll
         heightRelativeToParent={heightRelativeToParent}
         className={scrollClassName}
