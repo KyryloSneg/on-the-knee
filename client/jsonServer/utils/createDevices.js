@@ -18,29 +18,31 @@ module.exports = async () => {
   const dummyCategorySlugs = await getAllCategorySlugs();
   const dummyUnfilteredBrandNames = dummyDevices.map(d => d.brand);
 
-  let dummyBrandNames = [];  
+  let dummyBrandNames = [];
   for (let brand of dummyUnfilteredBrandNames) {
     if (dummyBrandNames.includes(brand)) continue;
     dummyBrandNames.push(brand);
   }
 
   const brands = createBrands(dummyBrandNames);
-  let categorySlugs = [];
+  let categoryObjects = [];
 
   for (let slug of dummyCategorySlugs) {
-    const slugObj = { slug: slug, type: "category" };
-    categorySlugs.push(slugObj);
+    const categoryObj = { slug: slug, type: "category" };
+    categoryObjects.push(categoryObj);
   }
 
-  for (let brand of brands) {
-    const isBrandInCategory = faker.datatype.boolean(0.5);
-    if (!isBrandInCategory) continue;
+  // // we can do anything here just to make layout of future brand categories
+  // for (let brand of brands) {
+  //   const isBrandInCategory = faker.datatype.boolean(0.5);
+  //   if (!isBrandInCategory) continue;
 
-    const slugObj = { slug: brand.slug, type: "brand", brand: brand };
-    categorySlugs.push(slugObj);
-  }
+  //   // const categoryBrandObj = { slug: brand.slug, name: brand.name, type: "brand", brand: brand };
+  //   const categoryBrandObj = { slug: null, name: null, type: "brand", brand: null };
+  //   categoryObjects.push(categoryBrandObj);
+  // }
 
-  const categories = createCategories(categorySlugs, brands);
+  let categories = createCategories(categoryObjects);
   const { sellers, sellerFeedbacks, sellerFeedbackReplies } = createSellers();
 
   let devices = [];
@@ -61,12 +63,29 @@ module.exports = async () => {
   let sales = [];
   let saleTypes = [];
   let saleTypeNames = [];
-  
+
   createSales(sales, saleTypes, saleTypeNames);
-  
+
+  let categoriesLeft = [...categories];
+  let brandsLeft = [...categories];
+
   dummyDevices.map((dev, i) => {
-    const brand = brands[faker.number.int({ min: 0, max: brands.length - 1 })];
-    const category = categories[faker.number.int({ min: MAIN_CATEGORIES_AMOUNT + 1, max: categories.length - 1 })];
+    let category;
+    if (categoriesLeft.length) {
+      category = categoriesLeft[faker.number.int({ min: 0, max: categoriesLeft.length - 1 })];
+    } else {
+      category = categories[faker.number.int({ min: 0, max: categories.length - 1 })];
+    }
+
+    let brand;
+    if (categoriesLeft.length) {
+      brand = brandsLeft[faker.number.int({ min: 0, max: brandsLeft.length - 1 })];
+    } else {
+      brand = brands[faker.number.int({ min: 0, max: brands.length - 1 })];
+    }
+
+    // const brand = brands[faker.number.int({ min: 0, max: brands.length - 1 })];
+    // const category = categories[faker.number.int({ min: 0, max: categories.length - 1 })];
     const seller = sellers[faker.number.int({ min: 0, max: sellers.length - 1 })];
 
     const rating = createDeviceFeedbacks(deviceFeedbacks, deviceFeedbackReplies, dev.id);
@@ -87,7 +106,45 @@ module.exports = async () => {
     };
 
     devices.push(device);
+
+    categoriesLeft = categoriesLeft.filter(cat => cat.id !== category.id);
+    brandsLeft = brandsLeft.filter(brandItem => brandItem.id !== brand.id);
   });
+
+  for (let category of categories) {
+    const devicesInCategory = devices.filter(dev => dev.categoryId === category.id);
+    if (!devicesInCategory.length) continue;
+
+    const isToAddBrandCategory = faker.datatype.boolean(0.6);
+    if (!isToAddBrandCategory) continue;
+
+    const brandIdsInCategory = Array.from(new Set(devicesInCategory.map(dev => dev.brandId)));
+
+    let amount;
+    if (brandIdsInCategory.length - 1 > 2) {
+      amount = 2;
+    } else {
+      amount = brandIdsInCategory.length - 1;
+    }
+
+    let leftBrandIds = [...brandIdsInCategory];
+    const idsToCreateCategories = [];
+    for (let i = 0; i <= amount - 1; i++) {
+      const randomIndex = faker.number.int({ min: 0, max: amount - 1 });
+      const brandId = leftBrandIds[randomIndex];
+      idsToCreateCategories.push(brandId);
+
+      leftBrandIds = leftBrandIds.filter(id => id !== brandId);
+    }
+
+    const categoryObjects = idsToCreateCategories.map(id => {
+      const brand = brands.find(brand => brand.id === id);
+      return { slug: brand.slug, name: brand.name, type: "brand", brand: brand, parentCategoryId: category.id };
+    });
+
+    const brandCategories = createCategories(categoryObjects, categories.length - 1);
+    categories = categories.concat(brandCategories);
+  }
 
   let categoriesMaxMainBrandsAmount = {};
   for (let category of categories) {
@@ -111,7 +168,7 @@ module.exports = async () => {
 
   for (let dev of devices) {
     const category = categories.find(cat => +cat.id === +dev.categoryId);
-    
+
     // only main categories can have main brands
     const parentMainCategory = findParentMainCategory(category);
     const mainBrands = parentMainCategory.mainBrands;

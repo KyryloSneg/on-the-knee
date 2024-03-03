@@ -1,6 +1,5 @@
 import Dropdown from "../components/UI/dropdown/Dropdown";
 import TopFilterBar from "../components/TopFilterBar";
-import FiltersAside from "../components/FiltersAside";
 import "./styles/CatalogPage.css";
 import useWindowWidth from "../hooks/useWindowWidth";
 import DeviceSection from "../components/DeviceSection";
@@ -10,7 +9,11 @@ import { Context } from "../Context";
 import useClosingAllWindows from "../hooks/useClosingAllWindows";
 import CatalogAside from "../components/CatalogAside";
 
-const CatalogPage = () => {
+const POSSIBLE_TYPES = ["category", "brand", "search"];
+
+const CatalogPage = ({ type }) => {
+  if (!POSSIBLE_TYPES.includes(type)) throw Error("type of Catalog Page is not defined");
+
   const { deviceStore, app } = useContext(Context);
   const pageRef = useRef(null);
   const windowWidth = useWindowWidth();
@@ -42,7 +45,6 @@ const CatalogPage = () => {
         />
       </div>
       <div id="wrapper">
-        {/* <FiltersAside /> */}
         <CatalogAside />
         <DeviceSection />
       </div>
