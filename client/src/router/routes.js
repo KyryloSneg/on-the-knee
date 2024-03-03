@@ -1,19 +1,27 @@
-import CatalogPage from "../pages/CatalogPage";
 import CheckoutPage from "../pages/CheckoutPage";
 import DesiredListPage from "../pages/DesiredListPage";
 import DevicePage from "../pages/DevicePage";
 import MainPage from "../pages/MainPage";
+import RenavigatingCatalogPage from "../pages/RenavigatingCatalogPage";
 import UserPage from "../pages/UserPage";
-import { CATALOG_ROUTE, CHECKOUT_ROUTE, DESIRED_LIST_ROUTE, DEVICE_ROUTE, USER_ROUTE } from "../utils/consts";
+import { BRAND_CATALOG_ROUTE, CATEGORY_CATALOG_ROUTE, CHECKOUT_ROUTE, DESIRED_LIST_ROUTE, DEVICE_ROUTE, SEARCH_CATALOG_ROUTE, USER_ROUTE } from "../utils/consts";
 
 export const PUBLIC_ROUTES = [
   {
-    path: CATALOG_ROUTE,
-    element: <CatalogPage />
+    path: CATEGORY_CATALOG_ROUTE + ":categoryIdSlug",
+    element: <RenavigatingCatalogPage type="category" />,
+  },
+  {
+    path: BRAND_CATALOG_ROUTE + ":brandIdSlug",
+    element: <RenavigatingCatalogPage type="brand" />,
+  },
+  {
+    path: SEARCH_CATALOG_ROUTE,
+    element: <RenavigatingCatalogPage type="search" />
   },
   {
     path: DEVICE_ROUTE + ":deviceId",
-    element: <DevicePage />
+    element: <DevicePage />,
   },
   {
     path: CHECKOUT_ROUTE,

@@ -1,21 +1,25 @@
-import { CATALOG_ROUTE, CHECKOUT_ROUTE, DESIRED_LIST_ROUTE, DEVICE_ROUTE, USER_ROUTE } from "../utils/consts";
-
+import { useMemo } from "react";
+import { PRIVATE_ROUTES, PUBLIC_ROUTES } from "../router/routes";
 const { useLocation, matchRoutes } = require("react-router-dom");
 
-const routes = [
-  { path: CATALOG_ROUTE}, 
-  { path: DEVICE_ROUTE + ":deviceId"}, 
-  { path: USER_ROUTE}, 
-  { path: CHECKOUT_ROUTE}, 
-  { path: DESIRED_LIST_ROUTE},
-  { path: "/"}
-];
-
 function useCurrentPath() {
+  // we can't calculate it on initialization
+  const publicRoutes = useMemo(() => {
+    return PUBLIC_ROUTES.map(route => ({ path: route.path }));
+  }, []);
+
+  console.log(publicRoutes);
+
+  const privateRoutes = useMemo(() => {
+    return PRIVATE_ROUTES.map(route => ({ path: route.path }));
+  }, []);
+
+  const routes = publicRoutes.concat(privateRoutes);
+
   const location = useLocation();
   const [{ route }] = matchRoutes(routes, location);
 
   return route?.path || null;
-} 
+}
 
 export default useCurrentPath;
