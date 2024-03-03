@@ -3,7 +3,6 @@ import DeviceStore from "../stores/DeviceStore";
 import UserStore from "../stores/UserStore";
 
 export const ROOT_ROUTE = "/";
-export const CATALOG_ROUTE = "/catalog";
 export const DEVICE_ROUTE = "/catalog/"; // + :deviceId
 export const CHECKOUT_ROUTE = "/checkout";
 export const DESIRED_LIST_ROUTE = "/desired";
@@ -11,7 +10,7 @@ export const USER_ROUTE = "/user";
 // TODO: routing for user cabinet
 
 // TODO: remake catalog route in next branches
-export const CATEGORY_CATALOG_ROUTE = "/"; // + ":categoryIdSlug" (1-smartphones for example)
+export const CATEGORY_CATALOG_ROUTE = "/categories/"; // + ":categoryIdSlug" (1-smartphones for example)
 export const BRAND_CATALOG_ROUTE = "/brand/" // + ":brandIdSlug" (2-asus for example);
 export const SEARCH_CATALOG_ROUTE = "/search/" // + ?text=value;
 
@@ -86,7 +85,9 @@ export const SPECIAL_TO_HANDLE_FILTERS = ["sort", "price", "text", "stock", "sel
 // filters that aren't placed in category filters
 export const FILTERS_IN_SPECIAL_COMPONENTS = ["sort", "price", "text"];
 
-// categories menu consts
+// renavigate user to categories page if subcategories amount >= MIN_CATEGORIES_LENGTH_TO_RENAVIGATE
+export const MIN_CATEGORIES_LENGTH_TO_RENAVIGATE = 8;
+
 // we use the const below on one of the columns overflow
 export const CATEGORIES_COL_LVL_THREE_LIMIT = 8;
 

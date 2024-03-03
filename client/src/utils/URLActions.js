@@ -140,7 +140,7 @@ export default class URLActions {
 
       usedFilters[key] = filterValues;
     }
-
+    
     const newUrl = this.deleteAllRedundantFilters(filters, usedFilters);
     return { usedFilters, url: newUrl };
   }

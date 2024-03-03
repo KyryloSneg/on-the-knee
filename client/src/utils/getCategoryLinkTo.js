@@ -1,4 +1,5 @@
 import URLActions from "./URLActions";
+import { CATEGORY_CATALOG_ROUTE } from "./consts";
 import encodeUrl from "./encodeUrl";
 
 function getCategoryLinkTo(category, parentCategoryId = null, categories = null) {
@@ -16,12 +17,13 @@ function getCategoryLinkTo(category, parentCategoryId = null, categories = null)
 
     let newUrl = href;
     for (let [name, value] of Object.entries(category.queryParams)) {
+      console.log(name, value);
       newUrl = URLActions.addParamValue(name, value, newUrl);
     }
 
     to = encodeUrl(newUrl.replace(basename, ""));
   } else {
-    to = `/${category.id}-${category.slug}`;
+    to = CATEGORY_CATALOG_ROUTE + `${category.id}-${category.slug}`;
   }
   
   return to;
