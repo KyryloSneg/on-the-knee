@@ -1,11 +1,11 @@
 import FiltersAside from "./FiltersAside";
-import PreetyScrollbar from "./UI/preetyScrollbar/PreetyScrollbar";
+import CustomScrollbar from "./UI/customScrollbar/CustomScrollbar";
 import "./styles/CatalogAside.css";
 
 const CatalogAside = () => {
   return (
     <div className="filters-aside-wrapper">
-      <PreetyScrollbar children={<FiltersAside />} id={"filters-aside-scroll"} className="filters-aside-scroll" />
+      <CustomScrollbar children={<FiltersAside />} className="filters-aside-scroll" />
     </div>
   );
 }

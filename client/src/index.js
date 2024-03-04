@@ -5,6 +5,7 @@ import DeviceStore from './stores/DeviceStore';
 import AppStore from './stores/AppStore';
 import { Context } from "./Context";
 import AppRouterProvider from './components/AppRouterProvider';
+import 'overlayscrollbars/overlayscrollbars.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
