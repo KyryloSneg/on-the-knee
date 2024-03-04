@@ -9,7 +9,7 @@ import getTimeForLeftInterruptedAnim from "../../../utils/getTimeForLeftInterrup
 import useFocusTraps from "../../../hooks/useFocusTraps";
 import useWindowInvisibleFocus from "../../../hooks/useWindowInvisibleFocus";
 import { observer } from "mobx-react-lite";
-import PreetyScrollbar from "../preetyScrollbar/PreetyScrollbar";
+import CustomScrollbar from "../customScrollbar/CustomScrollbar";
 
 const Sidebar = observer(({ children, closeSidebar, shortcutRef, id, headerText = "", className = "" }) => {
   const { app } = useContext(Context);
@@ -132,13 +132,8 @@ const Sidebar = observer(({ children, closeSidebar, shortcutRef, id, headerText 
         </button>
       </header>
       <div className="sidebar-child-positioning">
-        <PreetyScrollbar
-          children={children}
-          id={`${id}-scrollbar`}
-          isRect={true}
-        />
+        <CustomScrollbar children={children} isRect={true}/>
       </div>
-      {/* {children} */}
       <div className="visually-hidden" tabIndex={0} ref={lastFocusTrapRef} />
     </section>
   ];
