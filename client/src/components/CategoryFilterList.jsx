@@ -139,7 +139,7 @@ const CategoryFilterList = observer(({ filter, variant, elemToFocusRef = null })
             </p>
           )
         }
-      </ul>,
+      </ul>
       {filtersToRender.length >= FILTERS_OPTIONS_LENGTH_LIMIT &&
         <button
           className="filters-show-more-btn link-colors"
