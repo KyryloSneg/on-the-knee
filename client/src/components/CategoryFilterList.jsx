@@ -90,22 +90,22 @@ const CategoryFilterList = observer(({ filter, variant, elemToFocusRef = null })
           initialFilters={deviceStore.filters[filter]}
           ref={elemToFocusRef}
         />
-        <ul 
-          className="filters" 
-          data-testid={testId} 
-          ref={filterListRef}
-        >
-          {filteredValues.length !== 0
-            ? (
-              filtersToRender
-            )
-            : (
-              <p className="empty-filters-msg">
-                We can't find such a filters
-              </p>
-            )
-          }
-        </ul>
+        {filteredValues.length !== 0
+          ? (
+            <ul
+              className="filters"
+              data-testid={testId}
+              ref={filterListRef}
+            >
+              {filtersToRender}
+            </ul>
+          )
+          : (
+            <p className="empty-filters-msg">
+              We can't find such a filters
+            </p>
+          )
+        }
         {filtersToRender.length >= FILTERS_OPTIONS_LENGTH_LIMIT &&
           <button
             className="filters-show-more-btn link-colors"
@@ -123,23 +123,22 @@ const CategoryFilterList = observer(({ filter, variant, elemToFocusRef = null })
 
   return (
     <div>
-      <ul
-        className="filters"
-        data-testid={testId}
-        key="filters-list"
-        ref={filterListRef}
-      >
-        {filteredValues.length !== 0
-          ? (
-            filtersToRender
-          )
-          : (
-            <p className="empty-filters-msg">
-              We can't find such a filters
-            </p>
-          )
-        }
-      </ul>
+      {filteredValues.length !== 0
+        ? (
+          <ul
+            className="filters"
+            data-testid={testId}
+            ref={filterListRef}
+          >
+            {filtersToRender}
+          </ul>
+        )
+        : (
+          <p className="empty-filters-msg">
+            We can't find such a filters
+          </p>
+        )
+      }
       {filtersToRender.length >= FILTERS_OPTIONS_LENGTH_LIMIT &&
         <button
           className="filters-show-more-btn link-colors"

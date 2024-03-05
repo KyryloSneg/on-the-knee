@@ -42,6 +42,7 @@
 .empty-filters-msg {
   text-align: center;
   font-size: 1.3rem;
+  padding: 6px 0;
 }
 
 .filters-show-more-btn {
