@@ -1,3 +1,5 @@
+import getIsVisibleMultipleWindows from "./getIsVisibleMultipleWindows";
+
 function setCategoriesMenuVisibility(isToShowMenu, app) {
   if (isToShowMenu) {
     app.headerRef?.current?.classList.add("closer-than-darkbg");
@@ -6,6 +8,8 @@ function setCategoriesMenuVisibility(isToShowMenu, app) {
   }
 
   app.setIsVisibleCategoriesMenu(isToShowMenu);
+  if (getIsVisibleMultipleWindows()) return;
+
   app.setDarkBgVisible(isToShowMenu);
 }
 
