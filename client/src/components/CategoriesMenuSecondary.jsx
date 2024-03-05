@@ -11,7 +11,8 @@ import { CATEGORIES_COL_LVL_THREE_LIMIT } from "../utils/consts";
 
 const CATEGORIES_COL_HEIGHT = 400;
 const COLUMNS_NUMBER = 3;
-const VERTICAL_COL_PADDING = 10;
+// 2 pixels to spare
+const VERTICAL_COL_PADDING = 16;
 
 const CATEGORY_NEST_LEVEL_2_HEIGHT = 23;
 const CATEGORY_NEST_LEVEL_3_HEIGHT = 17;
