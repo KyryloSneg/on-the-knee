@@ -24,7 +24,6 @@ function useInitialDataFetching() {
     // }
 
     deviceStore.setBrands(brands);
-    console.log(brands);
     deviceStore.setCategories(sortedCategories);
   }
 
