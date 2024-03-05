@@ -17,7 +17,6 @@ function getCategoryLinkTo(category, parentCategoryId = null, categories = null)
 
     let newUrl = href;
     for (let [name, value] of Object.entries(category.queryParams)) {
-      console.log(name, value);
       newUrl = URLActions.addParamValue(name, value, newUrl);
     }
 

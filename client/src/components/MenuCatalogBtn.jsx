@@ -15,7 +15,7 @@ const MenuCatalogBtn = () => {
   function onClick() {
     if (windowWidth >= WIDTH_TO_SHOW_CATEGORIES_MENU) {
       setCategoriesMenuVisibility(true, app);
-      setMenuVisibility(false, app);
+      setMenuVisibility(false, app, true);
     } else {
       setCategoriesModalVisibility(true, app);
     }
