@@ -8,8 +8,6 @@ function useCurrentPath() {
     return PUBLIC_ROUTES.map(route => ({ path: route.path }));
   }, []);
 
-  console.log(publicRoutes);
-
   const privateRoutes = useMemo(() => {
     return PRIVATE_ROUTES.map(route => ({ path: route.path }));
   }, []);

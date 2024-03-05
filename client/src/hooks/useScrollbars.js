@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { OverlayScrollbars } from "overlayscrollbars";
+import { OverlayScrollbars, ScrollbarsHidingPlugin, SizeObserverPlugin } from "overlayscrollbars";
 
 const config = {
   scrollbars: {
@@ -13,6 +13,10 @@ function useScrollbars(root, hasScroll = true) {
 
     if (root.current && hasScroll) {
       scrollbars = OverlayScrollbars(root.current, config);
+
+      // plugins to make it work in old browsers
+      scrollbars.plugin(ScrollbarsHidingPlugin);
+      scrollbars.plugin(SizeObserverPlugin);
     }
 
     return () => {
