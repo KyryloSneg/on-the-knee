@@ -1,7 +1,6 @@
 import { useContext, useEffect, useRef } from "react";
 import { Context } from "../Context";
 import { observer } from "mobx-react-lite";
-import useDeviceSectionFetching from "../hooks/useDeviceSectionFetching";
 import getTotalPages from "../utils/getTotalPages";
 import DeviceList from "./DeviceList";
 import "./styles/DeviceSection.css";
@@ -11,7 +10,7 @@ import { Spinner } from "react-bootstrap";
 import isCanLoadMoreContent from "../utils/isCanLoadMoreContent";
 import useGettingPaginationParams from "../hooks/useGettingPaginationParams";
 
-const DeviceSection = observer(() => {
+const DeviceSection = observer(({ isLoading, retryDevicesFetch, error }) => {
   const { app, deviceStore } = useContext(Context);
   const deviceSectionRef = useRef(null);
   const totalPages = getTotalPages(deviceStore.totalCount, deviceStore.limit);
@@ -21,9 +20,6 @@ const DeviceSection = observer(() => {
     (deviceStore.page - 1) * deviceStore._limit
   );
 
-  const [isLoading, error, fetching] = useDeviceSectionFetching(deviceStore, app);
-  if (error) console.log(error);
-
   useEffect(() => {
     app.setDeviceSectionRef(deviceSectionRef);
   }, [app, deviceStore.devices]);
@@ -31,7 +27,7 @@ const DeviceSection = observer(() => {
 
   async function onFetchRetry() {
     // retrying latest fetch
-    await fetching();
+    await retryDevicesFetch();
   }
 
   return (
