@@ -16,17 +16,17 @@
 }
 
 .page-pagination-link:hover,
-.page-pagination-link:focus,
+.page-pagination-link:focus-visible,
 .page-pagination-link:active {
   color: #004cf1;
 }
 
 .page-pagination-link.active,
-.page-pagination-link:focus {
+.page-pagination-link:focus-visible {
   border: 2px solid #0061e0;
 }
 
-.page-pagination-link:focus {
+.page-pagination-link:focus-visible {
   font-weight: bold;
 }
 

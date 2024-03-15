@@ -18,6 +18,7 @@ function useFetching(callback, settingIsLoadingDelay = 0, finallyCallback = null
         setIsLoading(false); 
       }, settingIsLoadingDelay);
     }
+    // eslint-disable-next-line
   }, []);
 
   return [fetching, isLoading, error]

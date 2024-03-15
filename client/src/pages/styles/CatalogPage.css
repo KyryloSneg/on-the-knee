@@ -17,15 +17,64 @@
   margin-bottom: 10px;
 }
 
+.wrong-search-query-p, .spell-checked-query-p {
+  padding: 0 14px;
+}
+
+.wrong-search-query-p {
+  font-size: 1.5rem;
+  padding: 14px 8px;
+  display: grid;
+  justify-content: center;
+  gap: 3px;
+}
+
+.wrong-search-query-p > span:nth-of-type(2) {
+  font-size: 1rem;
+  color: rgb(90, 90, 90);
+}
+
+.spell-checked-query-p {
+  padding: 14px 10px;
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+
+.wrong-search-query-span,  .spell-checked-query-p > span {
+  color: #3c3cd5;
+}
+
+.spell-checked-p-placeholder {
+  height: 25px;
+}
+
+@media screen and (min-width: 460px) {
+  .wrong-search-query-p {
+    font-size: 2.1rem;
+  }
+
+  .wrong-search-query-p > span:nth-of-type(2) {
+    font-size: 1.6rem; 
+  }
+}
+
 @media screen and (min-width: 590px) {
   .sort-and-filter-bar-wrap {
     grid-template-columns: 1fr auto;
+  }
+
+  .spell-checked-query-p {
+    font-size: 1.8rem;
   }
 }
 
 @media screen and (min-width: 960px) {
   #wrapper {
     grid-template-columns: 1fr 3fr;
+  }
+
+  .spell-checked-query-p {
+    font-size: 2.1rem;
   }
 }
 
