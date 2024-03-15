@@ -77,7 +77,7 @@ export const mockSearchResults = {
 };
 
 // params that don't appear in used filters like a sort filter
-export const SPECIAL_QUERY_PARAMS = ["sort", "page", "pagesToFetch"];
+export const SPECIAL_QUERY_PARAMS = ["sort", "page", "pagesToFetch", "text"];
 
 // filters that have unique filtration logic
 export const SPECIAL_TO_HANDLE_FILTERS = ["sort", "price", "text", "stock", "seller", "brand"];

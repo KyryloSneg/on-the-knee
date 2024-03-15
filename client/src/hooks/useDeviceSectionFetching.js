@@ -14,10 +14,13 @@ import getDeviceFiltersObj from "../utils/getDeviceFiltersObj";
 import filterDevicesWithCommonFilters from "../utils/filterDevicesWithCommonFilters";
 import sortDevicesByPrice from "../utils/sortDevicesByPrice";
 import { getDevices } from "../http/DeviceApi";
+import spellCheck from "../http/SaplingAPI";
+import useNavigateToEncodedURL from "./useNavigateToEncodedURL";
 
 // query params without pagination ones
-function useDeviceSectionFetching(deviceStore, app) {
+function useDeviceSectionFetching(deviceStore, app, type, setIsFoundDevicesByQuery = null, setSpellCheckedQuery = null) {
   const location = useLocation();
+  const navigate = useNavigateToEncodedURL();
   
   const prevUsedFilters = useRef(deviceStore.usedFilters);
   const isInitialFetch = !deviceStore.devices.length || deviceStore.usedFilters !== prevUsedFilters.current
@@ -38,8 +41,10 @@ function useDeviceSectionFetching(deviceStore, app) {
     const toFilterBySeller = !!deviceStore.usedFilters["seller"]?.length;
     const toFilterByBrand = !!deviceStore.usedFilters["brand"]?.length;
 
+    const searchQuery = URLActions.getParamValue("text");
     const sortFilter = URLActions.getParamValue("sort");
 
+    // device's name_like="check spelled user's search query" param
     let fetchStringQueryParams = ``;
     const splittedSortFilter = sortFilter?.split(",");
 
@@ -49,7 +54,36 @@ function useDeviceSectionFetching(deviceStore, app) {
       fetchStringQueryParams = `_sort=rating&_order=${splittedSortFilter[0]}`;
     }
 
-    const { devices } = await getDevices(fetchStringQueryParams);
+    if (type === "search") fetchStringQueryParams += `&name_like=${searchQuery}`.replaceAll(`"`, "");
+    
+    let spellCheckedSearchQuery = searchQuery;
+    let { devices } = await getDevices(fetchStringQueryParams);
+
+    if (!devices.length && type === "search") {
+      spellCheckedSearchQuery = await spellCheck(searchQuery);
+
+      const fetchParams = fetchStringQueryParams.split("&");
+      fetchParams[2] = `name_like=${spellCheckedSearchQuery}`.replaceAll(`"`, "");
+
+      fetchStringQueryParams = fetchParams.join("&");
+      devices = (await getDevices(fetchStringQueryParams)).devices || [];
+    }
+
+    if (type === "search") {
+      if (devices.length && !!spellCheckedSearchQuery && spellCheckedSearchQuery !== searchQuery) {
+        const newUrl = URLActions.setNewParam("text", spellCheckedSearchQuery);
+
+        const basename = process.env.REACT_APP_CLIENT_URL;
+        navigate(newUrl.replace(basename, ""), { replace: true });
+      }
+      setIsFoundDevicesByQuery(!!devices.length);
+    }
+
+    if (!!spellCheckedSearchQuery && spellCheckedSearchQuery !== searchQuery) {
+      setSpellCheckedQuery(spellCheckedSearchQuery);
+    } else {
+      setSpellCheckedQuery(searchQuery);
+    }
 
     const stocks = await getStocks();
     const sales = await getSales();

@@ -14,20 +14,13 @@ function useInitialDataFetching() {
 
     // sorting categories by id
     const sortedCategories = ArrayActions.sortNumberObjectArray(categories, "id");
-    // let categories = {};
-    // for (let category of categoriesArray) {
-    //   if (categories[category.nestLevel]) {
-    //     categories[category.nestLevel].push(category);
-    //   } else {
-    //     categories[category.nestLevel] = [category];
-    //   }
-    // }
 
     deviceStore.setBrands(brands);
     deviceStore.setCategories(sortedCategories);
   }
 
   const [fetching, isLoading, error] = useFetching(fetchData);
+
   useEffect(() => {
     fetching();
   }, [fetching]);
