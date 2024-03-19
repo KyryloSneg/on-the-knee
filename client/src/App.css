@@ -14,6 +14,10 @@ body {
   margin: 0;
 }
 
+main {
+  min-height: 100vh;
+}
+
 /* implementing the scroll blocking like this, so the scroll bar doesn't disappears */
 .global-blocked-scroll {
   position: fixed;

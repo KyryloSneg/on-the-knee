@@ -31,7 +31,7 @@ const DeviceSection = observer(({ isLoading, retryDevicesFetch, error }) => {
   }
 
   return (
-    <main ref={deviceSectionRef}>
+    <main className="device-section-main" ref={deviceSectionRef}>
       {/* <DevicePageList /> */}
       {deviceStore.devices.length
         ? (
