@@ -127,7 +127,7 @@ const App = observer(() => {
           <CategoriesMenu navCategoryBtnRef={navCategoryBtnRef} />
         }
       </header>
-      <Outlet />  
+      <Outlet />
       <MyFooter />
     </div>
   );

@@ -86,6 +86,7 @@ export const SPECIAL_TO_HANDLE_FILTERS = ["sort", "price", "text", "stock", "sel
 export const FILTERS_IN_SPECIAL_COMPONENTS = ["sort", "price", "text"];
 
 // renavigate user to categories page if subcategories amount >= MIN_CATEGORIES_LENGTH_TO_RENAVIGATE
+// TODO: change to 12
 export const MIN_CATEGORIES_LENGTH_TO_RENAVIGATE = 8;
 
 // we use the const below on one of the columns overflow
