@@ -11,7 +11,7 @@ import CatalogAside from "../components/CatalogAside";
 import useDeviceSectionFetching from "../hooks/useDeviceSectionFetching";
 import URLActions from "../utils/URLActions";
 
-const POSSIBLE_TYPES = ["category", "brand", "search"];
+const POSSIBLE_TYPES = ["category", "search"];
 
 const CatalogPage = ({ type }) => {
   if (!POSSIBLE_TYPES.includes(type)) throw Error("type of Catalog Page is not defined");

@@ -5,8 +5,10 @@ import { Context } from "../Context";
 import setMenuVisibility from "../utils/setMenuVisibility";
 import setFiltersSidebarVisibility from "../utils/setFiltersSidebarVisibility";
 import setUsedFiltersBarVisibility from "../utils/setUsedFiltersBarVisibility";
+import { useLocation } from "react-router-dom";
 
 function useClosingAllWindows() {
+  const location = useLocation();
   const { app } = useContext(Context);
 
   // TODO: close every new modal window / sidebar / maybe even new menu that causes dark bg appearing
@@ -16,7 +18,10 @@ function useClosingAllWindows() {
     setMenuVisibility(false, app);
     setFiltersSidebarVisibility(false, app);
     setUsedFiltersBarVisibility(false, app);
-  }, [app]);
+
+    app.setDarkBgVisible(false, app);
+    app.setIsBlockedScroll(false, app);
+  }, [app, location]);
 }
 
 export default useClosingAllWindows;
