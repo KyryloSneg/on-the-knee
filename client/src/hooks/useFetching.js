@@ -1,14 +1,16 @@
 import { useCallback, useState } from "react";
 
 function useFetching(callback, settingIsLoadingDelay = 0, finallyCallback = null) {
+  const [fetchResult, setFetchResult] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
   const fetching = useCallback(async (...args) => {
     try {
-      setIsLoading(true)
-      await callback(...args)
+      setIsLoading(true);
+      const result = await callback(...args);
       // if everything is ok and we fetched some data there's no error
+      setFetchResult(result);
       setError('');
     } catch(e) {
       setError(e.message);
@@ -21,7 +23,7 @@ function useFetching(callback, settingIsLoadingDelay = 0, finallyCallback = null
     // eslint-disable-next-line
   }, []);
 
-  return [fetching, isLoading, error]
+  return [fetching, isLoading, error, fetchResult]
 }
 
 export default useFetching;
