@@ -62,13 +62,15 @@ const CatalogPage = observer(({ type }) => {
   if (!Object.keys(deviceStore.filters).length) return <main />;
   if (!isFoundDevicesByQuery && type === "search") {
     return (
-      <div className="display-grid" ref={pageRef}>
-        {/* amazon copy + paste */}
-        <p className="wrong-search-query-p">
-          <span>No results for «<span className="wrong-search-query-span">{spellCheckedQuery}</span>».</span>
-          <span>Try checking your spelling or use more general terms</span>
-        </p>
-      </div>
+      <main>
+        <div className="display-grid" ref={pageRef}>
+          {/* amazon copy + paste */}
+          <p className="wrong-search-query-p">
+            <span>No results for «<span className="wrong-search-query-span">{spellCheckedQuery}</span>».</span>
+            <span>Try checking your spelling or use more general terms</span>
+          </p>
+        </div>
+      </main>
     );
   }
 
@@ -89,7 +91,7 @@ const CatalogPage = observer(({ type }) => {
           className="device-sorting-filter"
         />
       </div>
-      <div id="wrapper"> 
+      <div id="wrapper">
         <CatalogAside key={"aside"} />
         <DeviceSection isLoading={isLoading} retryDevicesFetch={deviceFetching} error={error} key={"devSection"} />
       </div>
