@@ -1,8 +1,10 @@
 footer {
+  position: relative;
   padding: 10px;
   background-color: #333333;
   color: white;
   font-size: 1rem;
+  z-index: 15;
 }
 
 footer {

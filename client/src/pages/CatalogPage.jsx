@@ -10,13 +10,18 @@ import useClosingAllWindows from "../hooks/useClosingAllWindows";
 import CatalogAside from "../components/CatalogAside";
 import useDeviceSectionFetching from "../hooks/useDeviceSectionFetching";
 import URLActions from "../utils/URLActions";
+import { observer } from "mobx-react-lite";
+import useNavigateToEncodedURL from "../hooks/useNavigateToEncodedURL";
+import { useLocation } from "react-router-dom";
 
 const POSSIBLE_TYPES = ["category", "search"];
 
-const CatalogPage = ({ type }) => {
+const CatalogPage = observer(({ type }) => {
   if (!POSSIBLE_TYPES.includes(type)) throw Error("type of Catalog Page is not defined");
 
-  const { deviceStore, app } = useContext(Context);
+  const location = useLocation();
+  const navigate = useNavigateToEncodedURL();
+  const { deviceStore, app, isTest } = useContext(Context);
   const pageRef = useRef(null);
   const windowWidth = useWindowWidth();
   const [isFoundDevicesByQuery, setIsFoundDevicesByQuery] = useState(true);
@@ -26,6 +31,21 @@ const CatalogPage = ({ type }) => {
     app.setPageRef(pageRef);
   }, [app, windowWidth]);
 
+  useEffect(() => {
+    const { usedFilters, url } = URLActions.getUsedFilters(deviceStore.filters);
+    deviceStore.setUsedFilters(usedFilters);
+
+    // if the url changed (for example if there's some not existing key or value)
+    // we change it to normal one without redundant query params
+
+    // router from the tests seems to not work with navigate() function,
+    // so it's better to skip the block below
+    if (location.pathname !== url && !isTest) {
+      const basename = process.env.REACT_APP_CLIENT_URL;
+      navigate(url.replace(basename, ""), { replace: true });
+    }
+
+  }, [location.search, deviceStore, deviceStore.filters, deviceStore.filters, location.pathname, navigate, isTest]);
   const [isLoading, error, deviceFetching] = useDeviceSectionFetching(deviceStore, app, type, setIsFoundDevicesByQuery, setSpellCheckedQuery);
   if (error) console.log(error);
 
@@ -38,6 +58,8 @@ const CatalogPage = ({ type }) => {
   }, [deviceStore, windowWidth]);
 
   useClosingAllWindows();
+
+  if (!Object.keys(deviceStore.filters).length) return <main />;
   if (!isFoundDevicesByQuery && type === "search") {
     return (
       <div className="display-grid" ref={pageRef}>
@@ -67,12 +89,12 @@ const CatalogPage = ({ type }) => {
           className="device-sorting-filter"
         />
       </div>
-      <div id="wrapper">
+      <div id="wrapper"> 
         <CatalogAside key={"aside"} />
         <DeviceSection isLoading={isLoading} retryDevicesFetch={deviceFetching} error={error} key={"devSection"} />
       </div>
     </div>
   );
-};
+});
 
 export default CatalogPage;
