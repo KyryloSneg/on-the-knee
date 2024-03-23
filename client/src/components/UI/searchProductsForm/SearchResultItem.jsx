@@ -43,7 +43,7 @@ const SearchResultItem = ({ type = "default", value, id, active = false, onFocus
       data-testid={`${isBackupValueOption ? "backup" : (id || null)}-searchResultHistory`}
     >
       <Link 
-        // change the route to the catalog one with query params
+        // TODO: change the route to the catalog one with query params
         to={"/catalog/some_route"}
         tabIndex={tabIndex}
         onFocus={onFocus}

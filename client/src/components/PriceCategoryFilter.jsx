@@ -31,7 +31,7 @@ const PriceCategoryFilter = observer(() => {
 
     const currentPrice = URLActions.getParamValue("price");
     if (currentPrice === `${minPriceValue}-${maxPriceValue}`
-      || (minPriceValue === deviceStore.initialMinPrice && maxPriceValue === deviceStore.initialMaxPrice)) return;
+      || (minPriceValue === deviceStore.initialMinPrice && maxPriceValue === deviceStore.initialMaxPrice && !currentPrice)) return;
 
     const nextUrl = URLActions.setNewParam("price", `${minPriceValue}-${maxPriceValue}`);
     const basename = process.env.REACT_APP_CLIENT_URL;

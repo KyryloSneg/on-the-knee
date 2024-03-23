@@ -4,37 +4,23 @@ import { SPECIAL_QUERY_PARAMS, SPECIAL_TO_HANDLE_FILTERS } from "./consts";
 
 export default class URLActions {
 
-  // static deleteEmptyParamValues(searchParams, paramPairs) {
-
-  //   for (let [key, value] of paramPairs) {
-  //     if (!!value.trim()) continue;
-  //     searchParams.delete(key);
-  //   }
-
-  // }
-
   static generateNewURL(url, searchParams) {
     const urlWithoutParams = url.origin + url.pathname;
     let newUrl;
 
+    // do not change ANYTHING related to commas, spaces and underslashes. please.
     if (searchParams.toString()) {
-      // replacing percentage-decoded commas with normal ones to make the URL less ugly
-      let queryParams = searchParams.toString().replaceAll("%2C", ",").replaceAll("%3B", ";");
-      // replacing spaces with underlines
-      queryParams = queryParams.replaceAll("%20", "__");
-      queryParams = queryParams.replaceAll("+", "__");
-
+      let queryParams = searchParams.toString().replaceAll("%2C", ",");
       newUrl = `${urlWithoutParams}?${queryParams}`;
     } else {
       newUrl = urlWithoutParams;
     }
 
-    return decodeURI(encodeURI(newUrl));
+    return newUrl.replaceAll("%20", "_").replaceAll("+", "_");
   }
 
   static addParamValue(name, value, href = window.location.href) {
-    const decodedURL = decodeURIComponent(href);
-    const url = new URL(decodedURL);
+    const url = new URL(href);
     const searchParams = new URLSearchParams(url.search);
     const isNameAlreadyExists = searchParams.has(name);
 
@@ -43,17 +29,18 @@ export default class URLActions {
       const paramPairs = Array.from(url.searchParams.entries());
       for (let [key, pairValue] of paramPairs) {
         if (key !== name) continue;
-        // if a value was "apple" and new value is "orange" we'll get "apple;;orange" param value
+        // if a value was "apple" and new value is "orange" we'll get "apple,orange" param value
         // (do not forget about auto encoding url)
-        const valueArray = [...pairValue.split(";;"), value];
+        const valueArray = [...pairValue.split(","), value.replaceAll("_", "%5F")];
         const sortedValueArray = ArrayActions.sortStringArray(valueArray);
-        const newValue = sortedValueArray.join(";;");
+        const encodedSortedValueArray = sortedValueArray.map(val => val.replaceAll(",", "%2C"))
+        const newValue = encodedSortedValueArray.join(",");
 
         searchParams.set(key, newValue)
       }
 
     } else {
-      searchParams.set(name, value);
+      searchParams.set(name, (typeof value === "string" ? value.replaceAll(",", "%2C").replaceAll("_", "%5F") : value));
       searchParams.sort();
     }
 
@@ -62,21 +49,22 @@ export default class URLActions {
   }
 
   static deleteParamValue(name, value, href = window.location.href) {
-    const decodedURL = decodeURIComponent(href);
-    const url = new URL(decodedURL);
+    const url = new URL(href);
     const searchParams = new URLSearchParams(url.search);
 
     // replacing spaces in value with underlines to match it with url param values
-    value = value.replaceAll(" ", "__");
+    value = value.replaceAll("_", "%5F");
+    value = value.replaceAll(" ", "_");
     // almost redundant but i'll keep it here to reduce possible weird bugs in future
-    value = value.replaceAll("+", "__");
+    value = value.replaceAll("+", "_");
+    value = value.replaceAll(",", "%2C");
 
-    const isMultipleValues = searchParams.get(name)?.split(";;").length > 1;
+    const isMultipleValues = searchParams.get(name)?.split(",").length > 1;
     if (isMultipleValues) {
       const paramValue = searchParams.get(name);
-      const strToReplace = paramValue.startsWith(value) ? `${value};;` : `;;${value}`;
+      const strToReplace = paramValue.startsWith(value) ? `${value},` : `,${value}`;
 
-      // if a value was "apple;;orange" and value to delete is "orange" we'll get "apple" param value
+      // if a value was "apple,orange" and value to delete is "orange" we'll get "apple" param value
       const newValue = paramValue.replace(strToReplace, "");
       searchParams.set(name, newValue);
 
@@ -89,8 +77,7 @@ export default class URLActions {
   }
 
   static deleteAllDefaultParamValues(href = window.location.href) {
-    const decodedURL = decodeURIComponent(href);
-    const url = new URL(decodedURL);
+    const url = new URL(href);
     const searchParams = new URLSearchParams(url.search);
     const paramPairs = Array.from(url.searchParams.entries());
 
@@ -104,8 +91,8 @@ export default class URLActions {
   }
 
   static setNewParam(name, value, href = window.location.href) {
-    const decodedURL = decodeURIComponent(href);
-    const url = new URL(decodedURL);
+    // const decodedURL = decodeURIComponent(href);
+    const url = new URL(href);
     const searchParams = new URLSearchParams(url.search);
 
     searchParams.set(name, value);
@@ -125,8 +112,7 @@ export default class URLActions {
   }
 
   static getUsedFilters(filters, href = window.location.href) {
-    const decodedURL = decodeURIComponent(href);
-    const url = new URL(decodedURL);
+    const url = new URL(href);
     const searchParams = new URLSearchParams(url.search);
 
     let usedFilters = {};
@@ -134,8 +120,8 @@ export default class URLActions {
       if (SPECIAL_QUERY_PARAMS.includes(key)) continue;
 
       let filterValues = [];
-      for (let val of value.split(";;")) {
-        filterValues.push(val.replaceAll("__", " "));
+      for (let val of value.split(",")) {
+        filterValues.push(val.replaceAll("_", " ").replaceAll("%5F", "_").replaceAll("%255F", "_").replaceAll("%252C", ",").replaceAll("%2C", ","));
       }
 
       usedFilters[key] = filterValues;
@@ -146,8 +132,7 @@ export default class URLActions {
   }
 
   static deleteAllRedundantFilters(filters, usedFilters, href = window.location.href) {
-    const decodedURL = decodeURIComponent(href);
-    const url = new URL(decodedURL);
+    const url = new URL(href);
     const searchParams = new URLSearchParams(url.search);
 
     if (Object.keys(filters).length) {
@@ -189,7 +174,7 @@ export default class URLActions {
           searchParams.delete(key);
 
           // making a new "value" for it without redundant filters
-          const newValue = sortedUniqueValues.join(";;");
+          const newValue = sortedUniqueValues.join(",");
           searchParams.set(key, newValue);
 
           usedFilters[key] = sortedUniqueValues;
