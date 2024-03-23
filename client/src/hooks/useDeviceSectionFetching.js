@@ -27,6 +27,8 @@ function useDeviceSectionFetching(deviceStore, app, type, setIsFoundDevicesByQue
   
   async function fetchingCallback() {
     if (isInitialFetch) {
+      deviceStore.setDevices([]);
+      deviceStore.setFilters({});
       app.setIsGlobalLoading(true);
     }
     
@@ -190,6 +192,7 @@ function useDeviceSectionFetching(deviceStore, app, type, setIsFoundDevicesByQue
     deviceStore.limit,
     deviceStore.page, 
     deviceStore.pagesToFetch,
+    // deviceStore.usedFilters,
     // if param queries have changed, re-fetch devices
     location.search,
   ]);
