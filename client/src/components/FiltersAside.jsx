@@ -4,18 +4,12 @@ import "./styles/FiltersAside.css";
 import FilterCategories from "./FilterCategories";
 import { useContext, useEffect, useRef } from "react";
 import { Context } from "../Context";
-import { useLocation } from "react-router-dom";
-import URLActions from "../utils/URLActions";
 import SkipToNextPageContent from "./UI/skipToNextPageContent/SkipToNextPageContent";
 import getAllFocusableElements from "../utils/getAllFocusableElements";
-import useNavigateToEncodedURL from "../hooks/useNavigateToEncodedURL";
 
 const FiltersAside = observer(() => {
-  const { deviceStore, app, isTest } = useContext(Context);
+  const { deviceStore, app } = useContext(Context);
   const asideRef = useRef(null);
-
-  const location = useLocation();
-  const navigate = useNavigateToEncodedURL();
 
   let deviceSectionElemToFocus;
   let asideElemToFocus;
@@ -33,22 +27,6 @@ const FiltersAside = observer(() => {
   useEffect(() => {
     app.setFiltersAsideRef(asideRef);
   }, [app, deviceStore.filters, deviceStore.usedFilters]);
-
-  useEffect(() => {
-    const { usedFilters, url } = URLActions.getUsedFilters(deviceStore.filters);
-    deviceStore.setUsedFilters(usedFilters);
-
-    // if the url changed (for example if there's some not existing key or value)
-    // we change it to normal one without redundant query params
-
-    // router from the tests seems to not work with navigate() function,
-    // so it's better to skip the block below
-    if (location.pathname !== url && !isTest) {
-      const basename = process.env.REACT_APP_CLIENT_URL;
-      navigate(url.replace(basename, ""), { replace: true });
-    }
-
-  }, [location.search, deviceStore, deviceStore.filters, deviceStore.filters, location.pathname, navigate, isTest]);
 
   return (
     <aside className="filters-aside" ref={asideRef}>

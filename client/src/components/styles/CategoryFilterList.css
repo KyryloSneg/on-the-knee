@@ -37,6 +37,7 @@
   padding: 1px 6px;
   font-size: 1.5rem;
   justify-items: start;
+  overflow: hidden;
 }
 
 .empty-filters-msg {
