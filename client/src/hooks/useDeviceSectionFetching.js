@@ -72,6 +72,24 @@ function useDeviceSectionFetching(deviceStore, app, type, setIsFoundDevicesByQue
     }
 
     if (type === "search") {
+      if (!devices.length) {
+        devices = (await getDevices()).devices;
+        // it looks ugly as hell
+        // device found by its combination's sku or deviceCode
+        let foundDevice = devices.find(dev => 
+          !!dev["device-combinations"].find(combo => combo.sku === searchQuery || combo.deviceCode === +searchQuery)
+        ) || null;
+        
+        if (foundDevice) {
+          const combination = foundDevice["device-combinations"].find(combo => combo.sku === searchQuery || combo.deviceCode === +searchQuery);
+          combination.default = true;
+          foundDevice["device-combinations"] = [combination];
+        }
+
+        devices = foundDevice ? [foundDevice] : [];
+        console.log(devices);
+      }
+
       if (devices.length && !!spellCheckedSearchQuery && spellCheckedSearchQuery !== searchQuery) {
         const newUrl = URLActions.setNewParam("text", spellCheckedSearchQuery);
 
