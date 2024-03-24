@@ -21,7 +21,7 @@ module.exports = (categoryObjects, categoriesLengthOffset = 0) => {
 			if (categories.length >= MAIN_CATEGORIES_AMOUNT && categories.length < startNestLevelThreeNum) {
 				parentId = faker.number.int({ min: 1, max: MAIN_CATEGORIES_AMOUNT });
 			} else if (categories.length >= startNestLevelThreeNum) {
-				parentId = faker.number.int({ min: startNestLevelThreeNum - 1, max: categories.length });
+				parentId = faker.number.int({ min: MAIN_CATEGORIES_AMOUNT + 1, max: startNestLevelThreeNum - 1 });
 			}
 		}
 
