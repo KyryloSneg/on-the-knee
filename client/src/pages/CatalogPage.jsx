@@ -12,7 +12,9 @@ import useDeviceSectionFetching from "../hooks/useDeviceSectionFetching";
 import URLActions from "../utils/URLActions";
 import { observer } from "mobx-react-lite";
 import useNavigateToEncodedURL from "../hooks/useNavigateToEncodedURL";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
+import ChildCategoriesBar from "../components/ChildCategoriesBar";
+import CustomScrollbar from "../components/UI/customScrollbar/CustomScrollbar";
 
 const POSSIBLE_TYPES = ["category", "search"];
 
@@ -20,12 +22,17 @@ const CatalogPage = observer(({ type }) => {
   if (!POSSIBLE_TYPES.includes(type)) throw Error("type of Catalog Page is not defined");
 
   const location = useLocation();
+  const { categoryIdSlug } = useParams();
   const navigate = useNavigateToEncodedURL();
   const { deviceStore, app, isTest } = useContext(Context);
   const pageRef = useRef(null);
   const windowWidth = useWindowWidth();
   const [isFoundDevicesByQuery, setIsFoundDevicesByQuery] = useState(true);
   const [spellCheckedQuery, setSpellCheckedQuery] = useState(type === "search" ? URLActions.getParamValue("text") : null);
+
+  const categoryId = +categoryIdSlug?.split("-")[0] || undefined;
+  const category = deviceStore.categories.find(cat => cat.id === categoryId);
+  const childCategories = deviceStore.categories.filter(cat => !cat.isVariation && cat.parentCategoryId === categoryId);
 
   useEffect(() => {
     app.setPageRef(pageRef);
@@ -80,6 +87,7 @@ const CatalogPage = observer(({ type }) => {
         ? <p className="spell-checked-query-p">Devices by query «<span>{spellCheckedQuery}</span>»</p>
         : (type === "search") && <div className="spell-checked-p-placeholder" />
       }
+      {type === "category" && <h2 className="category-name-heading">{category.name}</h2>}
       <div className="sort-and-filter-bar-wrap">
         {windowWidth < WIDTH_TO_SHOW_ASIDE &&
           <TopFilterBar />
@@ -91,6 +99,13 @@ const CatalogPage = observer(({ type }) => {
           className="device-sorting-filter"
         />
       </div>
+      {(type === "category" && !!childCategories.length) && 
+        <CustomScrollbar 
+          children={<ChildCategoriesBar 
+          childCategories={childCategories} />} 
+          className="child-categories-scrollbar" 
+        />
+      }
       <div id="wrapper">
         <CatalogAside key={"aside"} />
         <DeviceSection isLoading={isLoading} retryDevicesFetch={deviceFetching} error={error} key={"devSection"} />

@@ -185,8 +185,8 @@ const POSSIBLE_SCHEDULE_TIME_RANGES = {
 };
 
 const POSSIBLE_ORDER_STATUSES = ["Cancelled", "Pending", "Paid", "Confirmed", "Done"];
-const MAIN_CATEGORIES_AMOUNT = 3;
-const START_CATEGORIES_NEST_3_AMOUNT = 20;
+const MAIN_CATEGORIES_AMOUNT = 2;
+const START_CATEGORIES_NEST_3_AMOUNT = 10;
 
 const LOGO_HEIGHT = 34;
 const LOGO_WIDTH = 34;
