@@ -4,7 +4,7 @@ import { getStocks } from "../http/StocksAPI";
 import { getSaleTypeNames, getSales } from "../http/SalesAPI";
 import useFetching from "./useFetching";
 import { SPECIAL_TO_HANDLE_FILTERS } from "../utils/consts";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import DeviceComboActions from "../utils/DeviceComboActions";
 import { getSellers } from "../http/SellersAPI";
 import URLActions from "../utils/URLActions";
@@ -16,10 +16,12 @@ import sortDevicesByPrice from "../utils/sortDevicesByPrice";
 import { getDevices } from "../http/DeviceApi";
 import spellCheck from "../http/SaplingAPI";
 import useNavigateToEncodedURL from "./useNavigateToEncodedURL";
+import getDescendantCategories from "../utils/getDescendantCategories";
 
 // query params without pagination ones
 function useDeviceSectionFetching(deviceStore, app, type, setIsFoundDevicesByQuery = null, setSpellCheckedQuery = null) {
   const location = useLocation();
+  const { categoryIdSlug } = useParams();
   const navigate = useNavigateToEncodedURL();
   
   const prevUsedFilters = useRef(deviceStore.usedFilters);
@@ -81,13 +83,13 @@ function useDeviceSectionFetching(deviceStore, app, type, setIsFoundDevicesByQue
         ) || null;
         
         if (foundDevice) {
-          const combination = foundDevice["device-combinations"].find(combo => combo.sku === searchQuery || combo.deviceCode === +searchQuery);
+          const combination = foundDevice["device-combinations"]
+            .find(combo => combo.sku === searchQuery || combo.deviceCode === +searchQuery);
           combination.default = true;
           foundDevice["device-combinations"] = [combination];
         }
 
         devices = foundDevice ? [foundDevice] : [];
-        console.log(devices);
       }
 
       if (devices.length && !!spellCheckedSearchQuery && spellCheckedSearchQuery !== searchQuery) {
@@ -103,6 +105,14 @@ function useDeviceSectionFetching(deviceStore, app, type, setIsFoundDevicesByQue
       setSpellCheckedQuery(spellCheckedSearchQuery);
     } else {
       setSpellCheckedQuery(searchQuery);
+    }
+
+    if (type === "category") {
+      const categoryId = +categoryIdSlug?.split("-")[0];
+      let descendantCategories = getDescendantCategories(categoryId, deviceStore.categories);
+      descendantCategories.push(categoryId);
+
+      devices = devices.filter(dev => descendantCategories.includes(dev.categoryId));
     }
 
     const stocks = await getStocks();
