@@ -26,12 +26,12 @@ function getCategoryLinkTo(category, parentCategoryId = null, categories = null)
       newUrl = URLActions.addParamValue(name, value, newUrl);
     }
 
-    newUrl = URLActions.addParamValue("page", 1, newUrl);
-    newUrl = URLActions.addParamValue("pagesToFetch", 1, newUrl);
+    newUrl = URLActions.setNewParam("page", "1", newUrl);
+    newUrl = URLActions.setNewParam("pagesToFetch", "1", newUrl);
 
     to = encodeUrl(newUrl.replace(basename, ""));
   } else {
-    to = CATEGORY_CATALOG_ROUTE + `${category.id}-${category.slug}`;
+    to = CATEGORY_CATALOG_ROUTE + `${category.id}-${category.slug}?page=1&pagesToFetch=1`;
   }
   
   return to;
