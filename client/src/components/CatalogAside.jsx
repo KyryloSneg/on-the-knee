@@ -10,7 +10,10 @@ const CatalogAside = observer(() => {
 
   return (
     <div className="filters-aside-wrapper">
-      {(!!Object.keys(deviceStore.filters).length && !!deviceStore.devices.length) && <CustomScrollbar children={<FiltersAside />} className="filters-aside-scroll" />}
+      {!!Object.keys(deviceStore.filters).length
+        ? <CustomScrollbar children={<FiltersAside />} className="filters-aside-scroll" />
+        : <div style={{ minWidth: "320px" }} />
+      }
     </div>
   );
 });
