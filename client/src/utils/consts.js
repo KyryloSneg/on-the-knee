@@ -95,8 +95,6 @@ export const CATEGORIES_COL_LVL_THREE_LIMIT = 8;
 // in production build the values should be greater than current ones
 export const FILTERS_OPTIONS_LENGTH_LIMIT = 6;
 export const DEVICE_ITEM_INFO_AMOUNT_LIMIT = 6;
-export const DEVICE_ITEMS_MOBILE_LIMIT = 30;
-export const DEVICE_ITEMS_DESKTOP_LIMIT = 60;
 
 // unfortunately we can't use consts in css, so on changing the values below
 // we must change it in css manually

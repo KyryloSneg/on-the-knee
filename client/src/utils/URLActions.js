@@ -31,9 +31,9 @@ export default class URLActions {
         if (key !== name) continue;
         // if a value was "apple" and new value is "orange" we'll get "apple,orange" param value
         // (do not forget about auto encoding url)
-        const valueArray = [...pairValue.split(","), value.replaceAll("_", "%5F")];
+        const valueArray = [...pairValue.split(","), (value?.replaceAll("_", "%5F") || value)];
         const sortedValueArray = ArrayActions.sortStringArray(valueArray);
-        const encodedSortedValueArray = sortedValueArray.map(val => val.replaceAll(",", "%2C"))
+        const encodedSortedValueArray = sortedValueArray.map(val => (val?.replaceAll(",", "%2C") || value))
         const newValue = encodedSortedValueArray.join(",");
 
         searchParams.set(key, newValue)
