@@ -3,7 +3,7 @@ import TopFilterBar from "../components/TopFilterBar";
 import "./styles/CatalogPage.css";
 import useWindowWidth from "../hooks/useWindowWidth";
 import DeviceSection from "../components/DeviceSection";
-import { DEVICE_ITEMS_DESKTOP_LIMIT, DEVICE_ITEMS_MOBILE_LIMIT, WIDTH_TO_SHOW_ASIDE, sortingOptions } from "../utils/consts";
+import { WIDTH_TO_SHOW_ASIDE, sortingOptions } from "../utils/consts";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Context } from "../Context";
 import useClosingAllWindows from "../hooks/useClosingAllWindows";
@@ -56,17 +56,8 @@ const CatalogPage = observer(({ type }) => {
   const [isLoading, error, deviceFetching] = useDeviceSectionFetching(deviceStore, app, type, setIsFoundDevicesByQuery, setSpellCheckedQuery);
   if (error) console.log(error);
 
-  useEffect(() => {
-    if (windowWidth > 820) {
-      if (deviceStore.limit !== DEVICE_ITEMS_DESKTOP_LIMIT) deviceStore.setLimit(DEVICE_ITEMS_DESKTOP_LIMIT);
-    } else {
-      if (deviceStore.limit !== DEVICE_ITEMS_MOBILE_LIMIT) deviceStore.setLimit(DEVICE_ITEMS_MOBILE_LIMIT);
-    }
-  }, [deviceStore, windowWidth]);
-
   useClosingAllWindows();
 
-  if (!Object.keys(deviceStore.filters).length) return <main />;
   if (!isFoundDevicesByQuery && type === "search") {
     return (
       <main>
