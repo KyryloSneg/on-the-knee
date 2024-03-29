@@ -8,6 +8,7 @@ import "./styles/FilterCategoryBlocksList.css";
 
 const FilterCategoryBlocksList = observer(({ areInitiallyVisible }) => {
   const { deviceStore } = useContext(Context);
+  console.log({...deviceStore.filters});
 
   function renderList() {
     let result = [];
@@ -21,7 +22,7 @@ const FilterCategoryBlocksList = observer(({ areInitiallyVisible }) => {
     );
 
     sortedFilterKeys.forEach((filterKey) => {
-      const isTooLong = deviceStore.filters[filterKey].length >= FILTERS_OPTIONS_LENGTH_LIMIT;
+      const isTooLong = deviceStore.filters[filterKey].length > FILTERS_OPTIONS_LENGTH_LIMIT;
 
       result.push(
         <li key={filterKey}>
