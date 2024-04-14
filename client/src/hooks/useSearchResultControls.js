@@ -1,32 +1,32 @@
 import { useEffect } from "react";
-import findResultId from "../utils/findResultId";
 
-export default function useSearchResultControl(selectedId, setSelectedId, minId, maxId, backupValue, setValue, isInputFocused, isFocused, results) {
+export default function useSearchResultControl(selectedId, setSelectedId, minIdRef, maxIdRef, backupValue, setValue, isInputFocused, isFocused, results) {
   useEffect(() => {
     function onKeyDown(e) {
       switch (e.key) {
         case "ArrowDown":
           e.preventDefault();
 
-          if (selectedId === maxId) {
-            setSelectedId(minId);
+          if (minIdRef.current === maxIdRef.current) {
+            return;
+          } else if (selectedId === maxIdRef.current) {
+            setSelectedId(minIdRef.current);
           } else {
-            const nextSelectedId = findResultId(results, selectedId);
-            setSelectedId(nextSelectedId);
+            setSelectedId(selectedId + 1);
           }
+
           break;
         case "ArrowUp":
           e.preventDefault();
 
-          // our minId is always less than minimum search's id by 1
-          if (selectedId === minId + 1) {
-            setSelectedId(minId);
-          } else if (selectedId === minId) {
-            setSelectedId(maxId);
+          if (minIdRef.current === maxIdRef.current) {
+            return;
+          } else if (selectedId === minIdRef.current) {
+            setSelectedId(maxIdRef.current);
           } else {
-            const nextSelectedId = findResultId(results, selectedId, "previous");
-            setSelectedId(nextSelectedId);
+            setSelectedId(selectedId - 1);
           }
+
           break;
         default:
           break;
@@ -38,27 +38,14 @@ export default function useSearchResultControl(selectedId, setSelectedId, minId,
       // if input and the form itself are focused
       if (isInputFocused && isFocused) {
         window.addEventListener("keydown", onKeyDown);
-        
-        // if our backup value search option is hidden we unblock it
-        if (selectedId === minId - 1 && backupValue) {
-          setSelectedId(minId);
-        } else if (selectedId === minId - 2 && !backupValue) {
-          setSelectedId(minId - 1)
-        }
-  
-      } else {
-        setValue(backupValue);
-        // hide out backup value search option
-        if (!backupValue) {
-          setSelectedId(minId - 2);
-        } else {
-          setSelectedId(minId - 1);
-        }
-      }
+      } 
+      // else {
+      //   setValue(backupValue);
+      // }
     }
     
     return () => {
       window.removeEventListener("keydown", onKeyDown);
     }
-  }, [selectedId, setSelectedId, minId, maxId, backupValue, setValue, isInputFocused, isFocused, results]);
+  }, [selectedId, setSelectedId, minIdRef, maxIdRef, backupValue, setValue, isInputFocused, isFocused, results]);
 }

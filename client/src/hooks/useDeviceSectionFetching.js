@@ -28,7 +28,6 @@ function useDeviceSectionFetching(deviceStore, app, type, setIsFoundDevicesByQue
   const prevLocationPathname = useRef(location.pathname);
 
   const hasChangedURL = prevLocationPathname.current !== location.pathname;
-  // console.log(hasChangedURL);
 
   async function fetchingCallback(location, categoryIdSlug, hasChangedURL) {
     const isInitialFetch = !deviceStore.devices.length || !_.isEqual(deviceStore.usedFilters, prevUsedFilters.current) || hasChangedURL;

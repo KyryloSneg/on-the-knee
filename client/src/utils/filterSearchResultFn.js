@@ -25,7 +25,7 @@ export default function filterSearchResultFn(res, value, isDefault = true) {
     // if our value isn't empty and a result length is greater than input value's one:
     // check is a result starts with our value or not  
     // otherwise it's false
-    isSuitable = value && res.length > value.length ? res.startsWith(value) : false;
+    isSuitable = value.length && res.length > value.length ? res.startsWith(value) : false;
   } else if (value.length) {
     isSuitable = true;
 

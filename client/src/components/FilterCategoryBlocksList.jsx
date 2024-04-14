@@ -8,7 +8,6 @@ import "./styles/FilterCategoryBlocksList.css";
 
 const FilterCategoryBlocksList = observer(({ areInitiallyVisible }) => {
   const { deviceStore } = useContext(Context);
-  console.log({...deviceStore.filters});
 
   function renderList() {
     let result = [];

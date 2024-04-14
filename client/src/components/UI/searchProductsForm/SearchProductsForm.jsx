@@ -7,12 +7,11 @@ import SearchResults from "./SearchResults";
 import useFnOnSomeValue from "../../../hooks/useFnOnSomeValue";
 import { mockSearchResults } from "../../../utils/consts";
 import useDeleteValueOnEsc from "../../../hooks/useDeleteValueOnEsc";
-import useMinMaxIds from "../../../hooks/useMinMaxIds";
 import filterSearchResultFn from "../../../utils/filterSearchResultFn";
 import StringActions from "../../../utils/StringActions";
-import useClickOnEverything from "../../../hooks/useClickOnEverything";
+import setSearchFormVisibility from "../../../utils/setSearchFormVisibility";
 
-const SearchProductsForm = observer(({ btnGroupRef, navbarRef }) => {
+const SearchProductsForm = observer(({ navbarRef }) => {
   const { app, isTest, isEmptySearchResults } = useContext(Context);
   const [value, setValue] = useState(""); // the value that will be submitted to the form
   // the value that user can return to (it renders as the first search option if the input value isn't empty)
@@ -29,55 +28,62 @@ const SearchProductsForm = observer(({ btnGroupRef, navbarRef }) => {
   // const [results, setResults] = useState({...mockSearchResults, history: []});
   
   const [selectedId, setSelectedId] = useState(null);
-  const [minId, maxId] = useMinMaxIds(results, setSelectedId);
+  
+  const minId = useRef(null);
+  const maxId = useRef(null);
 
   const formRef = useRef(null);
   const searchBtnRef = useRef(null);
   const inputRef = useRef(null);
 
-  const [isFocused, setIsFocused] = useState(false);
   // the "real" input focus
   const [isInputFocused, setIsInputFocused] = useState(false);
 
   useEffect(() => {
+    // if user left the component, reset selectedId to prevent bugs 
+    if (!app.isFocusedSearchForm) setSelectedId(null);
+  }, [app.isFocusedSearchForm]);
+
+  useEffect(() => {
     if (app.headerRef) {
-      if (isFocused) {
+      if (app.isFocusedSearchForm) {
         app.headerRef.current.classList.add("closer-than-darkbg");
       } else {
         app.headerRef.current.classList.remove("closer-than-darkbg");
       }
     }
-  }, [isFocused, app]);
+  }, [app.isFocusedSearchForm, app]);
 
   // using the useCallback hook below to use the function in the useEffect hook without any linter warnings
   
   // focusing input (making it wider, showing the dark bg)
   const focusInput = useCallback(() => {
-    btnGroupRef.current.classList.add("focusedSearch");
-    app.setDarkBgVisible(true);
-    setIsFocused(true);
-  }, [app, btnGroupRef]);
+    setSearchFormVisibility(true, app);
+  }, [app, app.navBtnGroupRef]);
 
   // vice versa
   const blurInput = useCallback(() => {
-    app.setDarkBgVisible(false);
-    btnGroupRef.current.classList.remove("focusedSearch");
-    setIsFocused(false);
-  }, [app, btnGroupRef]);
+    setSearchFormVisibility(false, app);
+
+    // by adding this we make sure that on returning to the form user will get correct results immediately
+    // (maybe i would need to delete it when I'll implement almost real version of filtering results)
+    const mockResults = mockSearchResults;
+    filterResults(value, mockResults);
+    // eslint-disable-next-line
+  }, [app, app.navBtnGroupRef]);
 
   const amount = results.default.length + results.history.length + results.categories.length;
-  const isResultsAndValue = amount || value;
-  const onEmptyResultsAndValue = useCallback(() => {
-    setIsFocused(false);
+  const isResultsOrValue = amount || value;
+
+  const onEmptyResultsOrValue = useCallback(() => {
+    app.setIsFocusedSearchForm(false);
     blurInput();
-  }, [setIsFocused, blurInput]);
+  }, [app, blurInput]);
 
   useFnOnSomeValue(value, focusInput, null);
-  useFnOnSomeValue(isResultsAndValue, null, onEmptyResultsAndValue);
+  useFnOnSomeValue(isResultsOrValue, null, onEmptyResultsOrValue);
 
-  const onClickOnEverything = isFocused ? blurInput : null;
-  useClickOnEverything(onClickOnEverything, formRef);
-  useDeleteValueOnEsc(setValue, setBackupValue, isFocused);
+  useDeleteValueOnEsc(setValue, setBackupValue, app.isFocusedSearchForm);
 
   function filterResults(nextBackupValue, mockResults) {
 
@@ -93,7 +99,7 @@ const SearchProductsForm = observer(({ btnGroupRef, navbarRef }) => {
       } else {
         nextResults = {
           default: mockResults.default.filter(d => filterSearchResultFn(d.value, nextBackupValue)),
-          history: mockResults.history.filter(h => filterSearchResultFn(h.value, nextBackupValue, false)),
+          history: mockResults.history.slice(0, 6),
           categories: mockResults.categories.filter(c => filterSearchResultFn(c.value, nextBackupValue, false)),
         }
       }
@@ -103,9 +109,13 @@ const SearchProductsForm = observer(({ btnGroupRef, navbarRef }) => {
 
   }
 
+  // useEffect(() => {
+  //   if (!app.isFocusedSearchForm && (value.length || backupValue.length)) filterResults(value, mockResults);
+  // }, [app.isFocusedSearchForm]);
+
   function onInputFocus() {
     setIsInputFocused(true);
-    if (isFocused || value === "") return;
+    if (app.isFocusedSearchForm || value === "") return;
     focusInput();
   }
 
@@ -130,8 +140,8 @@ const SearchProductsForm = observer(({ btnGroupRef, navbarRef }) => {
 
   function onSubmitBtnBlur(e) {
     // if the input isn't focused we do nothing, else we check other conditions and if everything is ok we focus the button
-    // (it's not the best solution i guess but i've havent found out what i can do else here)
-    if (!isFocused) return;
+    // (it's not the best solution i guess but i've haven't found out what i can do else here)
+    if (!app.isFocusedSearchForm) return;
 
     const focusedElem = e.relatedTarget;
     if (formRef.current.contains(focusedElem)) return;
@@ -141,7 +151,7 @@ const SearchProductsForm = observer(({ btnGroupRef, navbarRef }) => {
 
   function onInputBlur(e) {
     setIsInputFocused(false);
-    if (!isFocused) return;
+    if (!app.isFocusedSearchForm) return;
 
     const focusedElem = e.relatedTarget;
     if (formRef.current.contains(focusedElem)) return;
@@ -153,18 +163,24 @@ const SearchProductsForm = observer(({ btnGroupRef, navbarRef }) => {
   function deleteInputContent() {
     setValue("");
     setBackupValue("");
+
     inputRef.current.input.focus();
+    setIsInputFocused(true);
   }
 
   function onBackBtnClick() {
-    setIsFocused(false);
+    // using this condition to prevent input unfocusing on pressing enter key
+    // (idk how it happens)
+    if (document.activeElement !== inputRef.current.backBtn) return;
+    
+    app.setIsFocusedSearchForm(false);
     blurInput();
     inputRef.current.input.focus();
   }
 
   function onChange(e) {
-    if (selectedId !== minId) {
-      setSelectedId(minId);
+    if (selectedId !== minId.current) {
+      setSelectedId(minId.current);
     }
 
     // for test purpose
@@ -186,14 +202,17 @@ const SearchProductsForm = observer(({ btnGroupRef, navbarRef }) => {
 
   function onSubmit(e) {
     e.preventDefault();
-    try {
-      // TODO: searching products
-    } catch (error) {
-      // TODO: error handling
-    } finally {
-      setBackupValue(value);
-      setIsInputFocused(false);
-      blurInput();
+    if (!!value.trim().length) {
+      try {
+        // TODO: searching products
+      } catch (error) {
+        // TODO: error handling
+      } finally {
+        setBackupValue(value);
+        setIsInputFocused(false);
+        blurInput();
+        inputRef.current.input.blur();
+      }
     }
   }
 
@@ -209,7 +228,7 @@ const SearchProductsForm = observer(({ btnGroupRef, navbarRef }) => {
           onInputBlur={onInputBlur}
           ref={inputRef}
         />
-        {isFocused &&
+        {app.isFocusedSearchForm &&
           <SearchResults
             results={results}
             setResults={setResults}
@@ -220,7 +239,6 @@ const SearchProductsForm = observer(({ btnGroupRef, navbarRef }) => {
             selectedId={selectedId}
             setSelectedId={setSelectedId}
             isInputFocused={isInputFocused}
-            isFocused={isFocused}
             inputRef={inputRef}
           />
         }

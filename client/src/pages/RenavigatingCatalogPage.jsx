@@ -5,7 +5,6 @@ import { Context } from '../Context';
 import CategoriesPage from './CategoriesPage';
 import { MIN_CATEGORIES_LENGTH_TO_RENAVIGATE } from '../utils/consts';
 import { observer } from 'mobx-react-lite';
-import useClosingAllWindows from '../hooks/useClosingAllWindows';
 
 const RenavigatingCatalogPage = observer(({ type }) => {
   // relocate user to the catalog page or to the subcategories select page
@@ -13,8 +12,6 @@ const RenavigatingCatalogPage = observer(({ type }) => {
   const { deviceStore } = useContext(Context);
   const { categoryIdSlug, brandIdSlug } = useParams();
   const location = useLocation();
-
-  useClosingAllWindows();
 
   if (!deviceStore.categories.length && !deviceStore.brands.length) return <main />;
   if (type === "search" && !categoryIdSlug && !brandIdSlug) return <CatalogPage type={type} />;
