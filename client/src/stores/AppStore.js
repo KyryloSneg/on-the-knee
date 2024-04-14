@@ -12,6 +12,7 @@ class AppStore {
     this._isVisibleUsedFiltersSidebar = false;
     this._isVisibleCategoriesMenu = false;
     this._isVisibleCategoriesModal = false;
+    this._isFocusedSearchForm = false;
     // some important app refs below to skip a big amount of props passing
     this._pageRef = null;
     this._deviceSectionRef = null;
@@ -20,6 +21,7 @@ class AppStore {
     this._menuShortcutRef = null;
     this._filtersShortcutRef = null;
     this._usedFiltersShortcutRef = null;
+    this._navBtnGroupRef = null;
     makeAutoObservable(this);
   }
 
@@ -59,6 +61,10 @@ class AppStore {
     this._isVisibleCategoriesModal = bool;
   }
 
+  setIsFocusedSearchForm(bool) {
+    this._isFocusedSearchForm = bool;
+  }
+
   setPageRef(ref) {
     this._pageRef = ref;
   }
@@ -85,6 +91,10 @@ class AppStore {
 
   setUsedFiltersShortcutRef(ref) {
     this._usedFiltersShortcutRef = ref;
+  }
+
+  setNavBtnGroupRef(ref) {
+    this._navBtnGroupRef = ref;
   }
   
   get darkBgVisible() {
@@ -122,6 +132,10 @@ class AppStore {
   get isVisibleCategoriesModal() {
     return this._isVisibleCategoriesModal;
   }
+
+  get isFocusedSearchForm() {
+    return this._isFocusedSearchForm;
+  }
   
   get pageRef() {
     return this._pageRef;
@@ -149,6 +163,10 @@ class AppStore {
 
   get usedFiltersShortcutRef() {
     return this._usedFiltersShortcutRef;
+  }
+
+  get navBtnGroupRef() {
+    return this._navBtnGroupRef;
   }
 }
 

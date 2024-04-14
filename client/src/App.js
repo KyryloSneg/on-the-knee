@@ -27,6 +27,7 @@ import CategoriesModalContent from "./components/CategoriesModalContent";
 import setFiltersSidebarVisibility from "./utils/setFiltersSidebarVisibility";
 import setUsedFiltersBarVisibility from "./utils/setUsedFiltersBarVisibility";
 import useClosingCategoriesModalWidth from "./hooks/useClosingCategoriesModalWidth";
+import useClosingAllWindows from "./hooks/useClosingAllWindows";
  
 const App = observer(() => {
   const { app, deviceStore } = useContext(Context);
@@ -61,6 +62,7 @@ const App = observer(() => {
   }, [app, headerRef]);
 
   useInitialDataFetching();
+  useClosingAllWindows();
 
   useClosingFiltersSidebarWidth(windowWidth, app.isVisibleFiltersSidebar, closeFiltersSidebar);
   useClosingUsedFiltersBarWidth(windowWidth, app.isVisibleUsedFiltersSidebar, closeUsedFiltersSidebar);
