@@ -2,7 +2,7 @@ import StringActions from "../../../utils/StringActions";
 import "./SearchResultItem.css";
 import { Link } from "react-router-dom";
 
-const SearchResultItem = ({ type = "default", value, id, active = false, onFocus, inputValue, results, setResults, inputRef, isBackupValueOption = false }) => {
+const SearchResultItem = ({ type = "default", active = false, value, id, onFocus, inputValue, results, setResults, inputRef, isBackupValueOption = false }) => {
   let className = type !== "default" ? `search-result-${type}` : "";
   className = active ? `${className} active` : className;
   const tabIndex = type === "hidden" ? "-1" : "0" ;
@@ -40,6 +40,7 @@ const SearchResultItem = ({ type = "default", value, id, active = false, onFocus
       role="radio" 
       aria-checked={active} 
       aria-labelledby={value} 
+      data-value={value}
       data-testid={`${isBackupValueOption ? "backup" : (id || null)}-searchResultHistory`}
     >
       <Link 

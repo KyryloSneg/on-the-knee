@@ -6,6 +6,7 @@ import setMenuVisibility from "../utils/setMenuVisibility";
 import setFiltersSidebarVisibility from "../utils/setFiltersSidebarVisibility";
 import setUsedFiltersBarVisibility from "../utils/setUsedFiltersBarVisibility";
 import { useLocation } from "react-router-dom";
+import setSearchFormVisibility from "../utils/setSearchFormVisibility";
 
 function useClosingAllWindows() {
   const location = useLocation();
@@ -18,6 +19,7 @@ function useClosingAllWindows() {
     setMenuVisibility(false, app);
     setFiltersSidebarVisibility(false, app);
     setUsedFiltersBarVisibility(false, app);
+    setSearchFormVisibility(false, app);
 
     app.setDarkBgVisible(false, app);
     app.setIsBlockedScroll(false, app);

@@ -6,7 +6,6 @@ import DeviceSection from "../components/DeviceSection";
 import { WIDTH_TO_SHOW_ASIDE, sortingOptions } from "../utils/consts";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Context } from "../Context";
-import useClosingAllWindows from "../hooks/useClosingAllWindows";
 import CatalogAside from "../components/CatalogAside";
 import useDeviceSectionFetching from "../hooks/useDeviceSectionFetching";
 import URLActions from "../utils/URLActions";
@@ -55,8 +54,6 @@ const CatalogPage = observer(({ type }) => {
   }, [location.search, deviceStore, deviceStore.filters, deviceStore.filters, location.pathname, navigate, isTest]);
   const [isLoading, error, deviceFetching] = useDeviceSectionFetching(deviceStore, app, type, setIsFoundDevicesByQuery, setSpellCheckedQuery);
   if (error) console.log(error);
-
-  useClosingAllWindows();
 
   if (!isFoundDevicesByQuery && type === "search") {
     return (
