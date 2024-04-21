@@ -25,9 +25,12 @@ const SearchResultItem = ({ type = "default", active = false, value, id, onFocus
 
   function onClearSearch(e) {
     e.preventDefault();
+    const newHistoryResults = results.history.filter((r, index) => index !== id)
+    localStorage.setItem("historyResults", JSON.stringify(newHistoryResults));
+
     const nextResults = {
       ...results,
-      history: results.history.filter(r => r.id !== id),
+      history: newHistoryResults,
     };
 
     setResults(nextResults);
