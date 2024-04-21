@@ -18,7 +18,7 @@ const Navbar = ({ elemToFocus, navCategoryBtnRef }) => {
 
   useEffect(() => {
     app.setNavBtnGroupRef(btnGroupRef)
-  }, [btnGroupRef]);
+  }, [app, btnGroupRef]);
 
   return (
     <nav ref={navbarRef}>

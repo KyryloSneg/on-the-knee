@@ -43,8 +43,41 @@ export const sortingOptions = [
   },
 ];
 
+// export const mockSearchResults = {
+//   "default": [
+//     {
+//       "id": 1,
+//       "value": "gaming mouse",
+//     },
+//     {
+//       "id": 2,
+//       "value": "gaming keyboards",
+//     },
+//   ],
+//   "history": [
+//     {
+//       "id": 3,
+//       "value": "mice bloody",
+//     },
+//     {
+//       "id": 4,
+//       "value": "headphones",
+//     },
+//   ],
+//   "categories": [
+//     {
+//       "id": 5,
+//       "value": "mice",
+//     },
+//     {
+//       "id": 6,
+//       "value": "keyboards",
+//     },
+//   ]
+// };
+
 export const mockSearchResults = {
-  "default": [
+  "hint": [
     {
       "id": 1,
       "value": "gaming mouse",
@@ -54,7 +87,7 @@ export const mockSearchResults = {
       "value": "gaming keyboards",
     },
   ],
-  "history": [
+  "device": [
     {
       "id": 3,
       "value": "mice bloody",
@@ -64,7 +97,7 @@ export const mockSearchResults = {
       "value": "headphones",
     },
   ],
-  "categories": [
+  "category": [
     {
       "id": 5,
       "value": "mice",
@@ -73,7 +106,8 @@ export const mockSearchResults = {
       "id": 6,
       "value": "keyboards",
     },
-  ]
+  ],
+  "history": []
 };
 
 // params that don't appear in used filters like a sort filter
