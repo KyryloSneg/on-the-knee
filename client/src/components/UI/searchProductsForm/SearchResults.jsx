@@ -10,15 +10,14 @@ const SearchResults = ({ results, setResults, backupValue, setValue, minId, maxI
   const { app } = useContext(Context);
 
   const searchResultsRef = useRef(null);
-  const amount = results.default.length + results.categories.length + results.history.length;
+  const amount = results.hint.length + results.device.length + results.category.length + results.history.length;
 
   useChangingMinMaxIds(minId, maxId, setSelectedId, results, backupValue);
   useSelectedSearchValue(selectedId, setSelectedId, results, setValue, minId, backupValue, searchResultsRef);
   useSearchResultControl(selectedId, setSelectedId, minId, maxId, backupValue, setValue, isInputFocused, app.isFocusedSearchForm, results);
 
   function onClearAllSearches() {
-    // TODO: deleting search history from localstorage / DB
-    // (if the last one we should use try...catch)
+    localStorage.setItem("historyResults", JSON.stringify([]));
     const nextResults = {
       ...results,
       history: [],
@@ -34,7 +33,7 @@ const SearchResults = ({ results, setResults, backupValue, setValue, minId, maxI
 
   return (
     <ul className="search-product-results" role="radiogroup" ref={searchResultsRef}>
-      {(isBackupValue && (!amount || !results.history.length))
+      {!amount
         ? <p className="no-search-results">We haven't found any results. Please clarify your request</p>
         : (
           <div>
@@ -43,37 +42,53 @@ const SearchResults = ({ results, setResults, backupValue, setValue, minId, maxI
               active={currentResultId === selectedId}
               value={backupValue}
               type={isBackupValue ? "default" : "hidden"}
-              isBackupValueOption={isBackupValue}
+              isBackupValueOption={true}
             />
-            {!!results.default.length &&
+            {!!results.hint.length &&
               <ul>
-                {results.default.map(result => {
+                {results.hint.map((result, index) => {
                   currentResultId += 1;
                   return (
                     <SearchResultItem
-                      key={`${result.value}-${result.id}`}
+                      key={`${result.value}-${currentResultId}`}
                       active={currentResultId === selectedId}
                       value={result.value}
-                      id={result.id}
+                      id={index}
                       inputValue={backupValue}
                     />
                   )
                 })}
               </ul>
             }
-            {!!results.categories.length &&
+            {!!results.device.length &&
+              <ul>
+                {results.device.map((result, index) => {
+                  currentResultId += 1;
+                  return (
+                    <SearchResultItem
+                      key={`${result.value}-${currentResultId}`}
+                      active={currentResultId === selectedId}
+                      value={result.value}
+                      id={index}
+                      inputValue={backupValue}
+                    />
+                  )
+                })}
+              </ul>
+            }
+            {!!results.category.length &&
               <li className="search-product-results-group">
                 <p>Search by categories</p>
                 <ul>
-                  {results.categories.map(result => {
+                  {results.category.map((result, index) => {
                     currentResultId += 1;
                     return (
                       <SearchResultItem
-                        key={`category-${result.value}-${result.id}`}
+                        key={`category-${result.value}-${currentResultId}`}
                         type="category"
                         active={currentResultId === selectedId}
                         value={result.value}
-                        id={result.id}
+                        id={index}
                       />
                     );
                   })}
@@ -92,15 +107,15 @@ const SearchResults = ({ results, setResults, backupValue, setValue, minId, maxI
                   </button>
                 </div>
                 <ul>
-                  {results.history.map(result => {
+                  {results.history.map((result, index) => {
                     currentResultId += 1;
                     return (
                       <SearchResultItem
-                        key={`history-${result.value}-${result.id}`}
+                        key={`history-${result.value}-${currentResultId}`}
                         type="history"
                         active={currentResultId === selectedId}
                         value={result.value}
-                        id={result.id}
+                        id={index}
                         results={results}
                         setResults={setResults}
                         inputRef={inputRef}

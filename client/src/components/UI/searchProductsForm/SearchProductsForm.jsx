@@ -10,6 +10,7 @@ import useDeleteValueOnEsc from "../../../hooks/useDeleteValueOnEsc";
 import filterSearchResultFn from "../../../utils/filterSearchResultFn";
 import StringActions from "../../../utils/StringActions";
 import setSearchFormVisibility from "../../../utils/setSearchFormVisibility";
+import useSearchResultsFetching from "../../../hooks/useSearchResultsFetching";
 
 const SearchProductsForm = observer(({ navbarRef }) => {
   const { app, isTest, isEmptySearchResults } = useContext(Context);
@@ -17,9 +18,13 @@ const SearchProductsForm = observer(({ navbarRef }) => {
   // the value that user can return to (it renders as the first search option if the input value isn't empty)
   const [backupValue, setBackupValue] = useState("");
   // TODO: change mock value to the real one
-  let initialResValue = { default: [], categories: [], history: [] };
-  if (!isEmptySearchResults) {
-    initialResValue = isTest ? mockSearchResults : mockSearchResults;
+  let initialResValue = { 
+    hint: [], device: [], category: [], 
+    history: JSON.parse(localStorage.getItem("historyResults")) || [] 
+  };
+
+  if (!isEmptySearchResults && isTest) {
+    initialResValue = mockSearchResults;
   }
 
   const [results, setResults] = useState(initialResValue);
@@ -38,28 +43,17 @@ const SearchProductsForm = observer(({ navbarRef }) => {
 
   // the "real" input focus
   const [isInputFocused, setIsInputFocused] = useState(false);
-
   useEffect(() => {
     // if user left the component, reset selectedId to prevent bugs 
     if (!app.isFocusedSearchForm) setSelectedId(null);
   }, [app.isFocusedSearchForm]);
-
-  useEffect(() => {
-    if (app.headerRef) {
-      if (app.isFocusedSearchForm) {
-        app.headerRef.current.classList.add("closer-than-darkbg");
-      } else {
-        app.headerRef.current.classList.remove("closer-than-darkbg");
-      }
-    }
-  }, [app.isFocusedSearchForm, app]);
 
   // using the useCallback hook below to use the function in the useEffect hook without any linter warnings
   
   // focusing input (making it wider, showing the dark bg)
   const focusInput = useCallback(() => {
     setSearchFormVisibility(true, app);
-  }, [app, app.navBtnGroupRef]);
+  }, [app]);
 
   // vice versa
   const blurInput = useCallback(() => {
@@ -68,11 +62,12 @@ const SearchProductsForm = observer(({ navbarRef }) => {
     // by adding this we make sure that on returning to the form user will get correct results immediately
     // (maybe i would need to delete it when I'll implement almost real version of filtering results)
     const mockResults = mockSearchResults;
-    filterResults(value, mockResults);
-    // eslint-disable-next-line
-  }, [app, app.navBtnGroupRef]);
+    // filterResults(value, mockResults);
 
-  const amount = results.default.length + results.history.length + results.categories.length;
+    // eslint-disable-next-line
+  }, [app]);
+
+  const amount = results.hint.length + results.device.length + results.category.length + results.history.length;
   const isResultsOrValue = amount || value;
 
   const onEmptyResultsOrValue = useCallback(() => {
@@ -135,7 +130,9 @@ const SearchProductsForm = observer(({ navbarRef }) => {
     const mockResults = mockSearchResults;
     
     setBackupValue(nextBackupValue);
-    filterResults(nextBackupValue, mockResults);
+    // TODO: implement it somehow with our hook
+    console.log("implement it somehow with our hook");
+    // filterResults(nextBackupValue, mockResults);
   }
 
   function onSubmitBtnBlur(e) {
@@ -186,15 +183,12 @@ const SearchProductsForm = observer(({ navbarRef }) => {
     // for test purpose
     // const mockResults = {...mockSearchResults, history: []};
 
-    // instead of mockResults we must use real data later on
-    const mockResults = mockSearchResults;
     const nextBackupValue = StringActions.removeRedundantSpaces(e.target.value);
-
-    if (!mockResults.history.length && !nextBackupValue) {
+    if (!results.history.length && !nextBackupValue) {
       blurInput();
     }
 
-    filterResults(nextBackupValue, mockResults);
+    // filterResults(nextBackupValue, mockResults);
 
     setValue(e.target.value);
     setBackupValue(e.target.value);
@@ -208,6 +202,12 @@ const SearchProductsForm = observer(({ navbarRef }) => {
       } catch (error) {
         // TODO: error handling
       } finally {
+        let storageHistoryResults = JSON.parse(localStorage.getItem("historyResults")) || [];
+        let newHistoryResult = { value: value.trim() };
+
+        const newHistoryResults = [...storageHistoryResults, newHistoryResult];
+        localStorage.setItem("historyResults", JSON.stringify(newHistoryResults));
+
         setBackupValue(value);
         setIsInputFocused(false);
         blurInput();
@@ -216,6 +216,7 @@ const SearchProductsForm = observer(({ navbarRef }) => {
     }
   }
 
+  useSearchResultsFetching(results, setResults, backupValue);
   return (
     <form className="search-product-form" role="search" onSubmit={onSubmit} onBlur={onFormBlur} ref={formRef}>
       <div className="search-product-with-results">
