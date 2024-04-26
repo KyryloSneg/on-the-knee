@@ -1,17 +1,26 @@
 import { useContext, useEffect } from "react";
 import useFetching from "./useFetching";
 import { Context } from "../Context";
+import StringActions from "../utils/StringActions";
 
 // query params without pagination ones
 function useSearchResultsFetching(results, setResults, backupValue) {
   const { app, deviceStore } = useContext(Context);
   
-  async function fetchingCallback() {
-    const hintResults = results.hint;
+  async function fetchingCallback(backupValue) {
+    let hintResults = [];
+    if (!!backupValue.trim().length) {
+      const allHintSearchResults = [...app.hintSearchResults];
+      const trimmedBackupValue = StringActions.removeRedundantSpaces(backupValue);
+
+      hintResults = allHintSearchResults.filter(result => 
+        result.value.startsWith(trimmedBackupValue) && trimmedBackupValue.length < result.value.length
+      );
+    }
+
     const deviceResults = results.device;
     const categoryResults = results.category;
     const historyResults = JSON.parse(localStorage.getItem("historyResults")) || [];
-    console.log(historyResults);
     
     const nextResults = {
       hint: hintResults,
@@ -23,10 +32,10 @@ function useSearchResultsFetching(results, setResults, backupValue) {
     setResults(nextResults);
   }
 
-  const [fetching, isLoading, error] = useFetching(fetchingCallback);
+  const [fetching, isLoading, error] = useFetching((backupValue) => fetchingCallback(backupValue));
 
   useEffect(() => {
-    fetching();
+    fetching(backupValue);
     // eslint-disable-next-line
   }, [backupValue, app.isFocusedSearchForm]);
 
