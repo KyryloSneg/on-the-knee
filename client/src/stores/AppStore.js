@@ -13,6 +13,8 @@ class AppStore {
     this._isVisibleCategoriesMenu = false;
     this._isVisibleCategoriesModal = false;
     this._isFocusedSearchForm = false;
+
+    this._hintSearchResults = []
     // some important app refs below to skip a big amount of props passing
     this._pageRef = null;
     this._deviceSectionRef = null;
@@ -96,6 +98,10 @@ class AppStore {
   setNavBtnGroupRef(ref) {
     this._navBtnGroupRef = ref;
   }
+
+  setHintSearchResults(results) {
+    this._hintSearchResults = results;
+  }
   
   get darkBgVisible() {
     return this._darkBgVisible;
@@ -167,6 +173,10 @@ class AppStore {
 
   get navBtnGroupRef() {
     return this._navBtnGroupRef;
+  }
+
+  get hintSearchResults() {
+    return this._hintSearchResults;
   }
 }
 
