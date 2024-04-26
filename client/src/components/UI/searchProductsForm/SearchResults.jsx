@@ -50,6 +50,7 @@ const SearchResults = ({ results, setResults, backupValue, setValue, minId, maxI
                   currentResultId += 1;
                   return (
                     <SearchResultItem
+                      type="hint"
                       key={`${result.value}-${currentResultId}`}
                       active={currentResultId === selectedId}
                       value={result.value}
@@ -76,6 +77,26 @@ const SearchResults = ({ results, setResults, backupValue, setValue, minId, maxI
                 })}
               </ul>
             }
+            {!!results.category.length &&
+              <li className="search-product-results-group">
+                <p>Search by categories</p>
+                <ul>
+                  {results.category.map((result, index) => {
+                    currentResultId += 1;
+                    return (
+                      <SearchResultItem
+                        key={`category-${result.value}-${currentResultId}`}
+                        type="category"
+                        active={currentResultId === selectedId}
+                        value={result.value}
+                        id={index}
+                      />
+                    );
+                  })}
+                </ul>
+              </li>
+            }
+            {/* search in category (category catalog page + ?text="our query"): */}
             {!!results.category.length &&
               <li className="search-product-results-group">
                 <p>Search by categories</p>

@@ -9,10 +9,9 @@ export const DESIRED_LIST_ROUTE = "/desired";
 export const USER_ROUTE = "/user";
 // TODO: routing for user cabinet
 
-// TODO: remake catalog route in next branches
 export const CATEGORY_CATALOG_ROUTE = "/categories/"; // + ":categoryIdSlug" (1-smartphones for example)
 export const BRAND_CATALOG_ROUTE = "/brand/" // + ":brandIdSlug" (2-asus for example);
-export const SEARCH_CATALOG_ROUTE = "/search/" // + ?text=value;
+export const SEARCH_CATALOG_ROUTE = "/search" // + ?text=value;
 
 export const DEVICE_API_URL = "/devices?_embed=device-combinations&_embed=device-feedbacks&_embed=device-infos&_embed=sale-devices";
 export const SALES_API_URL = "/sales?_embed=sale-types";

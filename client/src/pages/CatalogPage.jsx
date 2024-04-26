@@ -46,12 +46,15 @@ const CatalogPage = observer(({ type }) => {
 
     // router from the tests seems to not work with navigate() function,
     // so it's better to skip the block below
-    if (location.pathname !== url && !isTest) {
-      const basename = process.env.REACT_APP_CLIENT_URL;
+    const basename = process.env.REACT_APP_CLIENT_URL;
+    const currentUrl = basename + location.pathname + location.search;
+
+    if (currentUrl !== url && !isTest) { 
       navigate(url.replace(basename, ""), { replace: true });
     }
 
   }, [location.search, deviceStore, deviceStore.filters, deviceStore.filters, location.pathname, navigate, isTest]);
+  
   const [isLoading, error, deviceFetching] = useDeviceSectionFetching(deviceStore, app, type, setIsFoundDevicesByQuery, setSpellCheckedQuery);
   if (error) console.log(error);
 
