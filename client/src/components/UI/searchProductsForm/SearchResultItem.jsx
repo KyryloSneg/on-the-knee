@@ -1,20 +1,23 @@
 import StringActions from "../../../utils/StringActions";
+import { SEARCH_CATALOG_ROUTE } from "../../../utils/consts";
 import "./SearchResultItem.css";
 import { Link } from "react-router-dom";
 
-const SearchResultItem = ({ type = "default", active = false, value, id, onFocus, inputValue, results, setResults, inputRef, isBackupValueOption = false }) => {
-  let className = type !== "default" ? `search-result-${type}` : "";
+const SearchResultItem = ({ type, active = false, value, id, onFocus, inputValue, results, setResults, inputRef, isBackupValueOption = false }) => {
+  let className = type !== "hint" ? `search-result-${type}` : "";
   className = active ? `${className} active` : className;
   const tabIndex = type === "hidden" ? "-1" : "0" ;
 
   function renderValue() {
-    if (type === "default" && inputValue) {
+    if (type === "hint" && inputValue) {
       const trimmedInputValue = StringActions.removeRedundantSpaces(inputValue); 
-      const notMatchingSegment = value.slice(trimmedInputValue.length);
+      
+      const matchingSegment = value.slice(0, trimmedInputValue.length);
+      const notMatchingSegment = value.slice(trimmedInputValue.length, value.length);
 
       return [
         <span key={`${type}-${value}-${trimmedInputValue}`} className="matching-search-result-segment">
-          {trimmedInputValue}
+          {matchingSegment}
         </span>,
         <span key={`${type}-${value}-${trimmedInputValue}-notMatching`}>{notMatchingSegment}</span>
       ];
@@ -37,6 +40,11 @@ const SearchResultItem = ({ type = "default", active = false, value, id, onFocus
     inputRef.current.input.focus();
   }
 
+  let to = "#";
+  if (type === "hint" || type === "history") {
+    to = SEARCH_CATALOG_ROUTE + `?page=1&pagesToFetch=1&text=${value}`;
+  } 
+
   return (
     <li 
       className={`search-result ${className}`.trim()} 
@@ -48,7 +56,7 @@ const SearchResultItem = ({ type = "default", active = false, value, id, onFocus
     >
       <Link 
         // TODO: change the route to the catalog one with query params
-        to={"/catalog/some_route"}
+        to={to}
         tabIndex={tabIndex}
         onFocus={onFocus}
       >

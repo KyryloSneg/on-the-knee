@@ -7,10 +7,11 @@ import SearchResults from "./SearchResults";
 import useFnOnSomeValue from "../../../hooks/useFnOnSomeValue";
 import { mockSearchResults } from "../../../utils/consts";
 import useDeleteValueOnEsc from "../../../hooks/useDeleteValueOnEsc";
-import filterSearchResultFn from "../../../utils/filterSearchResultFn";
 import StringActions from "../../../utils/StringActions";
 import setSearchFormVisibility from "../../../utils/setSearchFormVisibility";
 import useSearchResultsFetching from "../../../hooks/useSearchResultsFetching";
+import { addHintSearchResult } from "../../../http/HintSearchResultsAPI";
+import getDevicesBySearchQuery from "../../../utils/getDevicesBySearchQuery";
 
 const SearchProductsForm = observer(({ navbarRef }) => {
   const { app, isTest, isEmptySearchResults } = useContext(Context);
@@ -19,7 +20,9 @@ const SearchProductsForm = observer(({ navbarRef }) => {
   const [backupValue, setBackupValue] = useState("");
   // TODO: change mock value to the real one
   let initialResValue = { 
-    hint: [], device: [], category: [], 
+    hint: [], 
+    device: [], 
+    category: [], 
     history: JSON.parse(localStorage.getItem("historyResults")) || [] 
   };
 
@@ -58,12 +61,6 @@ const SearchProductsForm = observer(({ navbarRef }) => {
   // vice versa
   const blurInput = useCallback(() => {
     setSearchFormVisibility(false, app);
-
-    // by adding this we make sure that on returning to the form user will get correct results immediately
-    // (maybe i would need to delete it when I'll implement almost real version of filtering results)
-    const mockResults = mockSearchResults;
-    // filterResults(value, mockResults);
-
     // eslint-disable-next-line
   }, [app]);
 
@@ -80,34 +77,6 @@ const SearchProductsForm = observer(({ navbarRef }) => {
 
   useDeleteValueOnEsc(setValue, setBackupValue, app.isFocusedSearchForm);
 
-  function filterResults(nextBackupValue, mockResults) {
-
-    let nextResults = { default: [], categories: [], history: [] };
-    if (!isEmptySearchResults) {
-      // if our value is empty and our history search results aren't empty we show a couple of them
-      if (!nextBackupValue.length && mockResults.history.length) {
-        nextResults = {
-          default: [],
-          history: mockResults.history.slice(0, 6),
-          categories: [],
-        }
-      } else {
-        nextResults = {
-          default: mockResults.default.filter(d => filterSearchResultFn(d.value, nextBackupValue)),
-          history: mockResults.history.slice(0, 6),
-          categories: mockResults.categories.filter(c => filterSearchResultFn(c.value, nextBackupValue, false)),
-        }
-      }
-    }
-
-    setResults(nextResults);
-
-  }
-
-  // useEffect(() => {
-  //   if (!app.isFocusedSearchForm && (value.length || backupValue.length)) filterResults(value, mockResults);
-  // }, [app.isFocusedSearchForm]);
-
   function onInputFocus() {
     setIsInputFocused(true);
     if (app.isFocusedSearchForm || value === "") return;
@@ -123,16 +92,7 @@ const SearchProductsForm = observer(({ navbarRef }) => {
     blurInput();
 
     const nextBackupValue = StringActions.removeRedundantSpaces(value);
-    // for test purpose
-    // const mockResults = {...mockSearchResults, history: []};
-
-    // TODO: change mock results below to the real ones
-    const mockResults = mockSearchResults;
-    
     setBackupValue(nextBackupValue);
-    // TODO: implement it somehow with our hook
-    console.log("implement it somehow with our hook");
-    // filterResults(nextBackupValue, mockResults);
   }
 
   function onSubmitBtnBlur(e) {
@@ -194,20 +154,25 @@ const SearchProductsForm = observer(({ navbarRef }) => {
     setBackupValue(e.target.value);
   }
 
-  function onSubmit(e) {
+  async function onSubmit(e) {
     e.preventDefault();
     if (!!value.trim().length) {
       try {
-        // TODO: searching products
-      } catch (error) {
-        // TODO: error handling
-      } finally {
+        // we can't store array in localStorage, so we save it as string and getting with JSON.parse(...) method
         let storageHistoryResults = JSON.parse(localStorage.getItem("historyResults")) || [];
         let newHistoryResult = { value: value.trim() };
 
         const newHistoryResults = [...storageHistoryResults, newHistoryResult];
         localStorage.setItem("historyResults", JSON.stringify(newHistoryResults));
 
+        // add hint search result only if the result links to not empty catalog page
+        const fetchStringQueryParams = `name_like=${value.trim().toLowerCase()}`.replaceAll(`"`, "");
+        const devicesBySearchQuery = await getDevicesBySearchQuery(fetchStringQueryParams);
+
+        if (devicesBySearchQuery.length) addHintSearchResult({ value: value.trim().toLowerCase() });
+      } catch (error) {
+        // TODO: error handling
+      } finally {
         setBackupValue(value);
         setIsInputFocused(false);
         blurInput();
@@ -228,6 +193,7 @@ const SearchProductsForm = observer(({ navbarRef }) => {
           onInputFocus={onInputFocus}
           onInputBlur={onInputBlur}
           ref={inputRef}
+          hintSearchResults={app.hintSearchResults}
         />
         {app.isFocusedSearchForm &&
           <SearchResults
