@@ -8,7 +8,7 @@ async function getDevicesBySearchQuery(fetchStringQueryParams, additionalConditi
   const searchQuery = URLActions.getParamValue("text");
 
   // maybe redundant part, but it can help if i'll want to filter existing devices with this function
-  let devices;
+  let devices = [];
   if (argDevices.length) {
     devices = argDevices;
   } else {
@@ -16,7 +16,7 @@ async function getDevicesBySearchQuery(fetchStringQueryParams, additionalConditi
   }
 
   let spellCheckedSearchQuery = searchQuery;
-  if (!devices.length && additionalCondition) {
+  if (!devices.length && additionalCondition && searchQuery) {
     spellCheckedSearchQuery = await spellCheck(searchQuery);
 
     const fetchParams = fetchStringQueryParams.split("&");

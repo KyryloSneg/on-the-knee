@@ -1,15 +1,19 @@
+import DeviceComboActions from "../../../utils/DeviceComboActions";
 import StringActions from "../../../utils/StringActions";
-import { SEARCH_CATALOG_ROUTE } from "../../../utils/consts";
+import { CATEGORY_CATALOG_ROUTE, DEVICE_ROUTE, SEARCH_CATALOG_ROUTE } from "../../../utils/consts";
+import DeviceSearchResultItem from "./DeviceSearchResultItem";
 import "./SearchResultItem.css";
 import { Link } from "react-router-dom";
 
-const SearchResultItem = ({ type, active = false, value, id, onFocus, inputValue, results, setResults, inputRef, isBackupValueOption = false }) => {
+const SearchResultItem = ({ type, active = false, value, id, onFocus, inputValue, results, setResults, inputRef, isBackupValueOption = false, sales = null, saleTypeNames = null, stocks = null }) => {  
   let className = type !== "hint" ? `search-result-${type}` : "";
   className = active ? `${className} active` : className;
   const tabIndex = type === "hidden" ? "-1" : "0" ;
 
   function renderValue() {
-    if (type === "hint" && inputValue) {
+    if (isBackupValueOption) {
+      return <span className="color-black">{value.trim()}</span>;
+    } else if (type === "hint" && inputValue) {
       const trimmedInputValue = StringActions.removeRedundantSpaces(inputValue); 
       
       const matchingSegment = value.slice(0, trimmedInputValue.length);
@@ -21,8 +25,29 @@ const SearchResultItem = ({ type, active = false, value, id, onFocus, inputValue
         </span>,
         <span key={`${type}-${value}-${trimmedInputValue}-notMatching`}>{notMatchingSegment}</span>
       ];
-    } else {
-      return <span>{value.trimLeft()}</span>;
+    } else if (type === "device") {
+      return <DeviceSearchResultItem 
+                device={value} 
+                defaultCombo={defaultComboInStock} 
+                sales={sales} 
+                saleTypeNames={saleTypeNames} 
+                stocks={stocks} 
+              />;
+    } else if (type === "category") {
+      return (
+        <span className="color-black">
+          {StringActions.capitalize(value.name)}
+        </span>
+      )
+    } else if (type === "category-search") {
+      return (
+        <span>
+          <span className="color-black">{inputValue.trim()}</span> in category 
+          <span className="bold"> {StringActions.capitalize(value.name)}</span>
+        </span>
+      );
+    } else if (type === "history") {
+      return <span>{value.trim()}</span>;
     }
   }
 
@@ -40,22 +65,42 @@ const SearchResultItem = ({ type, active = false, value, id, onFocus, inputValue
     inputRef.current.input.focus();
   }
 
+  let defaultComboInStock = null;
   let to = "#";
+
   if (type === "hint" || type === "history") {
     to = SEARCH_CATALOG_ROUTE + `?page=1&pagesToFetch=1&text=${value}`;
-  } 
+  } else if (type === "category") {
+    to = CATEGORY_CATALOG_ROUTE + `${value.id}-${value.slug}`;
+  } else if (type === "category-search") {
+    to = SEARCH_CATALOG_ROUTE + `?categoryId=${value.id}&page=1&pagesToFetch=1&text=${inputValue}`;
+  } else if (type === "device") {
+    const { 
+      defaultCombinationInStock: defaultCombo
+    } = DeviceComboActions.findDefaultCombination(value, stocks); 
+
+    const deviceRouteCombo = defaultCombo.combinationString || "default";
+    to = DEVICE_ROUTE + `${value.id}-${deviceRouteCombo}`;
+
+    // saving the combination to use it in the render function
+    defaultComboInStock = defaultCombo;
+  }
+
+  const labelledBy = (type === "device" || type === "category" || type === "category-search")
+    ? value.name
+    : value;
 
   return (
     <li 
       className={`search-result ${className}`.trim()} 
       role="radio" 
       aria-checked={active} 
-      aria-labelledby={value} 
+      aria-labelledby={labelledBy} 
       data-value={value}
-      data-testid={`${isBackupValueOption ? "backup" : (id || null)}-searchResultHistory`}
+      data-type={type}
+      data-testid={`${isBackupValueOption ? "backup" : (id >= 0 ? id : null)}-searchResultHistory`}
     >
       <Link 
-        // TODO: change the route to the catalog one with query params
         to={to}
         tabIndex={tabIndex}
         onFocus={onFocus}
