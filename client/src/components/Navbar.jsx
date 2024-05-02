@@ -7,11 +7,18 @@ import NavAccountBtn from "./NavAccountBtn";
 import NavCartBtn from "./NavCartBtn";
 import SkipToNextPageContent from "./UI/skipToNextPageContent/SkipToNextPageContent";
 import NavDesiredListBtn from "./NavDesiredListBtn";
-import { useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
+import { Context } from "../Context";
 
 const Navbar = ({ elemToFocus, navCategoryBtnRef }) => {
+  const { app } = useContext(Context);
+  
   const btnGroupRef = useRef(null);
   const navbarRef = useRef(null);
+
+  useEffect(() => {
+    app.setNavBtnGroupRef(btnGroupRef)
+  }, [app, btnGroupRef]);
 
   return (
     <nav ref={navbarRef}>
@@ -20,7 +27,7 @@ const Navbar = ({ elemToFocus, navCategoryBtnRef }) => {
       <div ref={btnGroupRef} data-testid="navbar-btn-group">
         <NavMenuBtn />
         <NavCategoryBtn ref={navCategoryBtnRef} />
-        <SearchProductsForm btnGroupRef={btnGroupRef} navbarRef={navbarRef} />
+        <SearchProductsForm navbarRef={navbarRef} />
         <NavAccountBtn />
         <NavDesiredListBtn />
         <NavCartBtn />

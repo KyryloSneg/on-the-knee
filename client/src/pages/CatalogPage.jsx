@@ -6,7 +6,6 @@ import DeviceSection from "../components/DeviceSection";
 import { WIDTH_TO_SHOW_ASIDE, sortingOptions } from "../utils/consts";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Context } from "../Context";
-import useClosingAllWindows from "../hooks/useClosingAllWindows";
 import CatalogAside from "../components/CatalogAside";
 import useDeviceSectionFetching from "../hooks/useDeviceSectionFetching";
 import URLActions from "../utils/URLActions";
@@ -15,6 +14,7 @@ import useNavigateToEncodedURL from "../hooks/useNavigateToEncodedURL";
 import { useLocation, useParams } from "react-router-dom";
 import ChildCategoriesBar from "../components/ChildCategoriesBar";
 import CustomScrollbar from "../components/UI/customScrollbar/CustomScrollbar";
+import useDeletingRedundantCategoryId from "../hooks/useDeletingRedundantCategoryId";
 
 const POSSIBLE_TYPES = ["category", "search"];
 
@@ -38,6 +38,8 @@ const CatalogPage = observer(({ type }) => {
     app.setPageRef(pageRef);
   }, [app, windowWidth]);
 
+  // we have no need in categoryId param if we're already at the category catalog page
+  useDeletingRedundantCategoryId(type);
   useEffect(() => {
     const { usedFilters, url } = URLActions.getUsedFilters(deviceStore.filters);
     deviceStore.setUsedFilters(usedFilters);
@@ -47,16 +49,17 @@ const CatalogPage = observer(({ type }) => {
 
     // router from the tests seems to not work with navigate() function,
     // so it's better to skip the block below
-    if (location.pathname !== url && !isTest) {
-      const basename = process.env.REACT_APP_CLIENT_URL;
+    const basename = process.env.REACT_APP_CLIENT_URL;
+    const currentUrl = basename + location.pathname + location.search;
+
+    if (currentUrl !== url && !isTest) { 
       navigate(url.replace(basename, ""), { replace: true });
     }
 
   }, [location.search, deviceStore, deviceStore.filters, deviceStore.filters, location.pathname, navigate, isTest]);
+  
   const [isLoading, error, deviceFetching] = useDeviceSectionFetching(deviceStore, app, type, setIsFoundDevicesByQuery, setSpellCheckedQuery);
   if (error) console.log(error);
-
-  useClosingAllWindows();
 
   if (!isFoundDevicesByQuery && type === "search") {
     return (

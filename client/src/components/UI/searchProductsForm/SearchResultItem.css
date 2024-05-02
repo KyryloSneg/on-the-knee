@@ -47,6 +47,10 @@
   background: white url("../../../assets/category.svg") 6px center no-repeat;
 }
 
+.search-result-category-search a {
+  background: white url("../../../assets/search.svg") 6px center no-repeat;
+}
+
 .search-result-hidden {
   width: 0;
   height: 0;
@@ -56,7 +60,8 @@
 }
 
 .search-result-history a,
-.search-result-category a {
+.search-result-category a,
+.search-result-category-search a {
   padding-left: 32px;
 }
 

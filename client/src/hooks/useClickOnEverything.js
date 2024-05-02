@@ -5,11 +5,11 @@ import { useEffect } from "react";
 
 // btnOfElem - the button that opens up our elem
 export default function useClickOnEverything(func, elemRef, btnOfElemRef = null) {
-  useEffect(() => {
+  function effectFn() {
     if (func) {
 
       function clickHandler(e) {
-        if (btnOfElemRef?.current && e.target === btnOfElemRef?.current) return;
+        if (!!btnOfElemRef?.current && e.target === btnOfElemRef?.current) return;
 
         if (elemRef.current && !elemRef.current?.contains(e.target)) {
           func();
@@ -27,5 +27,7 @@ export default function useClickOnEverything(func, elemRef, btnOfElemRef = null)
         document.body.removeEventListener("click", clickHandler);
       }
     }
-  }, [func, elemRef, btnOfElemRef])
+  }
+  
+  useEffect(effectFn, [func, elemRef, btnOfElemRef, effectFn])
 }

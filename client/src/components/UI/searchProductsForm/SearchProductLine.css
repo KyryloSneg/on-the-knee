@@ -26,6 +26,12 @@ nav .search-product-line {
   transition: background 0.2s;
 }
 
+/* doing this, so, for example, on clicking the delete input btn our input will still be white */
+
+div.focusedSearch .search-product-line {
+  background-color: white;
+}
+
 /* Delete input content button */
 
 nav .delete-input-content-btn {

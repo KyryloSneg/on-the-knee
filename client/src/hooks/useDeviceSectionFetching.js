@@ -13,10 +13,9 @@ import getDeviceStructuredAttributes from "../utils/getDeviceStructuredAttribute
 import getDeviceFiltersObj from "../utils/getDeviceFiltersObj";
 import filterDevicesWithCommonFilters from "../utils/filterDevicesWithCommonFilters";
 import sortDevicesByPrice from "../utils/sortDevicesByPrice";
-import { getDevices } from "../http/DeviceApi";
-import spellCheck from "../http/SaplingAPI";
 import useNavigateToEncodedURL from "./useNavigateToEncodedURL";
 import getDescendantCategories from "../utils/getDescendantCategories";
+import getDevicesBySearchQuery from "../utils/getDevicesBySearchQuery";
 
 // query params without pagination ones
 function useDeviceSectionFetching(deviceStore, app, type, setIsFoundDevicesByQuery = null, setSpellCheckedQuery = null) {
@@ -28,7 +27,6 @@ function useDeviceSectionFetching(deviceStore, app, type, setIsFoundDevicesByQue
   const prevLocationPathname = useRef(location.pathname);
 
   const hasChangedURL = prevLocationPathname.current !== location.pathname;
-  // console.log(hasChangedURL);
 
   async function fetchingCallback(location, categoryIdSlug, hasChangedURL) {
     const isInitialFetch = !deviceStore.devices.length || !_.isEqual(deviceStore.usedFilters, prevUsedFilters.current) || hasChangedURL;
@@ -53,6 +51,7 @@ function useDeviceSectionFetching(deviceStore, app, type, setIsFoundDevicesByQue
       const toFilterBySeller = !!deviceStore.usedFilters["seller"]?.length;
       const toFilterByBrand = !!deviceStore.usedFilters["brand"]?.length;
   
+      const categoryIdParam = URLActions.getParamValue("categoryId");
       const searchQuery = URLActions.getParamValue("text");
       const sortFilter = URLActions.getParamValue("sort");
   
@@ -67,54 +66,12 @@ function useDeviceSectionFetching(deviceStore, app, type, setIsFoundDevicesByQue
       }
   
       if (type === "search") fetchStringQueryParams += `&name_like=${searchQuery}`.replaceAll(`"`, "");
-      
-      let spellCheckedSearchQuery = searchQuery;
-      let { devices } = await getDevices(fetchStringQueryParams);
-  
-      if (!devices.length && type === "search") {
-        spellCheckedSearchQuery = await spellCheck(searchQuery);
-  
-        const fetchParams = fetchStringQueryParams.split("&");
-        fetchParams[2] = `name_like=${spellCheckedSearchQuery}`.replaceAll(`"`, "");
-  
-        fetchStringQueryParams = fetchParams.join("&");
-        devices = (await getDevices(fetchStringQueryParams)).devices || [];
-      }
-  
-      if (type === "search") {
-        if (!devices.length) {
-          devices = (await getDevices()).devices;
-          // it looks ugly as hell
-          // device found by its combination's sku or deviceCode
-          let foundDevice = devices.find(dev => 
-            !!dev["device-combinations"].find(combo => combo.sku === searchQuery || combo.deviceCode === +searchQuery)
-          ) || null;
-          
-          if (foundDevice) {
-            const combination = foundDevice["device-combinations"]
-              .find(combo => combo.sku === searchQuery || combo.deviceCode === +searchQuery);
-            combination.default = true;
-            foundDevice["device-combinations"] = [combination];
-          }
-  
-          devices = foundDevice ? [foundDevice] : [];
-        }
-  
-        if (devices.length && !!spellCheckedSearchQuery && spellCheckedSearchQuery !== searchQuery) {
-          const newUrl = URLActions.setNewParam("text", spellCheckedSearchQuery);
-  
-          const basename = process.env.REACT_APP_CLIENT_URL;
-          navigate(newUrl.replace(basename, ""), { replace: true });
-        }
-        setIsFoundDevicesByQuery(!!devices.length);
-      }
-  
-      if (!!spellCheckedSearchQuery && spellCheckedSearchQuery !== searchQuery) {
-        setSpellCheckedQuery(spellCheckedSearchQuery);
-      } else {
-        setSpellCheckedQuery(searchQuery);
-      }
-  
+      if (categoryIdParam && type !== "category") fetchStringQueryParams += `&categoryId=${categoryIdParam}`.replaceAll(`"`, "");
+
+      let devices = await getDevicesBySearchQuery(
+        fetchStringQueryParams, type === "search", setIsFoundDevicesByQuery, setSpellCheckedQuery, navigate
+      );
+
       if (type === "category") {
         const categoryId = +categoryIdSlug?.split("-")[0];
         let descendantCategories = getDescendantCategories(categoryId, deviceStore.categories);
