@@ -3,7 +3,7 @@ import DeviceStore from "../stores/DeviceStore";
 import UserStore from "../stores/UserStore";
 
 export const ROOT_ROUTE = "/";
-export const DEVICE_ROUTE = "/catalog/"; // + :deviceId
+export const DEVICE_ROUTE = "/device/"; // + :deviceIdCombo
 export const CHECKOUT_ROUTE = "/checkout";
 export const DESIRED_LIST_ROUTE = "/desired";
 export const USER_ROUTE = "/user";
@@ -110,13 +110,18 @@ export const mockSearchResults = {
 };
 
 // params that don't appear in used filters like a sort filter
-export const SPECIAL_QUERY_PARAMS = ["sort", "page", "pagesToFetch", "text"];
+export const SPECIAL_QUERY_PARAMS = ["sort", "page", "pagesToFetch", "text", "categoryId"];
 
 // filters that have unique filtration logic
 export const SPECIAL_TO_HANDLE_FILTERS = ["sort", "price", "text", "stock", "seller", "brand"];
 
 // filters that aren't placed in category filters
 export const FILTERS_IN_SPECIAL_COMPONENTS = ["sort", "price", "text"];
+
+export const HINT_SEARCH_RESULTS_MAX_AMOUNT = 3;
+export const DEVICE_SEARCH_RESULTS_MAX_AMOUNT = 3;
+export const CATEGORY_SEARCH_RESULTS_MAX_AMOUNT = 3;
+export const HISTORY_SEARCH_RESULTS_MAX_AMOUNT = 3;
 
 // renavigate user to categories page if subcategories amount >= MIN_CATEGORIES_LENGTH_TO_RENAVIGATE
 // TODO: change to 12
@@ -125,7 +130,7 @@ export const MIN_CATEGORIES_LENGTH_TO_RENAVIGATE = 8;
 // we use the const below on one of the columns overflow
 export const CATEGORIES_COL_LVL_THREE_LIMIT = 8;
 
-// in production build the values should be greater than current ones
+// TODO: in production build the values should be greater than current ones
 export const FILTERS_OPTIONS_LENGTH_LIMIT = 6;
 export const DEVICE_ITEM_INFO_AMOUNT_LIMIT = 6;
 

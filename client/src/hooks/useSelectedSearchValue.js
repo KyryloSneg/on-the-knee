@@ -17,7 +17,10 @@ export default function useSelectedSearchValue(selectedId, setSelectedId, result
 
           if (searchResultElems.length) {
             const selectedSearchResult = searchResultElems[selectedId - 1];
-            resultValue = selectedSearchResult.dataset.value;
+            const selectedSearchType = selectedSearchResult.dataset.type
+            const isSelectable = selectedSearchType === "hint" || selectedSearchType === "history";
+
+            if (isSelectable) resultValue = selectedSearchResult.dataset.value;
           }
         }
 

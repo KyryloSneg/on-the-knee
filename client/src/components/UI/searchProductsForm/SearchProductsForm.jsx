@@ -5,20 +5,25 @@ import { observer } from "mobx-react-lite";
 import SearchProductLine from "./SearchProductLine";
 import SearchResults from "./SearchResults";
 import useFnOnSomeValue from "../../../hooks/useFnOnSomeValue";
-import { mockSearchResults } from "../../../utils/consts";
+import { HISTORY_SEARCH_RESULTS_MAX_AMOUNT, mockSearchResults } from "../../../utils/consts";
 import useDeleteValueOnEsc from "../../../hooks/useDeleteValueOnEsc";
 import StringActions from "../../../utils/StringActions";
 import setSearchFormVisibility from "../../../utils/setSearchFormVisibility";
 import useSearchResultsFetching from "../../../hooks/useSearchResultsFetching";
 import { addHintSearchResult } from "../../../http/HintSearchResultsAPI";
 import getDevicesBySearchQuery from "../../../utils/getDevicesBySearchQuery";
+import useGettingDeviceRelatedData from "../../../hooks/useGettingDeviceRelatedData";
+import useNavigateToEncodedURL from "../../../hooks/useNavigateToEncodedURL";
 
 const SearchProductsForm = observer(({ navbarRef }) => {
   const { app, isTest, isEmptySearchResults } = useContext(Context);
+  const navigate = useNavigateToEncodedURL();
+  const [sales, setSales] = useState([]);
+  const [saleTypeNames, setSaleTypeNames] = useState([]);
+  const [stocks, setStocks] = useState([]);
   const [value, setValue] = useState(""); // the value that will be submitted to the form
   // the value that user can return to (it renders as the first search option if the input value isn't empty)
   const [backupValue, setBackupValue] = useState("");
-  // TODO: change mock value to the real one
   let initialResValue = { 
     hint: [], 
     device: [], 
@@ -148,8 +153,6 @@ const SearchProductsForm = observer(({ navbarRef }) => {
       blurInput();
     }
 
-    // filterResults(nextBackupValue, mockResults);
-
     setValue(e.target.value);
     setBackupValue(e.target.value);
   }
@@ -158,11 +161,25 @@ const SearchProductsForm = observer(({ navbarRef }) => {
     e.preventDefault();
     if (!!value.trim().length) {
       try {
+        const href = `/search/?text=${value.trim()}&page=1&pagesToFetch=1`;
+        navigate(href);
+        
         // we can't store array in localStorage, so we save it as string and getting with JSON.parse(...) method
         let storageHistoryResults = JSON.parse(localStorage.getItem("historyResults")) || [];
         let newHistoryResult = { value: value.trim() };
 
-        const newHistoryResults = [...storageHistoryResults, newHistoryResult];
+        let newHistoryResults = [...storageHistoryResults];
+        const isAlreadyExists = !!storageHistoryResults.find(result => result.value === newHistoryResult.value);
+
+        if (!isAlreadyExists) {
+          if (storageHistoryResults.length >= HISTORY_SEARCH_RESULTS_MAX_AMOUNT) {
+            newHistoryResults = [...storageHistoryResults, newHistoryResult];
+            newHistoryResults = newHistoryResults.slice(1);
+          } else {
+            newHistoryResults = [...storageHistoryResults, newHistoryResult];
+          }
+        }
+
         localStorage.setItem("historyResults", JSON.stringify(newHistoryResults));
 
         // add hint search result only if the result links to not empty catalog page
@@ -181,7 +198,9 @@ const SearchProductsForm = observer(({ navbarRef }) => {
     }
   }
 
-  useSearchResultsFetching(results, setResults, backupValue);
+  useSearchResultsFetching(setResults, backupValue);
+  useGettingDeviceRelatedData(setSales, setSaleTypeNames, setStocks, results);
+
   return (
     <form className="search-product-form" role="search" onSubmit={onSubmit} onBlur={onFormBlur} ref={formRef}>
       <div className="search-product-with-results">
@@ -207,6 +226,9 @@ const SearchProductsForm = observer(({ navbarRef }) => {
             setSelectedId={setSelectedId}
             isInputFocused={isInputFocused}
             inputRef={inputRef}
+            sales={sales}
+            saleTypeNames={saleTypeNames}
+            stocks={stocks}
           />
         }
       </div>

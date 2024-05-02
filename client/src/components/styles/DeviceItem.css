@@ -31,6 +31,10 @@
   object-fit: cover;
   justify-self: center;
   align-self: center;
+  /* alt text's styles */
+  text-align: center;
+  font-size: 1.4rem;
+  color: grey;
 }
 
 .main-device-name {

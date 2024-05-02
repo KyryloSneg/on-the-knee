@@ -14,6 +14,7 @@ import useNavigateToEncodedURL from "../hooks/useNavigateToEncodedURL";
 import { useLocation, useParams } from "react-router-dom";
 import ChildCategoriesBar from "../components/ChildCategoriesBar";
 import CustomScrollbar from "../components/UI/customScrollbar/CustomScrollbar";
+import useDeletingRedundantCategoryId from "../hooks/useDeletingRedundantCategoryId";
 
 const POSSIBLE_TYPES = ["category", "search"];
 
@@ -37,6 +38,8 @@ const CatalogPage = observer(({ type }) => {
     app.setPageRef(pageRef);
   }, [app, windowWidth]);
 
+  // we have no need in categoryId param if we're already at the category catalog page
+  useDeletingRedundantCategoryId(type);
   useEffect(() => {
     const { usedFilters, url } = URLActions.getUsedFilters(deviceStore.filters);
     deviceStore.setUsedFilters(usedFilters);
