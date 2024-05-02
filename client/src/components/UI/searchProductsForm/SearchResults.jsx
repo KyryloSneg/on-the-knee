@@ -6,7 +6,12 @@ import "./SearchResults.css";
 import useChangingMinMaxIds from "../../../hooks/useChangingMinMaxIds";
 import { Context } from "../../../Context";
 
-const SearchResults = ({ results, setResults, backupValue, setValue, minId, maxId, selectedId, setSelectedId, isInputFocused, inputRef }) => {
+const SearchResults = ({ 
+  results, setResults, backupValue, setValue,
+  minId, maxId, selectedId, setSelectedId, 
+  isInputFocused, inputRef,
+  sales, saleTypeNames, stocks
+}) => {
   const { app } = useContext(Context);
 
   const searchResultsRef = useRef(null);
@@ -41,7 +46,7 @@ const SearchResults = ({ results, setResults, backupValue, setValue, minId, maxI
               key={`${backupValue}-${minId.current}`}
               active={currentResultId === selectedId}
               value={backupValue}
-              type={isBackupValue ? "default" : "hidden"}
+              type={isBackupValue ? "hint" : "hidden"}
               isBackupValueOption={true}
             />
             {!!results.hint.length &&
@@ -67,11 +72,15 @@ const SearchResults = ({ results, setResults, backupValue, setValue, minId, maxI
                   currentResultId += 1;
                   return (
                     <SearchResultItem
-                      key={`${result.value}-${currentResultId}`}
+                      key={`${result.id}-${currentResultId}`}
+                      type="device"
                       active={currentResultId === selectedId}
-                      value={result.value}
+                      value={result}
                       id={index}
                       inputValue={backupValue}
+                      sales={sales}
+                      saleTypeNames={saleTypeNames}
+                      stocks={stocks}
                     />
                   )
                 })}
@@ -85,10 +94,11 @@ const SearchResults = ({ results, setResults, backupValue, setValue, minId, maxI
                     currentResultId += 1;
                     return (
                       <SearchResultItem
-                        key={`category-${result.value}-${currentResultId}`}
+                        key={`category-${result.id}-${currentResultId}`}
                         type="category"
                         active={currentResultId === selectedId}
-                        value={result.value}
+                        value={result}
+                        inputValue={backupValue}
                         id={index}
                       />
                     );
@@ -99,16 +109,17 @@ const SearchResults = ({ results, setResults, backupValue, setValue, minId, maxI
             {/* search in category (category catalog page + ?text="our query"): */}
             {!!results.category.length &&
               <li className="search-product-results-group">
-                <p>Search by categories</p>
+                <p>Search in categories</p>
                 <ul>
                   {results.category.map((result, index) => {
                     currentResultId += 1;
                     return (
                       <SearchResultItem
-                        key={`category-${result.value}-${currentResultId}`}
-                        type="category"
+                        key={`categorySearch-${result.id}-${currentResultId}`}
+                        type="category-search"
                         active={currentResultId === selectedId}
-                        value={result.value}
+                        value={result}
+                        inputValue={backupValue}
                         id={index}
                       />
                     );

@@ -2,9 +2,11 @@ import { useContext, useEffect } from "react";
 import useFetching from "./useFetching";
 import { Context } from "../Context";
 import StringActions from "../utils/StringActions";
+import getDevicesBySearchQuery from "../utils/getDevicesBySearchQuery";
+import { CATEGORY_SEARCH_RESULTS_MAX_AMOUNT, DEVICE_SEARCH_RESULTS_MAX_AMOUNT, HINT_SEARCH_RESULTS_MAX_AMOUNT } from "../utils/consts";
 
 // query params without pagination ones
-function useSearchResultsFetching(results, setResults, backupValue) {
+function useSearchResultsFetching(setResults, backupValue) {
   const { app, deviceStore } = useContext(Context);
   
   async function fetchingCallback(backupValue) {
@@ -18,14 +20,22 @@ function useSearchResultsFetching(results, setResults, backupValue) {
       );
     }
 
-    const deviceResults = results.device;
-    const categoryResults = results.category;
-    const historyResults = JSON.parse(localStorage.getItem("historyResults")) || [];
+    let deviceResults = [];
+    if (backupValue.trim().length > 2) {
+      const fetchStringQueryParams = `name_like=${backupValue.trim().toLowerCase()}`.replaceAll(`"`, "");
+      deviceResults = await getDevicesBySearchQuery(fetchStringQueryParams);
+    }
     
+    const categoryResults = deviceResults.map(device => {
+      const category = deviceStore.categories.find(cat => +cat.id === +device.categoryId);
+      return category;
+    });
+
+    const historyResults = JSON.parse(localStorage.getItem("historyResults")) || [];
     const nextResults = {
-      hint: hintResults,
-      device: deviceResults,
-      category: categoryResults,
+      hint: hintResults.slice(0, HINT_SEARCH_RESULTS_MAX_AMOUNT),
+      device: deviceResults.slice(0, DEVICE_SEARCH_RESULTS_MAX_AMOUNT),
+      category: categoryResults.slice(0, CATEGORY_SEARCH_RESULTS_MAX_AMOUNT),
       history: historyResults,
     };
 

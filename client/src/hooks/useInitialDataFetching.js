@@ -31,7 +31,6 @@ function useInitialDataFetching() {
     const sortedHintResults = ArrayActions.sortNumberObjectArray(resultsWithAmount, "amount").reverse();
     // sorting categories by id
     const sortedCategories = ArrayActions.sortNumberObjectArray(categories, "id");
-    console.log(sortedHintResults);
 
     deviceStore.setBrands(brands);
     deviceStore.setCategories(sortedCategories);

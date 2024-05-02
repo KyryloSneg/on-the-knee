@@ -4,6 +4,7 @@ class DeviceSalesActions {
     let deviceSaleTypes = [];
     let discountPercentage;
 
+    if (!sales?.length || !saleTypeNames?.length) return; 
     // if our device is promotional
     if (!!device["sale-devices"]?.length) {
 

@@ -51,6 +51,7 @@ function useDeviceSectionFetching(deviceStore, app, type, setIsFoundDevicesByQue
       const toFilterBySeller = !!deviceStore.usedFilters["seller"]?.length;
       const toFilterByBrand = !!deviceStore.usedFilters["brand"]?.length;
   
+      const categoryIdParam = URLActions.getParamValue("categoryId");
       const searchQuery = URLActions.getParamValue("text");
       const sortFilter = URLActions.getParamValue("sort");
   
@@ -65,6 +66,7 @@ function useDeviceSectionFetching(deviceStore, app, type, setIsFoundDevicesByQue
       }
   
       if (type === "search") fetchStringQueryParams += `&name_like=${searchQuery}`.replaceAll(`"`, "");
+      if (categoryIdParam && type !== "category") fetchStringQueryParams += `&categoryId=${categoryIdParam}`.replaceAll(`"`, "");
 
       let devices = await getDevicesBySearchQuery(
         fetchStringQueryParams, type === "search", setIsFoundDevicesByQuery, setSpellCheckedQuery, navigate
