@@ -25,7 +25,12 @@ const SearchProductLine = forwardRef(({ value, onChange, deleteInputContent, bac
 
   return (
     <div className="search-product-line-wrap" ref={searchLineRef}>
-      <button className="input-back-btn" onBlur={onInputBlur} ref={backBtnRef} onClick={backToNavbar} data-testid="search-product-back-btn">
+      <button 
+        className="input-back-btn" 
+        onBlur={onInputBlur} 
+        onClick={backToNavbar} 
+        ref={backBtnRef} 
+        data-testid="search-product-back-btn">
         <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20">
           <path d="M360-216 96-480l264-264 51 51-177 177h630v72H234l177 177-51 51Z" />
         </svg>

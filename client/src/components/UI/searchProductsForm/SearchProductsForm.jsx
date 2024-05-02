@@ -5,22 +5,34 @@ import { observer } from "mobx-react-lite";
 import SearchProductLine from "./SearchProductLine";
 import SearchResults from "./SearchResults";
 import useFnOnSomeValue from "../../../hooks/useFnOnSomeValue";
-import { mockSearchResults } from "../../../utils/consts";
+import { HISTORY_SEARCH_RESULTS_MAX_AMOUNT, mockSearchResults } from "../../../utils/consts";
 import useDeleteValueOnEsc from "../../../hooks/useDeleteValueOnEsc";
-import useMinMaxIds from "../../../hooks/useMinMaxIds";
-import filterSearchResultFn from "../../../utils/filterSearchResultFn";
 import StringActions from "../../../utils/StringActions";
-import useClickOnEverything from "../../../hooks/useClickOnEverything";
+import setSearchFormVisibility from "../../../utils/setSearchFormVisibility";
+import useSearchResultsFetching from "../../../hooks/useSearchResultsFetching";
+import { addHintSearchResult } from "../../../http/HintSearchResultsAPI";
+import getDevicesBySearchQuery from "../../../utils/getDevicesBySearchQuery";
+import useGettingDeviceRelatedData from "../../../hooks/useGettingDeviceRelatedData";
+import useNavigateToEncodedURL from "../../../hooks/useNavigateToEncodedURL";
 
-const SearchProductsForm = observer(({ btnGroupRef, navbarRef }) => {
+const SearchProductsForm = observer(({ navbarRef }) => {
   const { app, isTest, isEmptySearchResults } = useContext(Context);
+  const navigate = useNavigateToEncodedURL();
+  const [sales, setSales] = useState([]);
+  const [saleTypeNames, setSaleTypeNames] = useState([]);
+  const [stocks, setStocks] = useState([]);
   const [value, setValue] = useState(""); // the value that will be submitted to the form
   // the value that user can return to (it renders as the first search option if the input value isn't empty)
   const [backupValue, setBackupValue] = useState("");
-  // TODO: change mock value to the real one
-  let initialResValue = { default: [], categories: [], history: [] };
-  if (!isEmptySearchResults) {
-    initialResValue = isTest ? mockSearchResults : mockSearchResults;
+  let initialResValue = { 
+    hint: [], 
+    device: [], 
+    category: [], 
+    history: JSON.parse(localStorage.getItem("historyResults")) || [] 
+  };
+
+  if (!isEmptySearchResults && isTest) {
+    initialResValue = mockSearchResults;
   }
 
   const [results, setResults] = useState(initialResValue);
@@ -29,83 +41,50 @@ const SearchProductsForm = observer(({ btnGroupRef, navbarRef }) => {
   // const [results, setResults] = useState({...mockSearchResults, history: []});
   
   const [selectedId, setSelectedId] = useState(null);
-  const [minId, maxId] = useMinMaxIds(results, setSelectedId);
+  
+  const minId = useRef(null);
+  const maxId = useRef(null);
 
   const formRef = useRef(null);
   const searchBtnRef = useRef(null);
   const inputRef = useRef(null);
 
-  const [isFocused, setIsFocused] = useState(false);
   // the "real" input focus
   const [isInputFocused, setIsInputFocused] = useState(false);
-
   useEffect(() => {
-    if (app.headerRef) {
-      if (isFocused) {
-        app.headerRef.current.classList.add("closer-than-darkbg");
-      } else {
-        app.headerRef.current.classList.remove("closer-than-darkbg");
-      }
-    }
-  }, [isFocused, app]);
+    // if user left the component, reset selectedId to prevent bugs 
+    if (!app.isFocusedSearchForm) setSelectedId(null);
+  }, [app.isFocusedSearchForm]);
 
   // using the useCallback hook below to use the function in the useEffect hook without any linter warnings
   
   // focusing input (making it wider, showing the dark bg)
   const focusInput = useCallback(() => {
-    btnGroupRef.current.classList.add("focusedSearch");
-    app.setDarkBgVisible(true);
-    setIsFocused(true);
-  }, [app, btnGroupRef]);
+    setSearchFormVisibility(true, app);
+  }, [app]);
 
   // vice versa
   const blurInput = useCallback(() => {
-    app.setDarkBgVisible(false);
-    btnGroupRef.current.classList.remove("focusedSearch");
-    setIsFocused(false);
-  }, [app, btnGroupRef]);
+    setSearchFormVisibility(false, app);
+    // eslint-disable-next-line
+  }, [app]);
 
-  const amount = results.default.length + results.history.length + results.categories.length;
-  const isResultsAndValue = amount || value;
-  const onEmptyResultsAndValue = useCallback(() => {
-    setIsFocused(false);
+  const amount = results.hint.length + results.device.length + results.category.length + results.history.length;
+  const isResultsOrValue = amount || value;
+
+  const onEmptyResultsOrValue = useCallback(() => {
+    app.setIsFocusedSearchForm(false);
     blurInput();
-  }, [setIsFocused, blurInput]);
+  }, [app, blurInput]);
 
   useFnOnSomeValue(value, focusInput, null);
-  useFnOnSomeValue(isResultsAndValue, null, onEmptyResultsAndValue);
+  useFnOnSomeValue(isResultsOrValue, null, onEmptyResultsOrValue);
 
-  const onClickOnEverything = isFocused ? blurInput : null;
-  useClickOnEverything(onClickOnEverything, formRef);
-  useDeleteValueOnEsc(setValue, setBackupValue, isFocused);
-
-  function filterResults(nextBackupValue, mockResults) {
-
-    let nextResults = { default: [], categories: [], history: [] };
-    if (!isEmptySearchResults) {
-      // if our value is empty and our history search results aren't empty we show a couple of them
-      if (!nextBackupValue.length && mockResults.history.length) {
-        nextResults = {
-          default: [],
-          history: mockResults.history.slice(0, 6),
-          categories: [],
-        }
-      } else {
-        nextResults = {
-          default: mockResults.default.filter(d => filterSearchResultFn(d.value, nextBackupValue)),
-          history: mockResults.history.filter(h => filterSearchResultFn(h.value, nextBackupValue, false)),
-          categories: mockResults.categories.filter(c => filterSearchResultFn(c.value, nextBackupValue, false)),
-        }
-      }
-    }
-
-    setResults(nextResults);
-
-  }
+  useDeleteValueOnEsc(setValue, setBackupValue, app.isFocusedSearchForm);
 
   function onInputFocus() {
     setIsInputFocused(true);
-    if (isFocused || value === "") return;
+    if (app.isFocusedSearchForm || value === "") return;
     focusInput();
   }
 
@@ -118,20 +97,13 @@ const SearchProductsForm = observer(({ btnGroupRef, navbarRef }) => {
     blurInput();
 
     const nextBackupValue = StringActions.removeRedundantSpaces(value);
-    // for test purpose
-    // const mockResults = {...mockSearchResults, history: []};
-
-    // TODO: change mock results below to the real ones
-    const mockResults = mockSearchResults;
-    
     setBackupValue(nextBackupValue);
-    filterResults(nextBackupValue, mockResults);
   }
 
   function onSubmitBtnBlur(e) {
     // if the input isn't focused we do nothing, else we check other conditions and if everything is ok we focus the button
-    // (it's not the best solution i guess but i've havent found out what i can do else here)
-    if (!isFocused) return;
+    // (it's not the best solution i guess but i've haven't found out what i can do else here)
+    if (!app.isFocusedSearchForm) return;
 
     const focusedElem = e.relatedTarget;
     if (formRef.current.contains(focusedElem)) return;
@@ -141,7 +113,7 @@ const SearchProductsForm = observer(({ btnGroupRef, navbarRef }) => {
 
   function onInputBlur(e) {
     setIsInputFocused(false);
-    if (!isFocused) return;
+    if (!app.isFocusedSearchForm) return;
 
     const focusedElem = e.relatedTarget;
     if (formRef.current.contains(focusedElem)) return;
@@ -153,49 +125,81 @@ const SearchProductsForm = observer(({ btnGroupRef, navbarRef }) => {
   function deleteInputContent() {
     setValue("");
     setBackupValue("");
+
     inputRef.current.input.focus();
+    setIsInputFocused(true);
   }
 
   function onBackBtnClick() {
-    setIsFocused(false);
+    // using this condition to prevent input unfocusing on pressing enter key
+    // (idk how it happens)
+    if (document.activeElement !== inputRef.current.backBtn) return;
+    
+    app.setIsFocusedSearchForm(false);
     blurInput();
     inputRef.current.input.focus();
   }
 
   function onChange(e) {
-    if (selectedId !== minId) {
-      setSelectedId(minId);
+    if (selectedId !== minId.current) {
+      setSelectedId(minId.current);
     }
 
     // for test purpose
     // const mockResults = {...mockSearchResults, history: []};
 
-    // instead of mockResults we must use real data later on
-    const mockResults = mockSearchResults;
     const nextBackupValue = StringActions.removeRedundantSpaces(e.target.value);
-
-    if (!mockResults.history.length && !nextBackupValue) {
+    if (!results.history.length && !nextBackupValue) {
       blurInput();
     }
-
-    filterResults(nextBackupValue, mockResults);
 
     setValue(e.target.value);
     setBackupValue(e.target.value);
   }
 
-  function onSubmit(e) {
+  async function onSubmit(e) {
     e.preventDefault();
-    try {
-      // TODO: searching products
-    } catch (error) {
-      // TODO: error handling
-    } finally {
-      setBackupValue(value);
-      setIsInputFocused(false);
-      blurInput();
+    if (!!value.trim().length) {
+      try {
+        const href = `/search/?text=${value.trim()}&page=1&pagesToFetch=1`;
+        navigate(href);
+        
+        // we can't store array in localStorage, so we save it as string and getting with JSON.parse(...) method
+        let storageHistoryResults = JSON.parse(localStorage.getItem("historyResults")) || [];
+        let newHistoryResult = { value: value.trim() };
+
+        let newHistoryResults = [...storageHistoryResults];
+        const isAlreadyExists = !!storageHistoryResults.find(result => result.value === newHistoryResult.value);
+
+        if (!isAlreadyExists) {
+          if (storageHistoryResults.length >= HISTORY_SEARCH_RESULTS_MAX_AMOUNT) {
+            newHistoryResults = [...storageHistoryResults, newHistoryResult];
+            newHistoryResults = newHistoryResults.slice(1);
+          } else {
+            newHistoryResults = [...storageHistoryResults, newHistoryResult];
+          }
+        }
+
+        localStorage.setItem("historyResults", JSON.stringify(newHistoryResults));
+
+        // add hint search result only if the result links to not empty catalog page
+        const fetchStringQueryParams = `name_like=${value.trim().toLowerCase()}`.replaceAll(`"`, "");
+        const devicesBySearchQuery = await getDevicesBySearchQuery(fetchStringQueryParams);
+
+        if (devicesBySearchQuery.length) addHintSearchResult({ value: value.trim().toLowerCase() });
+      } catch (error) {
+        // TODO: error handling
+      } finally {
+        setBackupValue(value);
+        setIsInputFocused(false);
+        blurInput();
+        inputRef.current.input.blur();
+      }
     }
   }
+
+  useSearchResultsFetching(setResults, backupValue);
+  useGettingDeviceRelatedData(setSales, setSaleTypeNames, setStocks, results);
 
   return (
     <form className="search-product-form" role="search" onSubmit={onSubmit} onBlur={onFormBlur} ref={formRef}>
@@ -208,8 +212,9 @@ const SearchProductsForm = observer(({ btnGroupRef, navbarRef }) => {
           onInputFocus={onInputFocus}
           onInputBlur={onInputBlur}
           ref={inputRef}
+          hintSearchResults={app.hintSearchResults}
         />
-        {isFocused &&
+        {app.isFocusedSearchForm &&
           <SearchResults
             results={results}
             setResults={setResults}
@@ -220,8 +225,10 @@ const SearchProductsForm = observer(({ btnGroupRef, navbarRef }) => {
             selectedId={selectedId}
             setSelectedId={setSelectedId}
             isInputFocused={isInputFocused}
-            isFocused={isFocused}
             inputRef={inputRef}
+            sales={sales}
+            saleTypeNames={saleTypeNames}
+            stocks={stocks}
           />
         }
       </div>

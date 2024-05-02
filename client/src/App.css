@@ -234,6 +234,10 @@ ul {
   outline: none;
 }
 
+.color-black {
+  color: black;
+}
+
 .link-colors,
 .link-colors-wrap a {
   outline-color: #ff7e14;

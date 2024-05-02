@@ -51,7 +51,7 @@
 }
 
 .spell-checked-p-placeholder {
-  height: 25px;
+  height: 47px;
 }
 
 .child-categories-scrollbar {
@@ -83,6 +83,10 @@
     font-size: 1.8rem;
   }
 
+  .spell-checked-p-placeholder {
+    height: 50px;
+  }
+
   .category-name-heading {
     font-size: 3.2rem;
   }
@@ -95,6 +99,10 @@
 
   .spell-checked-query-p {
     font-size: 2.1rem;
+  }
+
+  .spell-checked-p-placeholder {
+    height: 53px;
   }
 }
 

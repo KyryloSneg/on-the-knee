@@ -183,8 +183,8 @@ class DeviceComboActions {
       return stocks.find(stock => stock.id === stockId);
     }
 
-    // if there are some different combinations
-    if (defaultCombination.combinationString) {
+    // if there are some different combinations and stocks exist
+    if (defaultCombination.combinationString && !!stocks?.length) {
       const stock = getStock(defaultCombination.stockId).totalStock;
 
       // check is default combination not in stock
@@ -201,7 +201,7 @@ class DeviceComboActions {
 
     }
 
-    let isInStock = !!getStock(defaultCombinationInStock.stockId).totalStock;
+    let isInStock = !!getStock(defaultCombinationInStock.stockId)?.totalStock;
     return { defaultCombinationInStock, isInStock };
   }
 
