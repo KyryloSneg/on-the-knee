@@ -14,11 +14,12 @@ body {
   margin: 0;
 }
 
+/* every page must start with the <main /> element */
 main {
   min-height: 100vh;
 }
 
-/* implementing the scroll blocking like this, so the scroll bar doesn't disappears */
+/* implementing the scroll blocking like this, so the scroll bar doesn't disappear */
 .global-blocked-scroll {
   position: fixed;
   width: 100%;
