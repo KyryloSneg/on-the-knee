@@ -102,7 +102,7 @@ const DeviceItem = ({ device, isInStock, defaultCombination, stocks, sales, sale
         textSaleTypes={textSaleTypes}
       />
       {defaultComboColorHrefs
-        ? <DeviceColorOptions hrefObjects={defaultComboColorHrefObjects} />
+        ? <DeviceColorOptions hrefObjects={defaultComboColorHrefObjects} deviceId={device.id} />
         : <div className="device-color-options-placeholder" />
       }
       <Link to={to} className="main-device-name">
@@ -111,7 +111,8 @@ const DeviceItem = ({ device, isInStock, defaultCombination, stocks, sales, sale
       <DeviceItemAvgRating
         rating={device.rating}
         feedbackAmount={device["device-feedbacks"].length}
-        id={device.id}
+        deviceId={device.id}
+        defaultCombination={defaultCombination}
       />
       <div className="price-add-to-cart-wrap">
         <DeviceItemPrice price={defaultCombination.price} discountPercentage={discountPercentage} />

@@ -2,7 +2,6 @@ import { getDevices } from "../http/DeviceApi";
 import spellCheck from "../http/SaplingAPI";
 import URLActions from "./URLActions";
 
-
 // using this function in two cases: to get devices or check will a search query return empty catalog page or no (by checking devices amount)
 async function getDevicesBySearchQuery(fetchStringQueryParams, additionalCondition = true, setIsFoundDevicesByQuery = null, setSpellCheckedQuery = null, navigate = null, argDevices = []) {
   const searchQuery = URLActions.getParamValue("text");
