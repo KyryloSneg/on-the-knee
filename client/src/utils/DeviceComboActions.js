@@ -1,3 +1,4 @@
+import { DEVICE_ROUTE } from "./consts";
 import findMinMaxPrices from "./findMinMaxPrices";
 import { getDiscountedPriceOrDefaultOne } from "./getDiscountedPrice";
 
@@ -11,8 +12,8 @@ class DeviceComboActions {
   }
 
   // converting to default combination format with attribute's name and value
-  // for example: (hz, 60hz, "hz:144-color:purple#a020f0") => "hz:60-color:purple#a020f0"
-  static getDefaultComboStrByAttr(name, value, defaultStrFormat) {
+  // for example: (hz, 60, "hz:144-color:purple#a020f0") => "hz:60-color:purple#a020f0"
+  static changeDefaultComboStrAttr(name, value, defaultStrFormat) {
     const attrList = defaultStrFormat.split("-");
     const defaultComboStr = attrList.map(attr => {
       if (attr.startsWith(`${name}:`)) {
@@ -65,7 +66,8 @@ class DeviceComboActions {
       }
 
       // else we push a combo href
-      hrefs.push(`${deviceId}/${combo.combinationString}`);
+      const href = DEVICE_ROUTE + `${deviceId}-${combo.combinationString}`;
+      hrefs.push(href);
     }
 
     return hrefs;
@@ -75,7 +77,7 @@ class DeviceComboActions {
     let comboColorHrefObjects = [];
     if (comboColorHrefs) {
       comboColorHrefObjects = comboColorHrefs.map(href => {
-        const comboStr = href.split("/")[1];
+        const comboStr = href.split(`${DEVICE_ROUTE}${device.id}-`)[1];
         const combination = device["device-combinations"].find(
           combo => combo.combinationString === comboStr
         );
@@ -156,8 +158,8 @@ class DeviceComboActions {
       
       const attrValues = this.getAttrValuesFromComboStrings(combinationStrings, name);
       const valuesObj = attrValues.map(value => {
-        const comboStr = this.getDefaultComboStrByAttr(name, value, defaultCombination.combinationString);
-        const href = `${device.id}/${comboStr}`;
+        const comboStr = this.changeDefaultComboStrAttr(name, value, defaultCombination.combinationString);
+        const href = DEVICE_ROUTE + `${device.id}-${comboStr}`;
 
         return {
           attrValue: value,
