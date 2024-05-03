@@ -28,6 +28,7 @@ import setFiltersSidebarVisibility from "./utils/setFiltersSidebarVisibility";
 import setUsedFiltersBarVisibility from "./utils/setUsedFiltersBarVisibility";
 import useClosingCategoriesModalWidth from "./hooks/useClosingCategoriesModalWidth";
 import useClosingAllWindows from "./hooks/useClosingAllWindows";
+import useScrollingToPagesTop from "./hooks/useScrollingToPagesTop";
  
 const App = observer(() => {
   const { app, deviceStore } = useContext(Context);
@@ -62,6 +63,7 @@ const App = observer(() => {
   }, [app, headerRef]);
 
   useInitialDataFetching();
+  useScrollingToPagesTop();
   useClosingAllWindows();
 
   useClosingFiltersSidebarWidth(windowWidth, app.isVisibleFiltersSidebar, closeFiltersSidebar);
