@@ -3,7 +3,12 @@ import DeviceStore from "../stores/DeviceStore";
 import UserStore from "../stores/UserStore";
 
 export const ROOT_ROUTE = "/";
+
 export const DEVICE_ROUTE = "/device/"; // + :deviceIdCombo
+export const DEVICE_INFO_ROUTE = "/device/:deviceIdCombo/info";
+export const DEVICE_COMMENTS_ROUTE = "/device/:deviceIdCombo/comments";
+export const DEVICE_QUESTIONS_ROUTE = "/device/:deviceIdCombo/questions";
+
 export const CHECKOUT_ROUTE = "/checkout";
 export const DESIRED_LIST_ROUTE = "/desired";
 export const USER_ROUTE = "/user";
