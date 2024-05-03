@@ -4,7 +4,7 @@ import DevicePage from "../pages/DevicePage";
 import MainPage from "../pages/MainPage";
 import RenavigatingCatalogPage from "../pages/RenavigatingCatalogPage";
 import UserPage from "../pages/UserPage";
-import { BRAND_CATALOG_ROUTE, CATEGORY_CATALOG_ROUTE, CHECKOUT_ROUTE, DESIRED_LIST_ROUTE, DEVICE_ROUTE, SEARCH_CATALOG_ROUTE, USER_ROUTE } from "../utils/consts";
+import { BRAND_CATALOG_ROUTE, CATEGORY_CATALOG_ROUTE, CHECKOUT_ROUTE, DESIRED_LIST_ROUTE, DEVICE_COMMENTS_ROUTE, DEVICE_INFO_ROUTE, DEVICE_QUESTIONS_ROUTE, DEVICE_ROUTE, SEARCH_CATALOG_ROUTE, USER_ROUTE } from "../utils/consts";
 
 export const PUBLIC_ROUTES = [
   {
@@ -19,9 +19,22 @@ export const PUBLIC_ROUTES = [
     path: SEARCH_CATALOG_ROUTE,
     element: <RenavigatingCatalogPage type="search" />
   },
+  // all device-related pages will be rendered as DevicePage with different main content inside
   {
     path: DEVICE_ROUTE + ":deviceId",
-    element: <DevicePage />,
+    element: <DevicePage type="main" />,
+  },
+  {
+    path: DEVICE_INFO_ROUTE,
+    element: <DevicePage type="info" />,
+  },
+  {
+    path: DEVICE_COMMENTS_ROUTE,
+    element: <DevicePage type="comments" />,
+  },
+  {
+    path: DEVICE_QUESTIONS_ROUTE,
+    element: <DevicePage type="questions" />,
   },
   {
     path: CHECKOUT_ROUTE,
