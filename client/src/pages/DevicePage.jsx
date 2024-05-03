@@ -33,7 +33,7 @@ const DevicePage = ({ type }) => {
   }
 
   return (
-    <main>
+    <main ref={pageRef}>
       DevicePage
       {renderInnerPage()}
     </main>
