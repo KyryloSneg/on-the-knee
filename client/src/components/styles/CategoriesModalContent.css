@@ -1,17 +1,13 @@
 .categories-modal-content {
-  padding: 2px;
+  padding: 22px;
   box-sizing: border-box;
-  height: 100%;
 }
 
 .categories-modal-content-list {
   display: grid;
   grid-template-columns: 1fr;
-  /* max-height: 90%; */
-  /* overflow-y: auto; */
   gap: 10px;
   margin: 0;
-  padding: 4px 10px;
 }
 
 @media screen and (min-width: 300px) {
