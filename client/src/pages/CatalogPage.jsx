@@ -38,6 +38,12 @@ const CatalogPage = observer(({ type }) => {
     app.setPageRef(pageRef);
   }, [app, windowWidth]);
 
+  // resetting states below because user can navigate to this page from another page
+  useEffect(() => {
+    deviceStore.setDevices([]);
+    deviceStore.setFilters([]);
+  }, [deviceStore]);
+  
   // we have no need in categoryId param if we're already at the category catalog page
   useDeletingRedundantCategoryId(type);
   useEffect(() => {
