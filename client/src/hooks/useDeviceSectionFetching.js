@@ -149,7 +149,6 @@ function useDeviceSectionFetching(deviceStore, app, type, setIsFoundDevicesByQue
       }
   
       deviceStore.setDevices(pageFilteredDevices);
-      deviceStore.setDeviceInfos(deviceInfos);
       // filters are almost just the same as device infos but later on they will have device attributes
       deviceStore.setFilters(filters);
       deviceStore.setTotalCount(filteredDevices.length);
