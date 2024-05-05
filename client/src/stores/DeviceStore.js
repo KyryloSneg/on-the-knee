@@ -26,7 +26,6 @@ class DeviceStore {
     // }
 
     // for sorting filters section
-    this._deviceInfos = [];
     this._usedFilters = {};
 
     this._initialMinPrice = 0;
@@ -166,14 +165,6 @@ class DeviceStore {
 
   get stocks() {
     return this._stocks;
-  }
-
-  setDeviceInfos(deviceInfos) {
-    this._deviceInfos = deviceInfos;
-  }
-
-  get deviceInfos() {
-    return this._deviceInfos;
   }
 }
 
