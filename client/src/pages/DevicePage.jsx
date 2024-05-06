@@ -4,6 +4,9 @@ import MainDevicePage from "./MainDevicePage";
 import DeviceInfoPage from "./DeviceInfoPage";
 import DeviceCommentsPage from "./DeviceCommentsPage";
 import DeviceQuestionsPage from "./DeviceQuestionsPage";
+import TabsPageLayout from "../components/UI/tabsPageLayout/TabsPageLayout";
+import { useParams } from "react-router-dom";
+import { DEVICE_COMMENTS_ROUTE, DEVICE_INFO_ROUTE, DEVICE_QUESTIONS_ROUTE, DEVICE_ROUTE } from "../utils/consts";
 
 const POSSIBLE_TYPES = ["main", "info", "comments", "questions"];
 const DevicePage = ({ type }) => {
@@ -11,6 +14,7 @@ const DevicePage = ({ type }) => {
 
   const { app } = useContext(Context);
   const pageRef = useRef(null);
+  const { deviceIdCombo } = useParams();
 
   useEffect(() => {
     app.setPageRef(pageRef);
@@ -32,10 +36,17 @@ const DevicePage = ({ type }) => {
     return innerPage;
   }
 
+  const tabsData = [
+    { name: "Everything about device", to: DEVICE_ROUTE + deviceIdCombo },
+    { name: "Info", to: DEVICE_INFO_ROUTE.replace(":deviceIdCombo", deviceIdCombo) },
+    { name: "Comments", to: DEVICE_COMMENTS_ROUTE.replace(":deviceIdCombo", deviceIdCombo) },
+    { name: "Questions", to: DEVICE_QUESTIONS_ROUTE.replace(":deviceIdCombo", deviceIdCombo) },
+  ];
+
   return (
     <main ref={pageRef}>
       DevicePage
-      {renderInnerPage()}
+      <TabsPageLayout tabsData={tabsData} pageContent={renderInnerPage()} />
     </main>
   );
 };

@@ -82,17 +82,17 @@ const POSSIBLE_DEVICE_INFOS = {
 const POSSIBLE_DEVICE_ATTRIBUTES = {
   "smartphones": {
     "phoneStorage": ["32 GB", "64 GB", "128 GB", "256 GB"],
-    "color": ["red#FF0000", "purple#A020F0", "green#00FF00"],
+    "color": ["red_FF0000", "purple_A020F0", "green_00FF00"],
   },
   "laptops": {
     "refreshRate": ["75 hz", "144 hz", "240 hz"],
-    "color": ["brown#2B1700", "spacedark#333334", "white#FFFFFF"],
+    "color": ["brown_2B1700", "spacedark_333334", "white_FFFFFF"],
   },
   "furniture": {
-    "color": ["spacedark#333334", "purple#A020F0", "brown#2B1700", "white#FFFFFF"],
+    "color": ["spacedark_333334", "purple_A020F0", "brown_2B1700", "white_FFFFFF"],
   },
   "tops": {
-    "color": ["black#000000", "red#FF0000", "golden#FFD700", "grey#CECECE"],
+    "color": ["black_000000", "red_FF0000", "golden_FFD700", "grey_CECECE"],
   },
 }
 

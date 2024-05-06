@@ -49,7 +49,7 @@ const CategoryFilterList = observer(({ filter, variant, elemToFocusRef = null })
     function pushFilter(info) {
       let active = false;
       if (deviceStore.usedFilters?.[filter]) {
-        const valueToCheck = filter === "color" ? info.value.split("#")[0] : info.value;
+        const valueToCheck = filter === "color" ? info.value.split("_")[0] : info.value;
         active = deviceStore.usedFilters[filter].includes(valueToCheck);
       }
 

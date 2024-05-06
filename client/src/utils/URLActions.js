@@ -153,7 +153,7 @@ export default class URLActions {
         // otherwise delete redundant values (repeating multiple times, incorrect ones etc.)
         values = values.filter(val => {
           const filter = filters[key].find(info => {
-            const infoValue = key === "color" ? info.value.split("#")[0] : info.value;
+            const infoValue = key === "color" ? info.value.split("_")[0] : info.value;
             return infoValue === val;
           });
 
