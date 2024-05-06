@@ -21,7 +21,7 @@ export const PUBLIC_ROUTES = [
   },
   // all device-related pages will be rendered as DevicePage with different main content inside
   {
-    path: DEVICE_ROUTE + ":deviceId",
+    path: DEVICE_ROUTE + ":deviceIdCombo",
     element: <DevicePage type="main" />,
   },
   {

@@ -56,3 +56,15 @@
   width: 100%;
   border-radius: 20px;
 }
+
+.tabs-page-scroll {
+  border-radius: 14px;
+}
+
+.tabs-page-scroll .my-scrollbar.os-scrollbar {
+  --os-size: 4px;
+}
+
+.tabs-page-scroll .my-scrollbar.os-scrollbar .os-scrollbar-track {
+  height: 4px;
+}
