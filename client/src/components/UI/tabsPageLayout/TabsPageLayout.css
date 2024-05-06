@@ -1,0 +1,8 @@
+.tabs-page-layout {
+  /* padding: 0 165px; */
+  /* REMEMBER FOR FUTURE: we can use percentages here instead of endless amount of @media rules */
+  padding: 0 10%;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
