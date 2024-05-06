@@ -1,0 +1,11 @@
+.tabs-list {
+  margin: 0;
+  background-color: #fff;
+  border-radius: 14px;
+  display: flex;
+  gap: 28px;
+  padding: 0 20px;
+  /* with min-width: 100%; custom scrollbar appears instantly */
+  min-width: 90%;
+  width: max-content;
+}

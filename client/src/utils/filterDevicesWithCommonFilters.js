@@ -25,7 +25,7 @@ function filterDevicesWithCommonFilters(device, attributes, filtersWithoutSpecia
 
     for (let info of allDeviceInfo[key]) {
       const infoToCheck = key === "color"
-        ? info?.split("#")[0]
+        ? info?.split("_")[0]
         : info;
 
       const isIncluded = values?.includes(infoToCheck);
