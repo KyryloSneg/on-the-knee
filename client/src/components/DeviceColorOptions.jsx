@@ -7,11 +7,12 @@ const DeviceColorOptions = ({ hrefObjects, deviceId }) => {
   return (
     <ul className="device-color-options">
       {hrefObjects.map(obj => {
-        // :deviceId/:combinationString
+        // it was made with old device routing:
+        // :deviceIdCombo/:combinationString
         const combinationString = obj.href.split(`${DEVICE_ROUTE}${deviceId}-`)[1];
         // color = spacedark#333334
         const color = DeviceComboActions.getColor(combinationString);
-        const colorHEX = color.split("#")[1];
+        const colorHEX = color.split("_")[1];
 
         let className = "";
         if (obj.isDisabled) {
