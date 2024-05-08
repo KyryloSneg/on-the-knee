@@ -1,0 +1,17 @@
+.main-device-page {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.device-page-section {
+  background-color: #fff;
+  border-radius: 16px;
+}
+
+.dev-images-description-wrap,
+ .dev-info-comments-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+ }
