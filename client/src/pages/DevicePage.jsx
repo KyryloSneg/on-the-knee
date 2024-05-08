@@ -45,7 +45,6 @@ const DevicePage = ({ type }) => {
 
   return (
     <main ref={pageRef}>
-      DevicePage
       <TabsPageLayout tabsData={tabsData} pageContent={renderInnerPage()} />
     </main>
   );
