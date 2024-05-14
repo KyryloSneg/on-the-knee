@@ -1,0 +1,13 @@
+.images-carousel {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  overflow-x: hidden;
+}
+
+@media screen and (min-width: 870px) {
+  .images-carousel.device-images-carousel {
+    flex-direction: row;
+  }
+}
