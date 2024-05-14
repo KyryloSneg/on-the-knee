@@ -1,10 +1,18 @@
-import "./styles/DeviceImagesCarousel.css";
+import ImagesCarousel from "./UI/imagesCarousel/ImagesCarousel";
 
-const DeviceImagesCarousel = () => {
+const DeviceImagesCarousel = ({ device, selectedCombination, textSaleTypes = [], logoSaleTypes = [] }) => {
+  if (!textSaleTypes || !logoSaleTypes) return <div />;
+  const images = selectedCombination.images;
+
   return (
-    <section className="device-page-section">
-      DeviceImagesCarousel
-    </section>
+    <ImagesCarousel 
+      type="device" 
+      images={images} 
+      className="device-page-section device-images-carousel" 
+      device={device} 
+      textSaleTypes={textSaleTypes}
+      logoSaleTypes={logoSaleTypes}
+    />
   );
 }
 
