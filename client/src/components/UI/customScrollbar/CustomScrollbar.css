@@ -62,10 +62,20 @@
   border-radius: 14px;
 }
 
-.tabs-page-scroll .my-scrollbar.os-scrollbar {
+.tabs-page-scroll .my-scrollbar.os-scrollbar, 
+ .images-carousel-scrollbar .my-scrollbar.os-scrollbar {
   --os-size: 4px;
 }
 
 .tabs-page-scroll .my-scrollbar.os-scrollbar .os-scrollbar-track {
   height: 4px;
+}
+
+.images-carousel-scrollbar .my-scrollbar.os-scrollbar {
+  margin-right: -6px;
+}
+
+.images-carousel-scrollbar[data-overlayscrollbars~=host], 
+ .images-carousel-scrollbar[data-overlayscrollbars~=viewport] {
+  overflow: visible;
 }

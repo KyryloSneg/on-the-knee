@@ -19,6 +19,7 @@ export const BRAND_CATALOG_ROUTE = "/brand/" // + ":brandIdSlug" (2-asus for exa
 export const SEARCH_CATALOG_ROUTE = "/search" // + ?text=value;
 
 export const DEVICE_API_URL = "/devices?_embed=device-combinations&_embed=device-feedbacks&_embed=device-infos&_embed=sale-devices";
+export const ONE_DEVICE_API_URL = "/devices/ID_TO_REPLACE?_embed=device-combinations&_embed=device-feedbacks&_embed=device-infos&_embed=sale-devices";
 export const SALES_API_URL = "/sales?_embed=sale-types";
 export const ATRIBUTES_API_URL = "/attributes?_expand=attribute-value&_expand=attribute-name";
 
@@ -147,6 +148,7 @@ export const WIDTH_TO_SHOW_DEV_HID_CONTENT = 960;
 export const WIDTH_TO_SHOW_ASIDE = 960;
 export const WIDTH_TO_SHOW_LOADING_BTN_PAGINATION = 260;
 export const WIDTH_TO_SHOW_CATEGORIES_MENU = 1080;
+export const WIDTH_TO_SHOW_DEVICE_CAROUSEL_SIDEBAR = 870;
 
 // set up mock stores
 const deviceStoreInstance = new DeviceStore();

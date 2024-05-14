@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Context } from "../Context";
 import MainDevicePage from "./MainDevicePage";
 import DeviceInfoPage from "./DeviceInfoPage";
@@ -7,6 +7,7 @@ import DeviceQuestionsPage from "./DeviceQuestionsPage";
 import TabsPageLayout from "../components/UI/tabsPageLayout/TabsPageLayout";
 import { useParams } from "react-router-dom";
 import { DEVICE_COMMENTS_ROUTE, DEVICE_INFO_ROUTE, DEVICE_QUESTIONS_ROUTE, DEVICE_ROUTE } from "../utils/consts";
+import useOneDeviceFetching from "../hooks/useOneDeviceFetching";
 
 const POSSIBLE_TYPES = ["main", "info", "comments", "questions"];
 const DevicePage = ({ type }) => {
@@ -15,6 +16,12 @@ const DevicePage = ({ type }) => {
   const { app } = useContext(Context);
   const pageRef = useRef(null);
   const { deviceIdCombo } = useParams();
+  const [device, setDevice] = useState(null);
+
+  let [id, combinationString] = deviceIdCombo.split("-");
+  id = +id;
+
+  useOneDeviceFetching(id, setDevice);
 
   useEffect(() => {
     app.setPageRef(pageRef);
@@ -24,7 +31,7 @@ const DevicePage = ({ type }) => {
     let innerPage;
 
     if (type === "main") {
-      innerPage = <MainDevicePage />
+      innerPage = <MainDevicePage device={device} combinationString={combinationString} />
     } else if (type === "info") {
       innerPage = <DeviceInfoPage />
     } else if (type === "comments") {
