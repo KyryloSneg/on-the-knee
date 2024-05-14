@@ -10,8 +10,14 @@
 }
 
 .dev-images-description-wrap,
- .dev-info-comments-wrap {
+.dev-info-comments-wrap {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 16px;
- }
+}
+
+@media screen and (min-width: 870px) {
+  .dev-images-description-wrap {
+    grid-template-columns: 1fr 1fr;
+  }
+}
