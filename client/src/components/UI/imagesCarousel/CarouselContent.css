@@ -1,0 +1,133 @@
+.carousel-content {
+  height: max-content;
+  display: flex;
+  position: relative;
+  overflow: hidden;
+
+  width: 100%;
+  height: 220px;
+}
+
+.carousel-content-list {
+  display: flex;
+  margin: 0;
+  /* every next image is -100% translateX() */
+  transform: translateX(0%);
+  /* changed ease-out, so transition is a bit slower at the start */
+  transition: cubic-bezier(0.4, 0, 0.58, 1) 0.3s transform;
+  width: 100%;
+  max-height: 100%;
+}
+
+.carousel-content-list li {
+  display: flex;
+  position: relative;
+  width: auto;
+  min-width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.images-carousel.device-images-carousel .carousel-content-list li {
+  /* changing height is required to make it work properly */
+  height: 220px;
+}
+
+.carousel-content-list li img {
+  position: relative;
+  /* making every image same height */
+  width: auto;
+  max-width: 100%;
+  max-height: 100%;
+  /* keeping up proportions */
+  object-fit: cover;
+}
+
+.images-carousel.device-images-carousel .carousel-content-list li img {
+  /* changing height is required to make it work properly */
+  max-height: 220px;
+}
+
+.select-prev-image, .select-next-image {
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: absolute;
+  align-self: center;
+  z-index: 1;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  /* background-color: #f7f7f7; */
+  background-color: rgba(247, 247, 247, 0.85);
+  -webkit-box-shadow: 1px 1px 2px 0px rgba(0, 0, 0, 0.1), -1px 1px 2px 0px rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 1px 1px 2px 0px rgba(0, 0, 0, 0.1), -1px 1px 2px 0px rgba(0, 0, 0, 0.1);
+  box-shadow: 1px 1px 2px 0px rgba(0, 0, 0, 0.1), -1px 1px 2px 0px rgba(0, 0, 0, 0.1);
+}
+
+.select-prev-image {
+  left: 8px;
+}
+
+.select-next-image {
+  right: 8px;
+}
+
+ul.carousel-content-text-sale-icons, ul.carousel-content-logo-sale-icons {
+  display: none;
+  position: absolute;
+  z-index: 1;
+  top: 0;
+}
+
+.carousel-content-text-sale-icons {
+  left: 0;
+}
+
+.carousel-content-logo-sale-icons {
+  right: 0;
+}
+
+@media screen and (min-width: 360px) {
+  ul.carousel-content-text-sale-icons, ul.carousel-content-logo-sale-icons {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+@media screen and (min-width: 380px) {
+  .select-prev-image, .select-next-image {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media screen and (min-width: 420px) {
+  .carousel-content {
+    height: 300px;
+  }
+
+  .images-carousel.device-images-carousel .carousel-content-list li {
+    height: 300px;
+  }
+
+  .images-carousel.device-images-carousel .carousel-content-list li img {
+    max-height: 300px;
+  }
+}
+
+@media screen and (min-width: 500px) {
+  .carousel-content {
+    height: 376px;
+  }
+
+  .images-carousel.device-images-carousel .carousel-content-list li {
+    height: 376px;
+  }
+
+  .images-carousel.device-images-carousel .carousel-content-list li img {
+    max-height: 376px;
+  }
+}

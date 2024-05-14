@@ -1,0 +1,16 @@
+.carousel-bottom-select-bar-item {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #bbbbbb;
+  padding: 0;
+  margin: 0;
+  border: none;
+  cursor: pointer;
+}
+
+.carousel-bottom-select-bar-item.active {
+  width: 20px;
+  border-radius: 10px;
+  background-color: #707070;
+}

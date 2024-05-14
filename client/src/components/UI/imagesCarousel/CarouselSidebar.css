@@ -1,0 +1,11 @@
+.carousel-sidebar {
+  max-height: 366px;
+  padding: 5px;
+}
+
+.carousel-sidebar ul {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+}
