@@ -13,7 +13,7 @@ function useBrandDevicesFetching(brandId) {
 
   useEffect(() => {
     if (brandId) fetching(brandId);
-  }, [brandId]);
+  }, [brandId, fetching]);
 
   return [isLoading, error, fetching, fetchResult];
 }
