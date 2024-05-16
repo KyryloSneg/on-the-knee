@@ -5,8 +5,12 @@ import "./styles/ChildCategory.css";
 const ChildCategory = ({ category }) => {
   const to = getCategoryLinkTo(category);
 
+  function onClick() {
+    window.scrollTo(0, 0);
+  }
+
   return (
-    <Link to={to} className="child-category">
+    <Link to={to} onClick={onClick} className="child-category">
       <div className="child-category-img-wrap">
         <img src={category.image} alt="" draggable="false" />
       </div>
