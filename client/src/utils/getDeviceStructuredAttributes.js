@@ -29,8 +29,12 @@ async function getDeviceStructuredAttributes(isSpecialFilters, devices) {
     }
 
   } else {
+    const deviceIds = devices.map(dev => dev.id);
+
     const allAttributes = await getAttributesInfo();
-    for (let attr of allAttributes) {
+    const devicesAttributes = allAttributes.filter(attr => deviceIds.includes(attr.deviceId));
+
+    for (let attr of devicesAttributes) {
       const structuredAttr = {
         deviceId: attr.deviceId,
         name: attr["attribute-name"].name,

@@ -18,7 +18,7 @@ import getDescendantCategories from "../utils/getDescendantCategories";
 import getDevicesBySearchQuery from "../utils/getDevicesBySearchQuery";
 
 // query params without pagination ones
-function useDeviceSectionFetching(deviceStore, app, type, setIsFoundDevicesByQuery = null, setSpellCheckedQuery = null) {
+function useDeviceSectionFetching(deviceStore, app, originalType, setIsFoundDevicesByQuery = null, setSpellCheckedQuery = null) {
   const location = useLocation();
   const { categoryIdSlug } = useParams();
   const navigate = useNavigateToEncodedURL();
@@ -28,7 +28,17 @@ function useDeviceSectionFetching(deviceStore, app, type, setIsFoundDevicesByQue
 
   const hasChangedURL = prevLocationPathname.current !== location.pathname;
 
-  async function fetchingCallback(location, categoryIdSlug, hasChangedURL) {
+  // it works if you make these steps right (type is the example of outer param (or inner if it doesn't work even without the method below)):
+
+  // function disaLox(..., propsType) {
+  //   console.log("disa indeed lox", propsType);
+  // }
+
+  // const disaLoxRemastered = useCallback(() => disaLox(..., type), [type])
+
+  // useEffect(() => disaLoxRemastered(), [location]);
+
+  async function fetchingCallback(location, categoryIdSlug, hasChangedURL, type) {
     const isInitialFetch = !deviceStore.devices.length || !_.isEqual(deviceStore.usedFilters, prevUsedFilters.current) || hasChangedURL;
     
     try {
@@ -117,7 +127,7 @@ function useDeviceSectionFetching(deviceStore, app, type, setIsFoundDevicesByQue
       }
   
       const attributes = await getDeviceStructuredAttributes(isSpecialFilters, filteredDevices);
-      const filters = getDeviceFiltersObj(devices, stocks, sellers, brands, deviceInfos, attributes);
+      let filters = getDeviceFiltersObj(devices, stocks, sellers, brands, deviceInfos, attributes);
   
       let filtersWithoutSpecial = {};
       for (let [key, value] of Object.entries({ ...deviceStore.usedFilters })) {
@@ -135,6 +145,29 @@ function useDeviceSectionFetching(deviceStore, app, type, setIsFoundDevicesByQue
       if (splittedSortFilter?.[1] === "price") {
         sortDevicesByPrice(filteredDevices, stocks, sales, saleTypeNames, splittedSortFilter[0] === "desc");
       }
+
+      // if (toFilterBySeller) {
+      //   const devicesSellersIds = filteredDevices.map(dev => dev.sellerId);
+      //   const devicesSellers = sellers.filter(seller => devicesSellersIds.includes(seller.id));
+
+      //   for (let seller of devicesSellers) {
+      //     pushValueToFiltersObj(filters, "seller", seller.name);
+      //   }
+
+      //   filteredDevices = filterDevicesBySellers(filteredDevices, devicesSellers, deviceStore.usedFilters);
+      // }
+  
+      // if (toFilterByBrand) {
+      //   const devicesBrandsIds = filteredDevices.map(dev => dev.brandId);
+      //   const devicesBrands = brands.filter(brand => devicesBrandsIds.includes(brand.id));
+
+      //   for (let brand of devicesBrands) {
+      //     pushValueToFiltersObj(filters, "brand", brand.name);
+      //   }
+      //   console.log(filters);
+
+      //   filteredDevices = filterDevicesByBrands(filteredDevices, devicesBrands, deviceStore.usedFilters);
+      // }
   
       // getting devices for the current page
       pageFilteredDevices = filteredDevices.slice(start, (start + limit));
@@ -175,7 +208,7 @@ function useDeviceSectionFetching(deviceStore, app, type, setIsFoundDevicesByQue
     
   }
 
-  const [fetching, isLoading, error] = useFetching((location, categoryIdSlug, hasChangedURL) => fetchingCallback(location, categoryIdSlug, hasChangedURL));
+  const [fetching, isLoading, error] = useFetching((location, categoryIdSlug, hasChangedURL) => fetchingCallback(location, categoryIdSlug, hasChangedURL, originalType), 0, null, [originalType]);
 
   useEffect(() => {
     fetching(location, categoryIdSlug, hasChangedURL);
