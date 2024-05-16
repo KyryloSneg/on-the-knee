@@ -14,8 +14,15 @@ function useCurrentPath() {
 
   const routes = publicRoutes.concat(privateRoutes);
 
+  let route;
+
   const location = useLocation();
-  const [{ route }] = matchRoutes(routes, location);
+  const matchRoutesResult = matchRoutes(routes, location);
+
+  // matchRoutes on the main page with route "/" do not return [{...}, ...] ig
+  if (matchRoutesResult) {
+    route = matchRoutesResult[0]["route"]
+  }
 
   return route?.path || null;
 }
