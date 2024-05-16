@@ -35,6 +35,10 @@ const CatalogPage = observer(({ type }) => {
   const childCategories = deviceStore.categories.filter(cat => !cat.isVariation && cat.parentCategoryId === categoryId);
 
   useEffect(() => {
+    window.scroll(0, 0);
+  }, [isFoundDevicesByQuery]);
+
+  useEffect(() => {
     app.setPageRef(pageRef);
   }, [app, windowWidth]);
 
