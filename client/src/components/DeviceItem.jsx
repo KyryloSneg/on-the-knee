@@ -30,7 +30,6 @@ const DeviceItem = ({ device, isInStock, defaultCombination, stocks, sales, sale
     : null;
 
 
-  console.log(defaultComboColorHrefs, device, stocks);
   const defaultComboColorHrefObjects =
     DeviceComboActions.getComboColorHrefObjects(defaultComboColorHrefs, device, stocks);
 
