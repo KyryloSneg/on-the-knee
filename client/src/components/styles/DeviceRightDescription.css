@@ -1,0 +1,7 @@
+.device-right-description {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

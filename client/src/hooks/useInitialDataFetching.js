@@ -5,6 +5,8 @@ import { getBrands } from "../http/BrandsAPI";
 import { getCategories } from "../http/CategoriesAPI";
 import ArrayActions from "../utils/ArrayActions";
 import { getHintSearchResults } from "../http/HintSearchResultsAPI";
+import { getSales } from "../http/SalesAPI";
+import { getStocks } from "../http/StocksAPI";
 
 function useInitialDataFetching() {
   const { app, deviceStore } = useContext(Context);
@@ -12,6 +14,8 @@ function useInitialDataFetching() {
   async function fetchData() {
     const brands = await getBrands();
     const categories = await getCategories();
+    const sales = await getSales();
+    const stocks = await getStocks();
     const hintSearchResults = await getHintSearchResults();
 
     let uniqueHintResults = [];
@@ -34,6 +38,8 @@ function useInitialDataFetching() {
 
     deviceStore.setBrands(brands);
     deviceStore.setCategories(sortedCategories);
+    deviceStore.setSales(sales);
+    deviceStore.setStocks(stocks);
     app.setHintSearchResults(sortedHintResults);
   }
 
