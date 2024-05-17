@@ -28,9 +28,6 @@ const MainDevicePage = observer(({ device, combinationString }) => {
     selectedCombination = devCombos[0];
   }
 
-  const salesIds = device["sale-devices"].map(saleDev => saleDev.saleId);
-  const sales = deviceStore.sales.filter(sale => salesIds.includes(sale.id));
-
   let deviceSaleTypes = [];
   let textSaleTypes = [];
   let logoSaleTypes = [];
@@ -44,6 +41,19 @@ const MainDevicePage = observer(({ device, combinationString }) => {
     logoSaleTypes = deviceSaleTypes.filter(type => type.logo);
   }
 
+  const salesIds = device["sale-devices"].map(saleDev => saleDev.saleId);
+  const sales = deviceStore.sales.filter(sale => salesIds.includes(sale.id));
+  
+  let salesAndTypes = [];
+  for (let sale of sales) {
+    const saleAndTypeObj = {
+      sale: sale,
+      saleTypes: deviceSaleTypes.filter(type => type.saleId === sale.id),
+    }
+
+    salesAndTypes.push(saleAndTypeObj);
+  }
+
   return (
     <section className="main-device-page">
       <div className="dev-images-description-wrap">
@@ -55,10 +65,9 @@ const MainDevicePage = observer(({ device, combinationString }) => {
         />
         <DeviceRightDescription
           device={device}
-          sales={sales}
           selectedCombination={selectedCombination}
           defaultCombo={defaultCombo}
-          logoSaleTypes={logoSaleTypes}
+          salesAndTypes={salesAndTypes}
         />
       </div>
       <div className="dev-info-comments-wrap">
