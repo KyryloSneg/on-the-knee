@@ -3,8 +3,10 @@ import DesiredListPage from "../pages/DesiredListPage";
 import DevicePage from "../pages/DevicePage";
 import MainPage from "../pages/MainPage";
 import RenavigatingCatalogPage from "../pages/RenavigatingCatalogPage";
+import SalePage from "../pages/SalePage";
+import SalesPage from "../pages/SalesPage";
 import UserPage from "../pages/UserPage";
-import { BRAND_CATALOG_ROUTE, CATEGORY_CATALOG_ROUTE, CHECKOUT_ROUTE, DESIRED_LIST_ROUTE, DEVICE_COMMENTS_ROUTE, DEVICE_INFO_ROUTE, DEVICE_QUESTIONS_ROUTE, DEVICE_ROUTE, SEARCH_CATALOG_ROUTE, USER_ROUTE } from "../utils/consts";
+import { BRAND_CATALOG_ROUTE, CATEGORY_CATALOG_ROUTE, CHECKOUT_ROUTE, DESIRED_LIST_ROUTE, DEVICE_COMMENTS_ROUTE, DEVICE_INFO_ROUTE, DEVICE_QUESTIONS_ROUTE, DEVICE_ROUTE, SALES_ROUTE, SEARCH_CATALOG_ROUTE, USER_ROUTE } from "../utils/consts";
 
 export const PUBLIC_ROUTES = [
   {
@@ -39,6 +41,14 @@ export const PUBLIC_ROUTES = [
   {
     path: CHECKOUT_ROUTE,
     element: <CheckoutPage />
+  },
+  {
+    path: SALES_ROUTE,
+    element: <SalesPage />
+  },
+  {
+    path: SALES_ROUTE + "/:saleIdSlug",
+    element: <SalePage />
   },
   {
     index: true,
