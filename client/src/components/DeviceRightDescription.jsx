@@ -1,7 +1,8 @@
 import DeviceRightDescHeading from "./DeviceRightDescHeading";
+import DeviceRightDescSales from "./DeviceRightDescSales";
 import "./styles/DeviceRightDescription.css";
 
-const DeviceRightDescription = ({ device, selectedCombination, defaultCombo, sales, logoSaleTypes }) => {
+const DeviceRightDescription = ({ device, selectedCombination, defaultCombo, salesAndTypes }) => {
   return (
     <section className="device-page-section device-right-description">
       <DeviceRightDescHeading 
@@ -9,6 +10,7 @@ const DeviceRightDescription = ({ device, selectedCombination, defaultCombo, sal
         selectedCombination={selectedCombination}
         defaultCombo={defaultCombo}
       />
+      {!!salesAndTypes.length && <DeviceRightDescSales salesAndTypes={salesAndTypes} />}
     </section>
   );
 }

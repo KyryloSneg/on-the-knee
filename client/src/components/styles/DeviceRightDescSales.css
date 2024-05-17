@@ -1,0 +1,12 @@
+.device-right-desc-sales-section {
+  border-radius: 16px;
+  border: 1px #dfdfdf solid;
+  padding: 12px;
+}
+
+.device-right-desc-sales {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+  margin: 0;
+}
