@@ -29,6 +29,8 @@ const DeviceItem = ({ device, isInStock, defaultCombination, stocks, sales, sale
     )
     : null;
 
+
+  console.log(defaultComboColorHrefs, device, stocks);
   const defaultComboColorHrefObjects =
     DeviceComboActions.getComboColorHrefObjects(defaultComboColorHrefs, device, stocks);
 
@@ -59,7 +61,7 @@ const DeviceItem = ({ device, isInStock, defaultCombination, stocks, sales, sale
   }
 
   const deviceRouteCombo = defaultCombination.combinationString || "default";
-  const to = DEVICE_ROUTE + `${device.id}-${deviceRouteCombo}`;
+  const to = DEVICE_ROUTE + `${device.id}--${deviceRouteCombo}`;
   const thumbnail = defaultCombination.images[0];
 
   let className = "main-device-item";

@@ -9,7 +9,8 @@ const DeviceColorOptions = ({ hrefObjects, deviceId }) => {
       {hrefObjects.map(obj => {
         // it was made with old device routing:
         // :deviceIdCombo/:combinationString
-        const combinationString = obj.href.split(`${DEVICE_ROUTE}${deviceId}-`)[1];
+        const combinationString = obj.href.split(`${DEVICE_ROUTE}${deviceId}--`)[1];
+        console.log(obj.href, combinationString);
         // color = spacedark#333334
         const color = DeviceComboActions.getColor(combinationString);
         const colorHEX = color.split("_")[1];

@@ -18,7 +18,7 @@ const DevicePage = ({ type }) => {
   const { deviceIdCombo } = useParams();
   const [device, setDevice] = useState(null);
 
-  let [id, combinationString] = deviceIdCombo.split("-");
+  let [id, combinationString] = deviceIdCombo.split("--");
   id = +id;
 
   useOneDeviceFetching(id, setDevice);

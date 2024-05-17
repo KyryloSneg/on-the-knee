@@ -66,7 +66,7 @@ class DeviceComboActions {
       }
 
       // else we push a combo href
-      const href = DEVICE_ROUTE + `${deviceId}-${combo.combinationString}`;
+      const href = DEVICE_ROUTE + `${deviceId}--${combo.combinationString}`;
       hrefs.push(href);
     }
 
@@ -77,7 +77,7 @@ class DeviceComboActions {
     let comboColorHrefObjects = [];
     if (comboColorHrefs) {
       comboColorHrefObjects = comboColorHrefs.map(href => {
-        const comboStr = href.split(`${DEVICE_ROUTE}${device.id}-`)[1];
+        const comboStr = href.split(`${DEVICE_ROUTE}${device.id}--`)[1];
         const combination = device["device-combinations"].find(
           combo => combo.combinationString === comboStr
         );
@@ -159,7 +159,7 @@ class DeviceComboActions {
       const attrValues = this.getAttrValuesFromComboStrings(combinationStrings, name);
       const valuesObj = attrValues.map(value => {
         const comboStr = this.changeDefaultComboStrAttr(name, value, defaultCombination.combinationString);
-        const href = DEVICE_ROUTE + `${device.id}-${comboStr}`;
+        const href = DEVICE_ROUTE + `${device.id}--${comboStr}`;
 
         return {
           attrValue: value,
