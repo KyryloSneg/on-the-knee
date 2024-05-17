@@ -14,11 +14,12 @@ const MainDevicePage = observer(({ device, combinationString }) => {
   // theoretically setting sales and sale type names would not lead to bugs in the catalog page
   useGettingSalesAndTypeNames(deviceStore);
 
-  if (!device) {
+  if (!device || !deviceStore.sales.length || !deviceStore.stocks.length) {
     return <div />
   }
 
   const devCombos = device["device-combinations"];
+  const defaultCombo = devCombos.find(combo => combo.default);
   let selectedCombination;
 
   if (devCombos.length > 1) {
@@ -26,6 +27,9 @@ const MainDevicePage = observer(({ device, combinationString }) => {
   } else {
     selectedCombination = devCombos[0];
   }
+
+  const salesIds = device["sale-devices"].map(saleDev => saleDev.saleId);
+  const sales = deviceStore.sales.filter(sale => salesIds.includes(sale.id));
 
   let deviceSaleTypes = [];
   let textSaleTypes = [];
@@ -49,7 +53,13 @@ const MainDevicePage = observer(({ device, combinationString }) => {
           textSaleTypes={textSaleTypes}
           logoSaleTypes={logoSaleTypes}
         />
-        <DeviceRightDescription />
+        <DeviceRightDescription
+          device={device}
+          sales={sales}
+          selectedCombination={selectedCombination}
+          defaultCombo={defaultCombo}
+          logoSaleTypes={logoSaleTypes}
+        />
       </div>
       <div className="dev-info-comments-wrap">
         <DeviceInfoSection />
