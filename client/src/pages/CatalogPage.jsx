@@ -36,7 +36,7 @@ const CatalogPage = observer(({ type }) => {
 
   useEffect(() => {
     window.scroll(0, 0);
-  }, [isFoundDevicesByQuery]);
+  }, [location.pathname, isFoundDevicesByQuery]);
 
   useEffect(() => {
     app.setPageRef(pageRef);
