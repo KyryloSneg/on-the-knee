@@ -1,5 +1,5 @@
 const { getAllDevices, getAllCategorySlugs } = require("../http/deviceAPI");
-const { faker } = require('@faker-js/faker');
+const { faker, fa } = require('@faker-js/faker');
 const createDeviceFeedbacks = require('./createDeviceFeedbacks');
 const createBrands = require('./createBrands');
 const createCategories = require('./createCategories');
@@ -92,7 +92,7 @@ module.exports = async () => {
     const { deviceAttributeValues } = createAttributes(dev.id, category.slug, attributes, attributeNames, attributeValues);
 
     createDeviceInfos(dev.id, category.slug, deviceInfos, deviceAttributeValues);
-    createDeviceCombinations(dev.id, deviceAttributeValues, deviceCombinations, stocks);
+    createDeviceCombinations(dev, deviceAttributeValues, deviceCombinations, stocks);
     createAdditionalServices(dev.id, devices, additionalServices, additionalServiceDevices);
 
     const device = {
@@ -103,6 +103,7 @@ module.exports = async () => {
       "brandId": brand.id,
       "categoryId": category.id,
       "sellerId": seller.id,
+      "isPreOrder": faker.datatype.boolean(0.1)
     };
 
     devices.push(device);

@@ -80,7 +80,7 @@ const SearchResultItem = ({ type, active = false, value, id, onFocus, inputValue
     } = DeviceComboActions.findDefaultCombination(value, stocks); 
 
     const deviceRouteCombo = defaultCombo.combinationString || "default";
-    to = DEVICE_ROUTE + `${value.id}-${deviceRouteCombo}`;
+    to = DEVICE_ROUTE + `${value.id}--${deviceRouteCombo}`;
 
     // saving the combination to use it in the render function
     defaultComboInStock = defaultCombo;

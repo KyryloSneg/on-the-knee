@@ -5,7 +5,7 @@ import { DEVICE_COMMENTS_ROUTE } from "../utils/consts";
 
 const DeviceItemAvgRating = ({ rating = null, feedbackAmount = null, deviceId = null, defaultCombination = null }) => {
   const deviceRouteCombo = defaultCombination.combinationString || "default";
-  const to = DEVICE_COMMENTS_ROUTE.replace(":deviceIdCombo", `${deviceId}-${deviceRouteCombo}`);
+  const to = DEVICE_COMMENTS_ROUTE.replace(":deviceIdCombo", `${deviceId}--${deviceRouteCombo}`);
 
   if (rating >= 0) {
     const correctedFeedbackForm = feedbackAmount === 1 ? "feedback" : "feedbacks";
