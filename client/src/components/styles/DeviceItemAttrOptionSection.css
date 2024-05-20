@@ -1,0 +1,6 @@
+.device-item-attr-option-section {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
