@@ -12,6 +12,7 @@ const DeviceImagesCarousel = ({ device, selectedCombination, textSaleTypes = [],
       device={device} 
       textSaleTypes={textSaleTypes}
       logoSaleTypes={logoSaleTypes}
+      toResetOnLocationChange={true}
     />
   );
 }

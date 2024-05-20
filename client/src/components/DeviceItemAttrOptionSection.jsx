@@ -1,8 +1,9 @@
+import "./styles/DeviceItemAttrOptionSection.css";
 import DeviceItemAttrOptions from "./DeviceItemAttrOptions";
 
-const DeviceItemAttrOptionSection = ({ attributesList, deviceId, defaultCombo }) => {
+const DeviceItemAttrOptionSection = ({ attributesList, deviceId, defaultCombo, isWithParagraph = false, isListbox = false, isDefaultDiv = false }) => {
   return (
-    <ul>
+    <ul className="device-item-attr-option-section">
       {attributesList.map(attrsObj => 
         <li key={`${deviceId}`}>
           <DeviceItemAttrOptions
@@ -10,6 +11,9 @@ const DeviceItemAttrOptionSection = ({ attributesList, deviceId, defaultCombo })
             valuesObjects={attrsObj.valuesObj}
             deviceId={deviceId} 
             defaultCombo={defaultCombo}
+            isWithParagraph={isWithParagraph}
+            isListbox={isListbox}
+            isDefaultDiv={isDefaultDiv}
           />
         </li>
       )}
