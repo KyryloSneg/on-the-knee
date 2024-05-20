@@ -2,10 +2,11 @@
   display: flex;
   flex: 1;
   gap: 12px;
+  margin: 0;
   margin-bottom: 10px;
 }
 
-.device-color-options a {
+.color-option {
   position: relative;
   display: block;
   width: 26px;
@@ -18,17 +19,23 @@
   transition: 0.4s;
 }
 
-.device-color-options li:not(.disabled-color-option) a:hover,
-.device-color-options a:focus {
+/* creating such a long chain to make the selector specifity bigger than the one below 
+  (.color-option:not(.disabled-color-option):hover) */
+.color-option:focus-visible,
+ .device-color-options > li > .color-option.selected-color-option {
   outline: 1px #7e95fa solid;
 }
 
-.device-color-options .disabled-color-option a {
+.color-option:not(.disabled-color-option):hover {
+  outline: 1px #7e95fa5e solid;
+}
+
+.color-option.disabled-color-option {
   border: 1px solid rgba(0, 0, 0, 0.2);
   opacity: 0.6;
 }
 
-.device-color-options .disabled-color-option a::before {
+.color-option.disabled-color-option::before {
   position: absolute;
   display: block;
   content: "";
