@@ -1,10 +1,16 @@
 import DeviceColorOptions from "./DeviceColorOptions";
 import DeviceItemAttrOptionSection from "./DeviceItemAttrOptionSection";
+import DevicePurchaseSection from "./DevicePurchaseSection";
 import DeviceRightDescHeading from "./DeviceRightDescHeading";
 import DeviceRightDescSales from "./DeviceRightDescSales";
+import DeviceSellerBlock from "./DeviceSellerBlock";
 import "./styles/DeviceRightDescription.css";
 
-const DeviceRightDescription = ({ device, combinationString, selectedCombination, defaultCombo, salesAndTypes, attributesList, hrefObjects }) => {
+const DeviceRightDescription = ({ 
+  device, combinationString, selectedCombination, 
+  defaultCombo, salesAndTypes, attributesList, 
+  hrefObjects, seller, price, discountPercentage 
+}) => {
   return (
     <section className="device-page-section device-right-description">
       <DeviceRightDescHeading
@@ -15,7 +21,7 @@ const DeviceRightDescription = ({ device, combinationString, selectedCombination
       {!!salesAndTypes.length && <DeviceRightDescSales salesAndTypes={salesAndTypes} />}
       {combinationString !== "default" &&
         <div className="device-right-desc-combo-select-wrap">
-          {attributesList.length &&
+          {!!attributesList.length &&
             <DeviceItemAttrOptionSection
               attributesList={attributesList}
               deviceId={device.id}
@@ -25,7 +31,7 @@ const DeviceRightDescription = ({ device, combinationString, selectedCombination
               isDefaultDiv={true}
             />
           }
-          {hrefObjects.length &&
+          {!!hrefObjects.length &&
             <div className="device-color-options-p-wrap">
               <p>Color</p>
               <DeviceColorOptions
@@ -38,6 +44,10 @@ const DeviceRightDescription = ({ device, combinationString, selectedCombination
           }
         </div>
       }
+      <div className="device-right-desc-seller-purchase-wrap">
+        <DeviceSellerBlock seller={seller} />
+        <DevicePurchaseSection price={price} discountPercentage={discountPercentage} />
+      </div>
     </section>
   );
 }

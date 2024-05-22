@@ -4,18 +4,21 @@ import DeviceInfoSection from "../components/DeviceInfoSection";
 import DeviceRightDescription from "../components/DeviceRightDescription";
 import CommentsSection from "../components/UI/commentsSection/CommentsSection";
 import DeviceSalesActions from "../utils/DeviceSalesActions";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Context } from "../Context";
 import useGettingSalesAndTypeNames from "../hooks/useGettingSalesAndTypeNames";
 import { observer } from "mobx-react-lite";
 import DeviceComboActions from "../utils/DeviceComboActions";
+import useGettingSellers from "../hooks/useGettingSellers";
 
 const MainDevicePage = observer(({ device, combinationString }) => {
   const { deviceStore } = useContext(Context);
+  const [sellers, setSellers] = useState([]);
   // theoretically setting sales and sale type names would not lead to bugs in the catalog page
   useGettingSalesAndTypeNames(deviceStore);
+  useGettingSellers(setSellers);
 
-  if (!device || !deviceStore.sales.length || !deviceStore.stocks.length) {
+  if (!device || !deviceStore.sales.length || !deviceStore.stocks.length || !sellers.length) {
     return <div />
   }
 
@@ -79,6 +82,12 @@ const MainDevicePage = observer(({ device, combinationString }) => {
   const selectedComboColorHrefObjects =
     DeviceComboActions.getComboColorHrefObjects(selectedComboColorHrefs, device, deviceStore.stocks);
 
+  const seller = sellers.find(sellerItem => sellerItem.id === device.sellerId);
+  const price = selectedCombination.price;
+  const { discountPercentage } = 
+    DeviceSalesActions.getSaleTypesAndDiscount(device, sales, deviceStore.saleTypeNames)
+    || { discountPercentage: 0 };
+
   return (
     <section className="main-device-page">
       <div className="dev-images-description-wrap">
@@ -96,6 +105,9 @@ const MainDevicePage = observer(({ device, combinationString }) => {
           salesAndTypes={salesAndTypes}
           attributesList={attributesList}
           hrefObjects={selectedComboColorHrefObjects}
+          seller={seller}
+          price={price}
+          discountPercentage={discountPercentage}
         />
       </div>
       <div className="dev-info-comments-wrap">
