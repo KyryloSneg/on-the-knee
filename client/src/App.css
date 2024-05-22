@@ -1,9 +1,12 @@
 /* General */
 
 html {
-  font-family: 'Montserrat', sans-serif;
   font-size: 10px;
   background: #f0f0f0;
+}
+
+html, button {
+  font-family: 'Montserrat', sans-serif;
 }
 
 html>*:focus {
