@@ -18,3 +18,11 @@
   flex-direction: column;
   gap: 6px;
 }
+
+.device-right-desc-seller-purchase-wrap {
+  display: flex;
+  flex-direction: column;
+  border: 1px #dfdfdf solid;
+  border-radius: 18px;
+  overflow: hidden;
+}

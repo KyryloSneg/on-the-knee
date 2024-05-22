@@ -29,25 +29,24 @@ const CarouselContent = ({ type, images, selectedId, setSelectedId, device = nul
           saleTypes={logoSaleTypes}
           deviceId={device.id}
           className="carousel-content-logo-sale-icons"
-          draggable="false"
         />
       ]}
       {(images.length > 1 && selectedId !== 0) &&
         <button className="select-prev-image" onClick={selectPrevImage}>
-          <img src={chevronLeftIcon} alt="" />
+          <img src={chevronLeftIcon} alt="" draggable="false" />
         </button>
       }
       <ul className="carousel-content-list" style={{ transform: `translateX(${translateX})` }}>
         {images.map((image, index) =>
           <li key={index} className="carousel-content-img-wrap">
-            <img src={image.src} alt={image.alt} />
+            <img src={image.src} alt={image.alt} draggable="false" />
           </li>
         )}
       </ul>
       {/* <img src={image.src} alt={image.alt} /> */}
       {(images.length > 1 && selectedId !== images.length - 1) &&
         <button className="select-next-image" onClick={selectNextImage}>
-          <img src={chevronRightIcon} alt="" />
+          <img src={chevronRightIcon} alt="" draggable="false" />
         </button>
       }
     </div>
