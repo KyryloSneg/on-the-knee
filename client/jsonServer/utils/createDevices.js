@@ -10,7 +10,6 @@ const createDeviceCombinations = require("./createDeviceCombinations");
 const createAdditionalServices = require("./createAdditionalServices");
 const createSales = require("./createSales");
 const createSaleDevices = require("./createSaleDevices");
-const { MAIN_CATEGORIES_AMOUNT } = require("./consts");
 
 module.exports = async () => {
 
