@@ -6,7 +6,8 @@ async function getAllDevices() {
 }
 
 async function getAllCategorySlugs() {
-  const { data } = await axios.get("https://dummyjson.com/products/categories");
+  let { data } = await axios.get("https://dummyjson.com/products/categories");
+  data = data.map(obj => obj.slug);
   return data;
 }
 

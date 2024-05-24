@@ -1,6 +1,7 @@
 class DeviceSalesActions {
 
   static getSaleTypesAndDiscount(device, sales, saleTypeNames) {
+    console.log(device, sales, saleTypeNames);
     let deviceSaleTypes = [];
     let discountPercentage;
 

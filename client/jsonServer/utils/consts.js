@@ -99,29 +99,32 @@ const POSSIBLE_DEVICE_ATTRIBUTES = {
 // country => oblast / voivodeship => city => (district || null) && streets => house numbers
 const STORE_LOCATIONS = {
   "Ukraine": {
-    "Zhytomyr Oblast": {
+    "Zhytomyrska Oblast": {
       "Zhytomyr": {
         "district": "Zhytomyr district",
-        "type": "big-city",
+        "type": "city",
+        "population": 261624,
         "streets": {
           "Velyka Berdychivska Street": [60, 30],
           "Chudnivska Street": [54],
         }
       },
 
-      "Korosten'": {
-        "district": "Korosten' district",
+      "Korosten": {
+        "district": "Korosten district",
         "type": "city",
+        "population": 61496,
         "streets": {
           "Mykhaila Hrushevskoho": [30, 53],
         }
       }
     },
 
-    "Kyiv Oblast": {
+    "Kyivska Oblast": {
       "Kyiv": {
         "district": null,
-        "type": "big-city",
+        "type": "city",
+        "population": 2952301,
         "streets": {
           "Khreshchatyk Street": [14, 18],
           "Peremohy Ave": [93, 56],
@@ -131,6 +134,7 @@ const STORE_LOCATIONS = {
       "Brovary": {
         "district": "Brovary district",
         "type": "city",
+        "population": 109473,
         "streets": {
           "Kyiv Street": [160, 180],
         },
@@ -142,7 +146,8 @@ const STORE_LOCATIONS = {
     "Lublin Voivodeship": {
       "Lublin": {
         "district": "Lublin County",
-        "type": "big-city",
+        "type": "city",
+        "population": 2102324, 
         "streets": {
           "al. Solidarnosci": [61, 32],
         }
