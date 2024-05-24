@@ -18,6 +18,7 @@ const ModalWindow = observer(({ isVisible, setIsVisible, children, headerText, i
 
   function closeModalWindow() {
     if (!isVisible) return;
+    console.log(setIsVisible);
     setIsVisible(false);
   }
 
