@@ -20,7 +20,7 @@ module.exports = async () => {
 
   let dummyBrandNames = [];
   for (let brand of dummyUnfilteredBrandNames) {
-    if (dummyBrandNames.includes(brand)) continue;
+    if (dummyBrandNames.includes(brand) || typeof brand !== "string") continue;
     dummyBrandNames.push(brand);
   }
 
