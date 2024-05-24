@@ -43,8 +43,9 @@ module.exports = async () => {
 
         const dbCity = {
           "id": dbCityId,
-          "type": city.type,
+          "type": cityInfo.type,
           "name": StringActions.capitalize(city),
+          "population": cityInfo.population,
           "countryId": country.id,
           "regionId": dbRegion.id,
           "districtId": currentDistrict.id,
@@ -114,6 +115,7 @@ module.exports = async () => {
       "id": id,
       "type": type,
       "name": uaCity.city,
+      "population": +uaCity.population,
       "countryId": ukraineId,
       "regionId": region.id,
       "districtId": district.id,
