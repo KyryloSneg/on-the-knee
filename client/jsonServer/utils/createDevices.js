@@ -10,7 +10,6 @@ const createDeviceCombinations = require("./createDeviceCombinations");
 const createAdditionalServices = require("./createAdditionalServices");
 const createSales = require("./createSales");
 const createSaleDevices = require("./createSaleDevices");
-const { MAIN_CATEGORIES_AMOUNT } = require("./consts");
 
 module.exports = async () => {
 
@@ -20,7 +19,7 @@ module.exports = async () => {
 
   let dummyBrandNames = [];
   for (let brand of dummyUnfilteredBrandNames) {
-    if (dummyBrandNames.includes(brand)) continue;
+    if (dummyBrandNames.includes(brand) || typeof brand !== "string") continue;
     dummyBrandNames.push(brand);
   }
 
