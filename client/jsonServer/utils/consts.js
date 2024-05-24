@@ -103,6 +103,7 @@ const STORE_LOCATIONS = {
       "Zhytomyr": {
         "district": "Zhytomyr district",
         "type": "city",
+        "population": 261624,
         "streets": {
           "Velyka Berdychivska Street": [60, 30],
           "Chudnivska Street": [54],
@@ -112,6 +113,7 @@ const STORE_LOCATIONS = {
       "Korosten": {
         "district": "Korosten district",
         "type": "city",
+        "population": 61496,
         "streets": {
           "Mykhaila Hrushevskoho": [30, 53],
         }
@@ -122,6 +124,7 @@ const STORE_LOCATIONS = {
       "Kyiv": {
         "district": null,
         "type": "city",
+        "population": 2952301,
         "streets": {
           "Khreshchatyk Street": [14, 18],
           "Peremohy Ave": [93, 56],
@@ -131,6 +134,7 @@ const STORE_LOCATIONS = {
       "Brovary": {
         "district": "Brovary district",
         "type": "city",
+        "population": 109473,
         "streets": {
           "Kyiv Street": [160, 180],
         },
@@ -143,6 +147,7 @@ const STORE_LOCATIONS = {
       "Lublin": {
         "district": "Lublin County",
         "type": "city",
+        "population": 2102324, 
         "streets": {
           "al. Solidarnosci": [61, 32],
         }
