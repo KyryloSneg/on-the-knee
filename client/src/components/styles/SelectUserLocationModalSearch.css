@@ -1,0 +1,8 @@
+.select-user-location-modal-search {
+  position: relative;
+  width: 80%;
+}
+
+.select-user-location-modal-search > input {
+  width: 100%;
+}
