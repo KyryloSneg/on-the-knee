@@ -280,7 +280,6 @@ ul {
 
 /* delete input content and "back" buttons */
 
-.delete-input-content-btn,
 .input-back-btn {
   align-self: center;
   display: grid;
@@ -293,23 +292,10 @@ ul {
   cursor: pointer;
 }
 
-.delete-input-content-btn {
-  right: 5%;
-}
-
 .input-back-btn {
   box-sizing: border-box;
   padding-left: 6px;
   height: 100%;
-}
-
-.delete-input-content-btn svg {
-  transition: 0.2s;
-  fill: rgb(50 63 125);
-}
-
-.delete-input-content-btn:hover svg {
-  fill: rgb(88, 103, 180);
 }
 
 .input-back-btn svg {

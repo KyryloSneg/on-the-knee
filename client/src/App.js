@@ -29,6 +29,7 @@ import setUsedFiltersBarVisibility from "./utils/setUsedFiltersBarVisibility";
 import useClosingCategoriesModalWidth from "./hooks/useClosingCategoriesModalWidth";
 import useClosingAllWindows from "./hooks/useClosingAllWindows";
 import useScrollingToPagesTop from "./hooks/useScrollingToPagesTop";
+import SelectUserLocationModal from "./components/SelectUserLocationModal";
  
 const App = observer(() => {
   const { app, deviceStore } = useContext(Context);
@@ -125,6 +126,7 @@ const App = observer(() => {
         headerText="Categories"
         id="categories-modal"
       />
+      {app.isVisibleUserLocationModal && <SelectUserLocationModal />}
       <header ref={headerRef}>
         <Navbar elemToFocus={pageElemToFocus} navCategoryBtnRef={navCategoryBtnRef} />
         {(app.isVisibleCategoriesMenu && !!Object.keys(deviceStore.categories).length) && 

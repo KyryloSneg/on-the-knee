@@ -1,0 +1,25 @@
+.delete-input-content-btn {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  padding: 0 5px;
+
+  align-self: center;
+  display: grid;
+  align-items: center;
+  background: none;
+  border: none;
+  margin: 0;
+  cursor: pointer;
+}
+
+.delete-input-content-btn svg {
+  transition: 0.2s;
+  fill: rgb(50 63 125);
+}
+
+.delete-input-content-btn:hover svg {
+  fill: rgb(88, 103, 180);
+}
