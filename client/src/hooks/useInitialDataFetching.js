@@ -7,6 +7,7 @@ import ArrayActions from "../utils/ArrayActions";
 import { getHintSearchResults } from "../http/HintSearchResultsAPI";
 import { getSales } from "../http/SalesAPI";
 import { getStocks } from "../http/StocksAPI";
+import { getLocations } from "../http/LocationsAPI";
 
 function useInitialDataFetching() {
   const { app, deviceStore } = useContext(Context);
@@ -17,6 +18,7 @@ function useInitialDataFetching() {
     const sales = await getSales();
     const stocks = await getStocks();
     const hintSearchResults = await getHintSearchResults();
+    const allLocations = await getLocations();
 
     let uniqueHintResults = [];
     for (let result of hintSearchResults) {
@@ -41,6 +43,7 @@ function useInitialDataFetching() {
     deviceStore.setSales(sales);
     deviceStore.setStocks(stocks);
     app.setHintSearchResults(sortedHintResults);
+    app.setAllLocations(allLocations);
   }
 
   const [fetching, isLoading, error] = useFetching(fetchData);

@@ -27,6 +27,7 @@ class AppStore {
     this._navBtnGroupRef = null;
 
     this._userLocation = null;
+    this._allLocations = [];
     makeAutoObservable(this);
   }
 
@@ -67,7 +68,6 @@ class AppStore {
   }
 
   setIsVisibleUserLocationModal(bool) {
-    console.log("disa lox", bool);
     this._isVisibleUserLocationModal = bool;
   }
 
@@ -113,6 +113,10 @@ class AppStore {
 
   setUserLocation(userLocation) {
     this._userLocation = userLocation;
+  }
+  
+  setAllLocations(allLocations) {
+    this._allLocations = allLocations;
   }
   
   get darkBgVisible() {
@@ -197,6 +201,10 @@ class AppStore {
 
   get userLocation() {
     return this._userLocation;
+  }
+
+  get allLocations() {
+    return this._allLocations;
   }
 }
 
