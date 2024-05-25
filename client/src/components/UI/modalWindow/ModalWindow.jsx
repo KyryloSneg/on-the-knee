@@ -18,7 +18,6 @@ const ModalWindow = observer(({ isVisible, setIsVisible, children, headerText, i
 
   function closeModalWindow() {
     if (!isVisible) return;
-    console.log(setIsVisible);
     setIsVisible(false);
   }
 
@@ -33,6 +32,10 @@ const ModalWindow = observer(({ isVisible, setIsVisible, children, headerText, i
 
   useEffect(() => {
     app.setModalVisible(isVisible);
+    return () => {
+      // there can't be multiple modal windows on the site
+      app.setModalVisible(false);
+    };
   }, [app, isVisible]);
 
   useWindowInvisibleFocus(closeModalBtnRef, isVisible);

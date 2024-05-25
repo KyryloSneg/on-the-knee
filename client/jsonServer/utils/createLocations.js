@@ -2,6 +2,7 @@ const { faker } = require("@faker-js/faker");
 const StringActions = require("./StringActions");
 const { STORE_LOCATIONS } = require("./consts");
 const { getLocationCoords } = require("../http/mapDataManagerAPI");
+const uaCities = require("../data/ua.json");
 
 module.exports = async () => {
   let countries = [];
@@ -39,13 +40,19 @@ module.exports = async () => {
 
         const currentDistrict = districts[districts.length - 1];
         const dbCityId = cities.length + 1;
+        const name = StringActions.capitalize(city);
+        const fullName = `${name} (${currentDistrict.name}, ${dbRegion.name})`;
 
         const dbCity = {
           "id": dbCityId,
+          "type": cityInfo.type,
+          "name": name,
+          "population": cityInfo.population,
+          "countryId": country.id,
           "regionId": dbRegion.id,
           "districtId": currentDistrict.id,
+          "fullName": fullName,
           "isAccessible": dbCityId === 1 || !faker.datatype.boolean(0.15), // we guarantee that there will be at least one accessible city
-          "name": StringActions.capitalize(city),
         }
         cities.push(dbCity);
 
@@ -77,6 +84,50 @@ module.exports = async () => {
         }
       }
     }
+  }
+
+  const ukraineId = countries.find(country => country.name === "Ukraine").id;
+  for (let uaCity of uaCities) {
+    const doesExist = !!cities.find(city => city.name === uaCity.city);
+    if (doesExist) continue;
+
+    const id = cities.length + 1;
+    let type;
+
+    if (+uaCity.population < 5000) {
+      type = "village"; // объединил деревню и село в одно понятие
+    } else if (+uaCity.population >= 5000 && +uaCity.population < 10000) {
+      type = "urban settlement"; // пгт
+    } else {
+      type = "city";
+    }
+
+    let region = regions.find(regionItem => regionItem.name === uaCity["admin_name"]);
+    if (!region) {
+      region = {
+        "id": regions.length + 1,
+        "name": uaCity["admin_name"]
+      };
+
+      regions.push(region);
+    }
+
+    // in .json file there's no any info about city's district
+    const district = districts[faker.number.int({ min: 0, max: districts.length - 1 })]; 
+    const fullName = `${uaCity.city} (${district.name}, ${region.name})`;
+    const city = {
+      "id": id,
+      "type": type,
+      "name": uaCity.city,
+      "population": +uaCity.population,
+      "countryId": ukraineId,
+      "regionId": region.id,
+      "districtId": district.id,
+      "fullName": fullName,
+      "isAccessible": true
+    }
+
+    cities.push(city);
   }
 
   return {

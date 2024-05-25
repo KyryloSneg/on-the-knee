@@ -1,8 +1,21 @@
 .select-user-location-modal-search {
+  display: flex;
   position: relative;
-  width: 80%;
+  width: 100%;
+  height: 36px;
 }
 
 .select-user-location-modal-search > input {
   width: 100%;
+  height: 100%;
+  padding: 0 28px 0 8px;
+  border-radius: 10px;
+}
+
+.select-user-location-modal-search > input:focus {
+  border: 1px solid #3c3cd5;
+}
+
+.select-user-location-modal-search > .delete-input-content-btn {
+  border-radius: 0 10px 10px 0;
 }
