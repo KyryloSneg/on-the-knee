@@ -11,7 +11,6 @@ const SelectUserLocationModalContent = observer(() => {
   const [query, setQuery] = useState("");
   if (!app.allLocations.length) return <div />
 
-  // TODO: state "cities"
   const allLocationsCopy = [...app.allLocations];
   let filteredCities = allLocationsCopy.filter(location => 
     location.name.toLowerCase().includes(query.toLowerCase().trim())
@@ -25,7 +24,7 @@ const SelectUserLocationModalContent = observer(() => {
 
   const bigCities = allLocationsCopy
     .sort((a, b) => b.population - a.population)
-    .slice(0, 8);
+    .slice(0, 6);
 
   return (
     <section className="select-user-location-modal-content">
