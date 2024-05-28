@@ -1,0 +1,27 @@
+.select-user-location-modal-list-item {
+  border: none;
+  background: none;
+  outline: none;
+  width: 100%;
+  font-size: 1.3rem;
+  transition: background-color 0.15s;
+  cursor: pointer;
+  text-align: start;
+  padding: 8px 10px;
+}
+
+.select-user-location-modal-list-item:hover,
+.select-user-location-modal-list-item:active,
+.select-user-location-modal-list-item:focus-visible {
+  background-color: #dedede;
+}
+
+.select-user-location-modal-list-item.selected {
+  color: #bd5e10;
+}
+
+@media screen and (min-width: 500px) {
+  .select-user-location-modal-list-item {
+    font-size: 1.6rem;
+  }
+}
