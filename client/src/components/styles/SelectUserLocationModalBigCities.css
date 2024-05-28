@@ -3,9 +3,10 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px 14px;
+  padding: 0 16px;
 }
 
-.select-user-location-modal-big-cities > li > button {
+.select-user-location-modal-big-city {
   padding: 6px;
   width: 100%;
   cursor: pointer;
@@ -19,18 +20,19 @@
   outline: none;
 }
 
-.select-user-location-modal-big-cities > li > button:hover,
-.select-user-location-modal-big-cities > li > button:active,
-.select-user-location-modal-big-cities > li > button:focus-visible {
+.select-user-location-modal-big-city:hover,
+.select-user-location-modal-big-city:active,
+.select-user-location-modal-big-city:focus-visible,
+.select-user-location-modal-big-city.selected {
   color: #bd5e10;
 }
 
-.select-user-location-modal-big-cities > li > button:focus-visible {
+.select-user-location-modal-big-city:focus-visible {
   background-color: #f1f1f1;
 }
 
 @media screen and (min-width: 230px) {
-  .select-user-location-modal-big-cities > li > button {
+  .select-user-location-modal-big-city {
     font-size: 1.5rem;
   }
 }

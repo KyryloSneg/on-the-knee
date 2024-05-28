@@ -1,3 +1,7 @@
+.select-user-location-modal-search-wrap {
+  padding: 16px 16px 0 16px;
+}
+
 .select-user-location-modal-search {
   display: flex;
   position: relative;

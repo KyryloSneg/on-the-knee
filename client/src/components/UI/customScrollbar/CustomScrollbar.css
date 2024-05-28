@@ -47,7 +47,7 @@
   --os-handle-interactive-area-offset: 4px;
 }
 
-.custom-scrollbar-div.rect .my-scrollbar.os-scrollbar {
+.custom-scrollbar-div.rect > .my-scrollbar.os-scrollbar {
   --os-track-border-radius: none;
   --os-handle-border-radius: none;
 }
