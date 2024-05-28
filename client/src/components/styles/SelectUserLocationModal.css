@@ -1,0 +1,17 @@
+#select-user-location-modal {
+  width: 100%;
+  max-width: 600px;
+}
+
+@media screen and (min-width: 600px) {
+  #select-user-location-modal {
+    width: 600px;
+    height: auto;
+    max-height: 100%;
+    border-radius: 6px;
+  }
+
+  #select-user-location-modal > header > h2 {
+    font-size: 2.5rem;
+  }
+}

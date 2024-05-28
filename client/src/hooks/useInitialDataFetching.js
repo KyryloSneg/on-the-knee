@@ -20,6 +20,11 @@ function useInitialDataFetching() {
     const hintSearchResults = await getHintSearchResults();
     const allLocations = await getLocations();
 
+    let userLocation = JSON.parse(localStorage.getItem("location"));
+    if (!userLocation) {
+      // TODO: auto-getting user location
+    }
+
     let uniqueHintResults = [];
     for (let result of hintSearchResults) {
       const isIncludedAlready = !!uniqueHintResults.find(res => res.value === result.value);
@@ -44,6 +49,7 @@ function useInitialDataFetching() {
     deviceStore.setStocks(stocks);
     app.setHintSearchResults(sortedHintResults);
     app.setAllLocations(allLocations);
+    app.setUserLocation(userLocation);
   }
 
   const [fetching, isLoading, error] = useFetching(fetchData);
