@@ -1,3 +1,4 @@
+import "./styles/SelectUserLocationModal.css";
 import { useContext } from 'react';
 import ModalWindow from './UI/modalWindow/ModalWindow';
 import { Context } from '../Context';
@@ -19,6 +20,7 @@ const SelectUserLocationModal = observer(() => {
       children={<SelectUserLocationModalContent />}
       headerText="Choose your location"
       id="select-user-location-modal"
+      key="select-user-location-modal"
     />
   );
 });

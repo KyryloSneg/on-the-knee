@@ -7,6 +7,7 @@ import setFiltersSidebarVisibility from "../utils/setFiltersSidebarVisibility";
 import setUsedFiltersBarVisibility from "../utils/setUsedFiltersBarVisibility";
 import { useLocation } from "react-router-dom";
 import setSearchFormVisibility from "../utils/setSearchFormVisibility";
+import setSelectUserLocationVisibility from "../utils/setSelectUserLocationModalVisibility";
 
 function useClosingAllWindows() {
   const location = useLocation();
@@ -16,6 +17,7 @@ function useClosingAllWindows() {
   useEffect(() => {
     setCategoriesModalVisibility(false, app);
     setCategoriesMenuVisibility(false, app);
+    setSelectUserLocationVisibility(false, app);
     setMenuVisibility(false, app);
     setFiltersSidebarVisibility(false, app);
     setUsedFiltersBarVisibility(false, app);
