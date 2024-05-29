@@ -1,0 +1,17 @@
+.user-location-btn {
+  cursor: pointer;
+  display: flex;
+  gap: 2px;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  background: none;
+  border: none;
+  transition: 0.2s;
+}
+
+.user-location-btn:hover,
+.user-location-btn:active,
+.user-location-btn:focus-visible {
+  color: #7373ff;
+}

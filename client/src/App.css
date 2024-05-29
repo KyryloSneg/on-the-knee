@@ -9,8 +9,9 @@ html, button {
   font-family: 'Montserrat', sans-serif;
 }
 
-html>*:focus {
-  outline: solid;
+html *:focus, html *:focus-visible {
+  outline-color: #7373ff;
+  transition: outline 0s;
 }
 
 body {
