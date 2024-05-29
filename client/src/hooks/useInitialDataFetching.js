@@ -7,6 +7,9 @@ import ArrayActions from "../utils/ArrayActions";
 import { getHintSearchResults } from "../http/HintSearchResultsAPI";
 import { getSales } from "../http/SalesAPI";
 import { getStocks } from "../http/StocksAPI";
+import { getLocations } from "../http/LocationsAPI";
+import { getUserLocation } from "../http/UserLocationAPI";
+import { DEFAULT_USER_LOCATION_NAME } from "../utils/consts";
 
 function useInitialDataFetching() {
   const { app, deviceStore } = useContext(Context);
@@ -20,7 +23,19 @@ function useInitialDataFetching() {
 
     let userLocation = JSON.parse(localStorage.getItem("location"));
     if (!userLocation) {
-      // TODO: auto-getting user location
+      // auto-getting user location
+      const fetchedUserLocation = await getUserLocation();
+      userLocation = allLocations.find(location => location.name === fetchedUserLocation.city);
+
+      if (!userLocation) {
+        // if we still haven't found user location, set default one (Kyiv)
+        userLocation = allLocations.find(location => location.name === DEFAULT_USER_LOCATION_NAME);
+      }
+
+      app.setIsUserLocationDeterminedCorrectly(!!userLocation);
+      app.setIsToShowDeterminedUserLocationWindow(true);
+      
+      localStorage.setItem("location", JSON.stringify(userLocation))
     }
 
     let uniqueHintResults = [];
