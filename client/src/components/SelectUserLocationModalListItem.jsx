@@ -8,7 +8,7 @@ const SelectUserLocationModalListItem = observer(({ city }) => {
   const { app } = useContext(Context);
 
   let className = "select-user-location-modal-list-item";
-  if (app.userLocation.id === city.id) {
+  if (app.userLocation?.id === city.id) {
     className += " selected";
   }
 
