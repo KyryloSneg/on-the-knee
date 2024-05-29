@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef } from "react";
 import { Context } from "../Context";
-import setSelectUserLocationVisibility from "../utils/setSelectUserLocationModalVisibility";
+import UserLocationBtn from "../components/UserLocationBtn";
 
 const MainPage = () => {
   const { app } = useContext(Context);
@@ -13,9 +13,7 @@ const MainPage = () => {
   return (
     <div>
       MainPage
-      <button onClick={() => setSelectUserLocationVisibility(true, app)}>
-        Open user location modal
-      </button>
+      <UserLocationBtn />
     </div>
   );
 };
