@@ -152,6 +152,8 @@ export const WIDTH_TO_SHOW_LOADING_BTN_PAGINATION = 260;
 export const WIDTH_TO_SHOW_CATEGORIES_MENU = 1080;
 export const WIDTH_TO_SHOW_DEVICE_CAROUSEL_SIDEBAR = 870;
 
+export const DEFAULT_USER_LOCATION_NAME = "Kyiv";
+
 // set up mock stores
 const deviceStoreInstance = new DeviceStore();
 const userStoreInstance = new UserStore();

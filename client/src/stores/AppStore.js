@@ -28,6 +28,8 @@ class AppStore {
 
     this._userLocation = null;
     this._allLocations = [];
+    this._isToShowDeterminedUserLocationWindow = false;
+    this._isUserLocationDeterminedCorrectly = true;
     makeAutoObservable(this);
   }
 
@@ -118,6 +120,14 @@ class AppStore {
   setAllLocations(allLocations) {
     this._allLocations = allLocations;
   }
+
+  setIsToShowDeterminedUserLocationWindow(isToShowDeterminedUserLocationWindow) {
+    this._isToShowDeterminedUserLocationWindow = isToShowDeterminedUserLocationWindow;
+  }
+
+  setIsUserLocationDeterminedCorrectly(isUserLocationDeterminedCorrectly) {
+    this._isUserLocationDeterminedCorrectly = isUserLocationDeterminedCorrectly;
+  }
   
   get darkBgVisible() {
     return this._darkBgVisible;
@@ -205,6 +215,14 @@ class AppStore {
 
   get allLocations() {
     return this._allLocations;
+  }
+
+  get isToShowDeterminedUserLocationWindow() {
+    return this._isToShowDeterminedUserLocationWindow;
+  }
+
+  get isUserLocationDeterminedCorrectly() {
+    return this._isUserLocationDeterminedCorrectly;
   }
 }
 
