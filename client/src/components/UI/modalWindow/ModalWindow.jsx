@@ -7,7 +7,7 @@ import { observer } from "mobx-react-lite";
 import useWindowInvisibleFocus from "../../../hooks/useWindowInvisibleFocus";
 import CustomScrollbar from "../customScrollbar/CustomScrollbar";
 
-const ModalWindow = observer(({ isVisible, setIsVisible, children, headerText, id }) => {
+const ModalWindow = observer(({ isVisible, setIsVisible, children, headerText, id, ...props }) => {
   const { app } = useContext(Context)
 
   const modalRef = useRef(null);
@@ -32,6 +32,10 @@ const ModalWindow = observer(({ isVisible, setIsVisible, children, headerText, i
 
   useEffect(() => {
     app.setModalVisible(isVisible);
+    return () => {
+      // there can't be multiple modal windows on the site
+      app.setModalVisible(false);
+    };
   }, [app, isVisible]);
 
   useWindowInvisibleFocus(closeModalBtnRef, isVisible);
@@ -44,7 +48,9 @@ const ModalWindow = observer(({ isVisible, setIsVisible, children, headerText, i
       id={id} 
       role="dialog"
       aria-labelledby={headingId}
-      ref={modalRef}>
+      ref={modalRef}
+      {...props}
+    >
       <div className="visually-hidden" tabIndex={0} ref={firstFocusTrapRef} />
       <header>
         <h2 id={headingId}>{headerText}</h2>

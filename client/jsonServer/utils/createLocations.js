@@ -40,15 +40,18 @@ module.exports = async () => {
 
         const currentDistrict = districts[districts.length - 1];
         const dbCityId = cities.length + 1;
+        const name = StringActions.capitalize(city);
+        const fullName = `${name} (${currentDistrict.name}, ${dbRegion.name})`;
 
         const dbCity = {
           "id": dbCityId,
           "type": cityInfo.type,
-          "name": StringActions.capitalize(city),
+          "name": name,
           "population": cityInfo.population,
           "countryId": country.id,
           "regionId": dbRegion.id,
           "districtId": currentDistrict.id,
+          "fullName": fullName,
           "isAccessible": dbCityId === 1 || !faker.datatype.boolean(0.15), // we guarantee that there will be at least one accessible city
         }
         cities.push(dbCity);
@@ -111,6 +114,7 @@ module.exports = async () => {
 
     // in .json file there's no any info about city's district
     const district = districts[faker.number.int({ min: 0, max: districts.length - 1 })]; 
+    const fullName = `${uaCity.city} (${district.name}, ${region.name})`;
     const city = {
       "id": id,
       "type": type,
@@ -119,6 +123,7 @@ module.exports = async () => {
       "countryId": ukraineId,
       "regionId": region.id,
       "districtId": district.id,
+      "fullName": fullName,
       "isAccessible": true
     }
 

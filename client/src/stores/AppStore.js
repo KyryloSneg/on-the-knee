@@ -12,6 +12,7 @@ class AppStore {
     this._isVisibleUsedFiltersSidebar = false;
     this._isVisibleCategoriesMenu = false;
     this._isVisibleCategoriesModal = false;
+    this._isVisibleUserLocationModal = false;
     this._isFocusedSearchForm = false;
 
     this._hintSearchResults = []
@@ -24,6 +25,11 @@ class AppStore {
     this._filtersShortcutRef = null;
     this._usedFiltersShortcutRef = null;
     this._navBtnGroupRef = null;
+
+    this._userLocation = null;
+    this._allLocations = [];
+    this._isToShowUserLocationNotification = false;
+    this._isUserLocationDeterminedCorrectly = true;
     makeAutoObservable(this);
   }
 
@@ -61,6 +67,10 @@ class AppStore {
 
   setIsVisibleCategoriesModal(bool) {
     this._isVisibleCategoriesModal = bool;
+  }
+
+  setIsVisibleUserLocationModal(bool) {
+    this._isVisibleUserLocationModal = bool;
   }
 
   setIsFocusedSearchForm(bool) {
@@ -102,6 +112,22 @@ class AppStore {
   setHintSearchResults(results) {
     this._hintSearchResults = results;
   }
+
+  setUserLocation(userLocation) {
+    this._userLocation = userLocation;
+  }
+  
+  setAllLocations(allLocations) {
+    this._allLocations = allLocations;
+  }
+
+  setIsToShowUserLocationNotification(isToShowUserLocationNotification) {
+    this._isToShowUserLocationNotification = isToShowUserLocationNotification;
+  }
+
+  setIsUserLocationDeterminedCorrectly(isUserLocationDeterminedCorrectly) {
+    this._isUserLocationDeterminedCorrectly = isUserLocationDeterminedCorrectly;
+  }
   
   get darkBgVisible() {
     return this._darkBgVisible;
@@ -137,6 +163,10 @@ class AppStore {
 
   get isVisibleCategoriesModal() {
     return this._isVisibleCategoriesModal;
+  }
+
+  get isVisibleUserLocationModal() {
+    return this._isVisibleUserLocationModal;
   }
 
   get isFocusedSearchForm() {
@@ -177,6 +207,22 @@ class AppStore {
 
   get hintSearchResults() {
     return this._hintSearchResults;
+  }
+
+  get userLocation() {
+    return this._userLocation;
+  }
+
+  get allLocations() {
+    return this._allLocations;
+  }
+
+  get isToShowUserLocationNotification() {
+    return this._isToShowUserLocationNotification;
+  }
+
+  get isUserLocationDeterminedCorrectly() {
+    return this._isUserLocationDeterminedCorrectly;
   }
 }
 
