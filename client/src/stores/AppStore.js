@@ -28,7 +28,7 @@ class AppStore {
 
     this._userLocation = null;
     this._allLocations = [];
-    this._isToShowDeterminedUserLocationWindow = false;
+    this._isToShowUserLocationNotification = false;
     this._isUserLocationDeterminedCorrectly = true;
     makeAutoObservable(this);
   }
@@ -122,8 +122,8 @@ class AppStore {
     this._allLocations = allLocations;
   }
 
-  setIsToShowDeterminedUserLocationWindow(isToShowDeterminedUserLocationWindow) {
-    this._isToShowDeterminedUserLocationWindow = isToShowDeterminedUserLocationWindow;
+  setIsToShowUserLocationNotification(isToShowUserLocationNotification) {
+    this._isToShowUserLocationNotification = isToShowUserLocationNotification;
   }
 
   setIsUserLocationDeterminedCorrectly(isUserLocationDeterminedCorrectly) {
@@ -218,8 +218,8 @@ class AppStore {
     return this._allLocations;
   }
 
-  get isToShowDeterminedUserLocationWindow() {
-    return this._isToShowDeterminedUserLocationWindow;
+  get isToShowUserLocationNotification() {
+    return this._isToShowUserLocationNotification;
   }
 
   get isUserLocationDeterminedCorrectly() {
