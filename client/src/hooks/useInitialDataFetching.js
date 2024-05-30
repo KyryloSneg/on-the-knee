@@ -24,18 +24,22 @@ function useInitialDataFetching() {
 
     let userLocation = JSON.parse(localStorage.getItem("location"));
     if (!userLocation) {
-      // auto-getting user location
-      const fetchedUserLocation = await getUserLocation();
-      userLocation = allLocations.find(location => location.name === fetchedUserLocation.city);
+      try {
+        // auto-getting user location
+        // (using try ... catch because ipify crushes sometimes)
+        const fetchedUserLocation = await getUserLocation();
+        userLocation = allLocations.find(location => location.name === fetchedUserLocation.city);
+      } catch (e) {
+        console.log(e.message);
+      }
 
+      app.setIsUserLocationDeterminedCorrectly(!!userLocation);
       if (!userLocation) {
         // if we still haven't found user location, set default one (Kyiv)
         userLocation = allLocations.find(location => location.name === DEFAULT_USER_LOCATION_NAME);
       }
 
-      app.setIsUserLocationDeterminedCorrectly(!!userLocation);
-      app.setIsToShowDeterminedUserLocationWindow(true);
-      
+      app.setIsToShowUserLocationNotification(true);
       localStorage.setItem("location", JSON.stringify(userLocation))
     }
 
