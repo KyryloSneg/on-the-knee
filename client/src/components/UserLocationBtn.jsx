@@ -21,8 +21,8 @@ const UserLocationBtn = observer(({ additionalText = "", className = "" }) => {
       <img src={geoIcon} alt="" draggable="false" />
       {additionalText
         ? <span>
-          {additionalText} <strong>{app.userLocation?.name || "..."}</strong>
-        </span>
+            {additionalText} <strong>{app.userLocation?.name || "..."}</strong>
+          </span>
         : app.userLocation?.name || "..."
       }
     </button>
