@@ -4,6 +4,7 @@ import DevicePurchaseSection from "./DevicePurchaseSection";
 import DeviceRightDescHeading from "./DeviceRightDescHeading";
 import DeviceRightDescSales from "./DeviceRightDescSales";
 import DeviceSellerBlock from "./DeviceSellerBlock";
+import UserLocationBtn from "./UserLocationBtn";
 import "./styles/DeviceRightDescription.css";
 
 const DeviceRightDescription = ({ 
@@ -48,6 +49,7 @@ const DeviceRightDescription = ({
         <DeviceSellerBlock seller={seller} />
         <DevicePurchaseSection price={price} discountPercentage={discountPercentage} />
       </div>
+      <UserLocationBtn additionalText="Deliver to" className="device-right-desc-location-btn" />
     </section>
   );
 }
