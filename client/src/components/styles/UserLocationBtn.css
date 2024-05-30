@@ -4,7 +4,7 @@
   gap: 2px;
   align-items: center;
   justify-content: center;
-  padding: 6px;
+  padding: 8px;
   background: none;
   border: none;
   transition: color 0.2s;
@@ -14,4 +14,10 @@
 .user-location-btn:active,
 .user-location-btn:focus-visible {
   color: #7373ff;
+}
+
+.user-location-btn.device-right-desc-location-btn {
+  border: 1px #dfdfdf solid;
+  border-radius: 18px;
+  width: max-content;
 }
