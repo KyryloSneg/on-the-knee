@@ -7,6 +7,9 @@ import ArrayActions from "../utils/ArrayActions";
 import { getHintSearchResults } from "../http/HintSearchResultsAPI";
 import { getSales } from "../http/SalesAPI";
 import { getStocks } from "../http/StocksAPI";
+import { getLocations } from "../http/LocationsAPI";
+import { getUserLocation } from "../http/UserLocationAPI";
+import { DEFAULT_USER_LOCATION_NAME } from "../utils/consts";
 
 function useInitialDataFetching() {
   const { app, deviceStore } = useContext(Context);
@@ -17,6 +20,28 @@ function useInitialDataFetching() {
     const sales = await getSales();
     const stocks = await getStocks();
     const hintSearchResults = await getHintSearchResults();
+    const allLocations = await getLocations();
+
+    let userLocation = JSON.parse(localStorage.getItem("location"));
+    if (!userLocation) {
+      try {
+        // auto-getting user location
+        // (using try ... catch because ipify crushes sometimes)
+        const fetchedUserLocation = await getUserLocation();
+        userLocation = allLocations.find(location => location.name === fetchedUserLocation.city);
+      } catch (e) {
+        console.log(e.message);
+      }
+
+      app.setIsUserLocationDeterminedCorrectly(!!userLocation);
+      if (!userLocation) {
+        // if we still haven't found user location, set default one (Kyiv)
+        userLocation = allLocations.find(location => location.name === DEFAULT_USER_LOCATION_NAME);
+      }
+
+      app.setIsToShowUserLocationNotification(true);
+      localStorage.setItem("location", JSON.stringify(userLocation))
+    }
 
     let uniqueHintResults = [];
     for (let result of hintSearchResults) {
@@ -41,6 +66,8 @@ function useInitialDataFetching() {
     deviceStore.setSales(sales);
     deviceStore.setStocks(stocks);
     app.setHintSearchResults(sortedHintResults);
+    app.setAllLocations(allLocations);
+    app.setUserLocation(userLocation);
   }
 
   const [fetching, isLoading, error] = useFetching(fetchData);

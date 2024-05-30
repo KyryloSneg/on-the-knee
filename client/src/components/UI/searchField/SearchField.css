@@ -27,11 +27,3 @@
 .search-field-wrap > .search-line:focus {
   background-color: #ffffff;
 }
-
-.search-field-wrap > .delete-input-content-btn {
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  padding: 0 5px;
-}

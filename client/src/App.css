@@ -9,8 +9,9 @@ html, button {
   font-family: 'Montserrat', sans-serif;
 }
 
-html>*:focus {
-  outline: solid;
+html *:focus, html *:focus-visible {
+  outline-color: #7373ff;
+  transition: outline 0s;
 }
 
 body {
@@ -79,7 +80,7 @@ input {
   height: 30px;
   background-color: #e9e9e9;
   color: black;
-  transition: 0.2s;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
 }
 
 input:not(input[type="checkbox"]):focus {
@@ -280,7 +281,6 @@ ul {
 
 /* delete input content and "back" buttons */
 
-.delete-input-content-btn,
 .input-back-btn {
   align-self: center;
   display: grid;
@@ -293,23 +293,10 @@ ul {
   cursor: pointer;
 }
 
-.delete-input-content-btn {
-  right: 5%;
-}
-
 .input-back-btn {
   box-sizing: border-box;
   padding-left: 6px;
   height: 100%;
-}
-
-.delete-input-content-btn svg {
-  transition: 0.2s;
-  fill: rgb(50 63 125);
-}
-
-.delete-input-content-btn:hover svg {
-  fill: rgb(88, 103, 180);
 }
 
 .input-back-btn svg {
