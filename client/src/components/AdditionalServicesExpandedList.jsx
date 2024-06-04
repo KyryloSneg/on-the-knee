@@ -6,13 +6,17 @@ import { useRef } from "react";
 
 const AdditionalServicesExpandedList = ({ 
   names, deviceId, additionalServiceOptions, 
-  parentId, setParentIsChecked, 
+  labelledBy, parentId, setParentIsChecked, 
   selectedItems, setSelectedItems 
 }) => {
   const optionRefs = useRef([]);
 
   return (
-    <ul className="additional-services-expanded-list">
+    <ul 
+      className="additional-services-expanded-list"
+      role="radiogroup"
+      aria-labelledby={labelledBy}
+    >
       {additionalServiceOptions.map((option, index) => {
         const name = names[index];
         const selectedItem = selectedItems.find(item => item.parentId === parentId);
