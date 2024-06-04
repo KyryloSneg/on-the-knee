@@ -34,33 +34,6 @@
   background: none;
 }
 
-.filters li a:hover .filter-icon,
-  .filters li a:focus .filter-icon {
-  border: 1px solid black;
-}
-
-.filters li a:hover .filter-icon.checked,
-  .filters li a:focus .filter-icon.checked {
-  border: 1px solid #7e95fa;
-}
-
-.filter-icon {
-  width: 14px;
-  height: 14px;
-  border: 1px solid #676767;
-  background-color: white;
-  border-radius: 3px;
-  transition: 0.2s;
-}
-
-.filter-icon.checked {
-  border: 1px solid #7e95fa;
-  background-color: #7e95fa;
-  background-image: url(../../assets/check.svg);
-  background-position: center;
-  background-size: 14px 14px;
-}
-
 .filter-devices-amount {
   font-weight: bold;
   font-size: 1.3rem;

@@ -1,0 +1,66 @@
+.additional-services-expanded-list-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.additional-services-expanded-list-item > button {
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  width: 100%;
+  gap: 10px;
+}
+
+.add-service-radio-div-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.additional-services-expanded-list-item > button:focus-visible > div > .radio-div {
+  outline: 2px #7373ff solid;
+}
+
+.additional-services-expanded-list-item > a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-service-name-price-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 0;
+}
+
+.additional-service-expanded-price {
+  text-align: start;
+  font-size: 1.2rem;
+}
+
+/* doing preety much same as with the additional-services-list-item */
+@media screen and (min-width: 380px) {
+
+  .additional-services-expanded-list-item>button,
+  .add-service-radio-div-wrapper {
+    gap: 15px;
+  }
+
+  .additional-service-expanded-price {
+    font-size: 1.5rem;
+  }
+}
+
+@media screen and (min-width: 560px) {
+  .add-service-name-price-wrapper {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 6px;
+  }
+}

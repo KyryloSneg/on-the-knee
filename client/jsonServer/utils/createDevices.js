@@ -92,7 +92,7 @@ module.exports = async () => {
 
     createDeviceInfos(dev.id, category.slug, deviceInfos, deviceAttributeValues);
     createDeviceCombinations(dev, deviceAttributeValues, deviceCombinations, stocks);
-    createAdditionalServices(dev.id, devices, additionalServices, additionalServiceDevices);
+    createAdditionalServices(dev.id, devices, additionalServices, additionalServiceDevices, deviceCombinations);
 
     const device = {
       "id": dev.id,
