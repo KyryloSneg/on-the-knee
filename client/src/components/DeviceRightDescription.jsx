@@ -1,3 +1,5 @@
+import { useState } from "react";
+import AdditionalServicesSection from "./AdditionalServicesSection";
 import DeviceColorOptions from "./DeviceColorOptions";
 import DeviceItemAttrOptionSection from "./DeviceItemAttrOptionSection";
 import DevicePurchaseSection from "./DevicePurchaseSection";
@@ -10,8 +12,11 @@ import "./styles/DeviceRightDescription.css";
 const DeviceRightDescription = ({ 
   device, combinationString, selectedCombination, 
   defaultCombo, salesAndTypes, attributesList, 
-  hrefObjects, seller, price, discountPercentage 
+  hrefObjects, seller, price, discountPercentage,
+  additionalServicesObj 
 }) => {
+  const [selectedAddServices, setSelectedAddServices] = useState([]);
+
   return (
     <section className="device-page-section device-right-description">
       <DeviceRightDescHeading
@@ -45,6 +50,11 @@ const DeviceRightDescription = ({
           }
         </div>
       }
+      <AdditionalServicesSection 
+        additionalServices={additionalServicesObj}
+        selectedItems={selectedAddServices}
+        setSelectedItems={setSelectedAddServices} 
+      />
       <div className="device-right-desc-seller-purchase-wrap">
         <DeviceSellerBlock seller={seller} />
         <DevicePurchaseSection price={price} discountPercentage={discountPercentage} />
