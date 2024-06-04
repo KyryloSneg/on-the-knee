@@ -2,6 +2,7 @@ import "./styles/AdditionalServicesListItem.css";
 import { useState } from 'react';
 import dropdownArrowIcon from "../assets/expand_more.svg";
 import AdditionalServicesExpandedList from './AdditionalServicesExpandedList';
+import _ from "lodash";
 
 const AdditionalServicesListItem = ({ additionalService, id, selectedItems, setSelectedItems }) => {
   const [isChecked, setIsChecked] = useState(false);
@@ -43,6 +44,7 @@ const AdditionalServicesListItem = ({ additionalService, id, selectedItems, setS
     setIsExpanded(!isExpanded);
   }
 
+  const spanId = `additional-services-list-item-span-${additionalService.id}-${_.uniqueId()}`;
   return (
     <div className="additional-services-list-item">
       <div>
@@ -61,7 +63,7 @@ const AdditionalServicesListItem = ({ additionalService, id, selectedItems, setS
               draggable="false" 
             />
           </div>
-          <span className="hidden-overflow-name">
+          <span className="hidden-overflow-name" id={spanId}>
             {additionalService.name}
           </span>
         </button>
@@ -79,6 +81,7 @@ const AdditionalServicesListItem = ({ additionalService, id, selectedItems, setS
           names={additionalService["additional-service"].names}
           deviceId={additionalService["additional-service"].device.id}
           additionalServiceOptions={additionalServiceOptions}
+          labelledBy={spanId}
           parentId={id}
           setParentIsChecked={setIsChecked}
           selectedItems={selectedItems}
