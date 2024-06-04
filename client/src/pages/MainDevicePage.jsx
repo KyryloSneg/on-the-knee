@@ -10,13 +10,16 @@ import useGettingSalesAndTypeNames from "../hooks/useGettingSalesAndTypeNames";
 import { observer } from "mobx-react-lite";
 import DeviceComboActions from "../utils/DeviceComboActions";
 import useGettingSellers from "../hooks/useGettingSellers";
+import useGettingAddServicesRelatedData from "../hooks/useGettingAddServicesRelatedData";
 
 const MainDevicePage = observer(({ device, combinationString }) => {
   const { deviceStore } = useContext(Context);
   const [sellers, setSellers] = useState([]);
+  const [additionalServicesObj, setAdditionalServicesObj] = useState([]);
   // theoretically setting sales and sale type names would not lead to bugs in the catalog page
   useGettingSalesAndTypeNames(deviceStore);
   useGettingSellers(setSellers);
+  useGettingAddServicesRelatedData(device, setAdditionalServicesObj);
 
   if (!device || !deviceStore.sales.length || !deviceStore.stocks.length || !sellers.length) {
     return <div />
@@ -108,6 +111,7 @@ const MainDevicePage = observer(({ device, combinationString }) => {
           seller={seller}
           price={price}
           discountPercentage={discountPercentage}
+          additionalServicesObj={additionalServicesObj}
         />
       </div>
       <div className="dev-info-comments-wrap">
