@@ -73,11 +73,11 @@ const AdditionalServicesExpandedList = ({
           if (additionalServiceOptions.length === 1) return;
 
           let id;
-          if (selectedId === additionalServiceOptions.length - 1) {
+          if (index === additionalServiceOptions.length - 1) {
             id = 0;
             checkItem(additionalServiceOptions[id], id);
           } else {
-            id = selectedId + 1;
+            id = index + 1;
             checkItem(additionalServiceOptions[id], id);
           }
 
@@ -88,11 +88,11 @@ const AdditionalServicesExpandedList = ({
           if (additionalServiceOptions.length === 1) return;
 
           let id;
-          if (selectedId === 0) {
+          if (index === 0) {
             id = additionalServiceOptions.length - 1;
             checkItem(additionalServiceOptions[id], id);
           } else {
-            id = selectedId - 1;
+            id = index - 1;
             checkItem(additionalServiceOptions[id], id);
           }
 

@@ -25,8 +25,8 @@ const DeviceRightDescSaleItem = ({ sale, saleTypes }) => {
     return formattedDateString;
   }
 
-  const createdAtStr = moment(getFormattedDateString(createdAtDate)).format("MMM Do");
-  const expiresAtStr = moment(getFormattedDateString(expiresAtDate)).format("MMM Do YYYY");
+  const createdAtStr = moment(new Date(getFormattedDateString(createdAtDate))).format("MMM Do");
+  const expiresAtStr = moment(new Date(getFormattedDateString(expiresAtDate))).format("MMM Do YYYY");
   // d.toLocaleDateString() + moment.js
   return (
     <section className="device-right-desc-sale-item">
