@@ -9,7 +9,7 @@ const CategoryFilter = forwardRef(({ filter, value, count, active, onKeyDown, te
     filter === "color" ? value.split("_")[0] : value;
 
   const to = active ? URLActions.deleteParamValue(filter, value) : URLActions.addParamValue(filter, value);
-  const className = active ? "filter-icon checked" : "filter-icon";
+  const className = active ? "checkbox-div checked" : "checkbox-div";
   const iconTestId = active ? testId + " - icon checked" : testId + " - icon";
 
   return (

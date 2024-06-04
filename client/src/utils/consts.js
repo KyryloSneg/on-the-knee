@@ -20,10 +20,11 @@ export const SEARCH_CATALOG_ROUTE = "/search" // + ?text=value;
 
 export const SALES_ROUTE = "/sales" // SALE_ROUTE is the same but + :saleIdSlug;
 
-export const DEVICE_API_URL = "/devices?_embed=device-combinations&_embed=device-feedbacks&_embed=device-infos&_embed=sale-devices";
-export const ONE_DEVICE_API_URL = "/devices/ID_TO_REPLACE?_embed=device-combinations&_embed=device-feedbacks&_embed=device-infos&_embed=sale-devices";
+export const DEVICE_API_URL = "/devices?_embed=device-combinations&_embed=device-feedbacks&_embed=device-infos&_embed=sale-devices&_embed=additional-service-devices";
+export const ONE_DEVICE_API_URL = "/devices/ID_TO_REPLACE?_embed=device-combinations&_embed=device-feedbacks&_embed=device-infos&_embed=sale-devices&_embed=additional-service-devices";
 export const SALES_API_URL = "/sales?_embed=sale-types";
 export const ATRIBUTES_API_URL = "/attributes?_expand=attribute-value&_expand=attribute-name";
+export const ONE_ADDITIONAL_SERVICES_API_URL = "/additional-services/ID_TO_REPLACE";
 
 // value: (asc / desc),(rating / price)
 export const sortingOptions = [
