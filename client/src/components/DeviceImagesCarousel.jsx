@@ -1,3 +1,4 @@
+import "./styles/DeviceImagesCarousel.css";
 import ImagesCarousel from "./UI/imagesCarousel/ImagesCarousel";
 
 const DeviceImagesCarousel = ({ device, selectedCombination, textSaleTypes = [], logoSaleTypes = [] }) => {
@@ -5,15 +6,17 @@ const DeviceImagesCarousel = ({ device, selectedCombination, textSaleTypes = [],
   const images = selectedCombination.images;
 
   return (
-    <ImagesCarousel 
-      type="device" 
-      images={images} 
-      className="device-page-section device-images-carousel" 
-      device={device} 
-      textSaleTypes={textSaleTypes}
-      logoSaleTypes={logoSaleTypes}
-      toResetOnLocationChange={true}
-    />
+    <div className="images-carousel-wrapper">
+      <ImagesCarousel
+        type="device"
+        images={images}
+        className="device-page-section device-images-carousel"
+        device={device}
+        textSaleTypes={textSaleTypes}
+        logoSaleTypes={logoSaleTypes}
+        toResetOnLocationChange={true}
+      />
+    </div>
   );
 }
 
