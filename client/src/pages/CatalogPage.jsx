@@ -96,7 +96,7 @@ const CatalogPage = observer(({ type }) => {
       }
       {type === "category" && <h2 className="category-name-heading">{category.name}</h2>}
       <div className="sort-and-filter-bar-wrap">
-        {windowWidth < WIDTH_TO_SHOW_ASIDE &&
+        {(windowWidth < WIDTH_TO_SHOW_ASIDE && isToRenderFilters) &&
           <TopFilterBar />
         }
         <Dropdown
