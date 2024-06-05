@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import SelectUserLocationModalSearch from "./SelectUserLocationModalSearch";
 import "./styles/SelectUserLocationModalContent.css";
 import SelectUserLocationModalBigCities from "./SelectUserLocationModalBigCities";
@@ -7,7 +7,8 @@ import { Context } from "../Context";
 import { observer } from "mobx-react-lite";
 import CustomScrollbar from "./UI/customScrollbar/CustomScrollbar";
 
-const SelectUserLocationModalContent = () => {
+const SelectUserLocationModalContent = observer(() => {
+  const { app } = useContext(Context);
   const [query, setQuery] = useState("");
 
   // THIS FRICKING CODE ROW HAS DESTROYED ALL MY BRAIN CELLS BECAUSE IT RANDOMLY WAS CAUSING DOMEXCEPTION ERROR ON RENDERING THE MODAL
@@ -65,6 +66,6 @@ const SelectUserLocationModalContent = () => {
       }
     </section>
   );
-}
+});
 
 export default SelectUserLocationModalContent;

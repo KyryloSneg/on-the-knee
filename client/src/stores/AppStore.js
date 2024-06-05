@@ -70,7 +70,6 @@ class AppStore {
   }
 
   setIsVisibleUserLocationModal(bool) {
-    console.log("disa lox", bool);
     this._isVisibleUserLocationModal = bool;
   }
 

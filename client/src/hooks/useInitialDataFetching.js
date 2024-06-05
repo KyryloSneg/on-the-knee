@@ -20,6 +20,7 @@ function useInitialDataFetching() {
     const sales = await getSales();
     const stocks = await getStocks();
     const hintSearchResults = await getHintSearchResults();
+    const allLocations = await getLocations();
 
     let userLocation = JSON.parse(localStorage.getItem("location"));
     if (!userLocation) {
