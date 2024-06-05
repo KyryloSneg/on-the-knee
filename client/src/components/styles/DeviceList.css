@@ -52,11 +52,19 @@
   .main-device-list {
     grid-template-columns: 1fr 1fr;
   }
+
+  #wrapper.no-catalog-aside .main-device-list {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
 }
 
 @media screen and (min-width: 1120px) {
   .main-device-list {
     grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  #wrapper.no-catalog-aside .main-device-list {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
   }
 }
 
@@ -64,10 +72,18 @@
   .main-device-list {
     grid-template-columns: 1fr 1fr 1fr 1fr;
   }
+
+  #wrapper.no-catalog-aside .main-device-list {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  }
 }
 
 @media screen and (min-width: 1920px) {
   .main-device-list {
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  }
+
+  #wrapper.no-catalog-aside .main-device-list {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
   }
 }

@@ -5,7 +5,7 @@ import { observer } from "mobx-react-lite";
 import SearchProductLine from "./SearchProductLine";
 import SearchResults from "./SearchResults";
 import useFnOnSomeValue from "../../../hooks/useFnOnSomeValue";
-import { HISTORY_SEARCH_RESULTS_MAX_AMOUNT, mockSearchResults } from "../../../utils/consts";
+import { DEVICE_ROUTE, HISTORY_SEARCH_RESULTS_MAX_AMOUNT, mockSearchResults } from "../../../utils/consts";
 import useDeleteValueOnEsc from "../../../hooks/useDeleteValueOnEsc";
 import StringActions from "../../../utils/StringActions";
 import setSearchFormVisibility from "../../../utils/setSearchFormVisibility";
@@ -14,6 +14,7 @@ import { addHintSearchResult } from "../../../http/HintSearchResultsAPI";
 import getDevicesBySearchQuery from "../../../utils/getDevicesBySearchQuery";
 import useGettingDeviceRelatedData from "../../../hooks/useGettingDeviceRelatedData";
 import useNavigateToEncodedURL from "../../../hooks/useNavigateToEncodedURL";
+import DeviceComboActions from "../../../utils/DeviceComboActions";
 
 const SearchProductsForm = observer(({ navbarRef }) => {
   const { app, isTest, isEmptySearchResults } = useContext(Context);
@@ -24,11 +25,11 @@ const SearchProductsForm = observer(({ navbarRef }) => {
   const [value, setValue] = useState(""); // the value that will be submitted to the form
   // the value that user can return to (it renders as the first search option if the input value isn't empty)
   const [backupValue, setBackupValue] = useState("");
-  let initialResValue = { 
-    hint: [], 
-    device: [], 
-    category: [], 
-    history: JSON.parse(localStorage.getItem("historyResults")) || [] 
+  let initialResValue = {
+    hint: [],
+    device: [],
+    category: [],
+    history: JSON.parse(localStorage.getItem("historyResults")) || []
   };
 
   if (!isEmptySearchResults && isTest) {
@@ -39,9 +40,9 @@ const SearchProductsForm = observer(({ navbarRef }) => {
 
   // empty search history test
   // const [results, setResults] = useState({...mockSearchResults, history: []});
-  
+
   const [selectedId, setSelectedId] = useState(null);
-  
+
   const minId = useRef(null);
   const maxId = useRef(null);
 
@@ -57,7 +58,7 @@ const SearchProductsForm = observer(({ navbarRef }) => {
   }, [app.isFocusedSearchForm]);
 
   // using the useCallback hook below to use the function in the useEffect hook without any linter warnings
-  
+
   // focusing input (making it wider, showing the dark bg)
   const focusInput = useCallback(() => {
     setSearchFormVisibility(true, app);
@@ -118,7 +119,7 @@ const SearchProductsForm = observer(({ navbarRef }) => {
     const focusedElem = e.relatedTarget;
     if (formRef.current.contains(focusedElem)) return;
     if (!navbarRef.current.contains(focusedElem)) return;
-    
+
     inputRef.current.input.focus();
   }
 
@@ -134,7 +135,7 @@ const SearchProductsForm = observer(({ navbarRef }) => {
     // using this condition to prevent input unfocusing on pressing enter key
     // (idk how it happens)
     if (document.activeElement !== inputRef.current.backBtn) return;
-    
+
     app.setIsFocusedSearchForm(false);
     blurInput();
     inputRef.current.input.focus();
@@ -161,9 +162,6 @@ const SearchProductsForm = observer(({ navbarRef }) => {
     e.preventDefault();
     if (!!value.trim().length) {
       try {
-        const href = `/search/?text=${value.trim()}&page=1&pagesToFetch=1`;
-        navigate(href);
-        
         // we can't store array in localStorage, so we save it as string and getting with JSON.parse(...) method
         let storageHistoryResults = JSON.parse(localStorage.getItem("historyResults")) || [];
         let newHistoryResult = { value: value.trim() };
@@ -186,7 +184,25 @@ const SearchProductsForm = observer(({ navbarRef }) => {
         const fetchStringQueryParams = `name_like=${value.trim().toLowerCase()}`.replaceAll(`"`, "");
         const devicesBySearchQuery = await getDevicesBySearchQuery(fetchStringQueryParams);
 
-        if (devicesBySearchQuery.length) addHintSearchResult({ value: value.trim().toLowerCase() });
+
+        // d ,.;:& ssas  __
+        if (devicesBySearchQuery.length === 1) {
+          // navigating directly to device page
+          const {
+            defaultCombinationInStock: defaultCombo
+          } = DeviceComboActions.findDefaultCombination(devicesBySearchQuery[0], stocks);
+
+          const deviceRouteCombo = defaultCombo.combinationString || "default";
+          const to = DEVICE_ROUTE + `${devicesBySearchQuery[0].id}--${deviceRouteCombo}`;
+
+          navigate(to);
+        } else {
+          addHintSearchResult({ value: value.trim().toLowerCase() })
+
+          const hrefValue = value.trim().replaceAll("&", "%2526");
+          const href = `/search/?text=${hrefValue}&page=1&pagesToFetch=1`;
+          navigate(href);
+        }
       } catch (error) {
         // TODO: error handling
       } finally {

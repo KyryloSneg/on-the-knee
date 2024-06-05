@@ -53,14 +53,14 @@ export default class URLActions {
     const searchParams = new URLSearchParams(url.search);
 
     // replacing spaces in value with underlines to match it with url param values
-    value = value.replaceAll("_", "%5F");
-    value = value.replaceAll(" ", "_");
+    value = value?.replaceAll("_", "%5F");
+    value = value?.replaceAll(" ", "_");
     // almost redundant but i'll keep it here to reduce possible weird bugs in future
-    value = value.replaceAll("+", "_");
-    value = value.replaceAll(",", "%2C");
+    value = value?.replaceAll("+", "_");
+    value = value?.replaceAll(",", "%2C");
 
     const isMultipleValues = searchParams.get(name)?.split(",").length > 1;
-    if (isMultipleValues) {
+    if (isMultipleValues && value) {
       const paramValue = searchParams.get(name);
       const strToReplace = paramValue.startsWith(value) ? `${value},` : `,${value}`;
 
@@ -107,7 +107,7 @@ export default class URLActions {
     const url = new URL(decodedURL);
     const searchParams = new URLSearchParams(url.search);
 
-    const value = searchParams.get(name);
+    const value = searchParams.get(name)?.replaceAll("_", " ");
     return value;
   }
 
