@@ -8,7 +8,6 @@ export default class URLActions {
     const urlWithoutParams = url.origin + url.pathname;
     let newUrl;
 
-    // do not change ANYTHING related to commas, spaces and underslashes. please.
     if (searchParams.toString()) {
       let queryParams = searchParams.toString().replaceAll("%2C", ",");
       newUrl = `${urlWithoutParams}?${queryParams}`;
@@ -16,7 +15,7 @@ export default class URLActions {
       newUrl = urlWithoutParams;
     }
 
-    return newUrl.replaceAll("%20", "_").replaceAll("+", "_");
+    return newUrl;
   }
 
   static addParamValue(name, value, href = window.location.href) {
@@ -31,7 +30,7 @@ export default class URLActions {
         if (key !== name) continue;
         // if a value was "apple" and new value is "orange" we'll get "apple,orange" param value
         // (do not forget about auto encoding url)
-        const valueArray = [...pairValue.split(","), (value?.replaceAll("_", "%5F") || value)];
+        const valueArray = [...pairValue.split(","), value];
         const sortedValueArray = ArrayActions.sortStringArray(valueArray);
         const encodedSortedValueArray = sortedValueArray.map(val => (val?.replaceAll(",", "%2C") || value))
         const newValue = encodedSortedValueArray.join(",");
@@ -40,7 +39,7 @@ export default class URLActions {
       }
 
     } else {
-      searchParams.set(name, (typeof value === "string" ? value.replaceAll(",", "%2C").replaceAll("_", "%5F") : value));
+      searchParams.set(name, (typeof value === "string" ? value.replaceAll(",", "%2C") : value));
       searchParams.sort();
     }
 
@@ -52,22 +51,18 @@ export default class URLActions {
     const url = new URL(href);
     const searchParams = new URLSearchParams(url.search);
 
-    // replacing spaces in value with underlines to match it with url param values
-    value = value.replaceAll("_", "%5F");
-    value = value.replaceAll(" ", "_");
-    // almost redundant but i'll keep it here to reduce possible weird bugs in future
-    value = value.replaceAll("+", "_");
-    value = value.replaceAll(",", "%2C");
-
     const isMultipleValues = searchParams.get(name)?.split(",").length > 1;
-    if (isMultipleValues) {
+    if (isMultipleValues && value) {
       const paramValue = searchParams.get(name);
-      const strToReplace = paramValue.startsWith(value) ? `${value},` : `,${value}`;
+      // in paramValue we have comma encoded as %2C, not %252C as in URL
+      const valueWithEncodedComma = value.replaceAll(",", "%2C");
+      const strToReplace = paramValue.startsWith(valueWithEncodedComma) 
+        ? `${valueWithEncodedComma},` 
+        : `,${valueWithEncodedComma}`;
 
       // if a value was "apple,orange" and value to delete is "orange" we'll get "apple" param value
       const newValue = paramValue.replace(strToReplace, "");
       searchParams.set(name, newValue);
-
     } else {
       searchParams.delete(name);
     }
@@ -91,11 +86,10 @@ export default class URLActions {
   }
 
   static setNewParam(name, value, href = window.location.href) {
-    // const decodedURL = decodeURIComponent(href);
     const url = new URL(href);
     const searchParams = new URLSearchParams(url.search);
 
-    searchParams.set(name, value);
+    searchParams.set(name, typeof value === "string" ? value?.replaceAll(",", "%2C") : value);
     searchParams.sort();
 
     const newUrl = this.generateNewURL(url, searchParams);
@@ -121,7 +115,7 @@ export default class URLActions {
 
       let filterValues = [];
       for (let val of value.split(",")) {
-        filterValues.push(val.replaceAll("_", " ").replaceAll("%5F", "_").replaceAll("%255F", "_").replaceAll("%252C", ",").replaceAll("%2C", ","));
+        filterValues.push(val.replaceAll("%252C", ",").replaceAll("%2C", ","));
       }
 
       usedFilters[key] = filterValues;
