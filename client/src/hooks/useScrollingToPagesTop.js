@@ -8,10 +8,13 @@ function useScrollingToPagesTop() {
   const location = useLocation();
 
   useEffect(() => {
-    if (currentPath && !currentPath.startsWith(CATEGORY_CATALOG_ROUTE) && !currentPath.startsWith(SEARCH_CATALOG_ROUTE)) {
+    if (currentPath 
+        && !currentPath.startsWith(CATEGORY_CATALOG_ROUTE) 
+        && !currentPath.startsWith(SEARCH_CATALOG_ROUTE)
+      ) {
       window.scrollTo(0, 0);
     }
-  }, [location]);
+  }, [location, currentPath]);
 }
 
 export default useScrollingToPagesTop;
