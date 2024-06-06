@@ -15,6 +15,7 @@ import getDevicesBySearchQuery from "../../../utils/getDevicesBySearchQuery";
 import useGettingDeviceRelatedData from "../../../hooks/useGettingDeviceRelatedData";
 import useNavigateToEncodedURL from "../../../hooks/useNavigateToEncodedURL";
 import DeviceComboActions from "../../../utils/DeviceComboActions";
+import getPreparedForMockServerStr from "../../../utils/getPreparedForMockServerStr";
 
 const SearchProductsForm = observer(({ navbarRef }) => {
   const { app, isTest, isEmptySearchResults } = useContext(Context);
@@ -181,11 +182,10 @@ const SearchProductsForm = observer(({ navbarRef }) => {
         localStorage.setItem("historyResults", JSON.stringify(newHistoryResults));
 
         // add hint search result only if the result links to not empty catalog page
-        const fetchStringQueryParams = `name_like=${value.trim().toLowerCase()}`.replaceAll(`"`, "");
+        const preparedValue = getPreparedForMockServerStr(backupValue);
+        const fetchStringQueryParams = `name_like=${encodeURIComponent(preparedValue.trim().toLowerCase())}`.replaceAll(`"`, "");
         const devicesBySearchQuery = await getDevicesBySearchQuery(fetchStringQueryParams);
 
-
-        // d ,.;:& ssas  __
         if (devicesBySearchQuery.length === 1) {
           // navigating directly to device page
           const {
@@ -204,7 +204,8 @@ const SearchProductsForm = observer(({ navbarRef }) => {
           navigate(href);
         }
       } catch (error) {
-        // TODO: error handling
+        // TODO: error handling?
+        console.log(error.message)
       } finally {
         setBackupValue(value);
         setIsInputFocused(false);

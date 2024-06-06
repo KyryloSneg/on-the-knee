@@ -4,6 +4,7 @@ import { Context } from "../Context";
 import StringActions from "../utils/StringActions";
 import getDevicesBySearchQuery from "../utils/getDevicesBySearchQuery";
 import { CATEGORY_SEARCH_RESULTS_MAX_AMOUNT, DEVICE_SEARCH_RESULTS_MAX_AMOUNT, HINT_SEARCH_RESULTS_MAX_AMOUNT } from "../utils/consts";
+import getPreparedForMockServerStr from "../utils/getPreparedForMockServerStr";
 
 // query params without pagination ones
 function useSearchResultsFetching(setResults, backupValue) {
@@ -22,8 +23,13 @@ function useSearchResultsFetching(setResults, backupValue) {
 
     let deviceResults = [];
     if (backupValue.trim().length > 2) {
-      const fetchStringQueryParams = `name_like=${backupValue.trim().toLowerCase()}`.replaceAll(`"`, "");
-      deviceResults = await getDevicesBySearchQuery(fetchStringQueryParams);
+      const preparedBackupValue = getPreparedForMockServerStr(backupValue);
+      const fetchStringQueryParams = `name_like=${preparedBackupValue.trim().toLowerCase()}`.replaceAll(`"`, "");
+      try {
+        deviceResults = await getDevicesBySearchQuery(fetchStringQueryParams);
+      } catch (e) {
+        console.log(e.message);
+      }
     }
     
     const categoryResults = deviceResults.map(device => {

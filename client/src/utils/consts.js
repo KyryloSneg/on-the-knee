@@ -130,7 +130,7 @@ export const FILTERS_IN_SPECIAL_COMPONENTS = ["sort", "price", "text"];
 export const HINT_SEARCH_RESULTS_MAX_AMOUNT = 3;
 export const DEVICE_SEARCH_RESULTS_MAX_AMOUNT = 3;
 export const CATEGORY_SEARCH_RESULTS_MAX_AMOUNT = 3;
-export const HISTORY_SEARCH_RESULTS_MAX_AMOUNT = 3;
+export const HISTORY_SEARCH_RESULTS_MAX_AMOUNT = 6;
 
 // renavigate user to categories page if subcategories amount >= MIN_CATEGORIES_LENGTH_TO_RENAVIGATE
 // TODO: change to 12
