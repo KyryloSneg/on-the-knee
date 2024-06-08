@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import "./styles/DeviceItemAttrOptions.css";
+import StringActions from "../utils/StringActions";
 
-const DeviceItemAttrOptions = ({ attributeName, valuesObjects, deviceId, defaultCombo }) => {
+const DeviceItemAttrOptions = ({ attributeName, valuesObjects, deviceId, defaultCombo, isWithParagraph, isListbox, isDefaultDiv }) => {
 
   // attributesList:
   // [
@@ -22,33 +23,68 @@ const DeviceItemAttrOptions = ({ attributeName, valuesObjects, deviceId, default
   //   },
   // ]
 
+  // default option is the selected one on the device page
+  let defaultOption = { name: attributeName, value: null };
+  for (let obj of valuesObjects) {
+
+    for (let attr of defaultCombo.combinationString.split("-")) {
+      if (`${attributeName}:${obj.attrValue}` === attr) {
+        defaultOption = { name: attributeName, value: obj.attrValue }
+        break;
+      }
+    }
+
+  }
+
+  const nameToRender = StringActions.capitalize(
+    StringActions.splitByUpperCaseLetters(attributeName)
+  );
+
+  const ulProps = isListbox
+    ? { role: "listbox" }
+    : {};
+
   return (
-    <ul className="attr-options">
-      {valuesObjects.map(obj => {
-        // if attrs that aren't in stock or do not exist in combo with other default combination's attrs
-        // render "disabled" option
+    <div className="attr-options-wrap">
+      {isWithParagraph && <p>{nameToRender}</p>}
+      <ul className="attr-options">
+        {valuesObjects.map(obj => {
+          // if attrs that aren't in stock or do not exist in combo with other default combination's attrs
+          // render "disabled" option
 
-        let className = "";
-        if (obj.isDisabled) {
-          className = "disabled-attr-option";
-        } else {
-          for (let attr of defaultCombo.combinationString.split("-")) {
-            if (`${attributeName}:${obj.attrValue}` === attr) {
-              className = "default-option";
-              break;
-            }
+          let className = "attr-option";
+          if (obj.isDisabled) {
+            className += " disabled-attr-option";
           }
-        }
 
-        return (
-          <li key={`${deviceId}-${attributeName}: ${obj.href} ${obj.attrValue}`}>
-            <Link to={obj.href} className={className}>
-              {obj.attrValue}
-            </Link>
-          </li>
-        )
-      })}
-    </ul>
+          const isSelected = defaultOption.value === obj.attrValue;
+          if (isSelected) className += " default-option";
+
+          const ariaLabel = `Select ${defaultOption.value} ${nameToRender}`;
+          const liProps = ulProps.role
+            ? { role: "option", "aria-selected": isSelected }
+            : {};
+
+          return (
+            <li key={`${deviceId}-${attributeName}: ${obj.href} ${obj.attrValue}`} {...liProps}>
+              {/* we don't have a reason to show selected on the device page attr as a Link component */}
+              {isSelected && isDefaultDiv
+                ? (
+                  <div className={className}>
+                    {obj.attrValue}
+                  </div>
+                )
+                : (
+                  <Link to={obj.href} aria-label={ariaLabel} className={className}>
+                    {obj.attrValue}
+                  </Link>
+                )
+              }
+            </li>
+          )
+        })}
+      </ul>
+    </div>
   );
 }
 

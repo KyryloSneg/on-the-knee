@@ -2,7 +2,7 @@ import "./CustomScrollbar.css";
 import { useRef } from "react";
 import useScrollbars from "../../../hooks/useScrollbars";
 
-const CustomScrollbar = ({ children, isRect = false, className = "" }) => {
+const CustomScrollbar = ({ children, isRect = false, className = "", ...props }) => {
   const scrollbarRef = useRef(null);
 
   let scrollClassName = "custom-scrollbar-div";
@@ -16,7 +16,7 @@ const CustomScrollbar = ({ children, isRect = false, className = "" }) => {
 
   useScrollbars(scrollbarRef);
   return (
-    <div className={scrollClassName} ref={scrollbarRef}>
+    <div className={scrollClassName} ref={scrollbarRef} {...props}>
       {children}
     </div>
   );

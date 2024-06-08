@@ -48,6 +48,6 @@ const FilterCategoryBlock = ({ filter, variant = "default", isInitiallyVisible }
       {renderFilters()}
     </div>
   );
-}
+};
 
 export default FilterCategoryBlock;

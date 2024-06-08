@@ -21,7 +21,7 @@ const FilterCategoryBlocksList = observer(({ areInitiallyVisible }) => {
     );
 
     sortedFilterKeys.forEach((filterKey) => {
-      const isTooLong = deviceStore.filters[filterKey].length >= FILTERS_OPTIONS_LENGTH_LIMIT;
+      const isTooLong = deviceStore.filters[filterKey].length > FILTERS_OPTIONS_LENGTH_LIMIT;
 
       result.push(
         <li key={filterKey}>

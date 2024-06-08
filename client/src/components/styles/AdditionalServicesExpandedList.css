@@ -1,0 +1,13 @@
+.additional-services-expanded-list {
+  margin: 0;
+  padding-left: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+@media screen and (min-width: 380px) {
+  .additional-services-expanded-list {
+    padding-left: 30px;
+  }
+}

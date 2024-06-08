@@ -8,7 +8,7 @@ const FilterBtn = ({ value, paramKey, testId }) => {
 
   return (
     <Link to={to} className="remove-filter" data-testid={testId}>
-      {paramKey !== "price" ? value : `${value}$`}
+      <span>{paramKey !== "price" ? value : `${value}$`}</span>
       <img src={removeIcon} className="no-select" draggable="false" alt="" />
     </Link>
   );

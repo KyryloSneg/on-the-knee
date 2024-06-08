@@ -16,15 +16,14 @@
     "maplibre-gl": "^4.3.2",
     "mobx": "^6.9.0",
     "mobx-react-lite": "^3.4.3",
+    "moment": "^2.30.1",
     "nanoid": "^4.0.2",
     "overlayscrollbars-react": "^0.5.4",
-    "pluralize": "^8.0.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.9.0",
     "react-dom": "^18.2.0",
     "react-map-gl": "^7.1.7",
     "react-router-dom": "^6.13.0",
-    "react-scripts": "^5.0.1",
     "uuid": "^9.0.0",
     "web-vitals": "^2.1.4"
   },
@@ -33,7 +32,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "server": "json-server -w jsonServer/index.js --port 7000"
+    "server": "json-server -w jsonServer/index.js --port 7000 --routes jsonServer/routes.json"
   },
   "eslintConfig": {
     "extends": [
@@ -62,6 +61,7 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@faker-js/faker": "^8.0.2",
     "css-mediaquery": "^0.1.2",
-    "json-server": "^0.17.3"
+    "json-server": "^0.17.3",
+    "react-scripts": "^5.0.1"
   }
 }

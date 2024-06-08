@@ -1,6 +1,7 @@
 import { forwardRef } from "react";
 import useDebounce from "../../../hooks/useDebounce";
 import "./SearchField.css";
+import DeleteInputContent from "../deleteInputContent/DeleteInputContent";
 
 const SearchField = forwardRef(({ query, setQuery, setFilteredValues, filter, initialFilters }, ref) => {
   function filterValues(query) {
@@ -49,19 +50,7 @@ const SearchField = forwardRef(({ query, setQuery, setFilteredValues, filter, in
           data-testid={`search-field-input: ${filter}`}
         />
         {query && (
-          <button
-            type="button"
-            className="delete-input-content-btn active"
-            aria-label="Delete input content"
-            onClick={onClick}
-            data-testid={`delete-input-content-btn: ${filter}`}
-          >
-            {/* writing svg into the component to style it easily */}
-            <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20">
-              <path
-                d="M6.062 15 5 13.938 8.938 10 5 6.062 6.062 5 10 8.938 13.938 5 15 6.062 11.062 10 15 13.938 13.938 15 10 11.062Z" />
-            </svg>
-          </button>
+          <DeleteInputContent onClick={onClick} />
         )}
       </div>
     </div>

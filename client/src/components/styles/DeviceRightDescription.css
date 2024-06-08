@@ -1,0 +1,28 @@
+.device-right-description {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  gap: 16px;
+}
+
+.device-right-desc-combo-select-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.device-color-options-p-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.device-right-desc-seller-purchase-wrap {
+  display: flex;
+  flex-direction: column;
+  border: 1px #dfdfdf solid;
+  border-radius: 18px;
+  overflow: hidden;
+}

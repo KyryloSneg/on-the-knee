@@ -17,7 +17,6 @@
   color: #5e5e5e;
   outline: none;
   position: relative;
-
 }
 
 .search-result a:hover,
@@ -39,12 +38,16 @@
 }
 
 .search-result-history a {
-  background: white url("../../../assets/history.svg") 6px center no-repeat;
+  background: url("../../../assets/history.svg") 6px center no-repeat;
   grid-template-columns: 1fr auto;
 }
 
 .search-result-category a {
-  background: white url("../../../assets/category.svg") 6px center no-repeat;
+  background: url("../../../assets/category.svg") 6px center no-repeat;
+}
+
+.search-result-category-search a {
+  background: url("../../../assets/search.svg") 6px center no-repeat;
 }
 
 .search-result-hidden {
@@ -56,7 +59,8 @@
 }
 
 .search-result-history a,
-.search-result-category a {
+.search-result-category a,
+.search-result-category-search a {
   padding-left: 32px;
 }
 

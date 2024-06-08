@@ -23,7 +23,7 @@ const CategoriesMenuSecColBlock = ({ secondaryCategoriesObj, selectedId }) => {
         {secondaryCategoriesObj.nestedCategories?.map(category => {
           const to = getCategoryLinkTo(category, category.parentCategoryId, deviceStore.categories);
           return (
-            <li key={category.id}>
+            <li key={`${category.id}-${category.name}`}>
               <Link to={to} className="categories-menu-nest-3">
                 {category.name}
               </Link>

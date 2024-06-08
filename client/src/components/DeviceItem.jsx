@@ -9,7 +9,7 @@ import DeviceItemAddToCartBtn from "./DeviceItemAddToCartBtn";
 import DeviceItemHiddenContent from "./DeviceItemHiddenContent";
 import DeviceSalesActions from "../utils/DeviceSalesActions";
 import useWindowWidth from "../hooks/useWindowWidth";
-import { WIDTH_TO_SHOW_DEV_HID_CONTENT } from "../utils/consts";
+import { DEVICE_ROUTE, WIDTH_TO_SHOW_DEV_HID_CONTENT } from "../utils/consts";
 import { useRef, useState } from "react";
 
 const DeviceItem = ({ device, isInStock, defaultCombination, stocks, sales, saleTypeNames }) => {
@@ -28,6 +28,7 @@ const DeviceItem = ({ device, isInStock, defaultCombination, stocks, sales, sale
       false,
     )
     : null;
+
 
   const defaultComboColorHrefObjects =
     DeviceComboActions.getComboColorHrefObjects(defaultComboColorHrefs, device, stocks);
@@ -58,8 +59,8 @@ const DeviceItem = ({ device, isInStock, defaultCombination, stocks, sales, sale
     discountPercentage = saleDiscountPercentage;
   }
 
-  // some hardcoded url route if combination string is null
-  const to = `${device.id}/${defaultCombination?.combinationString || "default"}`;
+  const deviceRouteCombo = defaultCombination.combinationString || "default";
+  const to = DEVICE_ROUTE + `${device.id}--${deviceRouteCombo}`;
   const thumbnail = defaultCombination.images[0];
 
   let className = "main-device-item";
@@ -102,7 +103,7 @@ const DeviceItem = ({ device, isInStock, defaultCombination, stocks, sales, sale
         textSaleTypes={textSaleTypes}
       />
       {defaultComboColorHrefs
-        ? <DeviceColorOptions hrefObjects={defaultComboColorHrefObjects} />
+        ? <DeviceColorOptions hrefObjects={defaultComboColorHrefObjects} deviceId={device.id} />
         : <div className="device-color-options-placeholder" />
       }
       <Link to={to} className="main-device-name">
@@ -111,7 +112,8 @@ const DeviceItem = ({ device, isInStock, defaultCombination, stocks, sales, sale
       <DeviceItemAvgRating
         rating={device.rating}
         feedbackAmount={device["device-feedbacks"].length}
-        id={device.id}
+        deviceId={device.id}
+        defaultCombination={defaultCombination}
       />
       <div className="price-add-to-cart-wrap">
         <DeviceItemPrice price={defaultCombination.price} discountPercentage={discountPercentage} />

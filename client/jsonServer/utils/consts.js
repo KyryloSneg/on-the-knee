@@ -82,46 +82,49 @@ const POSSIBLE_DEVICE_INFOS = {
 const POSSIBLE_DEVICE_ATTRIBUTES = {
   "smartphones": {
     "phoneStorage": ["32 GB", "64 GB", "128 GB", "256 GB"],
-    "color": ["red#FF0000", "purple#A020F0", "green#00FF00"],
+    "color": ["red_FF0000", "purple_A020F0", "green_00FF00"],
   },
   "laptops": {
     "refreshRate": ["75 hz", "144 hz", "240 hz"],
-    "color": ["brown#2B1700", "spacedark#333334", "white#FFFFFF"],
+    "color": ["brown_2B1700", "spacedark_333334", "white_FFFFFF"],
   },
   "furniture": {
-    "color": ["spacedark#333334", "purple#A020F0", "brown#2B1700", "white#FFFFFF"],
+    "color": ["spacedark_333334", "purple_A020F0", "brown_2B1700", "white_FFFFFF"],
   },
   "tops": {
-    "color": ["black#000000", "red#FF0000", "golden#FFD700", "grey#CECECE"],
+    "color": ["black_000000", "red_FF0000", "golden_FFD700", "grey_CECECE"],
   },
 }
 
 // country => oblast / voivodeship => city => (district || null) && streets => house numbers
 const STORE_LOCATIONS = {
   "Ukraine": {
-    "Zhytomyr Oblast": {
+    "Zhytomyrska Oblast": {
       "Zhytomyr": {
         "district": "Zhytomyr district",
-        "type": "big-city",
+        "type": "city",
+        "population": 261624,
         "streets": {
           "Velyka Berdychivska Street": [60, 30],
           "Chudnivska Street": [54],
         }
       },
 
-      "Korosten'": {
-        "district": "Korosten' district",
+      "Korosten": {
+        "district": "Korosten district",
         "type": "city",
+        "population": 61496,
         "streets": {
           "Mykhaila Hrushevskoho": [30, 53],
         }
       }
     },
 
-    "Kyiv Oblast": {
+    "Kyivska Oblast": {
       "Kyiv": {
         "district": null,
-        "type": "big-city",
+        "type": "city",
+        "population": 2952301,
         "streets": {
           "Khreshchatyk Street": [14, 18],
           "Peremohy Ave": [93, 56],
@@ -131,6 +134,7 @@ const STORE_LOCATIONS = {
       "Brovary": {
         "district": "Brovary district",
         "type": "city",
+        "population": 109473,
         "streets": {
           "Kyiv Street": [160, 180],
         },
@@ -142,7 +146,8 @@ const STORE_LOCATIONS = {
     "Lublin Voivodeship": {
       "Lublin": {
         "district": "Lublin County",
-        "type": "big-city",
+        "type": "city",
+        "population": 2102324, 
         "streets": {
           "al. Solidarnosci": [61, 32],
         }
@@ -185,8 +190,8 @@ const POSSIBLE_SCHEDULE_TIME_RANGES = {
 };
 
 const POSSIBLE_ORDER_STATUSES = ["Cancelled", "Pending", "Paid", "Confirmed", "Done"];
-const MAIN_CATEGORIES_AMOUNT = 3;
-const START_CATEGORIES_NEST_3_AMOUNT = 20;
+const MAIN_CATEGORIES_AMOUNT = 2;
+const START_CATEGORIES_NEST_3_AMOUNT = 10;
 
 const LOGO_HEIGHT = 34;
 const LOGO_WIDTH = 34;

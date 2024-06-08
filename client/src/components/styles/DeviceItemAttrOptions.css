@@ -1,3 +1,13 @@
+.attr-options-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.attr-options-wrap > p {
+  font-size: 1.4rem;
+}
+
 .attr-options {
   display: flex;
   flex-wrap: wrap;
@@ -5,7 +15,7 @@
   gap: 16px;
 }
 
-.attr-options a {
+.attr-option {
   border: 1px solid black;
   border-radius: 6px;
   padding: 6px;
@@ -16,21 +26,21 @@
   transition: 0.2s;
 }
 
-.attr-options a.default-option {
+.attr-option.default-option {
   border-color: #0047FF;
 }
 
-.attr-options a:not(.disabled-attr-option):hover,
-.attr-options a:not(.disabled-attr-option):focus {
+.attr-option:not(.disabled-attr-option):hover,
+.attr-option:not(.disabled-attr-option):focus {
   border-color: #0047FF;
 }
 
-.attr-options .disabled-attr-option {
+.attr-option.disabled-attr-option {
   position: relative;
   background-color: rgba(0, 0, 0, 0.1);
 }
 
-.attr-options .disabled-attr-option::before {
+.attr-option.disabled-attr-option::before {
   position: absolute;
   display: block;
   content: "";

@@ -47,7 +47,7 @@
   --os-handle-interactive-area-offset: 4px;
 }
 
-.custom-scrollbar-div.rect .my-scrollbar.os-scrollbar {
+.custom-scrollbar-div.rect > .my-scrollbar.os-scrollbar {
   --os-track-border-radius: none;
   --os-handle-border-radius: none;
 }
@@ -55,4 +55,27 @@
 .filters-aside-scroll {
   width: 100%;
   border-radius: 20px;
+}
+
+.tabs-page-scroll {
+  background-color: #fff;
+  border-radius: 14px;
+}
+
+.tabs-page-scroll .my-scrollbar.os-scrollbar, 
+ .images-carousel-scrollbar .my-scrollbar.os-scrollbar {
+  --os-size: 4px;
+}
+
+.tabs-page-scroll .my-scrollbar.os-scrollbar .os-scrollbar-track {
+  height: 4px;
+}
+
+.images-carousel-scrollbar .my-scrollbar.os-scrollbar {
+  margin-right: -6px;
+}
+
+.images-carousel-scrollbar[data-overlayscrollbars~=host], 
+ .images-carousel-scrollbar[data-overlayscrollbars~=viewport] {
+  overflow: visible;
 }
