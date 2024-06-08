@@ -1,0 +1,18 @@
+.carousel-bottom-select-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: max-content;
+  max-width: 100%;
+  padding: 0 4px;
+  margin: 0 auto;
+}
+
+.carousel-bottom-select-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  margin: 0;
+}

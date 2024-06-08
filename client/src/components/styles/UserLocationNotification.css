@@ -1,0 +1,117 @@
+.user-location-notification, .user-location-notification > p {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-location-notification {
+  flex-direction: column;
+  position: relative;
+  /* fallback */
+  top: 100%;
+  top: calc(100% + 2px);
+  gap: 6px;
+  background-color: rgba(140, 140, 140, 0.85);
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+
+.user-location-notification > p,
+.btn-group > .correct-button, 
+.btn-group > .change-location-btn {
+  font-size: 1.2rem;
+}
+
+.user-location-notification > p {
+  gap: 4px;
+  color: #fff;
+}
+
+.user-location-notification > p > img {
+  width: 30px;
+  height: 30px;
+}
+
+.user-location-notification > .btn-group {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-group > .correct-button,
+.user-location-notification .change-location-btn {
+  cursor: pointer;
+  border-radius: 8px;
+  padding: 8px 10px;
+  transition: background 0.2s, color 0.2s;
+  outline: none;
+}
+
+.btn-group > .correct-button {
+  background-color: #00dd1d;
+  color: #fff;
+  border: none;
+}
+
+.btn-group > .correct-button:hover,
+.btn-group > .correct-button:active,
+.btn-group > .correct-button:focus-visible {
+  background-color: #00f521;
+}
+
+.user-location-notification .change-location-btn {
+  background-color: rgb(120, 120, 120);
+  border: 1px solid #f1f1f1;
+  color: #fff;
+}
+
+.user-location-notification .change-location-btn:hover,
+.user-location-notification .change-location-btn:active,
+.user-location-notification .change-location-btn:focus-visible {
+  background-color: #f1f1f1;
+  color: black;
+}
+
+.user-location-notification-triangle {
+  position: absolute;
+  width: 0;
+  height: 0;
+  bottom: 100%;
+  left: 10px;
+
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-bottom: 4px solid rgba(140, 140, 140, 0.85);
+}
+
+.user-location-btn-notification > .user-location-notification {
+  position: absolute;
+  z-index: 999;
+  left: 4px;
+  right: 4px;
+}
+
+@media screen and (min-width: 300px) {
+  .user-location-notification > p,
+  .btn-group > .correct-button, 
+  .btn-group > .change-location-btn {
+    font-size: 1.5rem;
+  }
+
+  .user-location-btn-notification > .user-location-notification {
+    right: auto;
+  }
+}
+
+@media screen and (min-width: 600px) {
+  .user-location-notification > p > img {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media screen and (min-width: 950px) {
+  .user-location-notification {
+    flex-direction: row;
+    gap: 16px;
+  }
+}

@@ -1,0 +1,81 @@
+.additional-services-list-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.additional-services-list-item > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.additional-services-list-item > div > button {
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.additional-services-checkbox-btn {
+  width: 100%;
+  gap: 10px;
+  outline: none;
+}
+
+.additional-services-checkbox-btn:focus-visible > div > .checkbox-div {
+  outline: 2px #7373ff solid;
+}
+
+.additional-services-checkbox-btn > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.additional-services-list-item .additional-service-image {
+  display: none;
+}
+
+.additional-services-list-item .hidden-overflow-name {
+  font-size: 1.2rem;
+  max-height: 30px;
+  overflow: hidden;
+  text-align: start;
+}
+
+.additional-services-item-arrow {
+  padding: 0;
+  justify-content: center;
+}
+
+.additional-services-item-arrow > img {
+  width: 24px;
+  height: 24px;
+  transition: transform 0.3s;
+}
+
+@media screen and (min-width: 300px) {
+  .additional-services-list-item .additional-service-image {
+    display: block;
+    width: 24px;
+    height: 24px;
+  }
+}
+
+@media screen and (min-width: 380px) {
+  .additional-services-checkbox-btn, .additional-services-checkbox-btn > div {
+    gap: 15px;
+  }
+
+  .additional-services-list-item .additional-service-image {
+    width: 36px;
+    height: 36px;
+  }
+
+  .additional-services-list-item .hidden-overflow-name {
+    font-size: 1.5rem;
+    max-height: 38px;
+  }
+}

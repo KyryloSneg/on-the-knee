@@ -49,7 +49,7 @@ const CategoryFilterList = observer(({ filter, variant, elemToFocusRef = null })
     function pushFilter(info) {
       let active = false;
       if (deviceStore.usedFilters?.[filter]) {
-        const valueToCheck = filter === "color" ? info.value.split("#")[0] : info.value;
+        const valueToCheck = filter === "color" ? info.value.split("_")[0] : info.value;
         active = deviceStore.usedFilters[filter].includes(valueToCheck);
       }
 
@@ -67,8 +67,7 @@ const CategoryFilterList = observer(({ filter, variant, elemToFocusRef = null })
       );
     }
 
-
-    if (sortedValues.length >= FILTERS_OPTIONS_LENGTH_LIMIT && !isToShowMore) {
+    if (sortedValues.length > FILTERS_OPTIONS_LENGTH_LIMIT && !isToShowMore) {
       sortedValues.slice(0, FILTERS_OPTIONS_LENGTH_LIMIT).forEach(pushFilter);
     } else {
       sortedValues.forEach(pushFilter);
@@ -106,7 +105,7 @@ const CategoryFilterList = observer(({ filter, variant, elemToFocusRef = null })
             </p>
           )
         }
-        {filtersToRender.length >= FILTERS_OPTIONS_LENGTH_LIMIT &&
+        {filteredValues.length > FILTERS_OPTIONS_LENGTH_LIMIT &&
           <button
             className="filters-show-more-btn link-colors"
             onClick={showMoreFilters}
@@ -123,7 +122,7 @@ const CategoryFilterList = observer(({ filter, variant, elemToFocusRef = null })
 
   return (
     <div>
-      {filteredValues.length !== 0
+      {deviceStore.filters[filter].length !== 0
         ? (
           <ul
             className="filters"
@@ -139,7 +138,7 @@ const CategoryFilterList = observer(({ filter, variant, elemToFocusRef = null })
           </p>
         )
       }
-      {filtersToRender.length >= FILTERS_OPTIONS_LENGTH_LIMIT &&
+      {deviceStore.filters[filter].length > FILTERS_OPTIONS_LENGTH_LIMIT &&
         <button
           className="filters-show-more-btn link-colors"
           onClick={showMoreFilters}

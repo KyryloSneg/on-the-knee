@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef } from "react";
 import { Context } from "../Context";
-import useClosingAllWindows from "../hooks/useClosingAllWindows";
+import UserLocationBtnNotification from "../components/UserLocationBtnNotification";
 
 const MainPage = () => {
   const { app } = useContext(Context);
@@ -10,10 +10,10 @@ const MainPage = () => {
     app.setPageRef(pageRef);
   }, [app]);
 
-  useClosingAllWindows();
   return (
     <div>
       MainPage
+      <UserLocationBtnNotification />
     </div>
   );
 };

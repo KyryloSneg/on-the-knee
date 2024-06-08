@@ -14,31 +14,41 @@ function useGettingPaginationParams(deviceStore, totalPages) {
     }
 
     function replaceInvalidParams(nextPage, nextPagesToFetch) {
+      let url;
       const basename = process.env.REACT_APP_CLIENT_URL;
+      
+      if (isNaN(+nextPage)) {
+        nextPage = 1;
+        url = URLActions.setNewParam("page", nextPage);
+      }
+
       if (+nextPage < 1 || nextPage[0] === "0") {
         nextPage = 1;
-        const url = URLActions.setNewParam("page", nextPage);
-        navigate(url.replace(basename, ""), { replace: true });
+        url = URLActions.setNewParam("page", nextPage);
       } 
       
       if (+nextPage > totalPages && totalPages) {
         nextPage = totalPages;
-        const url = URLActions.setNewParam("page", nextPage);
-        navigate(url.replace(basename, ""), { replace: true });
+        url = URLActions.setNewParam("page", nextPage);
       };
+
+      if (isNaN(+nextPagesToFetch)) {
+        nextPagesToFetch = 1;
+        url = URLActions.setNewParam("pagesToFetch", nextPagesToFetch);
+      }
 
       const maxPagesToFetch = getPossiblePagesToFetch(nextPage);
       if (+nextPagesToFetch < 1 || nextPagesToFetch[0] === "0") {
         nextPagesToFetch = 1;
-        const url = URLActions.setNewParam("pagesToFetch", nextPagesToFetch);
-        navigate(url.replace(basename, ""), { replace: true });
+        url = URLActions.setNewParam("pagesToFetch", nextPagesToFetch);
       };
       
       if (+nextPagesToFetch > maxPagesToFetch && totalPages) {
         nextPagesToFetch = maxPagesToFetch;
-        const url = URLActions.setNewParam("pagesToFetch", nextPagesToFetch);
-        navigate(url.replace(basename, ""), { replace: true });
+        url = URLActions.setNewParam("pagesToFetch", nextPagesToFetch);
       };
+
+      if (url) navigate(url.replace(basename, ""), { replace: true });
     }
 
     let nextPage = URLActions.getParamValue("page");

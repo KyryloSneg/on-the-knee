@@ -26,7 +26,6 @@ class DeviceStore {
     // }
 
     // for sorting filters section
-    this._deviceInfos = [];
     this._usedFilters = {};
 
     this._initialMinPrice = 0;
@@ -44,9 +43,7 @@ class DeviceStore {
     this._page = 1;
     this._pagesToFetch = 1;
     this._totalCount = 0;
-    // i can't import the DEVICE_ITEMS_MOBILE_LIMIT variable because of webpack-bootstrap error
-    // it happens because of some cyclical imports (i'm lazy to fix this)
-    this._limit = 30;
+    this._limit = 40;
     makeAutoObservable(this);
   }
 
@@ -168,14 +165,6 @@ class DeviceStore {
 
   get stocks() {
     return this._stocks;
-  }
-
-  setDeviceInfos(deviceInfos) {
-    this._deviceInfos = deviceInfos;
-  }
-
-  get deviceInfos() {
-    return this._deviceInfos;
   }
 }
 

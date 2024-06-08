@@ -1,0 +1,48 @@
+.search-result-device {
+  min-height: 65px;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  gap: 12px;
+}
+
+.search-result-device-img-wrap {
+  display: grid;
+  position: relative;
+}
+
+.search-result-device-img-wrap img {
+  /* making every image same height */
+  width: 50px;
+  height: 50px;
+  /* keeping up proportions */
+  object-fit: cover;
+  justify-self: center;
+  align-self: center;
+}
+
+.search-result-device-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow: hidden;
+}
+
+.search-result-device-name {
+  font-size: 1.3rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.search-result-device-info .main-device-price b {
+  font-size: 1.5rem;
+}
+
+.search-result-device-info .main-device-old-price > span:first-of-type,
+  .search-result-device-info .main-device-price > .main-device-currency {
+  font-size: 1.2rem;
+}
+
+.search-result-device-info .main-device-old-price > .main-device-currency {
+  font-size: 1rem;
+}

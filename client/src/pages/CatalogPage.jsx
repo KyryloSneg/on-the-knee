@@ -3,16 +3,18 @@ import TopFilterBar from "../components/TopFilterBar";
 import "./styles/CatalogPage.css";
 import useWindowWidth from "../hooks/useWindowWidth";
 import DeviceSection from "../components/DeviceSection";
-import { DEVICE_ITEMS_DESKTOP_LIMIT, DEVICE_ITEMS_MOBILE_LIMIT, WIDTH_TO_SHOW_ASIDE, sortingOptions } from "../utils/consts";
+import { WIDTH_TO_SHOW_ASIDE, sortingOptions } from "../utils/consts";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Context } from "../Context";
-import useClosingAllWindows from "../hooks/useClosingAllWindows";
 import CatalogAside from "../components/CatalogAside";
 import useDeviceSectionFetching from "../hooks/useDeviceSectionFetching";
 import URLActions from "../utils/URLActions";
 import { observer } from "mobx-react-lite";
 import useNavigateToEncodedURL from "../hooks/useNavigateToEncodedURL";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
+import ChildCategoriesBar from "../components/ChildCategoriesBar";
+import CustomScrollbar from "../components/UI/customScrollbar/CustomScrollbar";
+import useDeletingRedundantCategoryId from "../hooks/useDeletingRedundantCategoryId";
 
 const POSSIBLE_TYPES = ["category", "search"];
 
@@ -20,6 +22,7 @@ const CatalogPage = observer(({ type }) => {
   if (!POSSIBLE_TYPES.includes(type)) throw Error("type of Catalog Page is not defined");
 
   const location = useLocation();
+  const { categoryIdSlug } = useParams();
   const navigate = useNavigateToEncodedURL();
   const { deviceStore, app, isTest } = useContext(Context);
   const pageRef = useRef(null);
@@ -27,10 +30,26 @@ const CatalogPage = observer(({ type }) => {
   const [isFoundDevicesByQuery, setIsFoundDevicesByQuery] = useState(true);
   const [spellCheckedQuery, setSpellCheckedQuery] = useState(type === "search" ? URLActions.getParamValue("text") : null);
 
+  const categoryId = +categoryIdSlug?.split("-")[0] || undefined;
+  const category = deviceStore.categories.find(cat => cat.id === categoryId);
+  const childCategories = deviceStore.categories.filter(cat => !cat.isVariation && cat.parentCategoryId === categoryId);
+
+  useEffect(() => {
+    window.scroll(0, 0);
+  }, [location.pathname, isFoundDevicesByQuery]);
+
   useEffect(() => {
     app.setPageRef(pageRef);
   }, [app, windowWidth]);
 
+  // resetting states below because user can navigate to this page from another page
+  useEffect(() => {
+    deviceStore.setDevices([]);
+    deviceStore.setFilters([]);
+  }, [deviceStore]);
+
+  // we have no need in categoryId param if we're already at the category catalog page
+  useDeletingRedundantCategoryId(type);
   useEffect(() => {
     const { usedFilters, url } = URLActions.getUsedFilters(deviceStore.filters);
     deviceStore.setUsedFilters(usedFilters);
@@ -40,26 +59,18 @@ const CatalogPage = observer(({ type }) => {
 
     // router from the tests seems to not work with navigate() function,
     // so it's better to skip the block below
-    if (location.pathname !== url && !isTest) {
-      const basename = process.env.REACT_APP_CLIENT_URL;
+    const basename = process.env.REACT_APP_CLIENT_URL;
+    const currentUrl = basename + location.pathname + location.search;
+
+    if (currentUrl !== url && !isTest) {
       navigate(url.replace(basename, ""), { replace: true });
     }
 
   }, [location.search, deviceStore, deviceStore.filters, deviceStore.filters, location.pathname, navigate, isTest]);
+
   const [isLoading, error, deviceFetching] = useDeviceSectionFetching(deviceStore, app, type, setIsFoundDevicesByQuery, setSpellCheckedQuery);
   if (error) console.log(error);
 
-  useEffect(() => {
-    if (windowWidth > 820) {
-      if (deviceStore.limit !== DEVICE_ITEMS_DESKTOP_LIMIT) deviceStore.setLimit(DEVICE_ITEMS_DESKTOP_LIMIT);
-    } else {
-      if (deviceStore.limit !== DEVICE_ITEMS_MOBILE_LIMIT) deviceStore.setLimit(DEVICE_ITEMS_MOBILE_LIMIT);
-    }
-  }, [deviceStore, windowWidth]);
-
-  useClosingAllWindows();
-
-  if (!Object.keys(deviceStore.filters).length) return <main />;
   if (!isFoundDevicesByQuery && type === "search") {
     return (
       <main>
@@ -74,14 +85,18 @@ const CatalogPage = observer(({ type }) => {
     );
   }
 
+  const isToRenderFilters = !!Object.keys(deviceStore.filters).length;
+  const wrapperClassName = !isToRenderFilters ? "no-catalog-aside" : "";
+
   return (
     <div className="display-grid" ref={pageRef}>
       {(!!deviceStore.devices.length && type === "search")
         ? <p className="spell-checked-query-p">Devices by query «<span>{spellCheckedQuery}</span>»</p>
         : (type === "search") && <div className="spell-checked-p-placeholder" />
       }
+      {type === "category" && <h2 className="category-name-heading">{category.name}</h2>}
       <div className="sort-and-filter-bar-wrap">
-        {windowWidth < WIDTH_TO_SHOW_ASIDE &&
+        {(windowWidth < WIDTH_TO_SHOW_ASIDE && isToRenderFilters) &&
           <TopFilterBar />
         }
         <Dropdown
@@ -91,8 +106,17 @@ const CatalogPage = observer(({ type }) => {
           className="device-sorting-filter"
         />
       </div>
-      <div id="wrapper">
-        <CatalogAside key={"aside"} />
+      {(type === "category" && !!childCategories.length) &&
+        <CustomScrollbar
+          children={<ChildCategoriesBar
+            childCategories={childCategories} />}
+          className="child-categories-scrollbar"
+        />
+      }
+      <div id="wrapper" className={wrapperClassName}>
+        {isToRenderFilters &&
+          <CatalogAside key={"aside"} />
+        }
         <DeviceSection isLoading={isLoading} retryDevicesFetch={deviceFetching} error={error} key={"devSection"} />
       </div>
     </div>

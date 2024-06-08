@@ -3,10 +3,11 @@ const createAllCombinationStrings = require("./createAllCombinationStrings");
 const { MIN_IMAGE_WIDTH, MAX_IMAGE_WIDTH, MIN_IMAGE_HEIGHT, MAX_IMAGE_HEIGHT } = require("./consts");
 const createStock = require("./createStock");
 
-module.exports = (deviceId, attributeValues, deviceCombinations, stocks) => {
+module.exports = (device, attributeValues, deviceCombinations, stocks) => {
   let attrValues = [];
   let combinationString = [];
 
+  const deviceId = device.id;
   const width = faker.number.int({ min: MIN_IMAGE_WIDTH, max: MAX_IMAGE_WIDTH });
   const height = faker.number.int({ min: MIN_IMAGE_HEIGHT, max: MAX_IMAGE_HEIGHT });
   const imageAmount = faker.number.int({ min: 1, max: 4 });
@@ -43,7 +44,7 @@ module.exports = (deviceId, attributeValues, deviceCombinations, stocks) => {
       const cents = faker.number.int({ min: 0, max: 9 }) / 10;
       const price = (dollars + cents).toFixed(2);
 
-      const stock = createStock(id, stocks);
+      const stock = createStock(device, id, stocks);
       const deviceCombination = {
         "id": deviceCombinations.length + 1,
         "combinationString": combo,
@@ -75,7 +76,7 @@ module.exports = (deviceId, attributeValues, deviceCombinations, stocks) => {
 
     const id = deviceCombinations.length + 1;
 
-    const stock = createStock(id, stocks);
+    const stock = createStock(device, id, stocks);
     const deviceCombination = {
       "id": id,
       "combinationString": null,

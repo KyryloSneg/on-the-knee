@@ -1,0 +1,28 @@
+.carousel-sidebar-item {
+  display: grid;
+  position: relative;
+  outline: 1px #fff solid;
+  outline-offset: 4px;
+  transition: 0.2s;
+  border-radius: 1px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: 0;
+}
+
+.carousel-sidebar-item.active, 
+ .carousel-sidebar-item:focus {
+  outline: 1px #7e95fa solid;
+}
+
+.carousel-sidebar-item img {
+  /* making every image same height */
+  width: 42px;
+  height: 42px;
+  /* keeping up proportions */
+  object-fit: cover;
+  justify-self: center;
+  align-self: center;
+  font-size: 0rem;
+}

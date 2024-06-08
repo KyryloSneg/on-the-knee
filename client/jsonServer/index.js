@@ -57,6 +57,8 @@ module.exports = function createData () {
 
     "deliveries": [],
     "delivery-types": [],
+
+    "hint-search-results": [],
   };
 
   initializeEnvVars();
