@@ -1,6 +1,7 @@
 import { useContext, useEffect, useRef } from "react";
 import { Context } from "../Context";
 import UserLocationBtnNotification from "../components/UserLocationBtnNotification";
+import MyMap from "../components/UI/myMap/MyMap";
 
 const MainPage = () => {
   const { app } = useContext(Context);
@@ -14,6 +15,7 @@ const MainPage = () => {
     <div>
       MainPage
       <UserLocationBtnNotification />
+      <MyMap />
     </div>
   );
 };

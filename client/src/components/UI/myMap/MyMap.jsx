@@ -1,19 +1,30 @@
-import Map from 'react-map-gl';
+import "./myMap.css";
+import Map, { Marker, NavigationControl } from 'react-map-gl';
 import maplibregl from 'maplibre-gl';
 
-const MyMap = ({ lng, lat, zoom, id = "" }) => {
+// children can contain markers, popups etc.
+const MyMap = ({ lng = 30.4383398, lat = 50.4565494, zoom = 10, children }) => {
+  // width and height properties we change in css (these in style prop we override mostly)
   return (
-    <Map 
-      id={id}
-      mapLib={maplibregl}
-      initialViewState={{
-        longitude: 16.62662018,
-        latitude: 49.2125578,
-        zoom: 14
-      }}
-      style={{ width: "800px", height: "800px" }}
-      mapStyle="https://api.maptiler.com/maps/streets-v2/style.json?key=XESRWvK75vWTcOneFpZY"
-    />
+    <div className="my-map-wrapper" style={{ width: "620px", height: "620px" }}>
+      <Map
+        className="my-map"
+        mapLib={maplibregl}
+        initialViewState={{
+          longitude: lng,
+          latitude: lat,
+          zoom: zoom
+        }}
+        mapStyle={`https://api.maptiler.com/maps/streets-v2/style.json?key=${process.env.REACT_APP_MAPLIBRE_API_KEY}`}
+      >
+        <Marker
+          longitude={lng}
+          latitude={lat}
+        />
+        {children}
+        <NavigationControl position="top-left" />
+      </Map>
+    </div>
   );
 }
 
