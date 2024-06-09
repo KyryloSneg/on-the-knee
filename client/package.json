@@ -13,6 +13,7 @@
     "google-translate-api-x": "^10.6.7",
     "libphonenumber-js": "^1.10.41",
     "lodash": "^4.17.21",
+    "mapbox-gl": "^3.4.0",
     "maplibre-gl": "^4.3.2",
     "mobx": "^6.9.0",
     "mobx-react-lite": "^3.4.3",
