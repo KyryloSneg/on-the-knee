@@ -1,0 +1,40 @@
+.self-delivery-modal-content-tabs {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  padding: 16px 16px 0 16px;
+}
+
+.self-delivery-modal-content-tabs > li,
+.self-delivery-modal-content-tabs > li > button {
+  width: 100%;
+}
+
+.self-delivery-modal-content-tabs > li > button {
+  height: 38px;
+  border: 1px solid rgb(190, 190, 190);
+  font-size: 1.2rem;
+  color: #7373ff;
+  transition: background 0.2s, color 0.2s;
+}
+
+.self-delivery-modal-content-tabs > li > button.selected {
+  background-color: #dedede;
+  color: black;
+}
+
+.self-delivery-modal-content-tabs > li:first-of-type > button {
+  border-radius: 8px 0 0 8px;
+  border-right: none;
+}
+
+.self-delivery-modal-content-tabs > li:last-of-type > button {
+  border-radius: 0 8px 8px 0;
+  border-left: none;
+}
+
+@media screen and (min-width: 200px) {
+  .self-delivery-modal-content-tabs > li > button {
+    font-size: 1.5rem;
+  }
+}

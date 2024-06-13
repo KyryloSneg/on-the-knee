@@ -1,31 +1,37 @@
 import "./myMap.css";
-import Map, { Marker, NavigationControl } from 'react-map-gl';
+import Map, { NavigationControl } from 'react-map-gl';
 import maplibregl from 'maplibre-gl';
+import MarkerWithPopup from "./MarkerWithPopup";
+import { forwardRef } from "react";
 
 // children can contain markers, popups etc.
-const MyMap = ({ lng = 30.4383398, lat = 50.4565494, zoom = 10, children }) => {
-  // width and height properties we change in css (these in style prop we override mostly)
+const MyMap = forwardRef(({ lng = 0, lat = 0, zoom = 0, id = "", children, ...props }, ref) => {
+  const initViewState = {
+    longitude: lng,
+    latitude: lat,
+    zoom: zoom
+  };
+
   return (
-    <div className="my-map-wrapper" style={{ width: "620px", height: "620px" }}>
-      <Map
-        className="my-map"
-        mapLib={maplibregl}
-        initialViewState={{
-          longitude: lng,
-          latitude: lat,
-          zoom: zoom
-        }}
-        mapStyle={`https://api.maptiler.com/maps/streets-v2/style.json?key=${process.env.REACT_APP_MAPLIBRE_API_KEY}`}
-      >
-        <Marker
-          longitude={lng}
-          latitude={lat}
-        />
-        {children}
-        <NavigationControl position="top-left" />
-      </Map>
-    </div>
+    <Map
+      mapLib={maplibregl}
+      initialViewState={initViewState}
+      mapStyle={`https://api.maptiler.com/maps/streets-v2/style.json?key=${process.env.REACT_APP_MAPLIBRE_API_KEY}`}
+      id={id}
+      ref={ref}
+      {...props}
+    >
+      <MarkerWithPopup
+        lng={0}
+        lat={0}
+        popupChildren={
+          <p>Disa lox</p>
+        }
+      />
+      {children}
+      <NavigationControl position="top-left" />
+    </Map>
   );
-}
+});
 
 export default MyMap;
