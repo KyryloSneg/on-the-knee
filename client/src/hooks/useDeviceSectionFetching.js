@@ -16,6 +16,7 @@ import sortDevicesByPrice from "../utils/sortDevicesByPrice";
 import useNavigateToEncodedURL from "./useNavigateToEncodedURL";
 import getDescendantCategories from "../utils/getDescendantCategories";
 import getDevicesBySearchQuery from "../utils/getDevicesBySearchQuery";
+import getPreparedForMockServerStr from "../utils/getPreparedForMockServerStr";
 
 // query params without pagination ones
 function useDeviceSectionFetching(deviceStore, app, originalType, setIsFoundDevicesByQuery = null, setSpellCheckedQuery = null) {
@@ -75,7 +76,8 @@ function useDeviceSectionFetching(deviceStore, app, originalType, setIsFoundDevi
         fetchStringQueryParams = `_sort=rating&_order=${splittedSortFilter[0]}`;
       }
   
-      if (type === "search") fetchStringQueryParams += `&name_like=${searchQuery}`.replaceAll(`"`, "");
+      const preparedSearchQuery = typeof searchQuery === "string" ? getPreparedForMockServerStr(searchQuery) : searchQuery;
+      if (type === "search") fetchStringQueryParams += `&name_like=${preparedSearchQuery}`.replaceAll(`"`, "");
       if (categoryIdParam && type !== "category") fetchStringQueryParams += `&categoryId=${categoryIdParam}`.replaceAll(`"`, "");
 
       let devices = await getDevicesBySearchQuery(
@@ -118,7 +120,7 @@ function useDeviceSectionFetching(deviceStore, app, originalType, setIsFoundDevi
       // finding min / max prices before filtering by device's cost
       const { minPrice, maxPrice } = DeviceComboActions.getDeviceMinMaxPrices(filteredDevices, sales, saleTypeNames);
       if (toFilterByPrice) {
-        filteredDevices = filterDevicesByPrice(devices, sales, saleTypeNames, minQueryPrice, maxQueryPrice);
+        filteredDevices = filterDevicesByPrice(filteredDevices, sales, saleTypeNames, minQueryPrice, maxQueryPrice);
       }
   
       let deviceInfos = [];

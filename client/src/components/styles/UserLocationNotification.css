@@ -5,19 +5,31 @@
 }
 
 .user-location-notification {
+  flex-direction: column;
   position: relative;
   /* fallback */
   top: 100%;
   top: calc(100% + 2px);
-  gap: 16px;
+  gap: 6px;
   background-color: rgba(140, 140, 140, 0.85);
   border-radius: 12px;
   padding: 10px 12px;
 }
 
+.user-location-notification > p,
+.btn-group > .correct-button, 
+.btn-group > .change-location-btn {
+  font-size: 1.2rem;
+}
+
 .user-location-notification > p {
-  gap: 2px;
+  gap: 4px;
   color: #fff;
+}
+
+.user-location-notification > p > img {
+  width: 30px;
+  height: 30px;
 }
 
 .user-location-notification > .btn-group {
@@ -75,4 +87,31 @@
   position: absolute;
   z-index: 999;
   left: 4px;
+  right: 4px;
+}
+
+@media screen and (min-width: 300px) {
+  .user-location-notification > p,
+  .btn-group > .correct-button, 
+  .btn-group > .change-location-btn {
+    font-size: 1.5rem;
+  }
+
+  .user-location-btn-notification > .user-location-notification {
+    right: auto;
+  }
+}
+
+@media screen and (min-width: 600px) {
+  .user-location-notification > p > img {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media screen and (min-width: 950px) {
+  .user-location-notification {
+    flex-direction: row;
+    gap: 16px;
+  }
 }

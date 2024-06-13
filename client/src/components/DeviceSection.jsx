@@ -6,9 +6,9 @@ import DeviceList from "./DeviceList";
 import "./styles/DeviceSection.css";
 import ButtonPagination from "./UI/pagination/ButtonPagination";
 import PagesPagination from "./UI/pagination/PagesPagination";
-import { Spinner } from "react-bootstrap";
 import isCanLoadMoreContent from "../utils/isCanLoadMoreContent";
 import useGettingPaginationParams from "../hooks/useGettingPaginationParams";
+import Loader from "./UI/loader/Loader";
 
 const DeviceSection = observer(({ isLoading, retryDevicesFetch, error }) => {
   const { app, deviceStore } = useContext(Context);
@@ -51,15 +51,7 @@ const DeviceSection = observer(({ isLoading, retryDevicesFetch, error }) => {
 
       {/* spinner on "retry" fetch */}
       {(error && isLoading) &&
-        <Spinner
-          animation="border"
-          variant="primary"
-          size="sm"
-          role="status"
-          className="no-select error-retry-spinner"
-        >
-          <span className="visually-hidden">Loading...</span>
-        </Spinner>
+        <Loader className="error-retry-spinner" />
       }
       {/* create "try again" btn */}
       {(!!error && !isLoading) &&

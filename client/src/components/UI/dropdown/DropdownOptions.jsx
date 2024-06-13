@@ -45,7 +45,7 @@ const DropdownOptions = (props) => {
                 onKeyDown={(e) => onKeyDown(e, opt.id, props.options, optionRefs)}
                 data-testid={`dropdown-option-${props.paramKey} ${opt.id}`}
                 ref={ref => {
-                  if (optionRefs.length === props.options.length) return;
+                  if (optionRefs.current.length === props.options.length) return;
                   optionRefs.current.push(ref)
                 }}
                 aria-checked={isSelected}
@@ -64,7 +64,7 @@ const DropdownOptions = (props) => {
               onKeyDown={(e) => onKeyDown(e, opt.id, props.options, optionRefs)}
               data-testid={`option ${opt.id}`}
               ref={ref => {
-                if (optionRefs.length === props.options.length) return;
+                if (optionRefs.current.length === props.options.length) return;
                 optionRefs.current.push(ref)
               }}
               aria-checked={isSelected}

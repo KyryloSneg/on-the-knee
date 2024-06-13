@@ -10,6 +10,7 @@ import { getStocks } from "../http/StocksAPI";
 import { getLocations } from "../http/LocationsAPI";
 import { getUserLocation } from "../http/UserLocationAPI";
 import { DEFAULT_USER_LOCATION_NAME } from "../utils/consts";
+import { getStorePickupPoints } from "../http/StorePickupPointsAPI";
 
 function useInitialDataFetching() {
   const { app, deviceStore } = useContext(Context);
@@ -21,6 +22,7 @@ function useInitialDataFetching() {
     const stocks = await getStocks();
     const hintSearchResults = await getHintSearchResults();
     const allLocations = await getLocations();
+    const allStorePickupPoints = await getStorePickupPoints();
 
     let userLocation = JSON.parse(localStorage.getItem("location"));
     if (!userLocation) {
@@ -65,9 +67,11 @@ function useInitialDataFetching() {
     deviceStore.setCategories(sortedCategories);
     deviceStore.setSales(sales);
     deviceStore.setStocks(stocks);
+    
     app.setHintSearchResults(sortedHintResults);
     app.setAllLocations(allLocations);
     app.setUserLocation(userLocation);
+    app.setStorePickupPoints(allStorePickupPoints);
   }
 
   const [fetching, isLoading, error] = useFetching(fetchData);

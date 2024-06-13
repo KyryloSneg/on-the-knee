@@ -47,7 +47,7 @@ const CatalogPage = observer(({ type }) => {
     deviceStore.setDevices([]);
     deviceStore.setFilters([]);
   }, [deviceStore]);
-  
+
   // we have no need in categoryId param if we're already at the category catalog page
   useDeletingRedundantCategoryId(type);
   useEffect(() => {
@@ -62,12 +62,12 @@ const CatalogPage = observer(({ type }) => {
     const basename = process.env.REACT_APP_CLIENT_URL;
     const currentUrl = basename + location.pathname + location.search;
 
-    if (currentUrl !== url && !isTest) { 
+    if (currentUrl !== url && !isTest) {
       navigate(url.replace(basename, ""), { replace: true });
     }
 
   }, [location.search, deviceStore, deviceStore.filters, deviceStore.filters, location.pathname, navigate, isTest]);
-  
+
   const [isLoading, error, deviceFetching] = useDeviceSectionFetching(deviceStore, app, type, setIsFoundDevicesByQuery, setSpellCheckedQuery);
   if (error) console.log(error);
 
@@ -85,6 +85,9 @@ const CatalogPage = observer(({ type }) => {
     );
   }
 
+  const isToRenderFilters = !!Object.keys(deviceStore.filters).length;
+  const wrapperClassName = !isToRenderFilters ? "no-catalog-aside" : "";
+
   return (
     <div className="display-grid" ref={pageRef}>
       {(!!deviceStore.devices.length && type === "search")
@@ -93,7 +96,7 @@ const CatalogPage = observer(({ type }) => {
       }
       {type === "category" && <h2 className="category-name-heading">{category.name}</h2>}
       <div className="sort-and-filter-bar-wrap">
-        {windowWidth < WIDTH_TO_SHOW_ASIDE &&
+        {(windowWidth < WIDTH_TO_SHOW_ASIDE && isToRenderFilters) &&
           <TopFilterBar />
         }
         <Dropdown
@@ -103,15 +106,17 @@ const CatalogPage = observer(({ type }) => {
           className="device-sorting-filter"
         />
       </div>
-      {(type === "category" && !!childCategories.length) && 
-        <CustomScrollbar 
-          children={<ChildCategoriesBar 
-          childCategories={childCategories} />} 
-          className="child-categories-scrollbar" 
+      {(type === "category" && !!childCategories.length) &&
+        <CustomScrollbar
+          children={<ChildCategoriesBar
+            childCategories={childCategories} />}
+          className="child-categories-scrollbar"
         />
       }
-      <div id="wrapper">
-        <CatalogAside key={"aside"} />
+      <div id="wrapper" className={wrapperClassName}>
+        {isToRenderFilters &&
+          <CatalogAside key={"aside"} />
+        }
         <DeviceSection isLoading={isLoading} retryDevicesFetch={deviceFetching} error={error} key={"devSection"} />
       </div>
     </div>
