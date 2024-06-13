@@ -152,8 +152,11 @@ export const WIDTH_TO_SHOW_ASIDE = 960;
 export const WIDTH_TO_SHOW_LOADING_BTN_PAGINATION = 260;
 export const WIDTH_TO_SHOW_CATEGORIES_MENU = 1080;
 export const WIDTH_TO_SHOW_DEVICE_CAROUSEL_SIDEBAR = 870;
+export const WIDTH_TO_SHOW_BOTH_SELF_DELIVERY_MODAL_COLS = 800;
 
 export const DEFAULT_USER_LOCATION_NAME = "Kyiv";
+// coords of Kyiv
+export const DEFAULT_INIT_MAP_COORDS = { lng: 30.5241361, lat: 50.4500336 };
 
 // set up mock stores
 const deviceStoreInstance = new DeviceStore();

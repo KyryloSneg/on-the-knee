@@ -30,6 +30,7 @@ import useClosingCategoriesModalWidth from "./hooks/useClosingCategoriesModalWid
 import useClosingAllWindows from "./hooks/useClosingAllWindows";
 import useScrollingToPagesTop from "./hooks/useScrollingToPagesTop";
 import SelectUserLocationModal from "./components/SelectUserLocationModal";
+import SelfDeliveryModal from "./components/SelfDeliveryModal";
  
 const App = observer(() => {
   const { app, deviceStore } = useContext(Context);
@@ -127,6 +128,7 @@ const App = observer(() => {
         id="categories-modal"
       />
       {app.isVisibleUserLocationModal && <SelectUserLocationModal />}
+      {app.isVisibleSelfDeliveryModal && <SelfDeliveryModal />}
       <header ref={headerRef}>
         <Navbar elemToFocus={pageElemToFocus} navCategoryBtnRef={navCategoryBtnRef} />
         {(app.isVisibleCategoriesMenu && !!Object.keys(deviceStore.categories).length) && 

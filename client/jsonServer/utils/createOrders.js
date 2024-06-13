@@ -45,8 +45,8 @@ module.exports = (
       name = faker.person.firstName();
       surname = faker.person.lastName();
       email = faker.internet.email();
-      const numberObj = parsePhoneNumber(faker.phone.number("+380 ## ### ####"));
-      const internationalNumber = numberObj.formatInternational();
+      const numberObj = parsePhoneNumber("+380 " + faker.helpers.fromRegExp(/[0-9]{2} [0-9]{3} [0-9]{4}/));
+      const internationalNumber = numberObj.formatInternational(); 
       phoneNumber = internationalNumber;
     }
     

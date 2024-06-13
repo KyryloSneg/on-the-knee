@@ -1,0 +1,17 @@
+.my-popup > .maplibregl-popup-content {
+  border-radius: 8px;
+
+}
+
+.my-popup > .maplibregl-popup-content > button {
+  border-radius: 0 8px 0 0;
+  transition: color 0.2s;
+  font-size: 2.1rem;
+}
+
+.my-popup > .maplibregl-popup-content > button:hover,
+.my-popup > .maplibregl-popup-content > button:active,
+.my-popup > .maplibregl-popup-content > button:focus-visible {
+  background: none;
+  color: #7373ff;
+}
