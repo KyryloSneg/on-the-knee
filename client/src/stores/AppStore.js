@@ -13,6 +13,7 @@ class AppStore {
     this._isVisibleCategoriesMenu = false;
     this._isVisibleCategoriesModal = false;
     this._isVisibleUserLocationModal = false;
+    this._isVisibleSelfDeliveryModal = false;
     this._isFocusedSearchForm = false;
 
     this._hintSearchResults = []
@@ -30,6 +31,8 @@ class AppStore {
     this._allLocations = [];
     this._isToShowUserLocationNotification = false;
     this._isUserLocationDeterminedCorrectly = true;
+
+    this._storePickupPoints = [];
     makeAutoObservable(this);
   }
 
@@ -71,6 +74,10 @@ class AppStore {
 
   setIsVisibleUserLocationModal(bool) {
     this._isVisibleUserLocationModal = bool;
+  }
+
+  setIsVisibleSelfDeliveryModal(bool) {
+    this._isVisibleSelfDeliveryModal = bool;
   }
 
   setIsFocusedSearchForm(bool) {
@@ -128,6 +135,10 @@ class AppStore {
   setIsUserLocationDeterminedCorrectly(isUserLocationDeterminedCorrectly) {
     this._isUserLocationDeterminedCorrectly = isUserLocationDeterminedCorrectly;
   }
+
+  setStorePickupPoints(storePickupPoints) {
+    this._storePickupPoints = storePickupPoints;
+  }
   
   get darkBgVisible() {
     return this._darkBgVisible;
@@ -167,6 +178,10 @@ class AppStore {
 
   get isVisibleUserLocationModal() {
     return this._isVisibleUserLocationModal;
+  }
+
+  get isVisibleSelfDeliveryModal() {
+    return this._isVisibleSelfDeliveryModal;
   }
 
   get isFocusedSearchForm() {
@@ -223,6 +238,10 @@ class AppStore {
 
   get isUserLocationDeterminedCorrectly() {
     return this._isUserLocationDeterminedCorrectly;
+  }
+
+  get storePickupPoints() {
+    return this._storePickupPoints;
   }
 }
 

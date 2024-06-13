@@ -1,6 +1,5 @@
 const { env } = require('node:process');
 
 module.exports = function initializeEnvVars() {
-  // TODO: create new account in mapquest
-  env.MAPQUERY_API_KEY = "TWj3WwGCGYsUAh9WdWwRUS7RHKbXe3YJ";
+  env.OPENCAGE_API_KEY = "48b4518008864120a078fd1a96a834b8";
 }

@@ -62,6 +62,10 @@
   border-radius: 14px;
 }
 
+.self-delivery-modal-scrollbar .os-scrollbar-vertical {
+  padding: 1px 0 0 0;
+}
+
 .tabs-page-scroll .my-scrollbar.os-scrollbar, 
  .images-carousel-scrollbar .my-scrollbar.os-scrollbar {
   --os-size: 4px;
