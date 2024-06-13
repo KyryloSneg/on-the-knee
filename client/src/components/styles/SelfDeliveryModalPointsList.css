@@ -1,0 +1,59 @@
+.self-delivery-modal-points-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.self-delivery-modal-points-search {
+  position: relative;
+  height: 34px;
+  margin: 16px 16px 0 16px;
+}
+
+.self-delivery-modal-points-search > input {
+  width: 100%;
+  /* without inheirt value input's height changes on no results */
+  height: inherit;
+  padding: 0 28px 0 8px;
+  border-radius: 10px;
+}
+
+.self-delivery-modal-points-search > input:focus {
+  border: 1px solid #3c3cd5;
+}
+
+.self-delivery-modal-points-search > .delete-input-content-btn {
+  border-radius: 0 10px 10px 0;
+}
+
+.self-delivery-modal-points-list {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-height: calc(100vh - 201px);
+}
+
+.self-delivery-modal-no-points {
+  width: 100%;
+  text-align: center;
+  font-size: 1.8rem;
+  color: rgb(102, 102, 102);
+  height: 100%;
+}
+
+@media screen and (min-width: 800px) {
+  .self-delivery-modal-points-section {
+    border-right: 1px solid rgb(190, 190, 190);
+    width: 362px;
+  }
+
+  .self-delivery-modal-points-list,
+  .self-delivery-modal-no-points {
+    height: 450px;
+  }
+
+  .self-delivery-modal-points-list {
+    max-height: 100%;
+  }
+}

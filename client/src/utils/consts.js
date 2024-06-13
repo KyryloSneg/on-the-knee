@@ -130,7 +130,7 @@ export const FILTERS_IN_SPECIAL_COMPONENTS = ["sort", "price", "text"];
 export const HINT_SEARCH_RESULTS_MAX_AMOUNT = 3;
 export const DEVICE_SEARCH_RESULTS_MAX_AMOUNT = 3;
 export const CATEGORY_SEARCH_RESULTS_MAX_AMOUNT = 3;
-export const HISTORY_SEARCH_RESULTS_MAX_AMOUNT = 3;
+export const HISTORY_SEARCH_RESULTS_MAX_AMOUNT = 6;
 
 // renavigate user to categories page if subcategories amount >= MIN_CATEGORIES_LENGTH_TO_RENAVIGATE
 // TODO: change to 12
@@ -152,8 +152,11 @@ export const WIDTH_TO_SHOW_ASIDE = 960;
 export const WIDTH_TO_SHOW_LOADING_BTN_PAGINATION = 260;
 export const WIDTH_TO_SHOW_CATEGORIES_MENU = 1080;
 export const WIDTH_TO_SHOW_DEVICE_CAROUSEL_SIDEBAR = 870;
+export const WIDTH_TO_SHOW_BOTH_SELF_DELIVERY_MODAL_COLS = 800;
 
 export const DEFAULT_USER_LOCATION_NAME = "Kyiv";
+// coords of Kyiv
+export const DEFAULT_INIT_MAP_COORDS = { lng: 30.5241361, lat: 50.4500336 };
 
 // set up mock stores
 const deviceStoreInstance = new DeviceStore();

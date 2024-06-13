@@ -10,7 +10,8 @@ const DeviceColorOptions = ({ hrefObjects, deviceId, toShowSelectedOutline = fal
 
   let selectedCombinationString = null;
   if (toShowSelectedOutline && currentPath === DEVICE_ROUTE + ":deviceIdCombo") {
-    const pathname = location.pathname.replaceAll("%20", " ");
+    // doing this just in case
+    const pathname = location.pathname.replaceAll("%20", " ").replaceAll("+", " ");
     selectedCombinationString = pathname.split("--")[1];
   }
 
