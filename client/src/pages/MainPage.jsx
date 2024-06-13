@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef } from "react";
 import { Context } from "../Context";
 import UserLocationBtnNotification from "../components/UserLocationBtnNotification";
-import MyMap from "../components/UI/myMap/MyMap";
+import setSelfDeliveryModalVisibility from "../utils/setSelfDeliveryModalVisibility";
 
 const MainPage = () => {
   const { app } = useContext(Context);
@@ -15,7 +15,9 @@ const MainPage = () => {
     <div>
       MainPage
       <UserLocationBtnNotification />
-      <MyMap />
+      <button onClick={() => setSelfDeliveryModalVisibility(true, app)}>
+        Open self delivery modal
+      </button>
     </div>
   );
 };

@@ -1,0 +1,24 @@
+#self-delivery-modal {
+  width: 100%;
+  height: 100%;
+  max-width: 1000px;
+  border-radius: 0;
+}
+
+@media screen and (min-width: 800px) {
+  #self-delivery-modal {
+    width: calc(100% - 30px);
+    border-radius: 6px;
+    height: auto;
+    max-height: 100%;
+  }
+}
+
+@media screen and (min-width: 1030px) {
+  #self-delivery-modal {
+    width: 1000px;
+    height: auto;
+    max-height: 100%;
+    border-radius: 6px;
+  }
+}

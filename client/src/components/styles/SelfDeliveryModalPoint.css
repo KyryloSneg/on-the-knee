@@ -1,0 +1,50 @@
+.self-delivery-modal-point {
+  padding: 8px 16px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: none;
+  border: none;
+  border-top: 1px solid rgb(190, 190, 190);
+  transition: background 0.15s;
+  outline: none;
+  cursor: pointer;
+}
+
+.self-delivery-modal-point:hover,
+.self-delivery-modal-point:active,
+.self-delivery-modal-point:focus-visible,
+.self-delivery-modal-point.selected {
+  background: #dedede;
+}
+
+.self-delivery-modal-point > div {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.self-delivery-modal-point > div > img {
+  width: 18px;
+  height: 18px;
+}
+
+.self-delivery-modal-point > div > span {
+  text-align: start;
+}
+
+.self-delivery-modal-point-fullname {
+  color: #7373ff;
+}
+
+.self-delivery-modal-point.popup-version {
+  cursor: auto;
+  border: none;
+}
+
+.self-delivery-modal-point.popup-version:hover,
+.self-delivery-modal-point.popup-version:active,
+.self-delivery-modal-point.popup-version:focus-visible {
+  background: none;
+}
