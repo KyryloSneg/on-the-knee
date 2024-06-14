@@ -10,9 +10,13 @@ const SelfDeliveryModalPointsList = ({ selectedId, setSelectedId, storePickupPoi
   const [query, setQuery] = useState("");
   const inputRef = useRef(null);
 
-  const filteredPoints = storePickupPoints.filter(
-    point => point.fullName.toLowerCase().includes(query.toLowerCase())
-  );
+  let filteredPoints = []; 
+  const isTherePointsInCity = !!storePickupPoints?.length;
+  if (isTherePointsInCity) {
+    filteredPoints = storePickupPoints.filter(
+      point => point.fullName.toLowerCase().includes(query.toLowerCase())
+    );
+  }
 
   function onClick() {
     setQuery("");
@@ -64,14 +68,20 @@ const SelfDeliveryModalPointsList = ({ selectedId, setSelectedId, storePickupPoi
             }
           />
         )
-        : (
-          <p className="self-delivery-modal-no-points">
-            No such store pickup points {":("}
-          </p>
-        )
+        : isTherePointsInCity
+            ? (
+              <p className="self-delivery-modal-no-points">
+                No such store pickup points {":("}
+              </p>
+            )
+            : (
+              <p className="self-delivery-modal-no-points">
+                No store pickup points in your city {":("}
+              </p>
+            )
       }
     </section>
   );
-}
+};
 
 export default SelfDeliveryModalPointsList;

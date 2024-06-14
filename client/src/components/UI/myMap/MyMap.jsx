@@ -21,13 +21,6 @@ const MyMap = forwardRef(({ lng = 0, lat = 0, zoom = 0, id = "", children, ...pr
       ref={ref}
       {...props}
     >
-      <MarkerWithPopup
-        lng={0}
-        lat={0}
-        popupChildren={
-          <p>Disa lox</p>
-        }
-      />
       {children}
       <NavigationControl position="top-left" />
     </Map>
