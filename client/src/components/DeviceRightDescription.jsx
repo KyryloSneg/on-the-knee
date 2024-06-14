@@ -8,6 +8,7 @@ import DeviceRightDescSales from "./DeviceRightDescSales";
 import DeviceSellerBlock from "./DeviceSellerBlock";
 import UserLocationBtn from "./UserLocationBtn";
 import "./styles/DeviceRightDescription.css";
+import SelfDeliveryBtn from "./SelfDeliveryBtn";
 
 const DeviceRightDescription = ({ 
   device, combinationString, selectedCombination, 
@@ -59,6 +60,8 @@ const DeviceRightDescription = ({
         <DeviceSellerBlock seller={seller} />
         <DevicePurchaseSection price={price} discountPercentage={discountPercentage} />
       </div>
+      {/* TODO: create courier delivery item??? */}
+      <SelfDeliveryBtn />
       <UserLocationBtn additionalText="Deliver to" className="device-right-desc-location-btn" />
     </section>
   );
