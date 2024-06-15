@@ -33,7 +33,7 @@ const DevicePage = ({ type }) => {
     if (type === "main") {
       innerPage = <MainDevicePage device={device} combinationString={combinationString} />
     } else if (type === "info") {
-      innerPage = <DeviceInfoPage />
+      innerPage = <DeviceInfoPage device={device} />
     } else if (type === "comments") {
       innerPage = <DeviceCommentsPage />
     } else if (type === "questions") {
