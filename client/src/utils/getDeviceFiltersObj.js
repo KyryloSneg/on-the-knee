@@ -64,7 +64,8 @@ export default function getDeviceFiltersObj(devices, stocks, sellers, brands, de
     pushValueToFiltersObj(filters, "brand", brand.name);
   }
 
-  pushFilters(filters, deviceInfos);
+  const infosWithoutAdditional = deviceInfos.filter(info => info.name !== "additionalInfo");
+  pushFilters(filters, infosWithoutAdditional);
   pushFilters(filters, attributes);
 
   return filters;

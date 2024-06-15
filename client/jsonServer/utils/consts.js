@@ -1,24 +1,30 @@
+const { faker } = require("@faker-js/faker");
+
 const POSSIBLE_DEVICE_INFOS = {
   "smartphones": [
     {
       "processor": "Qualcomm Snapdragon",
       "phoneStorage": "32 GB",
       "refreshRate": "75 hz",
+      "diagonal": "6.7",
     },
     {
       "processor": "Apple",
       "phoneStorage": "64 GB",
       "refreshRate": "144 hz",
+      "diagonal": "6.7",
     },
     {
       "processor": "Mediatek",
       "phoneStorage": "128 GB",
       "refreshRate": "240 hz",
+      "diagonal": "6.7",
     },
     {
       "processor": "Mediatek",
       "phoneStorage": "256 GB",
       "refreshRate": "240 hz",
+      "diagonal": "6.7",
     },
   ],
   "laptops": [

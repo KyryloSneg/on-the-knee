@@ -1,8 +1,8 @@
-const DeviceInfoPage = () => {
+import DeviceInfoSection from "../components/DeviceInfoSection";
+
+const DeviceInfoPage = ({ device }) => {
   return (
-    <section>
-      Device info page
-    </section>
+    <DeviceInfoSection device={device} />
   );
 }
 

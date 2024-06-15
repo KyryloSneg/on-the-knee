@@ -1,0 +1,41 @@
+.device-info-section-list-item {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4px;
+  font-size: 1.2rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  padding-bottom: 6px;
+}
+
+.device-info-section-list-item > div {
+  height: 0;
+  padding-top: 14px;
+  border-bottom: 1px dashed #dfdfdf;
+}
+
+.device-info-section-list-item > dt {
+  font-weight: bold;
+}
+
+.device-info-section-list-item > dd {
+  margin: 0;
+}
+
+li:last-of-type > .device-info-section-list-item {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+@media screen and (min-width: 310px) {
+  .device-info-section-list-item {
+    font-size: 1.5rem;
+  }
+}
+
+@media screen and (min-width: 640px) {
+  .device-info-section-list-item {
+    grid-template-columns: auto 1fr 50%;
+    border-bottom: none;
+    gap: 8px;
+  }
+}
