@@ -115,7 +115,7 @@ const MainDevicePage = observer(({ device, combinationString }) => {
         />
       </div>
       <div className="dev-info-comments-wrap">
-        <DeviceInfoSection />
+        <DeviceInfoSection device={device} combinationString={combinationString} />
         <CommentsSection type="device" />
       </div>
     </section>

@@ -1,0 +1,23 @@
+.device-info-section-list-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.device-info-section-list {
+  list-style-type: none;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.show-more-device-info-link {
+  font-size: 1.5rem;
+}
+
+@media screen and (min-width: 310px) {
+  .show-more-device-info-link {
+    font-size: 1.8rem;
+  }
+}

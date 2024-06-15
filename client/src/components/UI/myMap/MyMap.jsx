@@ -1,7 +1,6 @@
 import "./myMap.css";
 import Map, { NavigationControl } from 'react-map-gl';
 import maplibregl from 'maplibre-gl';
-import MarkerWithPopup from "./MarkerWithPopup";
 import { forwardRef } from "react";
 
 // children can contain markers, popups etc.
