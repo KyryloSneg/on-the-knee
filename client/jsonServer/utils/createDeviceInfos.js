@@ -7,7 +7,10 @@ module.exports = (deviceId, categorySlug, deviceInfos, attributeNames) => {
   
   if (possibleDeviceInfos) {
     const deviceInfosIndex = faker.number.int({ min: 0, max: possibleDeviceInfos.length - 1 });
-    for (let [name, value] of Object.entries(possibleDeviceInfos[deviceInfosIndex])) {
+    let possibleDeviceInfoCopy = {...possibleDeviceInfos[deviceInfosIndex]};
+    possibleDeviceInfoCopy["additionalInfo"] = faker.lorem.lines({ min: 2, max: 3 });
+
+    for (let [name, value] of Object.entries(possibleDeviceInfoCopy)) {
       if (Object.keys(attributeNames).includes(name)) continue;
 
       const info = {

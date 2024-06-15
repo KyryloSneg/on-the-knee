@@ -1,0 +1,7 @@
+.device-page-section {
+  padding: 16px;
+}
+
+.device-page-section > h2 {
+  text-align: start;
+}
