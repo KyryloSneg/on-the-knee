@@ -89,9 +89,10 @@ module.exports = async () => {
 
     const rating = createDeviceFeedbacks(deviceFeedbacks, deviceFeedbackReplies, dev.id);
     const { deviceAttributeValues } = createAttributes(dev.id, category.slug, attributes, attributeNames, attributeValues);
+    const isPreOrder = faker.datatype.boolean(0.1);
 
     createDeviceInfos(dev.id, category.slug, deviceInfos, deviceAttributeValues);
-    createDeviceCombinations(dev, deviceAttributeValues, deviceCombinations, stocks);
+    createDeviceCombinations(dev, deviceAttributeValues, deviceCombinations, stocks, isPreOrder);
     createAdditionalServices(dev.id, devices, additionalServices, additionalServiceDevices, deviceCombinations);
 
     const device = {
@@ -102,7 +103,7 @@ module.exports = async () => {
       "brandId": brand.id,
       "categoryId": category.id,
       "sellerId": seller.id,
-      "isPreOrder": faker.datatype.boolean(0.1)
+      "isPreOrder": isPreOrder
     };
 
     devices.push(device);
