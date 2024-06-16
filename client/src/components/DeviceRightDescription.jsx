@@ -58,7 +58,11 @@ const DeviceRightDescription = ({
       />
       <div className="device-right-desc-seller-purchase-wrap">
         <DeviceSellerBlock seller={seller} />
-        <DevicePurchaseSection price={price} discountPercentage={discountPercentage} />
+        <DevicePurchaseSection 
+          price={price} 
+          discountPercentage={discountPercentage} 
+          device={device} 
+        />
       </div>
       {/* TODO: create courier delivery item??? */}
       <SelfDeliveryBtn />
