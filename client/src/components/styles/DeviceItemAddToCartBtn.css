@@ -21,6 +21,15 @@
   background-color: #00f521;
 }
 
+.main-device-add-to-cart.preorder-version {
+  background-color: #7373ff;
+}
+
+.main-device-add-to-cart.preorder-version:hover,
+ .main-device-add-to-cart.preorder-version:focus-visible {
+  background-color: #8282ff;
+}
+
 .main-device-add-to-cart > span {
   color: white;
   font-size: 1.8rem;
