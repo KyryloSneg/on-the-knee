@@ -102,7 +102,9 @@ function useDeviceSectionFetching(deviceStore, app, originalType, setIsFoundDevi
       // TODO: add there other "special" filters (that requires separate implementation) later on
       const isSpecialFilters = toFilterByPrice || toFilterByStock || toFilterBySeller || toFilterByBrand;
   
-      let filteredDevices = [...devices];
+      // we clone devices array deeply to prevent changing of a device combos
+      // (it's important for stock filter because it doesn't change on using it)
+      let filteredDevices = _.cloneDeep(devices);
       let pageFilteredDevices = [];
   
       if (toFilterByStock) {
