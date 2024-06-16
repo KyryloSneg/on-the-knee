@@ -42,7 +42,7 @@ const DeviceSection = observer(({ isLoading, retryDevicesFetch, error }) => {
             saleTypeNames={deviceStore.saleTypeNames}
           />
         )
-        : (!error && !!Object.keys(deviceStore.usedFilters).length) && (
+        : (!error && !!Object.keys(deviceStore.usedFilters).length && !isLoading) && (
           <p className="no-devices-message">
             We haven't found devices with such filters {":("}
           </p>
