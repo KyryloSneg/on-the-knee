@@ -1,0 +1,68 @@
+.purchase-device-footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  padding: 14px;
+  background-color: #fff;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  -webkit-box-shadow: 0px -1px 2px 0px rgba(0, 0, 0, 0.125);
+  -moz-box-shadow: 0px -1px 2px 0px rgba(0, 0, 0, 0.125);
+  box-shadow: 0px -1px 2px 0px rgba(0, 0, 0, 0.125);
+}
+
+.purchase-device-footer > img {
+  display: none;
+  width: 32px;
+  height: 32px;
+}
+
+.purchase-device-footer-device-name {
+  font-size: 1.2rem;
+}
+
+.purchase-device-footer .main-device-price,
+.purchase-device-footer .main-device-old-price {
+  text-overflow: initial;
+  white-space: initial;
+  overflow: visible;
+}
+
+.purchase-device-footer .main-device-price b {
+  font-size: 1.8rem;
+}
+
+.purchase-device-footer .main-device-old-price > span:first-of-type,
+.purchase-device-footer .main-device-price > .main-device-currency {
+  font-size: 1.5rem;
+}
+
+.purchase-device-footer .main-device-old-price > .main-device-currency {
+  font-size: 1.2rem;
+}
+
+@media screen and (min-width: 360px) {
+  .purchase-device-footer {
+    grid-template-columns: auto 1fr auto auto;
+  }
+
+  .purchase-device-footer > img {
+    display: inline-block;
+  }
+}
+
+@media screen and (min-width: 400px) {
+  .purchase-device-footer {
+    grid-template-columns: auto 1fr auto auto auto;
+  }
+}
+
+@media screen and (min-width: 680px) {
+  .purchase-device-footer-device-name {
+    font-size: 1.5rem;
+  }
+}
