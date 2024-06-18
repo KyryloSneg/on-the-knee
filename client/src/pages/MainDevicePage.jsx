@@ -4,22 +4,59 @@ import DeviceInfoSection from "../components/DeviceInfoSection";
 import DeviceRightDescription from "../components/DeviceRightDescription";
 import CommentsSection from "../components/UI/commentsSection/CommentsSection";
 import DeviceSalesActions from "../utils/DeviceSalesActions";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Context } from "../Context";
 import useGettingSalesAndTypeNames from "../hooks/useGettingSalesAndTypeNames";
 import { observer } from "mobx-react-lite";
 import DeviceComboActions from "../utils/DeviceComboActions";
 import useGettingSellers from "../hooks/useGettingSellers";
 import useGettingAddServicesRelatedData from "../hooks/useGettingAddServicesRelatedData";
+import PurchaseDeviceFooter from "../components/PurchaseDeviceFooter";
+import useWindowWidth from "../hooks/useWindowWidth";
+import { WIDTH_TO_SHOW_PURCHASE_DEVICE_FOOTER } from "../utils/consts";
 
 const MainDevicePage = observer(({ device, combinationString }) => {
   const { deviceStore } = useContext(Context);
+  const windowWidth = useWindowWidth();
+
+  const observer = useRef(null);
+  const rightDescRef = useRef(null);
+
   const [sellers, setSellers] = useState([]);
   const [additionalServicesObj, setAdditionalServicesObj] = useState([]);
+  const [isRightDescScrolled, setIsRightDescScrolled] = useState(false);
   // theoretically setting sales and sale type names would not lead to bugs in the catalog page
   useGettingSalesAndTypeNames(deviceStore);
   useGettingSellers(setSellers);
   useGettingAddServicesRelatedData(device, setAdditionalServicesObj);
+
+  // i think we can implement it without the observer but i already did it
+  useEffect(() => {
+    if (rightDescRef.current) {
+      if (observer.current) observer.current.disconnect();
+
+      function callback(entries, observer) {
+        const rightDescRect = rightDescRef.current.getBoundingClientRect();
+        const isScrolled = rightDescRect.top <= -(rightDescRect.height);
+
+        const nextIsRightDescScrolled = !entries[0].isIntersecting && isScrolled;
+
+        if (nextIsRightDescScrolled !== isRightDescScrolled) {
+          setIsRightDescScrolled(nextIsRightDescScrolled);
+        }
+      }
+
+      observer.current = new IntersectionObserver(callback);
+      observer.current.observe(rightDescRef.current);
+    }
+
+    return () => {
+      observer.current?.disconnect();
+    };
+
+    // putting rightDescRef.current into deps is necessarry
+    // eslint-disable-next-line
+  }, [isRightDescScrolled, rightDescRef.current]);
 
   if (!device || !deviceStore.sales.length || !deviceStore.stocks.length || !sellers.length) {
     return <div />
@@ -87,7 +124,7 @@ const MainDevicePage = observer(({ device, combinationString }) => {
 
   const seller = sellers.find(sellerItem => sellerItem.id === device.sellerId);
   const price = selectedCombination.price;
-  const { discountPercentage } = 
+  const { discountPercentage } =
     DeviceSalesActions.getSaleTypesAndDiscount(device, sales, deviceStore.saleTypeNames)
     || { discountPercentage: 0 };
 
@@ -112,12 +149,16 @@ const MainDevicePage = observer(({ device, combinationString }) => {
           price={price}
           discountPercentage={discountPercentage}
           additionalServicesObj={additionalServicesObj}
+          ref={rightDescRef}
         />
       </div>
       <div className="dev-info-comments-wrap">
         <DeviceInfoSection device={device} combinationString={combinationString} />
         <CommentsSection type="device" />
       </div>
+      {(isRightDescScrolled && windowWidth >= WIDTH_TO_SHOW_PURCHASE_DEVICE_FOOTER) && 
+        <PurchaseDeviceFooter device={device} selectedCombo={selectedCombination} 
+      />}
     </section>
   );
 });

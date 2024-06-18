@@ -18,3 +18,15 @@
 .add-to-desired-list:active {
   background: #c7c7c7;
 }
+
+.purchase-device-footer > .add-to-desired-list {
+  position: static;
+  display: none;
+}
+
+@media screen and (min-width: 400px) {
+  .purchase-device-footer > .add-to-desired-list {
+    position: static;
+    display: grid;
+  }
+}
