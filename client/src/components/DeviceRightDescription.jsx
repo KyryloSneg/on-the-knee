@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { forwardRef, useState } from "react";
 import AdditionalServicesSection from "./AdditionalServicesSection";
 import DeviceColorOptions from "./DeviceColorOptions";
 import DeviceItemAttrOptionSection from "./DeviceItemAttrOptionSection";
@@ -10,16 +10,16 @@ import UserLocationBtn from "./UserLocationBtn";
 import "./styles/DeviceRightDescription.css";
 import SelfDeliveryBtn from "./SelfDeliveryBtn";
 
-const DeviceRightDescription = ({ 
+const DeviceRightDescription = forwardRef(({ 
   device, combinationString, selectedCombination, 
   defaultCombo, salesAndTypes, attributesList, 
   hrefObjects, seller, price, discountPercentage,
   additionalServicesObj 
-}) => {
+}, ref) => {
   const [selectedAddServices, setSelectedAddServices] = useState([]);
 
   return (
-    <section className="device-page-section device-right-description">
+    <section className="device-page-section device-right-description" ref={ref}>
       <DeviceRightDescHeading
         device={device}
         selectedCombination={selectedCombination}
@@ -69,6 +69,6 @@ const DeviceRightDescription = ({
       <UserLocationBtn additionalText="Deliver to" className="device-right-desc-location-btn" />
     </section>
   );
-}
+});
 
 export default DeviceRightDescription;
