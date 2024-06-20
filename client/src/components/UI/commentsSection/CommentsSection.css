@@ -1,0 +1,82 @@
+.comments-section {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.comments-section > h2 {
+  margin-bottom: 0;
+  font-size: 2rem;
+}
+
+.comments-star-rating-p-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.comments-star-rating-p-wrapper > p {
+  font-size: 1.2rem;
+}
+
+.comments-section-all-images {
+  box-sizing: border-box;
+  display: flex;
+  gap: 8px;
+  /* width: 100% || calc(100% - 1px) doesn't work for some reason */
+  width: 0;
+  margin: 0;
+  padding: 10px 0;
+}
+
+.comments-section-all-images > li {
+  height: 64px;
+}
+
+.comments-section-all-images > li > button {
+  background: none;
+  border: none;
+  height: 64px;
+  padding: 0;
+  cursor: pointer;
+}
+
+.comments-section-all-images img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.create-comment-btn {
+  background: none;
+  width: max-content;
+  padding: 8px 12px;
+  border: 1px solid #dfdfdf;
+  border-radius: 16px;
+  color: #7373ff;
+  font-size: 1.2rem;
+  transition: background 0.2s, border 0.2s;
+  cursor: pointer;
+}
+
+.create-comment-btn:hover,
+.create-comment-btn:active,
+.create-comment-btn:focus-visible {
+  border: 1px solid #c7c7c7;
+  background: #f1f1f1;
+}
+
+@media screen and (min-width: 300px) {
+  .create-comment-btn {
+    font-size: 1.5rem;
+  }
+}
+
+@media screen and (min-width: 360px) {
+  .comments-section > h2 {
+    font-size: 2.5rem;
+  }
+}

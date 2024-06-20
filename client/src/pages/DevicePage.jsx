@@ -8,20 +8,23 @@ import TabsPageLayout from "../components/UI/tabsPageLayout/TabsPageLayout";
 import { useParams } from "react-router-dom";
 import { DEVICE_COMMENTS_ROUTE, DEVICE_INFO_ROUTE, DEVICE_QUESTIONS_ROUTE, DEVICE_ROUTE } from "../utils/consts";
 import useOneDeviceFetching from "../hooks/useOneDeviceFetching";
+import useOneDeviceFeedbacksFetching from "../hooks/useOneDeviceFeedbacksFetching";
 
 const POSSIBLE_TYPES = ["main", "info", "comments", "questions"];
 const DevicePage = ({ type }) => {
-  if (!POSSIBLE_TYPES.includes(type)) throw Error("type of Device Page is not defined");
+  if (!POSSIBLE_TYPES.includes(type)) throw Error("type of Device Page is not defined or incorrect");
 
   const { app } = useContext(Context);
   const pageRef = useRef(null);
   const { deviceIdCombo } = useParams();
   const [device, setDevice] = useState(null);
+  const [feedbacks, setFeedbacks] = useState([]);
 
   let [id, combinationString] = deviceIdCombo.split("--");
   id = +id;
 
   useOneDeviceFetching(id, setDevice);
+  useOneDeviceFeedbacksFetching(setFeedbacks, device?.id)
 
   useEffect(() => {
     app.setPageRef(pageRef);
@@ -31,13 +34,19 @@ const DevicePage = ({ type }) => {
     let innerPage;
 
     if (type === "main") {
-      innerPage = <MainDevicePage device={device} combinationString={combinationString} />
+      innerPage = (
+        <MainDevicePage 
+          device={device} 
+          combinationString={combinationString} 
+          feedbacks={feedbacks}
+        />
+      );
     } else if (type === "info") {
-      innerPage = <DeviceInfoPage device={device} />
+      innerPage = <DeviceInfoPage device={device} />;
     } else if (type === "comments") {
-      innerPage = <DeviceCommentsPage />
+      innerPage = <DeviceCommentsPage />;
     } else if (type === "questions") {
-      innerPage = <DeviceQuestionsPage />
+      innerPage = <DeviceQuestionsPage />;
     }
 
     return innerPage;
@@ -46,7 +55,7 @@ const DevicePage = ({ type }) => {
   const tabsData = [
     { name: "Everything about device", to: DEVICE_ROUTE + deviceIdCombo },
     { name: "Info", to: DEVICE_INFO_ROUTE.replace(":deviceIdCombo", deviceIdCombo) },
-    { name: "Comments", to: DEVICE_COMMENTS_ROUTE.replace(":deviceIdCombo", deviceIdCombo) },
+    { name: `Comments (${feedbacks?.length || 0})`, to: DEVICE_COMMENTS_ROUTE.replace(":deviceIdCombo", deviceIdCombo) },
     { name: "Questions", to: DEVICE_QUESTIONS_ROUTE.replace(":deviceIdCombo", deviceIdCombo) },
   ];
 
