@@ -10,6 +10,7 @@ const createDeviceCombinations = require("./createDeviceCombinations");
 const createAdditionalServices = require("./createAdditionalServices");
 const createSales = require("./createSales");
 const createSaleDevices = require("./createSaleDevices");
+const createDeviceQuestions = require("./createDeviceQuestions");
 
 module.exports = async () => {
 
@@ -47,6 +48,8 @@ module.exports = async () => {
   let devices = [];
   let deviceFeedbacks = [];
   let deviceFeedbackReplies = [];
+  let deviceQuestions = [];
+  let deviceAnswers = [];
   let deviceInfos = [];
   let deviceCombinations = [];
 
@@ -87,13 +90,15 @@ module.exports = async () => {
     // const category = categories[faker.number.int({ min: 0, max: categories.length - 1 })];
     const seller = sellers[faker.number.int({ min: 0, max: sellers.length - 1 })];
 
-    const rating = createDeviceFeedbacks(deviceFeedbacks, deviceFeedbackReplies, dev.id);
     const { deviceAttributeValues } = createAttributes(dev.id, category.slug, attributes, attributeNames, attributeValues);
     const isPreOrder = faker.datatype.boolean(0.1);
 
     createDeviceInfos(dev.id, category.slug, deviceInfos, deviceAttributeValues);
     createDeviceCombinations(dev, deviceAttributeValues, deviceCombinations, stocks, isPreOrder);
     createAdditionalServices(dev.id, devices, additionalServices, additionalServiceDevices, deviceCombinations);
+
+    const rating = createDeviceFeedbacks(deviceFeedbacks, deviceFeedbackReplies, dev.id, deviceCombinations);
+    createDeviceQuestions(deviceQuestions, deviceAnswers, dev.id);
 
     const device = {
       "id": dev.id,
@@ -183,6 +188,8 @@ module.exports = async () => {
     devices,
     deviceFeedbacks,
     deviceFeedbackReplies,
+    deviceQuestions,
+    deviceAnswers,
     deviceInfos,
     deviceCombinations,
 

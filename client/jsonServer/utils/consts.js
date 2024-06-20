@@ -164,7 +164,7 @@ const STORE_LOCATIONS = {
 
 const USERS = [
   {
-    "_id": { "$oid": "64e367f69f8167945dcb4a1b" },
+    "_id": "64e367f69f8167945dcb4a1b",
     "name": "user",
     "surname": "user",
     "roles": ["PUBLIC", "ORDER-MANAGER", "CONTENT-MANAGER", "SELLER", "OWNER"],

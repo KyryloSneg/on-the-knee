@@ -26,6 +26,12 @@ export const SALES_API_URL = "/sales?_embed=sale-types";
 export const ATRIBUTES_API_URL = "/attributes?_expand=attribute-value&_expand=attribute-name";
 export const ONE_ADDITIONAL_SERVICES_API_URL = "/additional-services/ID_TO_REPLACE";
 
+export const DEVICE_FEEDBACKS_API_URL = "/device-feedbacks?_embed=device-feedback-replies";
+export const ONE_DEVICE_FEEDBACKS_API_URL = "/device-feedbacks?deviceId=ID_TO_REPLACE&_embed=device-feedback-replies";
+
+export const DEVICE_QUESTIONS_API_URL = "/device-questions?_embed=device-answers";
+export const ONE_DEVICE_QUESTIONS_API_URL = "/device-questions?deviceId=ID_TO_REPLACE&_embed=device-answers";
+
 // value: (asc / desc),(rating / price)
 export const sortingOptions = [
   {
