@@ -43,7 +43,7 @@ module.exports = async () => {
   // }
 
   let categories = createCategories(categoryObjects);
-  const { sellers, sellerFeedbacks, sellerFeedbackReplies } = createSellers();
+  const { sellers, sellerFeedbacks } = createSellers();
 
   let devices = [];
   let deviceFeedbacks = [];
@@ -97,7 +97,7 @@ module.exports = async () => {
     createDeviceCombinations(dev, deviceAttributeValues, deviceCombinations, stocks, isPreOrder);
     createAdditionalServices(dev.id, devices, additionalServices, additionalServiceDevices, deviceCombinations);
 
-    const rating = createDeviceFeedbacks(deviceFeedbacks, deviceFeedbackReplies, dev.id, deviceCombinations);
+    const rating = createDeviceFeedbacks(deviceFeedbacks, deviceFeedbackReplies, dev.id);
     createDeviceQuestions(deviceQuestions, deviceAnswers, dev.id);
 
     const device = {
@@ -200,7 +200,6 @@ module.exports = async () => {
 
     sellers,
     sellerFeedbacks,
-    sellerFeedbackReplies,
 
     attributes,
     attributeNames,

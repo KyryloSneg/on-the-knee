@@ -157,7 +157,7 @@ const MainDevicePage = observer(({ device, combinationString, feedbacks }) => {
         <CommentsSection 
           type="deviceFeedbacks" 
           comments={feedbacks} 
-          isFullVersion={false}
+          isFullVersion={true}
           device={device}
         />
       </div>

@@ -1,0 +1,103 @@
+.original-comment {
+  border: 1px #dfdfdf solid;
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.comment-username-date-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.comment-username {
+  font-weight: bold;
+}
+
+.comment-date {
+  font-size: 1.2rem;
+  color: rgb(90, 90, 90);
+  height: 100%;
+}
+
+.original-comment-dis-and-advantages-list {
+  margin: 0;
+  font-size: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.original-comment-dis-and-advantages-list dt {
+  font-weight: bold;
+  display: inline;
+}
+
+.original-comment-dis-and-advantages-list dd {
+  margin: 0;
+  display: inline;
+}
+
+.original-comment-reply-btn {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.original-comment-reply-btn > img {
+  width: 20px;
+  height: 20px;
+}
+
+.original-comment-btn-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.original-comment-reply-btn {
+  border-radius: 12px;
+}
+
+.original-comment-rate-btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.original-comment-rate-btn-group > button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+}
+
+.original-comment-rate-btn-group > button > svg {
+  transition: color 0.2s, fill 0.2s;
+}
+
+.original-comment-rate-btn-group > button:hover > svg,
+.original-comment-rate-btn-group > button:active > svg,
+.original-comment-rate-btn-group > button:focus-visible > svg {
+  fill: #3348E6;
+}
+
+.original-comment-rate-btn-group > button > span {
+  transition: color 0.2s;
+}
+
+.original-comment-rate-btn-group > button:hover > span,
+.original-comment-rate-btn-group > button:active > span,
+.original-comment-rate-btn-group > button:focus-visible > span {
+  color: #bd5e10;
+}

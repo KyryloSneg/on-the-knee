@@ -10,6 +10,11 @@
   font-size: 2rem;
 }
 
+.heading-item-name-part {
+  color: rgb(90, 90, 90);
+  font-weight: normal;
+}
+
 .comments-star-rating-p-wrapper {
   display: flex;
   flex-wrap: wrap;
@@ -21,38 +26,9 @@
   font-size: 1.2rem;
 }
 
-.comments-section-all-images {
-  box-sizing: border-box;
-  display: flex;
-  gap: 8px;
-  /* width: 100% || calc(100% - 1px) doesn't work for some reason */
-  width: 0;
-  margin: 0;
-  padding: 10px 0;
-}
-
-.comments-section-all-images > li {
-  height: 64px;
-}
-
-.comments-section-all-images > li > button {
-  background: none;
-  border: none;
-  height: 64px;
-  padding: 0;
-  cursor: pointer;
-}
-
-.comments-section-all-images img {
-  width: 64px;
-  height: 64px;
-  object-fit: cover;
-  border-radius: 4px;
-}
-
+.original-comment-reply-btn, 
 .create-comment-btn {
   background: none;
-  width: max-content;
   padding: 8px 12px;
   border: 1px solid #dfdfdf;
   border-radius: 16px;
@@ -62,14 +38,29 @@
   cursor: pointer;
 }
 
-.create-comment-btn:hover,
-.create-comment-btn:active,
-.create-comment-btn:focus-visible {
+.original-comment-reply-btn {
+  width: max-content;
+}
+
+.create-comment-btn {
+  width: auto;
+}
+
+.original-comment-reply-btn:hover, .create-comment-btn:hover,
+.original-comment-reply-btn:active, .create-comment-btn:active,
+.original-comment-reply-btn:focus-visible, .create-comment-btn:focus-visible {
   border: 1px solid #c7c7c7;
   background: #f1f1f1;
 }
 
+@media screen and (min-width: 220px) {
+  .create-comment-btn {
+    width: max-content;
+  }
+}
+
 @media screen and (min-width: 300px) {
+  .original-comment-reply-btn,
   .create-comment-btn {
     font-size: 1.5rem;
   }

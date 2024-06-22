@@ -1,11 +1,15 @@
 import { useEffect } from "react";
 import useFetching from "./useFetching";
 import { getOneDeviceFeedbacks } from "../http/FeedbacksAPI";
+import { getOneDeviceQuestions } from "../http/DeviceQuestionsAPI";
 
-function useOneDeviceFeedbacksFetching(setFeedbacks, deviceId) {
+function useOneDeviceFeedbacksFetching(setFeedbacks, setQuestions, deviceId) {
 
   async function fetchingFunc(id) {
     const feedbacks = await getOneDeviceFeedbacks(id);
+    const questions = await getOneDeviceQuestions(id);
+
+    setQuestions(questions);
     setFeedbacks(feedbacks);
   }
 
@@ -13,7 +17,7 @@ function useOneDeviceFeedbacksFetching(setFeedbacks, deviceId) {
 
   useEffect(() => {
     if (deviceId) fetching();
-  }, [setFeedbacks, deviceId, fetching]);
+  }, [setFeedbacks, setQuestions, deviceId, fetching]);
 
 }
 

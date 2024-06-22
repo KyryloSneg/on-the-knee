@@ -1,4 +1,4 @@
-const DeviceQuestionsPage = () => {
+const DeviceQuestionsPage = ({ questions }) => {
   return (
     <section>
       Device questions page
