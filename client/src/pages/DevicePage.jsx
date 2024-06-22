@@ -19,12 +19,13 @@ const DevicePage = ({ type }) => {
   const { deviceIdCombo } = useParams();
   const [device, setDevice] = useState(null);
   const [feedbacks, setFeedbacks] = useState([]);
+  const [questions, setQuestions] = useState([]);
 
   let [id, combinationString] = deviceIdCombo.split("--");
   id = +id;
 
   useOneDeviceFetching(id, setDevice);
-  useOneDeviceFeedbacksFetching(setFeedbacks, device?.id)
+  useOneDeviceFeedbacksFetching(setFeedbacks, setQuestions, device?.id)
 
   useEffect(() => {
     app.setPageRef(pageRef);
@@ -46,7 +47,7 @@ const DevicePage = ({ type }) => {
     } else if (type === "comments") {
       innerPage = <DeviceCommentsPage />;
     } else if (type === "questions") {
-      innerPage = <DeviceQuestionsPage />;
+      innerPage = <DeviceQuestionsPage questions={questions} />;
     }
 
     return innerPage;

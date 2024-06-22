@@ -90,8 +90,19 @@ class UserService {
         const userDeviceDto = new UserDeviceDto(userDevice);
         const tokens = tokenService.generateTokens({...userDto});
 
+        // we could login without account activation, so give activation info dto to client
+        // even after user login
+        const activationInfo = await ActivationInfoModel.findOne({ user: user._id }); 
+        const activationInfoDto = new ActivationInfoDto(activationInfo);
+
+        if (!activationInfo.isActivated) {
+            await mailService.sendActivationMail(
+                userAddress.email, `${process.env.API_URL}/api/activate/${activationInfo.activationLink}`
+            );
+        }
+
         await tokenService.saveToken(userDevice._doc._id, tokens.refreshToken);
-        return {...tokens, user: userDto, userDevice: userDeviceDto};
+        return {...tokens, user: userDto, activationInfo: activationInfoDto, userDevice: userDeviceDto};
     }
 
     async logout(refreshToken) {
@@ -217,6 +228,16 @@ class UserService {
     async getAllUsers() {
         const users = await UserModel.find();
         return users;
+    }
+
+    async getUser(id, isDto = false) {
+        const user = await UserModel.findOne({_id: id});
+        if (isDto) {
+            const userDto = user ? new UserDto(user) : null;
+            return userDto;
+        } else {
+            return user;
+        }
     }
 }
 

@@ -1,21 +1,30 @@
+import { useState } from "react";
 import CommentRepliesList from "./CommentRepliesList";
 import "./CommentsListItem.css";
+import useGettingOneUser from "../../../hooks/useGettingOneUser";
+import OriginalComment from "./OriginalComment";
 
-const CommentsListItem = ({ type, comment }) => {
+const CommentsListItem = ({ type, comment, singularCommentWord }) => {
+  const [user, setUser] = useState(null);
+  useGettingOneUser(comment.userId, setUser, true, !comment.isAnonymously && !user);
+
   let replies;
   if (type === "deviceFeedbacks") {
     replies = comment["device-feedback-replies"];
   } else if (type === "deviceQuestions") {
     replies = comment["device-answers"];
-  } else if (type === "sellerFeedbacks") {
-    replies = comment["seller-feedback-replies"];
   }
 
   return (
-    <section className="comments-list-item">
-      {comment.id}
-      <CommentRepliesList replies={replies} />
-    </section>
+    <div className="comments-list-item">
+      <OriginalComment 
+        comment={comment} 
+        user={user} 
+        type={type}
+        singularCommentWord={singularCommentWord} 
+      />
+      {replies?.length && <CommentRepliesList type={type} replies={replies} />}
+    </div>
   );
 }
 
