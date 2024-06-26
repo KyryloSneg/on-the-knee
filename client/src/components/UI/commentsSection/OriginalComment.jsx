@@ -7,17 +7,38 @@ import filledLikeIcon from "../../../assets/thumb_up_24x24_filled_3348E6.svg";
 import notFilledLikeIcon from "../../../assets/thumb_up_24x24_not-filled_3348E6.svg";
 import filledDislikeIcon from "../../../assets/thumb_down_24x24_filled_3348E6.svg";
 import notFilledDislikeIcon from "../../../assets/thumb_down_24x24_not-filled_3348E6.svg";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Context } from "../../../Context";
 import { observer } from "mobx-react-lite";
+import DeviceFeedbackRatesActions from "../../../utils/DeviceFeedbackRatesActions";
+import useFetchingDeviceFeedbackRates from "../../../hooks/useFetchingDeviceFeedbackRates";
+import { v4 } from "uuid";
 
 const OriginalComment = observer(({ comment, user, type, singularCommentWord = "comment" }) => {
   const { user: userStore } = useContext(Context);
+
+  // we must update likes and dislikes after user click one of them
+  const [likes, setLikes] = useState(comment["device-feedback-likes"]);
+  const [dislikes, setDislikes] = useState(comment["device-feedback-dislikes"]);
+
+  const {
+    fetchingLikes,
+    fetchingDislikes
+  } = useFetchingDeviceFeedbackRates(comment.id, setLikes, setDislikes);
+
   const createdAtDate = new Date(comment.date);
   const createdAtDateStr = getDateStr(createdAtDate);
 
-  const isAlreadyLiked = false;
-  const isAlreadyDisliked = true;
+  let likeFromUser;
+  let dislikeFromUser;
+
+  if (type === "deviceFeedbacks") {
+    likeFromUser = likes.find(like => like.userId === userStore.user?._id);
+    dislikeFromUser = dislikes.find(dislike => dislike.userId === userStore.user?._id);
+  }
+
+  const [isAlreadyLiked, setIsAlreadyLiked] = useState(!!likeFromUser);
+  const [isAlreadyDisliked, setIsAlreadyDisliked] = useState(!!dislikeFromUser);
 
   function reply() {
     if (userStore.isAuth) {
@@ -27,12 +48,64 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
     }
   }
 
-  function rateComment(isLike) {
-    if (isAlreadyLiked || isAlreadyDisliked) return;
+  async function removeLike() {
+    // could be undefined
+    const error = await DeviceFeedbackRatesActions.removeLikeRate(likeFromUser.id, setIsAlreadyLiked);
+    if (!error) fetchingLikes();
+  }
+
+  async function removeDislike() {
+    const error = await DeviceFeedbackRatesActions.removeDislikeRate(dislikeFromUser.id, setIsAlreadyDisliked);
+    if (!error) fetchingDislikes();
+  }
+
+  async function rateComment(isLike) {
+    if (!userStore.isAuth) {
+      // open user login modal
+      return;
+    };
+
     if (isLike) {
-      // like
+
+      if (isAlreadyLiked) {
+        await removeLike();
+      } else {
+        const likeObject = {
+          // some random id (implementation might be different from this one)
+          "id": v4(),
+          "userId": userStore.user?._id,
+          "device-feedbackId": comment.id,
+        }
+
+        const error = await DeviceFeedbackRatesActions.likeFeedback(likeObject, setIsAlreadyLiked);
+        // preventing redundant fetches if delete request failed
+        if (!error) fetchingLikes();
+
+        if (isAlreadyDisliked) {
+          // we can't like and dislike a feedback at the same time
+          await removeDislike();
+        }
+      }
+
     } else {
-      // dislike
+
+      if (isAlreadyDisliked) {
+        await removeDislike();
+      } else {
+        const dislikeObject = {
+          "id": v4(),
+          "userId": userStore.user?._id,
+          "device-feedbackId": comment.id,
+        }
+
+        const error = await DeviceFeedbackRatesActions.dislikeFeedback(dislikeObject, setIsAlreadyDisliked);
+        if (!error) fetchingDislikes();
+
+        if (isAlreadyLiked) {
+          await removeLike();
+        }
+      }
+
     }
   }
 
@@ -43,14 +116,14 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
     commentReplyWord = "Answer";
   }
 
-  console.log(comment);
   return (
     <section className="original-comment">
       <div className="comment-username-date-wrap">
         <p className="comment-username">
+          {/* TODO: delete (user?.name || "Mock") etc. in production build maybe */}
           {comment?.isAnonymously
             ? "Anonym"
-            : `${user?.name} ${user?.surname}`
+            : `${user?.name || "Mock"} ${user?.surname || "User"}`
           }
         </p>
         <p className="comment-date">
@@ -58,8 +131,8 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
         </p>
       </div>
       {isToShowRating &&
-        <ReadOnlyStarRating 
-          value={comment.rate} 
+        <ReadOnlyStarRating
+          value={comment.rate}
           id={`${type}-${comment.id}-original-comment-rating`}
         />
       }
@@ -99,23 +172,31 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
           <div className="original-comment-rate-btn-group">
             <button
               onClick={() => rateComment(true)}
-              aria-label={`Like the ${singularCommentWord}`}
+              aria-label={
+                isAlreadyLiked
+                  ? `Remove your like from the ${singularCommentWord}`
+                  : `Like the ${singularCommentWord}`
+              }
             >
               {isAlreadyLiked
-                ? <img src={filledLikeIcon} alt="Dislike" draggable="false" />
-                : <img src={notFilledLikeIcon} alt="Dislike" />
+                ? <img src={filledLikeIcon} alt="Remove like" draggable="false" />
+                : <img src={notFilledLikeIcon} alt="Like" />
               }
-              <span>{comment.likes}</span>
+              <span>{likes?.length}</span>
             </button>
             <button
               onClick={() => rateComment(false)}
-              aria-label={`Dislike the ${singularCommentWord}`}
+              aria-label={
+                isAlreadyDisliked
+                  ? `Remove your dislike from the ${singularCommentWord}`
+                  : `Dislike the ${singularCommentWord}`
+              }
             >
               {isAlreadyDisliked
-                ? <img src={filledDislikeIcon} alt="Dislike" draggable="false" />
+                ? <img src={filledDislikeIcon} alt="Remove dislike" draggable="false" />
                 : <img src={notFilledDislikeIcon} alt="Dislike" draggable="false" />
               }
-              <span>{comment.dislikes}</span>
+              <span>{dislikes?.length}</span>
             </button>
           </div>
         }

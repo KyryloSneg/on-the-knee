@@ -49,6 +49,8 @@ module.exports = function createData () {
 
     "receivents": [],
     "device-feedbacks": [],
+    "device-feedback-likes": [],
+    "device-feedback-dislikes": [],
     "device-feedback-replies": [],
 
     "device-questions": [],
@@ -82,6 +84,8 @@ module.exports = function createData () {
   const devicesPromise = createDevices().then(result => {
     data["devices"] = result.devices;
     data["device-feedbacks"] = result.deviceFeedbacks;
+    data["device-feedback-likes"] = result.deviceFeedbackLikes;
+    data["device-feedback-dislikes"] = result.deviceFeedbackDislikes;
     data["device-feedback-replies"] = result.deviceFeedbackReplies;
     data["device-questions"] = result.deviceQuestions;
     data["device-answers"] = result.deviceAnswers;

@@ -1,5 +1,5 @@
 const { faker } = require("@faker-js/faker");
-const { USERS } = require("./consts");
+const { MOCK_USER } = require("./consts");
 const { parsePhoneNumber } = require("libphonenumber-js");
 
 module.exports = () => {
@@ -12,7 +12,7 @@ module.exports = () => {
     const internationalNumber = numberObj.formatInternational(); 
     phoneNumber = internationalNumber;
 
-    const userId = USERS.length > 1 ? USERS[faker.number.int({ min: 0, max: USERS.length - 1 })]._id : USERS[0]._id;
+    const userId = MOCK_USER._id;
     const receivent = {
       "id": receivents.length + 1,
       "userId": userId,
