@@ -23,7 +23,7 @@ const CommentReply = ({ reply, type }) => {
             {commentReplyLabelWord}
           </p>
           <p className="comment-username">
-            {user?.name} {user?.surname}
+            {user?.name || "Mock"} {user?.surname || "User"}
           </p>
         </div>
         <p className="comment-date">

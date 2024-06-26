@@ -11,6 +11,7 @@ const createAdditionalServices = require("./createAdditionalServices");
 const createSales = require("./createSales");
 const createSaleDevices = require("./createSaleDevices");
 const createDeviceQuestions = require("./createDeviceQuestions");
+const createDeviceFeedbackRates = require("./createDeviceFeedbackRates");
 
 module.exports = async () => {
 
@@ -47,6 +48,8 @@ module.exports = async () => {
 
   let devices = [];
   let deviceFeedbacks = [];
+  let deviceFeedbackLikes = [];
+  let deviceFeedbackDislikes = [];
   let deviceFeedbackReplies = [];
   let deviceQuestions = [];
   let deviceAnswers = [];
@@ -184,9 +187,13 @@ module.exports = async () => {
   }
 
   const saleDevices = createSaleDevices(sales, devices);
+  createDeviceFeedbackRates(deviceFeedbacks, deviceFeedbackLikes, deviceFeedbackDislikes);
+
   return {
     devices,
     deviceFeedbacks,
+    deviceFeedbackLikes,
+    deviceFeedbackDislikes,
     deviceFeedbackReplies,
     deviceQuestions,
     deviceAnswers,

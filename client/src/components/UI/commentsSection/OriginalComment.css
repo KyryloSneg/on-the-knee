@@ -93,6 +93,7 @@
 }
 
 .original-comment-rate-btn-group > button > span {
+  min-width: 16px;
   transition: color 0.2s;
 }
 

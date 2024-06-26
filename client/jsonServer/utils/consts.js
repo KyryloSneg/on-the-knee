@@ -1,5 +1,3 @@
-const { faker } = require("@faker-js/faker");
-
 const POSSIBLE_DEVICE_INFOS = {
   "smartphones": [
     {
@@ -173,6 +171,16 @@ const USERS = [
   },
 ];
 
+const MOCK_USER = {
+  // i made up the _id below
+  "_id": "6348acd2e1a47ca32e79f46f",
+  "name": "mock",
+  "surname": "user",
+  "roles": ["PUBLIC", "ORDER-MANAGER", "CONTENT-MANAGER", "SELLER", "OWNER"],
+  "email": "mockuserauth@gmail.com",
+  "phoneNumber": "+380 82 0172 6701"
+};
+
 const POSSIBLE_DELIVERY_TYPES = { "courier": 5, "self-delivery": 0 };
 const POSSIBLE_SALE_TYPE_NAMES = [
   {"name": "discount", "bgColor": "#ff1212"},
@@ -228,6 +236,7 @@ const MAX_FEEDBACK_IMAGE_WIDTH = 400;
 
 module.exports = {
   USERS,
+  MOCK_USER,
 
   POSSIBLE_DEVICE_INFOS,
   POSSIBLE_DEVICE_ATTRIBUTES,

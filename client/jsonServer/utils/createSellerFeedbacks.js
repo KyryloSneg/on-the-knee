@@ -1,5 +1,5 @@
 const { faker } = require("@faker-js/faker");
-const { MIN_FEEDBACK_IMAGE_WIDTH, MAX_FEEDBACK_IMAGE_WIDTH, MIN_FEEDBACK_IMAGE_HEIGHT, MAX_FEEDBACK_IMAGE_HEIGHT, USERS } = require("./consts");
+const { MIN_FEEDBACK_IMAGE_WIDTH, MAX_FEEDBACK_IMAGE_WIDTH, MIN_FEEDBACK_IMAGE_HEIGHT, MAX_FEEDBACK_IMAGE_HEIGHT, MOCK_USER } = require("./consts");
 const findAverageNum = require("../../src/utils/findAverageNum");
 
 module.exports = (feedbacks, sellerId) => {
@@ -20,7 +20,7 @@ module.exports = (feedbacks, sellerId) => {
 
     const rate = faker.number.int({ min: 1, max: 5 });
     rates.push(rate);
-    const userId = USERS.length > 1 ? USERS[faker.number.int({ min: 0, max: USERS.length - 1 })]._id : USERS[0]._id;
+    const userId = MOCK_USER._id;
 
     const feedback = {
       "id": feedbacks.length + 1,
