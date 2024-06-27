@@ -14,6 +14,10 @@ class AppStore {
     this._isVisibleCategoriesModal = false;
     this._isVisibleUserLocationModal = false;
     this._isVisibleSelfDeliveryModal = false;
+    this._isVisibleDeviceFeedbackModal = false;
+    this._isVisibleReplyModal = false;
+    this._isVisibleQuestionCommentModal = false;
+    this._isVisibleAnswerModal = false;
     this._isFocusedSearchForm = false;
 
     this._hintSearchResults = []
@@ -78,6 +82,22 @@ class AppStore {
 
   setIsVisibleSelfDeliveryModal(bool) {
     this._isVisibleSelfDeliveryModal = bool;
+  }
+
+  setIsVisibleDeviceFeedbackModal(bool) {
+    this._isVisibleDeviceFeedbackModal = bool;
+  }
+
+  setIsVisibleReplyModal(bool) {
+    this._isVisibleReplyModal = bool;
+  }
+
+  setIsVisibleQuestionCommentModal(bool) {
+    this._isVisibleQuestionCommentModal = bool;
+  }
+
+  setIsVisibleAnswerModal(bool) {
+    this._isVisibleAnswerModal = bool;
   }
 
   setIsFocusedSearchForm(bool) {
@@ -182,6 +202,22 @@ class AppStore {
 
   get isVisibleSelfDeliveryModal() {
     return this._isVisibleSelfDeliveryModal;
+  }
+
+  get isVisibleDeviceFeedbackModal() {
+    return this._isVisibleDeviceFeedbackModal;
+  }
+
+  get isVisibleReplyModal() {
+    return this._isVisibleReplyModal;
+  }
+
+  get isVisibleQuestionCommentModal() {
+    return this._isVisibleQuestionCommentModal;
+  }
+
+  get isVisibleAnswerModal() {
+    return this._isVisibleAnswerModal;
   }
 
   get isFocusedSearchForm() {

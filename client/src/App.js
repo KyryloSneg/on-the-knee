@@ -31,6 +31,10 @@ import useClosingAllWindows from "./hooks/useClosingAllWindows";
 import useScrollingToPagesTop from "./hooks/useScrollingToPagesTop";
 import SelectUserLocationModal from "./components/SelectUserLocationModal";
 import SelfDeliveryModal from "./components/SelfDeliveryModal";
+import DeviceFeedbackModal from "./components/DeviceFeedbackModal";
+import ReplyModal from "./components/ReplyModal";
+import QuestionCommentModal from "./components/QuestionCommentModal";
+import AnswerModal from "./components/AnswerModal";
  
 const App = observer(() => {
   const { app, deviceStore } = useContext(Context);
@@ -129,6 +133,10 @@ const App = observer(() => {
       />
       {app.isVisibleUserLocationModal && <SelectUserLocationModal />}
       {app.isVisibleSelfDeliveryModal && <SelfDeliveryModal />}
+      {app.isVisibleDeviceFeedbackModal && <DeviceFeedbackModal />}
+      {app.isVisibleReplyModal && <ReplyModal />}
+      {app.isVisibleQuestionCommentModal && <QuestionCommentModal />}
+      {app.isVisibleAnswerModal && <AnswerModal />}
       <header ref={headerRef}>
         <Navbar elemToFocus={pageElemToFocus} navCategoryBtnRef={navCategoryBtnRef} />
         {(app.isVisibleCategoriesMenu && !!Object.keys(deviceStore.categories).length) && 
