@@ -13,9 +13,11 @@ import { observer } from "mobx-react-lite";
 import DeviceFeedbackRatesActions from "../../../utils/DeviceFeedbackRatesActions";
 import useFetchingDeviceFeedbackRates from "../../../hooks/useFetchingDeviceFeedbackRates";
 import { v4 } from "uuid";
+import setReplyModalVisibility from "../../../utils/setReplyModalVisibility";
+import setQuestionCommentModalVisibility from "../../../utils/setQuestionCommentModalVisibility";
 
 const OriginalComment = observer(({ comment, user, type, singularCommentWord = "comment" }) => {
-  const { user: userStore } = useContext(Context);
+  const { user: userStore, app } = useContext(Context);
 
   // we must update likes and dislikes after user click one of them
   const [likes, setLikes] = useState(comment["device-feedback-likes"]);
@@ -43,6 +45,11 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
   function reply() {
     if (userStore.isAuth) {
       // open comment modal with type="reply"
+      if (type === "deviceFeedbacks") {
+        setReplyModalVisibility(true, app);
+      } else if (type === "deviceQuestions") {
+        setQuestionCommentModalVisibility(true, app);
+      }
     } else {
       // open user login modal
     }
@@ -160,15 +167,16 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
       {!!comment.images.length &&
         <CommentImagesSection images={comment.images} />
       }
-      <div className="original-comment-btn-group">
-        <button
-          className="original-comment-reply-btn"
-          onClick={reply}
-        >
-          <img src={replyIcon} alt="" draggable="false" />
-          {commentReplyWord}
-        </button>
-        {type === "deviceFeedbacks" &&
+      {type === "deviceFeedbacks" &&
+        <div className="original-comment-btn-group">
+          <button
+            className="original-comment-reply-btn"
+            onClick={reply} 
+          >
+            <img src={replyIcon} alt="" draggable="false" />
+            {commentReplyWord}
+          </button>
+
           <div className="original-comment-rate-btn-group">
             <button
               onClick={() => rateComment(true)}
@@ -199,8 +207,8 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
               <span>{dislikes?.length}</span>
             </button>
           </div>
-        }
-      </div>
+        </div>
+      }
     </section>
   );
 });

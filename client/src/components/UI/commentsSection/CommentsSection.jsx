@@ -5,10 +5,11 @@ import { Context } from "../../../Context";
 import { observer } from "mobx-react-lite";
 import CommentsList from "./CommentsList";
 import CommentImagesSection from "./CommentImagesSection";
+import setDeviceFeedbackModalVisibility from "../../../utils/setDeviceFeedbackModalVisibility";
 
 const POSSIBLE_TYPES = ["deviceFeedbacks", "deviceQuestions", "sellerFeedbacks"];
 const CommentsSection = observer(({ type, comments, isFullVersion = true, device = null, seller = null }) => {
-  const { user } = useContext(Context);
+  const { user, app } = useContext(Context);
 
   if (!POSSIBLE_TYPES.includes(type)) throw Error("type of Comments Section is not defined or incorrect");
   if (
@@ -19,7 +20,7 @@ const CommentsSection = observer(({ type, comments, isFullVersion = true, device
 
   function createComment() {
     if (user.isAuth) {
-      // open creating comment modal
+      setDeviceFeedbackModalVisibility(true, app);
     } else {
       // open user login modal
     }
@@ -46,13 +47,14 @@ const CommentsSection = observer(({ type, comments, isFullVersion = true, device
     singularCommentWord = "feedback";
     commentWord = comments?.length > 1 ? "feedbacks" : singularCommentWord;
     headingTextPart = "Seller feedbacks";
-    createCommentButtonText = "Remain your feedback";
   }
 
   // top level means original feedback / question, not reply / answer
   let allTopLevelImages = [];
-  for (let comment of comments) {
-    allTopLevelImages = allTopLevelImages.concat(comment.images);
+  if (type !== "sellerFeedbacks") {
+    for (let comment of comments) {
+      allTopLevelImages = allTopLevelImages.concat(comment.images);
+    }
   }
 
   const isToShowRating = type === "deviceFeedbacks" || type === "sellerFeedbacks";
@@ -88,13 +90,17 @@ const CommentsSection = observer(({ type, comments, isFullVersion = true, device
           <p>{commentsAmount} {commentWord}</p>
         </div>
       }
-      <CommentImagesSection images={allTopLevelImages} />
-      <button
-        className="create-comment-btn"
-        onClick={createComment}
-      >
-        {createCommentButtonText}
-      </button>
+      {type !== "sellerFeedbacks" &&
+        <>
+          <CommentImagesSection images={allTopLevelImages} />
+          <button
+            className="create-comment-btn"
+            onClick={createComment}
+          >
+            {createCommentButtonText}
+          </button>
+        </>
+      }
       <CommentsList type={type} comments={comments} singularCommentWord={singularCommentWord} />
     </section>
   );
