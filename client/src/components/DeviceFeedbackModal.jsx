@@ -16,8 +16,14 @@ const DeviceFeedbackModal = () => {
     <ModalWindow
       isVisible={app.isVisibleDeviceFeedbackModal}
       setIsVisible={setIsDeviceFeedbackVisible}
-      children={<CommentModalContent type="feedback" />}
+      children={
+        <CommentModalContent 
+          type="feedback" 
+          closeModal={() => setIsDeviceFeedbackVisible(false)} 
+        />
+      }
       headerText="Send feedback"
+      propsClassName="create-comment-modal"
       id="device-feedback-modal"
     />
   );

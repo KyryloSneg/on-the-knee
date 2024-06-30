@@ -1,6 +1,5 @@
 import "./OriginalComment.css";
 import getDateStr from "../../../utils/getDateStr";
-import ReadOnlyStarRating from "../readOnlyStarRating/ReadOnlyStarRating";
 import CommentImagesSection from "./CommentImagesSection";
 import replyIcon from "../../../assets/reply_24x24_7373FF.svg";
 import filledLikeIcon from "../../../assets/thumb_up_24x24_filled_3348E6.svg";
@@ -15,6 +14,7 @@ import useFetchingDeviceFeedbackRates from "../../../hooks/useFetchingDeviceFeed
 import { v4 } from "uuid";
 import setReplyModalVisibility from "../../../utils/setReplyModalVisibility";
 import setQuestionCommentModalVisibility from "../../../utils/setQuestionCommentModalVisibility";
+import StarRating from "../starRating/StarRating";
 
 const OriginalComment = observer(({ comment, user, type, singularCommentWord = "comment" }) => {
   const { user: userStore, app } = useContext(Context);
@@ -43,17 +43,13 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
   const [isAlreadyDisliked, setIsAlreadyDisliked] = useState(!!dislikeFromUser);
 
   function reply() {
-    if (userStore.isAuth) {
-      // open comment modal with type="reply"
-      if (type === "deviceFeedbacks") {
-        setReplyModalVisibility(true, app);
-      } else if (type === "deviceQuestions") {
-        setQuestionCommentModalVisibility(true, app);
-      }
-    } else {
-      // open user login modal
+    if (type === "deviceFeedbacks") {
+      setReplyModalVisibility(true, app);
+    } else if (type === "deviceQuestions") {
+      setQuestionCommentModalVisibility(true, app);
     }
   }
+
 
   async function removeLike() {
     // could be undefined
@@ -118,99 +114,99 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
 
   const isToShowRating = type === "deviceFeedbacks" || type === "sellerFeedbacks";
 
-  let commentReplyWord = "Reply";
-  if (type === "deviceQuestions") {
-    commentReplyWord = "Answer";
-  }
+let commentReplyWord = "Reply";
+if (type === "deviceQuestions") {
+  commentReplyWord = "Answer";
+}
 
-  return (
-    <section className="original-comment">
-      <div className="comment-username-date-wrap">
-        <p className="comment-username">
-          {/* TODO: delete (user?.name || "Mock") etc. in production build maybe */}
-          {comment?.isAnonymously
-            ? "Anonym"
-            : `${user?.name || "Mock"} ${user?.surname || "User"}`
-          }
-        </p>
-        <p className="comment-date">
-          {createdAtDateStr}
-        </p>
-      </div>
-      {isToShowRating &&
-        <ReadOnlyStarRating
-          value={comment.rate}
-          id={`${type}-${comment.id}-original-comment-rating`}
-        />
-      }
-      {comment.message &&
-        <p className="original-comment-message">
-          {comment.message}
-        </p>
-      }
-      {(comment?.advantages || comment?.disadvantages) &&
-        <dl className="original-comment-dis-and-advantages-list">
-          {comment?.advantages &&
-            <div>
-              <dt>Advantages: </dt>
-              <dd>{comment.advantages}</dd>
-            </div>
-          }
-          {comment?.disadvantages &&
-            <div>
-              <dt>Disadvantages: </dt>
-              <dd>{comment.disadvantages}</dd>
-            </div>
-          }
-        </dl>
-      }
-      {!!comment.images.length &&
-        <CommentImagesSection images={comment.images} />
-      }
-      {type === "deviceFeedbacks" &&
-        <div className="original-comment-btn-group">
-          <button
-            className="original-comment-reply-btn"
-            onClick={reply} 
-          >
-            <img src={replyIcon} alt="" draggable="false" />
-            {commentReplyWord}
-          </button>
-
-          <div className="original-comment-rate-btn-group">
-            <button
-              onClick={() => rateComment(true)}
-              aria-label={
-                isAlreadyLiked
-                  ? `Remove your like from the ${singularCommentWord}`
-                  : `Like the ${singularCommentWord}`
-              }
-            >
-              {isAlreadyLiked
-                ? <img src={filledLikeIcon} alt="Remove like" draggable="false" />
-                : <img src={notFilledLikeIcon} alt="Like" />
-              }
-              <span>{likes?.length}</span>
-            </button>
-            <button
-              onClick={() => rateComment(false)}
-              aria-label={
-                isAlreadyDisliked
-                  ? `Remove your dislike from the ${singularCommentWord}`
-                  : `Dislike the ${singularCommentWord}`
-              }
-            >
-              {isAlreadyDisliked
-                ? <img src={filledDislikeIcon} alt="Remove dislike" draggable="false" />
-                : <img src={notFilledDislikeIcon} alt="Dislike" draggable="false" />
-              }
-              <span>{dislikes?.length}</span>
-            </button>
+return (
+  <section className="original-comment">
+    <div className="comment-username-date-wrap">
+      <p className="comment-username">
+        {/* TODO: delete (user?.name || "Mock") etc. in production build maybe */}
+        {comment?.isAnonymously
+          ? "Anonym"
+          : `${user?.name || "Mock"} ${user?.surname || "User"}`
+        }
+      </p>
+      <p className="comment-date">
+        {createdAtDateStr}
+      </p>
+    </div>
+    {isToShowRating &&
+      <StarRating
+        readOnlyValue={comment.rate}
+        id={`${type}-${comment.id}-original-comment-rating`}
+      />
+    }
+    {comment.message &&
+      <p className="original-comment-message">
+        {comment.message}
+      </p>
+    }
+    {(comment?.advantages || comment?.disadvantages) &&
+      <dl className="original-comment-dis-and-advantages-list">
+        {comment?.advantages &&
+          <div>
+            <dt>Advantages: </dt>
+            <dd>{comment.advantages}</dd>
           </div>
+        }
+        {comment?.disadvantages &&
+          <div>
+            <dt>Disadvantages: </dt>
+            <dd>{comment.disadvantages}</dd>
+          </div>
+        }
+      </dl>
+    }
+    {!!comment.images.length &&
+      <CommentImagesSection images={comment.images} />
+    }
+    {type === "deviceFeedbacks" &&
+      <div className="original-comment-btn-group">
+        <button
+          className="original-comment-reply-btn"
+          onClick={reply}
+        >
+          <img src={replyIcon} alt="" draggable="false" />
+          {commentReplyWord}
+        </button>
+
+        <div className="original-comment-rate-btn-group">
+          <button
+            onClick={() => rateComment(true)}
+            aria-label={
+              isAlreadyLiked
+                ? `Remove your like from the ${singularCommentWord}`
+                : `Like the ${singularCommentWord}`
+            }
+          >
+            {isAlreadyLiked
+              ? <img src={filledLikeIcon} alt="Remove like" draggable="false" />
+              : <img src={notFilledLikeIcon} alt="Like" />
+            }
+            <span>{likes?.length}</span>
+          </button>
+          <button
+            onClick={() => rateComment(false)}
+            aria-label={
+              isAlreadyDisliked
+                ? `Remove your dislike from the ${singularCommentWord}`
+                : `Dislike the ${singularCommentWord}`
+            }
+          >
+            {isAlreadyDisliked
+              ? <img src={filledDislikeIcon} alt="Remove dislike" draggable="false" />
+              : <img src={notFilledDislikeIcon} alt="Dislike" draggable="false" />
+            }
+            <span>{dislikes?.length}</span>
+          </button>
         </div>
-      }
-    </section>
-  );
+      </div>
+    }
+  </section>
+);
 });
 
 export default OriginalComment;

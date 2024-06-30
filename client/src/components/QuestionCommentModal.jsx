@@ -16,8 +16,14 @@ const QuestionCommentModal = () => {
     <ModalWindow
       isVisible={app.isVisibleQuestionCommentModal}
       setIsVisible={setIsQuestionCommentVisible}
-      children={<CommentModalContent type="question" />}
+      children={
+        <CommentModalContent 
+          type="question" 
+          closeModal={() => setIsQuestionCommentVisible(false)}
+        />
+      }
       headerText="Ask a question"
+      propsClassName="create-comment-modal"
       id="question-comment-modal"
     />
   );
