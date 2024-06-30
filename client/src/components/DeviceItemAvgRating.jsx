@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import ReadOnlyStarRating from "./UI/readOnlyStarRating/ReadOnlyStarRating";
 import "./styles/DeviceItemAvgRating.css";
 import { DEVICE_COMMENTS_ROUTE } from "../utils/consts";
+import StarRating from "./UI/starRating/StarRating";
 
 const DeviceItemAvgRating = ({ rating = null, feedbackAmount = null, deviceId = null, defaultCombination = null }) => {
   const deviceRouteCombo = defaultCombination.combinationString || "default";
@@ -16,7 +16,7 @@ const DeviceItemAvgRating = ({ rating = null, feedbackAmount = null, deviceId = 
           className="main-device-rating link-colors" 
           aria-label={`${rating} stars of 5; go to device's feedbacks section`}
         >
-          <ReadOnlyStarRating value={+rating} id={deviceId} />
+          <StarRating readOnlyValue={+rating} id={`device-item-avg-star-rating-${deviceId}`} />
           <span className="device-item-feedback-num">{feedbackAmount} {correctedFeedbackForm}</span>
         </Link>
       </div>

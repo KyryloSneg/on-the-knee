@@ -65,15 +65,33 @@
   right: 0;
 }
 
+.modal-window.create-comment-modal {
+  width: 100%;
+}
+
 @media screen and (min-width: 500px) {
-  .modal-window {
+  .modal-window:not(.create-comment-modal) {
     width: auto;
     height: auto;
     max-height: 100%;
     border-radius: 6px;
   }
 
-  .modal-window > header > h2 {
+  .modal-window:not(.create-comment-modal) > header > h2 {
+    font-size: 2.5rem;
+  }
+}
+
+/* +30px */
+@media screen and (min-width: 680px) {
+  .modal-window.create-comment-modal {
+    width: 650px;
+    height: auto;
+    max-height: 100%;
+    border-radius: 6px;
+  }
+
+  .modal-window.create-comment-modal > header > h2 {
     font-size: 2.5rem;
   }
 }

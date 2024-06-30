@@ -16,8 +16,14 @@ const ReplyModal = () => {
     <ModalWindow
       isVisible={app.isVisibleReplyModal}
       setIsVisible={setIsReplyModalVisible}
-      children={<CommentModalContent type="reply" />}
+      children={
+        <CommentModalContent 
+          type="reply" 
+          closeModal={() => setIsReplyModalVisible(false)}
+        />
+      }
       headerText="Reply"
+      propsClassName="create-comment-modal"
       id="reply-modal"
     />
   );

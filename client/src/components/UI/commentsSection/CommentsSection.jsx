@@ -1,15 +1,15 @@
 import "./CommentsSection.css";
 import { useContext } from "react";
-import ReadOnlyStarRating from "../readOnlyStarRating/ReadOnlyStarRating";
 import { Context } from "../../../Context";
 import { observer } from "mobx-react-lite";
 import CommentsList from "./CommentsList";
 import CommentImagesSection from "./CommentImagesSection";
 import setDeviceFeedbackModalVisibility from "../../../utils/setDeviceFeedbackModalVisibility";
+import StarRating from "../starRating/StarRating";
 
 const POSSIBLE_TYPES = ["deviceFeedbacks", "deviceQuestions", "sellerFeedbacks"];
 const CommentsSection = observer(({ type, comments, isFullVersion = true, device = null, seller = null }) => {
-  const { user, app } = useContext(Context);
+  const { app } = useContext(Context);
 
   if (!POSSIBLE_TYPES.includes(type)) throw Error("type of Comments Section is not defined or incorrect");
   if (
@@ -19,11 +19,7 @@ const CommentsSection = observer(({ type, comments, isFullVersion = true, device
   ) return <div />;
 
   function createComment() {
-    if (user.isAuth) {
-      setDeviceFeedbackModalVisibility(true, app);
-    } else {
-      // open user login modal
-    }
+    setDeviceFeedbackModalVisibility(true, app);
   }
 
   let commentWord = "";
@@ -81,9 +77,9 @@ const CommentsSection = observer(({ type, comments, isFullVersion = true, device
       </h2>
       {isToShowRating &&
         <div className="comments-star-rating-p-wrapper">
-          <ReadOnlyStarRating
-            value={device.rating}
-            id={`${type}-comments-section-rating`}
+          <StarRating
+            readOnlyValue={device.rating}
+            id={`comments-section-${type}-comments-section-rating`}
             width={20}
             height={20}
           />

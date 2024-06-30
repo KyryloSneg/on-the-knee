@@ -7,7 +7,7 @@ import { observer } from "mobx-react-lite";
 import useWindowInvisibleFocus from "../../../hooks/useWindowInvisibleFocus";
 import CustomScrollbar from "../customScrollbar/CustomScrollbar";
 
-const ModalWindow = observer(({ isVisible, setIsVisible, children, headerText, id, ...props }) => {
+const ModalWindow = observer(({ isVisible, setIsVisible, children, headerText, id, propsClassName = "", ...props }) => {
   const { app } = useContext(Context)
 
   const modalRef = useRef(null);
@@ -22,6 +22,10 @@ const ModalWindow = observer(({ isVisible, setIsVisible, children, headerText, i
   }
 
   let className = "modal-window closer-than-darkbg";
+  if (propsClassName) {
+    className += ` ${propsClassName}`;
+  }
+
   if (!isVisible) {
     className += " not-visible-modal";
   } else {

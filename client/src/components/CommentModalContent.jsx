@@ -1,14 +1,110 @@
 import "./styles/CommentModalContent.css";
+import { useContext, useRef, useState } from "react";
+import { Context } from "../Context";
+import { useForm } from "react-hook-form";
+import { observer } from "mobx-react-lite";
+import CommentModalContentInputs from "./CommentModalContentInputs";
+import CommentModalBottomBtns from "./CommentModalBottomBtns";
 
 const POSSIBLE_TYPES = ["feedback", "reply", "question", "answer"];
-const CommentModalContent = ({ type }) => {
+const CommentModalContent = observer(({ type, closeModal }) => {
+  const { user } = useContext(Context);
+  const [isToShowErrors, setIsToShowErrors] = useState(true);
+  const [isAnonymously, setIsAnonymously] = useState(false);
+  const [settedStarRating, setSettedStarRating] = useState(0);
+  const [isToShowStarError, setIsToShowStarError] = useState(false);
+  const errorsBeforeBlock = useRef({});
+
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    setError,
+    clearErrors
+  } = useForm({
+    mode: "onBlur"
+  });
+
   if (!POSSIBLE_TYPES.includes(type)) throw Error("type of Comment Modal Content is not defined or incorrect");
+
+  function openLoginModal() {
+    closeModal();
+    // TODO: open the modal
+  }
+
+  async function onSubmit() {
+    if (settedStarRating === 0) {
+      setIsToShowStarError(true);
+      return;
+    }
+    // react-form-hook doesn't let this function run
+    // if there are any errors but i put errors 
+    // in the condition below just in case
+    if (areErrors || areInputsBlocked) return;
+
+    // closeModal();
+  }
+
+  const areErrors = !!Object.keys(errors).length;
+  const areInputsBlocked = !user.isAuth && !isAnonymously;
 
   return (
     <section className="comment-modal-content">
-      {type}
+      <form className="comment-modal-form" onSubmit={handleSubmit(onSubmit)}>
+        <CommentModalContentInputs 
+          type={type}
+          register={register}
+          errors={errors}
+          areInputsBlocked={areInputsBlocked}
+          errorsBeforeBlock={errorsBeforeBlock}
+          isToShowErrors={isToShowErrors}
+          setIsToShowErrors={setIsToShowErrors}
+          clearErrors={clearErrors}
+          setError={setError}
+          settedStarRating={settedStarRating}
+          setSettedStarRating={setSettedStarRating}
+          isToShowStarError={isToShowStarError}
+          setIsToShowStarError={setIsToShowStarError}
+          openLoginModal={openLoginModal}
+        />
+        <CommentModalBottomBtns 
+          type={type}
+          setIsAnonymously={setIsAnonymously}
+          isAnonymously={isAnonymously}
+          closeModal={closeModal}
+          areErrors={areErrors}
+          areInputsBlocked={areInputsBlocked}
+        />
+        {/* <div className="comment-modal-bottom-btns">
+          <button
+            className="comment-modal-is-anonymously"
+            onClick={() => setIsAnonymously(!isAnonymously)}
+            type="button"
+            role="checkbox"
+            aria-checked={isAnonymously}
+          >
+            <div className={checkboxDivClass} />
+            Send {type} anonymously
+          </button>
+          <div className="comment-modal-form-btn-group">
+            <button
+              className="comment-modal-form-deny-btn"
+              onClick={closeModal}
+            >
+              Deny
+            </button>
+            <button
+              className="comment-modal-form-submit-btn"
+              type="submit"
+              disabled={areErrors || areInputsBlocked}
+            >
+              Submit
+            </button>
+          </div>
+        </div> */}
+      </form>
     </section>
   );
-}
+});
 
 export default CommentModalContent;

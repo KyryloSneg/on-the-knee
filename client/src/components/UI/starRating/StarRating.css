@@ -1,0 +1,45 @@
+.star-rating {
+  gap: 1px;
+}
+
+.comment-modal-content .star-rating {
+  justify-content: center;
+}
+
+.star-rating > button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.star-rating > button > span {
+  font-size: 1.1rem;
+  color: rgb(90, 90, 90);
+}
+
+.comment-modal-content .star-rating > button {
+  padding: 8px 6px;
+}
+
+@media screen and (min-width: 280px) {
+  .comment-modal-content .star-rating > button {
+    padding: 8px;
+  }
+}
+
+@media screen and (min-width: 380px) {
+  .comment-modal-content .star-rating > button {
+    padding: 8px 12px;
+  }
+}
+
+@media screen and (min-width: 480px) {
+  .comment-modal-content .star-rating > button {
+    padding: 8px 20px;
+  }
+}
