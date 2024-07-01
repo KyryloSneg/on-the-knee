@@ -34,14 +34,11 @@ module.exports = (feedbacks, feedbackReplies, deviceId) => {
       "userId": userId,
       "isAnonymously": isAnonymously,
       "images": images,
-      "deviceLifetime": faker.lorem.words(2),
       "message": faker.lorem.text(),
       "advantages": faker.lorem.text(),
       "disadvantages": faker.lorem.text(),
       "rate": rate,
       "date": faker.date.recent(),
-      "likes": faker.number.int(150),
-      "dislikes": faker.number.int(150),
     }
 
     for (let j = 0; j < faker.number.int({ min: 2, max: 5 }); j++) {
@@ -56,8 +53,6 @@ module.exports = (feedbacks, feedbackReplies, deviceId) => {
         "images": [faker.image.url({ width, height })],
         "message": faker.lorem.text(),
         "date": faker.date.recent(),
-        "likes": faker.number.int(150),
-        "dislikes": faker.number.int(150),
       }
 
       feedbackReplies.push(reply);
