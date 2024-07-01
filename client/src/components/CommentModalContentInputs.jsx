@@ -2,10 +2,12 @@ import "./styles/CommentModalContentInputs.css";
 import { useEffect } from "react";
 import StarRating from "./UI/starRating/StarRating";
 import useWindowWidth from "../hooks/useWindowWidth";
+import FilePickerSection from "./UI/fileUploader/FilePickerSection";
 
 const CommentModalContentInputs = ({ 
   type, register, errors, areInputsBlocked, errorsBeforeBlock, isToShowErrors, setIsToShowErrors, clearErrors, setError,
-  settedStarRating, setSettedStarRating, isToShowStarError, setIsToShowStarError, openLoginModal
+  settedStarRating, setSettedStarRating, isToShowStarError, setIsToShowStarError, openLoginModal,
+  files, setFiles
 }) => {
   const windowWidth = useWindowWidth();
 
@@ -70,7 +72,7 @@ const CommentModalContentInputs = ({
           </section>
           <div>
             <label>
-              Advantages
+              Advantages (optional)
               <input
                 autoComplete="off"
                 disabled={areInputsBlocked}
@@ -97,7 +99,7 @@ const CommentModalContentInputs = ({
           </div>
           <div>
             <label>
-              Disadvantages
+              Disadvantages (optional)
               <input
                 autoComplete="off"
                 disabled={areInputsBlocked}
@@ -151,6 +153,9 @@ const CommentModalContentInputs = ({
           </p>
         }
       </div>
+      {(type === "feedback" || type === "answer") &&
+        <FilePickerSection files={files} setFiles={setFiles} />
+      }
       {areInputsBlocked &&
         <div className="comment-modal-form-block">
           <button onClick={openLoginModal}>

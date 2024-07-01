@@ -1,0 +1,26 @@
+.file-picker-btn {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  outline: none;
+  cursor: pointer;
+}
+
+.file-picker-btn {
+  color: #8282ff;
+  border: 1px rgb(150, 150, 150) solid;
+}
+
+.file-picker-btn:hover, 
+.file-picker-btn:active, 
+.file-picker-btn:focus-visible {
+  background-color: #e0e0e0;
+}
+
+@media screen and (min-width: 450px) {
+  .file-picker-section .file-picker-btn {
+    width: max-content;
+  }
+}

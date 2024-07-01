@@ -23,8 +23,6 @@ module.exports = (questions, answers, deviceId) => {
       "images": images,
       "message": faker.lorem.text(),
       "date": faker.date.recent(),
-      "likes": faker.number.int(150),
-      "dislikes": faker.number.int(150),
     }
 
     for (let j = 0; j < faker.number.int({ min: 2, max: 5 }); j++) {
@@ -39,8 +37,6 @@ module.exports = (questions, answers, deviceId) => {
         "images": [faker.image.url({ width, height })],
         "message": faker.lorem.text(),
         "date": faker.date.recent(),
-        "likes": faker.number.int(150),
-        "dislikes": faker.number.int(150),
       }
 
       answers.push(answer);

@@ -13,6 +13,7 @@ const CommentModalContent = observer(({ type, closeModal }) => {
   const [isAnonymously, setIsAnonymously] = useState(false);
   const [settedStarRating, setSettedStarRating] = useState(0);
   const [isToShowStarError, setIsToShowStarError] = useState(false);
+  const [files, setFiles] = useState([]);
   const errorsBeforeBlock = useRef({});
 
   const {
@@ -66,6 +67,8 @@ const CommentModalContent = observer(({ type, closeModal }) => {
           isToShowStarError={isToShowStarError}
           setIsToShowStarError={setIsToShowStarError}
           openLoginModal={openLoginModal}
+          files={files}
+          setFiles={setFiles}
         />
         <CommentModalBottomBtns 
           type={type}
@@ -75,33 +78,6 @@ const CommentModalContent = observer(({ type, closeModal }) => {
           areErrors={areErrors}
           areInputsBlocked={areInputsBlocked}
         />
-        {/* <div className="comment-modal-bottom-btns">
-          <button
-            className="comment-modal-is-anonymously"
-            onClick={() => setIsAnonymously(!isAnonymously)}
-            type="button"
-            role="checkbox"
-            aria-checked={isAnonymously}
-          >
-            <div className={checkboxDivClass} />
-            Send {type} anonymously
-          </button>
-          <div className="comment-modal-form-btn-group">
-            <button
-              className="comment-modal-form-deny-btn"
-              onClick={closeModal}
-            >
-              Deny
-            </button>
-            <button
-              className="comment-modal-form-submit-btn"
-              type="submit"
-              disabled={areErrors || areInputsBlocked}
-            >
-              Submit
-            </button>
-          </div>
-        </div> */}
       </form>
     </section>
   );
