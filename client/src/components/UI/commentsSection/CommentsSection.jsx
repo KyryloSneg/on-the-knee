@@ -6,6 +6,7 @@ import CommentsList from "./CommentsList";
 import CommentImagesSection from "./CommentImagesSection";
 import setDeviceFeedbackModalVisibility from "../../../utils/setDeviceFeedbackModalVisibility";
 import StarRating from "../starRating/StarRating";
+import setQuestionCommentModalVisibility from "../../../utils/setQuestionCommentModalVisibility";
 
 const POSSIBLE_TYPES = ["deviceFeedbacks", "deviceQuestions", "sellerFeedbacks"];
 const CommentsSection = observer(({ type, comments, isFullVersion = true, device = null, seller = null }) => {
@@ -19,7 +20,13 @@ const CommentsSection = observer(({ type, comments, isFullVersion = true, device
   ) return <div />;
 
   function createComment() {
-    setDeviceFeedbackModalVisibility(true, app);
+    app.setSelectedDeviceId(device.id);
+
+    if (type === "deviceFeedbacks") {
+      setDeviceFeedbackModalVisibility(true, app);
+    } else if (type === "deviceQuestions") {
+      setQuestionCommentModalVisibility(true, app);
+    }
   }
 
   let commentWord = "";

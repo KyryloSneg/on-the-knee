@@ -2,21 +2,29 @@ import { createDislike, createLike, removeDislike, removeLike } from "../http/Fe
 
 export default class DeviceFeedbackRatesActions {
 
-  static async likeFeedback(likeObject, setIsLiked = null) {
+  static async likeFeedback(likeObject, setIsLiked = null, setIsChangingRate = null) {
     try {
+      if (setIsChangingRate) setIsChangingRate(true);
+      
       await createLike(likeObject);
       if (setIsLiked) setIsLiked(true);
     } catch (e) {
       return e.message;
+    } finally {
+      if (setIsChangingRate) setIsChangingRate(false);
     }
   }
 
-  static async dislikeFeedback(dislikeObject, setIsDisliked = null) {
+  static async dislikeFeedback(dislikeObject, setIsDisliked = null, setIsChangingRate = null) {
     try {
+      if (setIsChangingRate) setIsChangingRate(true);
+      
       await createDislike(dislikeObject);
       if (setIsDisliked) setIsDisliked(true);
     } catch (e) {
       return e.message;
+    } finally {
+      if (setIsChangingRate) setIsChangingRate(false);
     }
   }
 

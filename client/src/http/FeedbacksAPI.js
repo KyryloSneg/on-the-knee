@@ -31,3 +31,13 @@ export async function removeLike(id) {
 export async function removeDislike(id) {
   await $mockApi.delete("/device-feedback-dislikes/" + id);
 }
+
+export async function createDeviceFeedback(formData) {
+  const { data } = await $mockApi.post("/device-feedbacks", formData);
+  return data;
+}
+
+export async function createDeviceFeedbackReply(formData) {
+  const { data } = await $mockApi.post("/device-feedback-replies", formData);
+  return data;
+}

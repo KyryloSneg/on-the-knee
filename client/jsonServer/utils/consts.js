@@ -171,6 +171,15 @@ const USERS = [
   },
 ];
 
+const REAL_USER = {
+  "_id": "64e367f69f8167945dcb4a1b",
+  "name": "user",
+  "surname": "user",
+  "roles": ["PUBLIC", "ORDER-MANAGER", "CONTENT-MANAGER", "SELLER", "OWNER"],
+  "email": "onthekneeauth@gmail.com",
+  "phoneNumber": "+380 95 532 9384"
+};
+
 const MOCK_USER = {
   // i made up the _id below
   "_id": "6348acd2e1a47ca32e79f46f",
@@ -236,6 +245,7 @@ const MAX_FEEDBACK_IMAGE_WIDTH = 400;
 
 module.exports = {
   USERS,
+  REAL_USER,
   MOCK_USER,
 
   POSSIBLE_DEVICE_INFOS,

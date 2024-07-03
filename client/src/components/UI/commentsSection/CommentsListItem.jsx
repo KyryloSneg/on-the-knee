@@ -23,7 +23,7 @@ const CommentsListItem = ({ type, comment, singularCommentWord }) => {
         type={type}
         singularCommentWord={singularCommentWord} 
       />
-      {replies?.length && <CommentRepliesList type={type} replies={replies} />}
+      {!!replies?.length && <CommentRepliesList type={type} replies={replies} />}
     </div>
   );
 }

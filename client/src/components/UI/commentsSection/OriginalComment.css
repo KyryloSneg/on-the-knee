@@ -66,6 +66,12 @@
   border-radius: 12px;
 }
 
+.original-comment-rate-group-error-wrap {
+  margin: auto;
+  display: grid;
+  justify-items: center;
+}
+
 .original-comment-rate-btn-group {
   display: flex;
   flex-wrap: wrap;
@@ -101,4 +107,16 @@
 .original-comment-rate-btn-group > button:active > span,
 .original-comment-rate-btn-group > button:focus-visible > span {
   color: #bd5e10;
+}
+
+.original-comment-rate-group-error-wrap > p {
+  color: #a10e0e;
+  font-size: 1.2rem;
+}
+
+@media screen and (min-width: 452px) {
+  .original-comment-rate-group-error-wrap {
+    margin: 0;
+    justify-content: end;
+  }
 }
