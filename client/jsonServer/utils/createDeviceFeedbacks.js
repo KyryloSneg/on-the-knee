@@ -1,5 +1,5 @@
 const { faker } = require("@faker-js/faker");
-const { MIN_FEEDBACK_IMAGE_WIDTH, MAX_FEEDBACK_IMAGE_WIDTH, MIN_FEEDBACK_IMAGE_HEIGHT, MAX_FEEDBACK_IMAGE_HEIGHT, MOCK_USER } = require("./consts");
+const { MIN_FEEDBACK_IMAGE_WIDTH, MAX_FEEDBACK_IMAGE_WIDTH, MIN_FEEDBACK_IMAGE_HEIGHT, MAX_FEEDBACK_IMAGE_HEIGHT, MOCK_USER, REAL_USER } = require("./consts");
 const findAverageNum = require("../../src/utils/findAverageNum");
 
 module.exports = (feedbacks, feedbackReplies, deviceId) => {
@@ -25,7 +25,8 @@ module.exports = (feedbacks, feedbackReplies, deviceId) => {
     const isAnonymously = faker.datatype.boolean(0.6);
 
     if (!isAnonymously) {
-      userId = MOCK_USER._id;
+      const isRealUser = faker.datatype.boolean(0.4);
+      userId = isRealUser ? REAL_USER._id : MOCK_USER._id;
     }
 
     const feedback = {
@@ -42,15 +43,13 @@ module.exports = (feedbacks, feedbackReplies, deviceId) => {
     }
 
     for (let j = 0; j < faker.number.int({ min: 2, max: 5 }); j++) {
-      const width = faker.number.int({ min: MIN_FEEDBACK_IMAGE_WIDTH, max: MAX_FEEDBACK_IMAGE_WIDTH });
-      const height = faker.number.int({ min: MIN_FEEDBACK_IMAGE_HEIGHT, max: MAX_FEEDBACK_IMAGE_HEIGHT })
-      const userId = MOCK_USER._id;
+      const isRealUser = faker.datatype.boolean(0.4);
+      const userId = isRealUser ? REAL_USER._id : MOCK_USER._id;
 
       const reply = {
         "id": feedbackReplies.length + 1,
-        "userId": userId,
         "device-feedbackId": feedback.id,
-        "images": [faker.image.url({ width, height })],
+        "userId": userId,
         "message": faker.lorem.text(),
         "date": faker.date.recent(),
       }

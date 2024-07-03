@@ -2,7 +2,7 @@ import "./styles/CommentModalContentInputs.css";
 import { useEffect } from "react";
 import StarRating from "./UI/starRating/StarRating";
 import useWindowWidth from "../hooks/useWindowWidth";
-import FilePickerSection from "./UI/fileUploader/FilePickerSection";
+import FilePickerSection from "./UI/filePicker/FilePickerSection";
 
 const CommentModalContentInputs = ({ 
   type, register, errors, areInputsBlocked, errorsBeforeBlock, isToShowErrors, setIsToShowErrors, clearErrors, setError,
@@ -153,7 +153,7 @@ const CommentModalContentInputs = ({
           </p>
         }
       </div>
-      {(type === "feedback" || type === "answer") &&
+      {(type === "feedback" || type === "question") &&
         <FilePickerSection files={files} setFiles={setFiles} />
       }
       {areInputsBlocked &&

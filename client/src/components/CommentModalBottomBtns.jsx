@@ -8,16 +8,18 @@ const CommentModalBottomBtns = ({ type, setIsAnonymously, isAnonymously, closeMo
 
   return (
     <div className="comment-modal-bottom-btns">
-      <button
-        className="comment-modal-is-anonymously"
-        onClick={() => setIsAnonymously(!isAnonymously)}
-        type="button"
-        role="checkbox"
-        aria-checked={isAnonymously}
-      >
-        <div className={checkboxDivClass} />
-        Send {type} anonymously
-      </button>
+      {(type === "feedback" || type === "question") &&
+        <button
+          className="comment-modal-is-anonymously"
+          onClick={() => setIsAnonymously(!isAnonymously)}
+          type="button"
+          role="checkbox"
+          aria-checked={isAnonymously}
+        >
+          <div className={checkboxDivClass} />
+          Send {type} anonymously
+        </button>
+      }
       <div className="comment-modal-form-btn-group">
         <button
           className="comment-modal-form-deny-btn"

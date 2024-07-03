@@ -21,7 +21,7 @@ class AppStore {
     this._isFocusedSearchForm = false;
 
     this._hintSearchResults = []
-    // some important app refs below to skip a big amount of props passing
+    // some important app refs below are used to skip a big amount of props passing
     this._pageRef = null;
     this._deviceSectionRef = null;
     this._filtersAsideRef = null;
@@ -35,6 +35,15 @@ class AppStore {
     this._allLocations = [];
     this._isToShowUserLocationNotification = false;
     this._isUserLocationDeterminedCorrectly = true;
+
+    // we moved states below from DevicePage to reload them on creating a feedback or a question
+    this._deviceFeedbacks = [];
+    this._deviceQuestions = [];
+
+    // we use these states in modals that are related to the info below
+    this._selectedDeviceId = null;
+    this._selectedDeviceFeedbackId = null;
+    this._selectedDeviceQuestionId = null;
 
     this._storePickupPoints = [];
     makeAutoObservable(this);
@@ -156,6 +165,26 @@ class AppStore {
     this._isUserLocationDeterminedCorrectly = isUserLocationDeterminedCorrectly;
   }
 
+  setDeviceFeedbacks(deviceFeedbacks) {
+    this._deviceFeedbacks = deviceFeedbacks;
+  }
+
+  setDeviceQuestions(deviceQuestions) {
+    this._deviceQuestions = deviceQuestions;
+  }
+
+  setSelectedDeviceId(selectedDeviceId) {
+    this._selectedDeviceId = selectedDeviceId;
+  }
+  
+  setSelectedDeviceFeedbackId(selectedDeviceFeedbackId) {
+    this._selectedDeviceFeedbackId = selectedDeviceFeedbackId;
+  }
+
+  setSelectedDeviceQuestionId(selectedDeviceQuestionId) {
+    this._selectedDeviceQuestionId = selectedDeviceQuestionId;
+  }
+
   setStorePickupPoints(storePickupPoints) {
     this._storePickupPoints = storePickupPoints;
   }
@@ -274,6 +303,26 @@ class AppStore {
 
   get isUserLocationDeterminedCorrectly() {
     return this._isUserLocationDeterminedCorrectly;
+  }
+
+  get deviceFeedbacks() {
+    return this._deviceFeedbacks;
+  }
+
+  get deviceQuestions() {
+    return this._deviceQuestions;
+  }
+
+  get selectedDeviceId() {
+    return this._selectedDeviceId;
+  }
+
+  get selectedDeviceFeedbackId() {
+    return this._selectedDeviceFeedbackId;
+  }
+
+  get selectedDeviceQuestionId() {
+    return this._selectedDeviceQuestionId;
   }
 
   get storePickupPoints() {
