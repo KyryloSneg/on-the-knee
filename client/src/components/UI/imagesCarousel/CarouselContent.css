@@ -90,6 +90,11 @@ ul.carousel-content-text-sale-icons, ul.carousel-content-logo-sale-icons {
   right: 0;
 }
 
+#comment-gallery-modal .carousel-content {
+  max-height: 360px;
+  height: auto;
+}
+
 @media screen and (min-width: 360px) {
   ul.carousel-content-text-sale-icons, ul.carousel-content-logo-sale-icons {
     display: flex;

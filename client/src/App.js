@@ -35,6 +35,7 @@ import DeviceFeedbackModal from "./components/DeviceFeedbackModal";
 import ReplyModal from "./components/ReplyModal";
 import QuestionCommentModal from "./components/QuestionCommentModal";
 import AnswerModal from "./components/AnswerModal";
+import CommentGalleryModal from "./components/CommentGalleryModal";
  
 const App = observer(() => {
   const { app, deviceStore } = useContext(Context);
@@ -124,19 +125,22 @@ const App = observer(() => {
           id="used-filters-sidebar"
         />
       }
-      <ModalWindow
-        isVisible={app.isVisibleCategoriesModal} 
-        setIsVisible={setIsCategoriesModalVisible}
-        children={<CategoriesModalContent />}
-        headerText="Categories"
-        id="categories-modal"
-      />
+      {app.isVisibleCategoriesModal &&
+        <ModalWindow
+          isVisible={app.isVisibleCategoriesModal} 
+          setIsVisible={setIsCategoriesModalVisible}
+          children={<CategoriesModalContent />}
+          headerText="Categories"
+          id="categories-modal"
+        />
+      }
       {app.isVisibleUserLocationModal && <SelectUserLocationModal />}
       {app.isVisibleSelfDeliveryModal && <SelfDeliveryModal />}
       {app.isVisibleDeviceFeedbackModal && <DeviceFeedbackModal />}
       {app.isVisibleReplyModal && <ReplyModal />}
       {app.isVisibleQuestionCommentModal && <QuestionCommentModal />}
       {app.isVisibleAnswerModal && <AnswerModal />}
+      {app.isVisibleCommentGalleryModal && <CommentGalleryModal />}
       <header ref={headerRef}>
         <Navbar elemToFocus={pageElemToFocus} navCategoryBtnRef={navCategoryBtnRef} />
         {(app.isVisibleCategoriesMenu && !!Object.keys(deviceStore.categories).length) && 

@@ -18,6 +18,7 @@ class AppStore {
     this._isVisibleReplyModal = false;
     this._isVisibleQuestionCommentModal = false;
     this._isVisibleAnswerModal = false;
+    this._isVisibleCommentGalleryModal = false;
     this._isFocusedSearchForm = false;
 
     this._hintSearchResults = []
@@ -44,6 +45,8 @@ class AppStore {
     this._selectedDeviceId = null;
     this._selectedDeviceFeedbackId = null;
     this._selectedDeviceQuestionId = null;
+    this._commentGalleryModalType = "deviceFeedbacks";
+    this._commentGallerySelectedImageId = null;
 
     this._storePickupPoints = [];
     makeAutoObservable(this);
@@ -107,6 +110,10 @@ class AppStore {
 
   setIsVisibleAnswerModal(bool) {
     this._isVisibleAnswerModal = bool;
+  }
+
+  setIsVisibleCommentGalleryModal(bool) {
+    this._isVisibleCommentGalleryModal = bool;
   }
 
   setIsFocusedSearchForm(bool) {
@@ -185,6 +192,14 @@ class AppStore {
     this._selectedDeviceQuestionId = selectedDeviceQuestionId;
   }
 
+  setCommentGalleryModalType(commentGalleryModalType) {
+    this._commentGalleryModalType = commentGalleryModalType;
+  }
+
+  setCommentGallerySelectedImageId(commentGallerySelectedImageId) {
+    this._commentGallerySelectedImageId = commentGallerySelectedImageId;
+  }
+
   setStorePickupPoints(storePickupPoints) {
     this._storePickupPoints = storePickupPoints;
   }
@@ -247,6 +262,10 @@ class AppStore {
 
   get isVisibleAnswerModal() {
     return this._isVisibleAnswerModal;
+  }
+
+  get isVisibleCommentGalleryModal() {
+    return this._isVisibleCommentGalleryModal;
   }
 
   get isFocusedSearchForm() {
@@ -323,6 +342,14 @@ class AppStore {
 
   get selectedDeviceQuestionId() {
     return this._selectedDeviceQuestionId;
+  }
+
+  get commentGalleryModalType() {
+    return this._commentGalleryModalType;
+  }
+
+  get commentGallerySelectedImageId() {
+    return this._commentGallerySelectedImageId;
   }
 
   get storePickupPoints() {

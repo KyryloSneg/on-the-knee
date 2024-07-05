@@ -1,4 +1,7 @@
 .modal-window {
+  box-sizing: border-box;
+  /* doing this to prevent scrollbar and content child components' borders "overflowing" on desktop */
+  padding: 0;
   height: 100%;
   width: 100%;
   max-width: 100%;
@@ -75,6 +78,7 @@
     height: auto;
     max-height: 90%;
     border-radius: 6px;
+    padding: 0 0 1px 0;
   }
 
   .modal-window:not(.create-comment-modal) > header > h2 {
@@ -89,6 +93,7 @@
     height: auto;
     max-height: 95%;
     border-radius: 6px;
+    padding: 0 0 1px 0;
   }
 
   .modal-window.create-comment-modal > header > h2 {

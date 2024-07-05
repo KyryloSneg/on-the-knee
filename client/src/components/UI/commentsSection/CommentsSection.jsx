@@ -53,10 +53,15 @@ const CommentsSection = observer(({ type, comments, isFullVersion = true, device
   }
 
   // top level means original feedback / question, not reply / answer
-  let allTopLevelImages = [];
+  let allTopLevelImageObjs = [];
   if (type !== "sellerFeedbacks") {
     for (let comment of comments) {
-      allTopLevelImages = allTopLevelImages.concat(comment.images);
+      const imagesObj = {
+        commentId: comment.id,
+        images: comment.images
+      };
+
+      allTopLevelImageObjs.push(imagesObj);
     }
   }
 
@@ -95,7 +100,7 @@ const CommentsSection = observer(({ type, comments, isFullVersion = true, device
       }
       {type !== "sellerFeedbacks" &&
         <>
-          <CommentImagesSection images={allTopLevelImages} />
+          <CommentImagesSection imagesObjs={allTopLevelImageObjs} type={type} />
           <button
             className="create-comment-btn"
             onClick={createComment}

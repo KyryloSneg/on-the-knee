@@ -4,7 +4,7 @@ import "./CommentsListItem.css";
 import useGettingOneUser from "../../../hooks/useGettingOneUser";
 import OriginalComment from "./OriginalComment";
 
-const CommentsListItem = ({ type, comment, singularCommentWord }) => {
+const CommentsListItem = ({ type, comment, singularCommentWord, isWithImages = true, closeGalleryModal = null }) => {
   const [user, setUser] = useState(null);
   useGettingOneUser(comment.userId, setUser, true, !comment.isAnonymously && !user);
 
@@ -22,6 +22,8 @@ const CommentsListItem = ({ type, comment, singularCommentWord }) => {
         user={user} 
         type={type}
         singularCommentWord={singularCommentWord} 
+        isWithImages={isWithImages}
+        closeGalleryModal={closeGalleryModal}
       />
       {!!replies?.length && <CommentRepliesList type={type} replies={replies} />}
     </div>
