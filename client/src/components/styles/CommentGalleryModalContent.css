@@ -1,0 +1,11 @@
+.comment-gallery-comment-content {
+  padding: 16px;
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+@media screen and (min-width: 1060px) {
+  .comment-gallery-comment-content {
+    grid-template-columns: 3fr 2fr;
+  }
+}

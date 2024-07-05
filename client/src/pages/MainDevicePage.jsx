@@ -15,7 +15,7 @@ import PurchaseDeviceFooter from "../components/PurchaseDeviceFooter";
 import useWindowWidth from "../hooks/useWindowWidth";
 import { WIDTH_TO_SHOW_PURCHASE_DEVICE_FOOTER } from "../utils/consts";
 
-const MainDevicePage = observer(({ device, combinationString }) => {
+const MainDevicePage = observer(({ device, combinationString, feedbacks }) => {
   const { deviceStore } = useContext(Context);
   const windowWidth = useWindowWidth();
 
@@ -154,7 +154,12 @@ const MainDevicePage = observer(({ device, combinationString }) => {
       </div>
       <div className="dev-info-comments-wrap">
         <DeviceInfoSection device={device} combinationString={combinationString} />
-        <CommentsSection type="device" />
+        <CommentsSection 
+          type="deviceFeedbacks" 
+          comments={feedbacks} 
+          isFullVersion={false}
+          device={device}
+        />
       </div>
       {(isRightDescScrolled && windowWidth >= WIDTH_TO_SHOW_PURCHASE_DEVICE_FOOTER) && 
         <PurchaseDeviceFooter device={device} selectedCombo={selectedCombination} 

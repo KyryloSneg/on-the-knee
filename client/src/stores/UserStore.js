@@ -1,9 +1,11 @@
 import { makeAutoObservable } from "mobx";
+import { MOCK_USER } from "../utils/mobxStoresConsts";
 
 class UserStore {
   constructor() {
-    this._isAuth = false;
-    this._user = {};
+    this._isAuth = true;
+    // TODO: change it to {} when I implement user authentication logic
+    this._user = MOCK_USER;
     makeAutoObservable(this);
   }
 

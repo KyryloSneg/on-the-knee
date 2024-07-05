@@ -29,6 +29,9 @@ router.patch('/address',
 router.get('/activate/:link', userController.activate);
 
 // an example of using function that requires both authorization and email activation
-router.get('/users', authMiddleware, activationMiddleware, userController.getUsers);
+// router.get('/users', authMiddleware, activationMiddleware, userController.getUsers);
+
+router.get('/users', userController.getUsers);
+router.get('/users/:id', userController.getUser);
 
 module.exports = router

@@ -1,8 +1,13 @@
-const DeviceQuestionsPage = () => {
+import CommentsSection from "../components/UI/commentsSection/CommentsSection";
+
+const DeviceQuestionsPage = ({ device, questions }) => {
   return (
-    <section>
-      Device questions page
-    </section>
+    <CommentsSection
+      type="deviceQuestions"
+      comments={questions}
+      isFullVersion={true}
+      device={device}
+    />
   );
 }
 

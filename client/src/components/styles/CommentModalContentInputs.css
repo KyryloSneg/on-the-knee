@@ -1,0 +1,107 @@
+.comment-modal-content-rate-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.comment-modal-content-rate-section > h3 {
+  margin: 0;
+  font-weight: normal;
+  font-size: 1.5rem;
+}
+
+.comment-modal-form label,
+.comment-modal-form-error-msg {
+  font-size: 1.3rem;
+}
+
+.comment-modal-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: rgb(90, 90, 90);
+}
+
+.comment-modal-form input:not(input[type="file"]),
+.comment-modal-form textarea {
+  box-sizing: border-box;
+  width: 100%;
+  border: 1px solid rgb(130, 130, 130);
+  border-radius: 8px;
+  background-color: #e9e9e9;
+  font-size: 1.3rem;
+  font-family: 'Montserrat', sans-serif;
+  transition: border-color 0.2s, background-color 0.2s;
+  outline: none;
+}
+
+.comment-modal-form input:not(input[type="file"]) {
+  height: 32px;
+  padding: 0 6px;
+}
+
+.comment-modal-form textarea {
+  height: 112px;
+  padding: 6px;
+}
+
+.comment-modal-form input:not(input[type="file"]):focus-visible,
+.comment-modal-form textarea:focus-visible {
+  background-color: #fff;
+  border: 1px solid #c1c1c1;
+}
+
+.comment-modal-form input:not(input[type="file"]).invalid,
+.comment-modal-content textarea.invalid {
+  border: 1px solid #e41515;
+}
+
+.comment-modal-form-error-msg {
+  color: #a10e0e;
+}
+
+.comment-modal-form-inputs {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.comment-modal-form-inputs.transparent > div:not(.comment-modal-form-block) {
+  opacity: 0.5;
+}
+
+.comment-modal-form-inputs > div:not(.star-rating) {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.comment-modal-form-block {
+  position: absolute;
+  top: -22px;
+  bottom: -8px;
+  left: -22px;
+  right: -22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, .5);
+}
+
+.comment-modal-form-block > button {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  outline-color: #ff7e14;
+  color: #dbdbff;
+  transition: color 0.2s;
+  cursor: pointer;
+}
+
+.comment-modal-form-block > button:hover,
+.comment-modal-form-block > button:active,
+.comment-modal-form-block > button:focus-visible {
+  color: #ff8e31;
+}

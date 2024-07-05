@@ -1,0 +1,86 @@
+.comment-modal-bottom-btns {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-self: flex-end;
+
+  /* 
+    using these styles to prevent modal content's 
+    padding dissappearing effect on scrolling down 
+  */
+  position: relative;
+  top: 22px;
+  padding-bottom: 22px;
+}
+
+.comment-modal-form-btn-group {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.comment-modal-form-btn-group > button {
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  outline: none;
+}
+
+.comment-modal-form-deny-btn {
+  color: #8282ff;
+  border: 1px rgb(150, 150, 150) solid;
+}
+
+.comment-modal-form-deny-btn:hover,
+.comment-modal-form-deny-btn:active,
+.comment-modal-form-deny-btn:focus-visible {
+  background-color: #e0e0e0;
+}
+
+.comment-modal-form-submit-btn {
+  background-color: #8282ff;
+  color: #fff;
+  border: none;
+}
+
+.comment-modal-form-submit-btn:disabled {
+  background-color: #b2b2b2;
+  cursor: auto;
+}
+
+.comment-modal-form-submit-btn:enabled:hover,
+.comment-modal-form-submit-btn:enabled:active,
+.comment-modal-form-submit-btn:enabled:focus-visible {
+  background-color: #7070ff;
+}
+
+.comment-modal-is-anonymously {
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.2rem;
+  text-align: start;
+  cursor: pointer;
+  padding: 0;
+}
+
+.comment-modal-is-anonymously > .checkbox-div {
+  margin-top: 1px;
+}
+
+@media screen and (min-width: 200px) {
+  .comment-modal-form-btn-group {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+}
+
+@media screen and (min-width: 300px) {
+  .comment-modal-is-anonymously {
+    font-size: 1.5rem;
+  }
+}

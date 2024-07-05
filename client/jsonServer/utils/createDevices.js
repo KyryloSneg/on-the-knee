@@ -10,6 +10,9 @@ const createDeviceCombinations = require("./createDeviceCombinations");
 const createAdditionalServices = require("./createAdditionalServices");
 const createSales = require("./createSales");
 const createSaleDevices = require("./createSaleDevices");
+const createDeviceQuestions = require("./createDeviceQuestions");
+const createDeviceFeedbackRates = require("./createDeviceFeedbackRates");
+const createDeviceQuestionRates = require("./createDeviceQuestionRates");
 
 module.exports = async () => {
 
@@ -42,11 +45,17 @@ module.exports = async () => {
   // }
 
   let categories = createCategories(categoryObjects);
-  const { sellers, sellerFeedbacks, sellerFeedbackReplies } = createSellers();
+  const { sellers, sellerFeedbacks } = createSellers();
 
   let devices = [];
   let deviceFeedbacks = [];
+  let deviceFeedbackLikes = [];
+  let deviceFeedbackDislikes = [];
   let deviceFeedbackReplies = [];
+  let deviceQuestionLikes = [];
+  let deviceQuestionDislikes = [];
+  let deviceQuestions = [];
+  let deviceAnswers = [];
   let deviceInfos = [];
   let deviceCombinations = [];
 
@@ -87,13 +96,15 @@ module.exports = async () => {
     // const category = categories[faker.number.int({ min: 0, max: categories.length - 1 })];
     const seller = sellers[faker.number.int({ min: 0, max: sellers.length - 1 })];
 
-    const rating = createDeviceFeedbacks(deviceFeedbacks, deviceFeedbackReplies, dev.id);
     const { deviceAttributeValues } = createAttributes(dev.id, category.slug, attributes, attributeNames, attributeValues);
     const isPreOrder = faker.datatype.boolean(0.1);
 
     createDeviceInfos(dev.id, category.slug, deviceInfos, deviceAttributeValues);
     createDeviceCombinations(dev, deviceAttributeValues, deviceCombinations, stocks, isPreOrder);
     createAdditionalServices(dev.id, devices, additionalServices, additionalServiceDevices, deviceCombinations);
+
+    const rating = createDeviceFeedbacks(deviceFeedbacks, deviceFeedbackReplies, dev.id);
+    createDeviceQuestions(deviceQuestions, deviceAnswers, dev.id);
 
     const device = {
       "id": dev.id,
@@ -179,10 +190,19 @@ module.exports = async () => {
   }
 
   const saleDevices = createSaleDevices(sales, devices);
+  createDeviceFeedbackRates(deviceFeedbacks, deviceFeedbackLikes, deviceFeedbackDislikes);
+  createDeviceQuestionRates(deviceQuestions, deviceQuestionLikes, deviceQuestionDislikes);
+
   return {
     devices,
     deviceFeedbacks,
+    deviceFeedbackLikes,
+    deviceFeedbackDislikes,
+    deviceQuestionLikes,
+    deviceQuestionDislikes,
     deviceFeedbackReplies,
+    deviceQuestions,
+    deviceAnswers,
     deviceInfos,
     deviceCombinations,
 
@@ -193,7 +213,6 @@ module.exports = async () => {
 
     sellers,
     sellerFeedbacks,
-    sellerFeedbackReplies,
 
     attributes,
     attributeNames,

@@ -92,6 +92,10 @@ input:active {
   background-color: white;
 }
 
+textarea {
+  resize: none;
+}
+
 /* I added this rule for every img a bit late so there are redundant classes "no-select" */
 .no-select,
 img {
@@ -213,6 +217,7 @@ ul {
   border: 0;
   background: 0;
   font-size: 0;
+  line-height: 0;
 }
 
 .display-none {
@@ -251,10 +256,10 @@ ul {
 
 .link-colors:hover,
 .link-colors:active,
-.link-colors:focus,
+.link-colors:focus-visible,
 .link-colors-wrap a:hover,
 .link-colors-wrap a:active,
-.link-colors-wrap a:focus {
+.link-colors-wrap a:focus-visible {
   color: #bd5e10;
 }
 

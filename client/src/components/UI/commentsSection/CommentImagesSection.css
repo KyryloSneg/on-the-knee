@@ -1,0 +1,29 @@
+.comment-images-section {
+  box-sizing: border-box;
+  display: flex;
+  gap: 8px;
+  /* width: 100% || calc(100% - 1px) doesn't work for some reason */
+  width: 0;
+  margin: 0;
+  padding: 10px 0;
+}
+
+.comment-images-section > li {
+  height: 64px;
+}
+
+.comment-images-section > li > button {
+  background: none;
+  border: 1px solid #dfdfdf;
+  border-radius: 4px;
+  height: 64px;
+  padding: 0;
+  cursor: pointer;
+}
+
+.comment-images-section img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 4px;
+}
