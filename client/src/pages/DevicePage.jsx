@@ -8,10 +8,12 @@ import TabsPageLayout from "../components/UI/tabsPageLayout/TabsPageLayout";
 import { useParams } from "react-router-dom";
 import { DEVICE_COMMENTS_ROUTE, DEVICE_INFO_ROUTE, DEVICE_QUESTIONS_ROUTE, DEVICE_ROUTE } from "../utils/consts";
 import useOneDeviceFetching from "../hooks/useOneDeviceFetching";
+import useOneDeviceFeedbacksFetching from "../hooks/useOneDeviceFeedbacksFetching";
+import { observer } from "mobx-react-lite";
 
 const POSSIBLE_TYPES = ["main", "info", "comments", "questions"];
-const DevicePage = ({ type }) => {
-  if (!POSSIBLE_TYPES.includes(type)) throw Error("type of Device Page is not defined");
+const DevicePage = observer(({ type }) => {
+  if (!POSSIBLE_TYPES.includes(type)) throw Error("type of Device Page is not defined or incorrect");
 
   const { app } = useContext(Context);
   const pageRef = useRef(null);
@@ -22,6 +24,7 @@ const DevicePage = ({ type }) => {
   id = +id;
 
   useOneDeviceFetching(id, setDevice);
+  useOneDeviceFeedbacksFetching(device?.id, null, null, app);
 
   useEffect(() => {
     app.setPageRef(pageRef);
@@ -31,13 +34,19 @@ const DevicePage = ({ type }) => {
     let innerPage;
 
     if (type === "main") {
-      innerPage = <MainDevicePage device={device} combinationString={combinationString} />
+      innerPage = (
+        <MainDevicePage 
+          device={device} 
+          combinationString={combinationString} 
+          feedbacks={app.deviceFeedbacks}
+        />
+      );
     } else if (type === "info") {
-      innerPage = <DeviceInfoPage device={device} />
+      innerPage = <DeviceInfoPage device={device} />;
     } else if (type === "comments") {
-      innerPage = <DeviceCommentsPage />
+      innerPage = <DeviceCommentsPage device={device} feedbacks={app.deviceFeedbacks} />;
     } else if (type === "questions") {
-      innerPage = <DeviceQuestionsPage />
+      innerPage = <DeviceQuestionsPage device={device} questions={app.deviceQuestions} />;
     }
 
     return innerPage;
@@ -46,8 +55,14 @@ const DevicePage = ({ type }) => {
   const tabsData = [
     { name: "Everything about device", to: DEVICE_ROUTE + deviceIdCombo },
     { name: "Info", to: DEVICE_INFO_ROUTE.replace(":deviceIdCombo", deviceIdCombo) },
-    { name: "Comments", to: DEVICE_COMMENTS_ROUTE.replace(":deviceIdCombo", deviceIdCombo) },
-    { name: "Questions", to: DEVICE_QUESTIONS_ROUTE.replace(":deviceIdCombo", deviceIdCombo) },
+    { name: 
+      `Comments (${app.deviceFeedbacks?.length || 0})`, 
+      to: DEVICE_COMMENTS_ROUTE.replace(":deviceIdCombo", deviceIdCombo) 
+    },
+    { 
+      name: `Questions (${app.deviceQuestions?.length || 0})`, 
+      to: DEVICE_QUESTIONS_ROUTE.replace(":deviceIdCombo", deviceIdCombo) 
+    },
   ];
 
   return (
@@ -55,6 +70,6 @@ const DevicePage = ({ type }) => {
       <TabsPageLayout tabsData={tabsData} pageContent={renderInnerPage()} />
     </main>
   );
-};
+});
 
 export default DevicePage;

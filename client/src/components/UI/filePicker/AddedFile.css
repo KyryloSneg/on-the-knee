@@ -1,0 +1,42 @@
+.added-file {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.added-file-img-p {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+}
+
+.added-file-img-p > img {
+  box-sizing: border-box;
+  max-width: 80px;
+  max-height: 80px;
+  padding: 6px;
+  background-color: #e9e9e9;
+  border: 1px solid #dfdfdf;
+  border-radius: 8px;
+  object-fit: contain;
+}
+
+.added-file-btn-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 4px;
+}
+
+.added-file-btn-group > button {
+  box-sizing: content-box;
+  background: none;
+  width: 24px;
+  height: 24px;
+  padding: 4px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}

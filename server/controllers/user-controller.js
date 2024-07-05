@@ -119,6 +119,19 @@ class UserController {
             next(e);
         }
     }
+
+    async getUser(req, res, next) {
+        try {
+            // /:id?isDto=true
+            const id = req.params.id;
+            const isDto = !!req.query.isDto;
+            const user = await userService.getUser(id, isDto);
+
+            return res.json(user);
+        } catch (e) {
+            next(e);
+        }
+    }
 }
 
 

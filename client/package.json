@@ -23,6 +23,7 @@
     "react": "^18.2.0",
     "react-bootstrap": "^2.9.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.52.0",
     "react-map-gl": "^7.1.7",
     "react-router-dom": "^6.13.0",
     "uuid": "^9.0.0",

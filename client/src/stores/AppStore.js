@@ -14,10 +14,15 @@ class AppStore {
     this._isVisibleCategoriesModal = false;
     this._isVisibleUserLocationModal = false;
     this._isVisibleSelfDeliveryModal = false;
+    this._isVisibleDeviceFeedbackModal = false;
+    this._isVisibleReplyModal = false;
+    this._isVisibleQuestionCommentModal = false;
+    this._isVisibleAnswerModal = false;
+    this._isVisibleCommentGalleryModal = false;
     this._isFocusedSearchForm = false;
 
     this._hintSearchResults = []
-    // some important app refs below to skip a big amount of props passing
+    // some important app refs below are used to skip a big amount of props passing
     this._pageRef = null;
     this._deviceSectionRef = null;
     this._filtersAsideRef = null;
@@ -31,6 +36,17 @@ class AppStore {
     this._allLocations = [];
     this._isToShowUserLocationNotification = false;
     this._isUserLocationDeterminedCorrectly = true;
+
+    // we moved states below from DevicePage to reload them on creating a feedback or a question
+    this._deviceFeedbacks = [];
+    this._deviceQuestions = [];
+
+    // we use these states in modals that are related to the info below
+    this._selectedDeviceId = null;
+    this._selectedDeviceFeedbackId = null;
+    this._selectedDeviceQuestionId = null;
+    this._commentGalleryModalType = "deviceFeedbacks";
+    this._commentGallerySelectedImageId = null;
 
     this._storePickupPoints = [];
     makeAutoObservable(this);
@@ -78,6 +94,26 @@ class AppStore {
 
   setIsVisibleSelfDeliveryModal(bool) {
     this._isVisibleSelfDeliveryModal = bool;
+  }
+
+  setIsVisibleDeviceFeedbackModal(bool) {
+    this._isVisibleDeviceFeedbackModal = bool;
+  }
+
+  setIsVisibleReplyModal(bool) {
+    this._isVisibleReplyModal = bool;
+  }
+
+  setIsVisibleQuestionCommentModal(bool) {
+    this._isVisibleQuestionCommentModal = bool;
+  }
+
+  setIsVisibleAnswerModal(bool) {
+    this._isVisibleAnswerModal = bool;
+  }
+
+  setIsVisibleCommentGalleryModal(bool) {
+    this._isVisibleCommentGalleryModal = bool;
   }
 
   setIsFocusedSearchForm(bool) {
@@ -136,6 +172,34 @@ class AppStore {
     this._isUserLocationDeterminedCorrectly = isUserLocationDeterminedCorrectly;
   }
 
+  setDeviceFeedbacks(deviceFeedbacks) {
+    this._deviceFeedbacks = deviceFeedbacks;
+  }
+
+  setDeviceQuestions(deviceQuestions) {
+    this._deviceQuestions = deviceQuestions;
+  }
+
+  setSelectedDeviceId(selectedDeviceId) {
+    this._selectedDeviceId = selectedDeviceId;
+  }
+  
+  setSelectedDeviceFeedbackId(selectedDeviceFeedbackId) {
+    this._selectedDeviceFeedbackId = selectedDeviceFeedbackId;
+  }
+
+  setSelectedDeviceQuestionId(selectedDeviceQuestionId) {
+    this._selectedDeviceQuestionId = selectedDeviceQuestionId;
+  }
+
+  setCommentGalleryModalType(commentGalleryModalType) {
+    this._commentGalleryModalType = commentGalleryModalType;
+  }
+
+  setCommentGallerySelectedImageId(commentGallerySelectedImageId) {
+    this._commentGallerySelectedImageId = commentGallerySelectedImageId;
+  }
+
   setStorePickupPoints(storePickupPoints) {
     this._storePickupPoints = storePickupPoints;
   }
@@ -182,6 +246,26 @@ class AppStore {
 
   get isVisibleSelfDeliveryModal() {
     return this._isVisibleSelfDeliveryModal;
+  }
+
+  get isVisibleDeviceFeedbackModal() {
+    return this._isVisibleDeviceFeedbackModal;
+  }
+
+  get isVisibleReplyModal() {
+    return this._isVisibleReplyModal;
+  }
+
+  get isVisibleQuestionCommentModal() {
+    return this._isVisibleQuestionCommentModal;
+  }
+
+  get isVisibleAnswerModal() {
+    return this._isVisibleAnswerModal;
+  }
+
+  get isVisibleCommentGalleryModal() {
+    return this._isVisibleCommentGalleryModal;
   }
 
   get isFocusedSearchForm() {
@@ -238,6 +322,34 @@ class AppStore {
 
   get isUserLocationDeterminedCorrectly() {
     return this._isUserLocationDeterminedCorrectly;
+  }
+
+  get deviceFeedbacks() {
+    return this._deviceFeedbacks;
+  }
+
+  get deviceQuestions() {
+    return this._deviceQuestions;
+  }
+
+  get selectedDeviceId() {
+    return this._selectedDeviceId;
+  }
+
+  get selectedDeviceFeedbackId() {
+    return this._selectedDeviceFeedbackId;
+  }
+
+  get selectedDeviceQuestionId() {
+    return this._selectedDeviceQuestionId;
+  }
+
+  get commentGalleryModalType() {
+    return this._commentGalleryModalType;
+  }
+
+  get commentGallerySelectedImageId() {
+    return this._commentGallerySelectedImageId;
   }
 
   get storePickupPoints() {

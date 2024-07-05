@@ -19,7 +19,7 @@ import useDeletingRedundantCategoryId from "../hooks/useDeletingRedundantCategor
 const POSSIBLE_TYPES = ["category", "search"];
 
 const CatalogPage = observer(({ type }) => {
-  if (!POSSIBLE_TYPES.includes(type)) throw Error("type of Catalog Page is not defined");
+  if (!POSSIBLE_TYPES.includes(type)) throw Error("type of Catalog Page is not defined or incorrect");
 
   const location = useLocation();
   const { categoryIdSlug } = useParams();

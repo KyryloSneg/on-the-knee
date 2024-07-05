@@ -4,6 +4,10 @@
   gap: 32px;
 }
 
+.main-device-page h2 {
+  font-size: 2rem;
+}
+
 .device-page-section {
   background-color: #fff;
   border-radius: 16px;
@@ -14,6 +18,12 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: 16px;
+}
+
+@media screen and (min-width: 360px) {
+  .main-device-page h2 {
+    font-size: 2.5rem;
+  }
 }
 
 @media screen and (min-width: 870px) {

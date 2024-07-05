@@ -1,5 +1,3 @@
-const { faker } = require("@faker-js/faker");
-
 const POSSIBLE_DEVICE_INFOS = {
   "smartphones": [
     {
@@ -164,7 +162,7 @@ const STORE_LOCATIONS = {
 
 const USERS = [
   {
-    "_id": { "$oid": "64e367f69f8167945dcb4a1b" },
+    "_id": "64e367f69f8167945dcb4a1b",
     "name": "user",
     "surname": "user",
     "roles": ["PUBLIC", "ORDER-MANAGER", "CONTENT-MANAGER", "SELLER", "OWNER"],
@@ -172,6 +170,25 @@ const USERS = [
     "phoneNumber": "+380 95 532 9384"
   },
 ];
+
+const REAL_USER = {
+  "_id": "64e367f69f8167945dcb4a1b",
+  "name": "user",
+  "surname": "user",
+  "roles": ["PUBLIC", "ORDER-MANAGER", "CONTENT-MANAGER", "SELLER", "OWNER"],
+  "email": "onthekneeauth@gmail.com",
+  "phoneNumber": "+380 95 532 9384"
+};
+
+const MOCK_USER = {
+  // i made up the _id below
+  "_id": "6348acd2e1a47ca32e79f46f",
+  "name": "mock",
+  "surname": "user",
+  "roles": ["PUBLIC", "ORDER-MANAGER", "CONTENT-MANAGER", "SELLER", "OWNER"],
+  "email": "mockuserauth@gmail.com",
+  "phoneNumber": "+380 82 0172 6701"
+};
 
 const POSSIBLE_DELIVERY_TYPES = { "courier": 5, "self-delivery": 0 };
 const POSSIBLE_SALE_TYPE_NAMES = [
@@ -211,8 +228,8 @@ const MIN_IMAGE_WIDTH = 300;
 const MIN_CATEGORY_IMAGE_HEIGHT = 200;
 const MIN_CATEGORY_IMAGE_WIDTH = 300;
 
-const MIN_FEEDBACK_IMAGE_HEIGHT = 150;
-const MIN_FEEDBACK_IMAGE_WIDTH = 200;
+const MIN_FEEDBACK_IMAGE_HEIGHT = 900;
+const MIN_FEEDBACK_IMAGE_WIDTH = 1000;
 
 const MAX_SALE_IMAGE_HEIGHT = 800;
 const MAX_SALE_IMAGE_WIDTH = 800;
@@ -223,11 +240,13 @@ const MAX_IMAGE_WIDTH = 800;
 const MAX_CATEGORY_IMAGE_HEIGHT = 400;
 const MAX_CATEGORY_IMAGE_WIDTH = 500;
 
-const MAX_FEEDBACK_IMAGE_HEIGHT = 350;
-const MAX_FEEDBACK_IMAGE_WIDTH = 400;
+const MAX_FEEDBACK_IMAGE_HEIGHT = 1500;
+const MAX_FEEDBACK_IMAGE_WIDTH = 1650;
 
 module.exports = {
   USERS,
+  REAL_USER,
+  MOCK_USER,
 
   POSSIBLE_DEVICE_INFOS,
   POSSIBLE_DEVICE_ATTRIBUTES,

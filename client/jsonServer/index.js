@@ -31,7 +31,6 @@ module.exports = function createData () {
 
     "sellers": [],
     "seller-feedbacks": [],
-    "seller-feedback-replies": [],
 
     "carts": [],
     "cart-devices": [],
@@ -50,7 +49,14 @@ module.exports = function createData () {
 
     "receivents": [],
     "device-feedbacks": [],
+    "device-feedback-likes": [],
+    "device-feedback-dislikes": [],
     "device-feedback-replies": [],
+    
+    "device-questions": [],
+    "device-question-likes": [],
+    "device-question-dislikes": [],
+    "device-answers": [],
 
     "orders": [],
     "order-device-combinations": [],
@@ -80,7 +86,13 @@ module.exports = function createData () {
   const devicesPromise = createDevices().then(result => {
     data["devices"] = result.devices;
     data["device-feedbacks"] = result.deviceFeedbacks;
+    data["device-feedback-likes"] = result.deviceFeedbackLikes;
+    data["device-feedback-dislikes"] = result.deviceFeedbackDislikes;
     data["device-feedback-replies"] = result.deviceFeedbackReplies;
+    data["device-questions"] = result.deviceQuestions;
+    data["device-question-likes"] = result.deviceQuestionLikes;
+    data["device-question-dislikes"] = result.deviceQuestionDislikes;
+    data["device-answers"] = result.deviceAnswers;
     data["device-infos"] = result.deviceInfos;
     data["device-combinations"] = result.deviceCombinations;
     
@@ -91,7 +103,6 @@ module.exports = function createData () {
     
     data["sellers"] = result.sellers;
     data["seller-feedbacks"] = result.sellerFeedbacks;
-    data["seller-feedback-replies"] = result.sellerFeedbackReplies;
     
     data["attributes"] = result.attributes;
     data["attribute-names"] = result.attributeNames;

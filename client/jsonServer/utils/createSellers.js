@@ -6,10 +6,9 @@ const StringActions = require("./StringActions");
 module.exports = () => {
   let sellers = [];
   let sellerFeedbacks = [];
-  let sellerFeedbackReplies = [];
 
   for (let i = 0; i < 10; i++) {
-    const rating = createSellerFeedbacks(sellerFeedbacks, sellerFeedbackReplies, sellers.length + 1);
+    const rating = createSellerFeedbacks(sellerFeedbacks, sellers.length + 1);
     const name = faker.company.name();
     const slug = StringActions.nameToSlug(name);
 
@@ -27,6 +26,5 @@ module.exports = () => {
   return {
     sellers,
     sellerFeedbacks,
-    sellerFeedbackReplies,
   };
 }
