@@ -9,8 +9,8 @@ import notFilledDislikeIcon from "../../../assets/thumb_down_24x24_not-filled_33
 import { useContext, useState } from "react";
 import { Context } from "../../../Context";
 import { observer } from "mobx-react-lite";
-import DeviceFeedbackRatesActions from "../../../utils/DeviceFeedbackRatesActions";
-import useFetchingDeviceFeedbackRates from "../../../hooks/useFetchingDeviceFeedbackRates";
+import DeviceCommentRatesActions from "../../../utils/DeviceCommentRatesActions";
+import useFetchingDeviceCommentRates from "../../../hooks/useFetchingDeviceCommentRates";
 import { v4 } from "uuid";
 import setReplyModalVisibility from "../../../utils/setReplyModalVisibility";
 import StarRating from "../starRating/StarRating";
@@ -19,16 +19,16 @@ import setAnswerModalVisibility from "../../../utils/setAnswerModalVisibility";
 const OriginalComment = observer(({ comment, user, type, singularCommentWord = "comment" , isWithImages, closeGalleryModal }) => {
   const { user: userStore, app } = useContext(Context);
 
-  // we must update likes and dislikes after user click one of them
-  const [likes, setLikes] = useState(comment["device-feedback-likes"]);
-  const [dislikes, setDislikes] = useState(comment["device-feedback-dislikes"]);
+  // we must update likes and dislikes after user clicking on one of them
+  const [likes, setLikes] = useState(comment["device-feedback-likes"] || comment["device-question-likes"]);
+  const [dislikes, setDislikes] = useState(comment["device-feedback-dislikes"] || comment["device-question-dislikes"]);
 
   const {
     fetchingLikes,
     fetchingDislikes,
     likesFetchResultRef,
     dislikesFetchResultRef
-  } = useFetchingDeviceFeedbackRates(comment.id, setLikes, setDislikes);
+  } = useFetchingDeviceCommentRates(comment.id, setLikes, setDislikes, type);
 
   const createdAtDate = new Date(comment.date);
   const createdAtDateStr = getDateStr(createdAtDate);
@@ -36,10 +36,8 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
   let likeFromUser;
   let dislikeFromUser;
 
-  if (type === "deviceFeedbacks") {
-    likeFromUser = likes.find(like => like.userId === userStore.user?._id);
-    dislikeFromUser = dislikes.find(dislike => dislike.userId === userStore.user?._id);
-  }
+  likeFromUser = likes.find(like => like.userId === userStore.user?._id);
+  dislikeFromUser = dislikes.find(dislike => dislike.userId === userStore.user?._id);
 
   const [isAlreadyLiked, setIsAlreadyLiked] = useState(!!likeFromUser);
   const [isAlreadyDisliked, setIsAlreadyDisliked] = useState(!!dislikeFromUser);
@@ -59,7 +57,7 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
       setAnswerModalVisibility(true, app);
     }
 
-    closeGalleryModal();
+    if (closeGalleryModal) closeGalleryModal();
   }
 
   async function removeLike() {
@@ -76,7 +74,7 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
     }
 
     // could be undefined
-    const error = await DeviceFeedbackRatesActions.removeLikeRate(likeFromUser.id, setIsAlreadyLiked);
+    const error = await DeviceCommentRatesActions.removeLikeRate(likeFromUser.id, type, setIsAlreadyLiked);
     if (!error) fetchingLikes();
   }
 
@@ -93,7 +91,7 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
       if (isCantRateYourCommentError) setIsCantRateYourCommentError(false);
     }
 
-    const error = await DeviceFeedbackRatesActions.removeDislikeRate(dislikeFromUser.id, setIsAlreadyDisliked);
+    const error = await DeviceCommentRatesActions.removeDislikeRate(dislikeFromUser.id, type, setIsAlreadyDisliked);
     if (!error) fetchingDislikes();
   }
 
@@ -140,14 +138,19 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
       if (isAlreadyLiked) {
         await removeLike();
       } else {
-        const likeObject = {
+        let likeObject = {
           // some random id (implementation might be different from this one)
           "id": v4(),
           "userId": userStore.user?._id,
-          "device-feedbackId": comment.id,
+        };
+        
+        if (type === "deviceFeedbacks") {
+          likeObject["device-feedbackId"] = comment.id;
+        } else if (type === "deviceQuestions") {
+          likeObject["device-questionId"] = comment.id;
         }
 
-        const error = await DeviceFeedbackRatesActions.likeFeedback(likeObject, setIsAlreadyLiked, setIsChangingRate);
+        const error = await DeviceCommentRatesActions.likeFeedback(likeObject, type, setIsAlreadyLiked, setIsChangingRate);
         // preventing redundant fetches if delete request failed
         if (!error) fetchingLikes();
 
@@ -175,13 +178,18 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
       if (isAlreadyDisliked) {
         await removeDislike();
       } else {
-        const dislikeObject = {
+        let dislikeObject = {
           "id": v4(),
           "userId": userStore.user?._id,
-          "device-feedbackId": comment.id,
+        };
+        
+        if (type === "deviceFeedbacks") {
+          dislikeObject["device-feedbackId"] = comment.id;
+        } else if (type === "deviceQuestions") {
+          dislikeObject["device-questionId"] = comment.id;
         }
 
-        const error = await DeviceFeedbackRatesActions.dislikeFeedback(dislikeObject, setIsAlreadyDisliked, setIsChangingRate);
+        const error = await DeviceCommentRatesActions.dislikeFeedback(dislikeObject, type, setIsAlreadyDisliked, setIsChangingRate);
         if (!error) fetchingDislikes();
 
         if (isAlreadyLiked) {

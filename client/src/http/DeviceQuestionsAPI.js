@@ -11,6 +11,32 @@ export async function createDeviceQuestion(formData) {
   return data;
 }
 
+export async function getOneQuestionLikes(deviceQuestionId) {
+  const { data } = await $mockApi.get(`/device-question-likes?device-questionId=${deviceQuestionId}`);
+  return data;
+}
+
+export async function getOneQuestionDislikes(deviceQuestionId) {
+  const { data } = await $mockApi.get(`/device-question-dislikes?device-questionId=${deviceQuestionId}`);
+  return data;
+}
+
+export async function createQuestionLike(likeObject) {
+  await $mockApi.post("/device-question-likes", likeObject);
+}
+
+export async function createQuestionDislike(dislikeObject) {
+  await $mockApi.post("/device-question-dislikes", dislikeObject);
+}
+
+export async function removeQuestionLike(id) {
+  await $mockApi.delete("/device-question-likes/" + id);
+}
+
+export async function removeQuestionDislike(id) {
+  await $mockApi.delete("/device-question-dislikes/" + id);
+}
+
 export async function createDeviceAnswer(formData) {
   const { data } = await $mockApi.post("/device-answers", formData);
   return data;
