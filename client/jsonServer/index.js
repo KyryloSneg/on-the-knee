@@ -52,8 +52,10 @@ module.exports = function createData () {
     "device-feedback-likes": [],
     "device-feedback-dislikes": [],
     "device-feedback-replies": [],
-
+    
     "device-questions": [],
+    "device-question-likes": [],
+    "device-question-dislikes": [],
     "device-answers": [],
 
     "orders": [],
@@ -88,6 +90,8 @@ module.exports = function createData () {
     data["device-feedback-dislikes"] = result.deviceFeedbackDislikes;
     data["device-feedback-replies"] = result.deviceFeedbackReplies;
     data["device-questions"] = result.deviceQuestions;
+    data["device-question-likes"] = result.deviceQuestionLikes;
+    data["device-question-dislikes"] = result.deviceQuestionDislikes;
     data["device-answers"] = result.deviceAnswers;
     data["device-infos"] = result.deviceInfos;
     data["device-combinations"] = result.deviceCombinations;
