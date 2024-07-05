@@ -1,6 +1,7 @@
 #select-user-location-modal {
   width: 100%;
   max-width: 600px;
+  padding: 0;
 }
 
 @media screen and (min-width: 600px) {
@@ -9,6 +10,7 @@
     height: auto;
     max-height: 95%;
     border-radius: 6px;
+    padding: 0 0 1px 0;
   }
 
   #select-user-location-modal > header > h2 {

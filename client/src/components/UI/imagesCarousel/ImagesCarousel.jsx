@@ -9,11 +9,14 @@ import CarouselBottomSelectBar from "./CarouselBottomSelectBar";
 import { useLocation } from "react-router-dom";
 
 const POSSIBLE_TYPES = ["default", "device"];
-const ImagesCarousel = ({ type = "default", images, className = "", toResetOnLocationChange = false, device = null, textSaleTypes = null, logoSaleTypes = null }) => {
+const ImagesCarousel = ({ 
+  type = "default", images, className = "", initialSelectedId = 0, 
+  toResetOnLocationChange = false, device = null, textSaleTypes = null, logoSaleTypes = null 
+}) => {
   if (!POSSIBLE_TYPES.includes(type)) throw Error("type of Catalog Page is not defined or incorrect");
   const location = useLocation();
   const windowWidth = useWindowWidth();
-  const [selectedId, setSelectedId] = useState(0);
+  const [selectedId, setSelectedId] = useState(initialSelectedId);
   
   let sectionClassName = "images-carousel";
   if (className) sectionClassName += ` ${className}`;
