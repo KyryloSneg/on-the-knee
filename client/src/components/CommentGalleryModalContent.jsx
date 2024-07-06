@@ -17,7 +17,8 @@ const CommentGalleryModalContent = observer(({ type, singularCommentWord, closeM
 
   let carouselImages = [];
   for (let image of comment?.images) {
-    carouselImages.push({ src: image, alt: "" })
+    const src = typeof image === "object" ? image?.fileObj : image;
+    carouselImages.push({ src: src, alt: "", style: { transform: `rotate(${image?.rotateDegrees || 0}deg)` } })
   }
 
   return (  
