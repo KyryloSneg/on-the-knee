@@ -34,19 +34,31 @@ const DevicePage = observer(({ type }) => {
     let innerPage;
 
     if (type === "main") {
+      const sortedByDateFeedbacks = [...app.deviceFeedbacks].sort(
+        (a, b) => b.date.localeCompare(a.date)
+      );
+
       innerPage = (
         <MainDevicePage 
           device={device} 
           combinationString={combinationString} 
-          feedbacks={app.deviceFeedbacks}
+          feedbacks={sortedByDateFeedbacks}
         />
       );
     } else if (type === "info") {
       innerPage = <DeviceInfoPage device={device} />;
     } else if (type === "comments") {
-      innerPage = <DeviceCommentsPage device={device} feedbacks={app.deviceFeedbacks} />;
+      const sortedByDateFeedbacks = [...app.deviceFeedbacks].sort(
+        (a, b) => b.date.localeCompare(a.date)
+      );
+
+      innerPage = <DeviceCommentsPage device={device} feedbacks={sortedByDateFeedbacks} />;
     } else if (type === "questions") {
-      innerPage = <DeviceQuestionsPage device={device} questions={app.deviceQuestions} />;
+      const sortedByDateQuestions = [...app.deviceQuestions].sort(
+        (a, b) => b.date.localeCompare(a.date)
+      );
+
+      innerPage = <DeviceQuestionsPage device={device} questions={sortedByDateQuestions} />;
     }
 
     return innerPage;

@@ -39,11 +39,10 @@ const CarouselContent = ({ type, images, selectedId, setSelectedId, device = nul
       <ul className="carousel-content-list" style={{ transform: `translateX(${translateX})` }}>
         {images.map((image, index) =>
           <li key={index} className="carousel-content-img-wrap">
-            <img src={image.src} alt={image.alt} draggable="false" />
+            <img src={image.src} alt={image.alt} draggable="false" style={image?.style || {}} />
           </li>
         )}
       </ul>
-      {/* <img src={image.src} alt={image.alt} /> */}
       {(images.length > 1 && selectedId !== images.length - 1) &&
         <button className="select-next-image" onClick={selectNextImage}>
           <img src={chevronRightIcon} alt="" draggable="false" />

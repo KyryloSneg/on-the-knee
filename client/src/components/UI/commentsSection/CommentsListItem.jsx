@@ -15,6 +15,8 @@ const CommentsListItem = ({ type, comment, singularCommentWord, isWithImages = t
     replies = comment["device-answers"];
   }
 
+  if (replies) replies.sort((a, b) => a.date.localeCompare(b.date));
+
   return (
     <div className="comments-list-item">
       <OriginalComment 
