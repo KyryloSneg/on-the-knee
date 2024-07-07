@@ -41,10 +41,13 @@ class AppStore {
     this._deviceFeedbacks = [];
     this._deviceQuestions = [];
 
+    this._sellerFeedbacks = [];
+
     // we use these states in modals that are related to the info below
     this._selectedDeviceId = null;
     this._selectedDeviceFeedbackId = null;
     this._selectedDeviceQuestionId = null;
+    this._selectedSellerFeedbackId = null;
     this._commentGalleryModalType = "deviceFeedbacks";
     this._commentGallerySelectedImageId = null;
 
@@ -180,6 +183,10 @@ class AppStore {
     this._deviceQuestions = deviceQuestions;
   }
 
+  setSellerFeedbacks(sellerFeedbacks) {
+    this._sellerFeedbacks = sellerFeedbacks;
+  }
+
   setSelectedDeviceId(selectedDeviceId) {
     this._selectedDeviceId = selectedDeviceId;
   }
@@ -190,6 +197,10 @@ class AppStore {
 
   setSelectedDeviceQuestionId(selectedDeviceQuestionId) {
     this._selectedDeviceQuestionId = selectedDeviceQuestionId;
+  }
+
+  setSelectedSellerFeedbackId(selectedSellerFeedbackId) {
+    this._selectedSellerFeedbackId = selectedSellerFeedbackId;
   }
 
   setCommentGalleryModalType(commentGalleryModalType) {
@@ -332,6 +343,10 @@ class AppStore {
     return this._deviceQuestions;
   }
 
+  get sellerFeedbacks() {
+    return this._sellerFeedbacks;
+  }
+
   get selectedDeviceId() {
     return this._selectedDeviceId;
   }
@@ -342,6 +357,10 @@ class AppStore {
 
   get selectedDeviceQuestionId() {
     return this._selectedDeviceQuestionId;
+  }
+
+  get selectedSellerFeedbackId() {
+    return this._selectedSellerFeedbackId;
   }
 
   get commentGalleryModalType() {
