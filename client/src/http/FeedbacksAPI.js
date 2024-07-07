@@ -1,8 +1,13 @@
-import { ONE_DEVICE_FEEDBACKS_API_URL } from "../utils/consts";
+import { ONE_DEVICE_FEEDBACKS_API_URL, ONE_SELLER_FEEDBACKS_API_URL } from "../utils/consts";
 import { $mockApi } from "./index";
 
 export async function getOneDeviceFeedbacks(id) {
   const { data } = await $mockApi.get(ONE_DEVICE_FEEDBACKS_API_URL.replace("ID_TO_REPLACE", id));
+  return data;
+}
+
+export async function getOneSellerFeedbacks(id) {
+  const { data } = await $mockApi.get(ONE_SELLER_FEEDBACKS_API_URL.replace("ID_TO_REPLACE", id));
   return data;
 }
 

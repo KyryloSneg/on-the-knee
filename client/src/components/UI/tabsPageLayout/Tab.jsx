@@ -4,9 +4,9 @@ import { Link } from "react-router-dom";
 
 const Tab = ({ tabData }) => {
   const currentPath = useCurrentPath();
-  // replace dynamic param :deviceIdCombo value with the param's name 
+  // replace dynamic param value with the param's name 
   let splittedTabDataTo = tabData.to.split("/");
-  splittedTabDataTo[2] = ":deviceIdCombo";
+  splittedTabDataTo[2] = currentPath.split("/")[2];
   
   const tabDataRoute = splittedTabDataTo.join("/");
   const active = currentPath === tabDataRoute;

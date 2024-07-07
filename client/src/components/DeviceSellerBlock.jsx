@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import "./styles/DeviceSellerBlock.css";
+import { SELLER_ROUTE } from "../utils/consts";
 
 const DeviceSellerBlock = ({ seller }) => {
-  /* TODO: sellers routing and corresponding link's to props */
-  let to = "#";
+  let to = SELLER_ROUTE + `${seller.id}--${seller.slug}`;
 
   return (
     <p className="device-seller-block">
