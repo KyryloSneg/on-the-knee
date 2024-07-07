@@ -16,7 +16,7 @@ import setReplyModalVisibility from "../../../utils/setReplyModalVisibility";
 import StarRating from "../starRating/StarRating";
 import setAnswerModalVisibility from "../../../utils/setAnswerModalVisibility";
 
-const OriginalComment = observer(({ comment, user, type, singularCommentWord = "comment" , isWithImages, closeGalleryModal }) => {
+const OriginalComment = observer(({ comment, user, type, singularCommentWord = "comment", isWithImages, closeGalleryModal }) => {
   const { user: userStore, app } = useContext(Context);
 
   // we must update likes and dislikes after user clicking on one of them
@@ -36,8 +36,8 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
   let likeFromUser;
   let dislikeFromUser;
 
-  likeFromUser = likes.find(like => like.userId === userStore.user?._id);
-  dislikeFromUser = dislikes.find(dislike => dislike.userId === userStore.user?._id);
+  likeFromUser = likes?.find(like => like.userId === userStore.user?._id);
+  dislikeFromUser = dislikes?.find(dislike => dislike.userId === userStore.user?._id);
 
   const [isAlreadyLiked, setIsAlreadyLiked] = useState(!!likeFromUser);
   const [isAlreadyDisliked, setIsAlreadyDisliked] = useState(!!dislikeFromUser);
@@ -123,14 +123,14 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
       // update opposite rate if user changed like to dislike or vice versa and DO NOT CHANGE A RATE AT ALL
       await fetchingLikes();
       const updatedLikes = likesFetchResultRef.current;
-     
+
       const updatedIsAlreadyLiked = !!updatedLikes?.find(like => like.userId === userStore.user?._id);
       if (updatedIsAlreadyLiked !== isAlreadyLiked) {
         setIsAlreadyLiked(updatedIsAlreadyLiked);
         if (updatedIsAlreadyLiked && isAlreadyDisliked) {
           await fetchingDislikes();
           setIsAlreadyDisliked(false);
-        } 
+        }
 
         return;
       };
@@ -143,7 +143,7 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
           "id": v4(),
           "userId": userStore.user?._id,
         };
-        
+
         if (type === "deviceFeedbacks") {
           likeObject["device-feedbackId"] = comment.id;
         } else if (type === "deviceQuestions") {
@@ -163,14 +163,14 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
     } else {
       await fetchingDislikes();
       const updatedDislikes = dislikesFetchResultRef.current;
-     
+
       const updatedIsAlreadyDisliked = !!updatedDislikes?.find(dislike => dislike.userId === userStore.user?._id);
       if (updatedIsAlreadyDisliked !== isAlreadyDisliked) {
         setIsAlreadyDisliked(updatedIsAlreadyDisliked);
         if (updatedIsAlreadyDisliked && isAlreadyLiked) {
           await fetchingLikes();
           setIsAlreadyLiked(false);
-        } 
+        }
 
         return;
       };
@@ -182,7 +182,7 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
           "id": v4(),
           "userId": userStore.user?._id,
         };
-        
+
         if (type === "deviceFeedbacks") {
           dislikeObject["device-feedbackId"] = comment.id;
         } else if (type === "deviceQuestions") {
@@ -199,8 +199,6 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
 
     }
   }
-
-  const isToShowRating = type === "deviceFeedbacks" || type === "sellerFeedbacks";
 
   let commentReplyWord = "Reply";
   if (type === "deviceQuestions") {
@@ -226,11 +224,38 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
           {createdAtDateStr}
         </p>
       </div>
-      {isToShowRating &&
-        <StarRating
-          readOnlyValue={comment.rate}
-          id={`${type}-${comment.id}-original-comment-rating`}
-        />
+      {type === "deviceFeedbacks"
+        ? (
+          <StarRating
+            readOnlyValue={comment.rate}
+            id={`${type}-${comment.id}-original-comment-rating`}
+          />
+        )
+        : (type === "sellerFeedbacks") && (
+          <div className="seller-feedback-star-ratings">
+            <div className="seller-feedback-star-rating-wrap">
+              <p>Service quality</p>
+              <StarRating
+                readOnlyValue={comment["service-quality-rate"]}
+                id={`${type}-${comment.id}-service-original-comment-rating`}
+              />
+            </div>
+            <div className="seller-feedback-star-rating-wrap">
+              <p>Up-to-date</p>
+              <StarRating
+                readOnlyValue={comment["is-up-to-date-rate"]}
+                id={`${type}-${comment.id}-up-to-date-original-comment-rating`}
+              />
+            </div>
+            <div className="seller-feedback-star-rating-wrap">
+              <p>Delivery speed</p>
+              <StarRating
+                readOnlyValue={comment["delivery-speed-rate"]}
+                id={`${type}-${comment.id}-del-speed-original-comment-rating`}
+              />
+            </div>
+          </div>
+        )
       }
       {comment.message &&
         <p className="original-comment-message">

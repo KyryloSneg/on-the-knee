@@ -18,8 +18,13 @@ module.exports = (feedbacks, sellerId) => {
       }
     }
 
-    const rate = faker.number.int({ min: 1, max: 5 });
-    rates.push(rate);
+    const upToDateRate = faker.number.int({ min: 1, max: 5 });
+    const deliverySpeedRate = faker.number.int({ min: 1, max: 5 });
+    const serviceQualityRate = faker.number.int({ min: 1, max: 5 });
+
+    rates.push(upToDateRate);
+    rates.push(deliverySpeedRate);
+    rates.push(serviceQualityRate);
 
     const isRealUser = faker.datatype.boolean(0.4);
     const userId = isRealUser ? REAL_USER._id : MOCK_USER._id;
@@ -30,7 +35,9 @@ module.exports = (feedbacks, sellerId) => {
       "userId": userId,
       "images": images,
       "message": faker.lorem.text(),
-      "rate": rate,
+      "is-up-to-date-rate": upToDateRate,
+      "delivery-speed-rate": deliverySpeedRate,
+      "service-quality-rate": serviceQualityRate,
       "date": faker.date.recent(),
     }
 

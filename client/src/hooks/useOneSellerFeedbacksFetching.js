@@ -3,12 +3,17 @@ import useFetching from "./useFetching";
 import { Context } from "../Context";
 import { getOneSellerFeedbacks } from "../http/FeedbacksAPI";
 
-function useOneSellerFeedbacksFetching(sellerId, setFeedbacks) {
+function useOneSellerFeedbacksFetching(sellerId, setFeedbacks = null) {
   const { app } = useContext(Context);
 
   async function fetchingCallback(propsSellerId) {
     const feedbacks = await getOneSellerFeedbacks(propsSellerId);
-    setFeedbacks(feedbacks);
+    
+    if (setFeedbacks) {
+      setFeedbacks(feedbacks);
+    } else {
+      app.setSellerFeedbacks(feedbacks);
+    }
   }
 
   const [fetching, isLoading, error] = useFetching(() => fetchingCallback(sellerId), 0, null, [sellerId]);

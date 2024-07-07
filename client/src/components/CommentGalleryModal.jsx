@@ -6,7 +6,7 @@ import ModalWindow from "./UI/modalWindow/ModalWindow";
 import CommentGalleryModalContent from "./CommentGalleryModalContent";
 import setCommentGalleryModalVisibility from "../utils/setCommentGalleryModalVisibility";
 
-const POSSIBLE_TYPES = ["deviceFeedbacks", "deviceQuestions"];
+const POSSIBLE_TYPES = ["deviceFeedbacks", "deviceQuestions", "sellerFeedbacks"];
 const CommentGalleryModal = observer(() => {
   const { app } = useContext(Context);
   const type = app.commentGalleryModalType;
@@ -14,7 +14,7 @@ const CommentGalleryModal = observer(() => {
   if (!POSSIBLE_TYPES.includes(type)) throw Error("type of CommentGalleryModal is not defined or incorrect");
 
   let singularCommentWord;
-  if (type === "deviceFeedbacks") {
+  if (type === "deviceFeedbacks" || type === "sellerFeedbacks") {
     singularCommentWord = "feedback";
   } else if (type === "deviceQuestions") {
     singularCommentWord = "question";
