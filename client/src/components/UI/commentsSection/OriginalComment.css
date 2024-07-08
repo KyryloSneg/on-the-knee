@@ -150,9 +150,21 @@
 @media screen and (min-width: 800px) {
   .seller-feedback-star-ratings {
     grid-template-columns: auto auto auto;
+    justify-content: start;
   }
 
   .seller-feedback-star-rating-wrap {
     justify-content: start;
+  }
+}
+
+@media screen and (min-width: 1060px) {
+  #comment-gallery-modal .seller-feedback-star-ratings {
+    grid-template-columns: 1fr;
+  }
+
+  #comment-gallery-modal .seller-feedback-star-rating-wrap {
+    grid-template-columns: auto auto;
+    justify-content: space-between;
   }
 }
