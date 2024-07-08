@@ -49,7 +49,11 @@ const SellerPage = observer(({ type }) => {
 
   return (
     <main>
-      <TabsPageLayout tabsData={tabsData} pageContent={renderInnerPage()} />
+      <TabsPageLayout 
+        tabsData={tabsData} 
+        pageContent={renderInnerPage()} 
+        isToUsePaddingForPage={type !== "devices"} 
+      />
     </main>
   );
 });
