@@ -62,6 +62,10 @@
   border-radius: 14px;
 }
 
+.tabs-page-layout.no-page-padding .tabs-page-scroll {
+  margin: 0 10%;
+}
+
 .self-delivery-modal-scrollbar .os-scrollbar-vertical {
   padding: 1px 0 0 0;
 }

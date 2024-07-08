@@ -1,10 +1,11 @@
 import React from 'react';
+import CatalogPage from './CatalogPage';
 
 const SellerDevicesPage = ({ seller }) => {
   if (!seller) return <div />;
   
   return (
-    <div>Imagine seller's devices</div>
+    <CatalogPage type="seller" seller={seller} />
   );
 }
 

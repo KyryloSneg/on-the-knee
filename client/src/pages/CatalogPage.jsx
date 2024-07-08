@@ -16,9 +16,9 @@ import ChildCategoriesBar from "../components/ChildCategoriesBar";
 import CustomScrollbar from "../components/UI/customScrollbar/CustomScrollbar";
 import useDeletingRedundantCategoryId from "../hooks/useDeletingRedundantCategoryId";
 
-const POSSIBLE_TYPES = ["category", "search"];
+const POSSIBLE_TYPES = ["category", "search", "seller"];
 
-const CatalogPage = observer(({ type }) => {
+const CatalogPage = observer(({ type, seller = null }) => {
   if (!POSSIBLE_TYPES.includes(type)) throw Error("type of Catalog Page is not defined or incorrect");
 
   const location = useLocation();
@@ -68,7 +68,10 @@ const CatalogPage = observer(({ type }) => {
 
   }, [location.search, deviceStore, deviceStore.filters, deviceStore.filters, location.pathname, navigate, isTest]);
 
-  const [isLoading, error, deviceFetching] = useDeviceSectionFetching(deviceStore, app, type, setIsFoundDevicesByQuery, setSpellCheckedQuery);
+  const [isLoading, error, deviceFetching] = useDeviceSectionFetching(
+    deviceStore, app, type, setIsFoundDevicesByQuery, setSpellCheckedQuery, seller
+  );
+
   if (error) console.log(error);
 
   if (!isFoundDevicesByQuery && type === "search") {

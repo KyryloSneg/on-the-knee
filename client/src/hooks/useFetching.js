@@ -14,9 +14,7 @@ function useFetching(callback, settingIsLoadingDelay = 0, finallyCallback = null
       fetchResultRef.current = result;
       setFetchResult(result);
       setError('');
-    } catch(e) {
-      setError(e.message);
-    } finally {
+    }  finally {
       if (finallyCallback) finallyCallback();
       setTimeout(() => {
         setIsLoading(false); 

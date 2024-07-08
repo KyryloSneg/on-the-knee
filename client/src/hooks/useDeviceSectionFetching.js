@@ -8,7 +8,7 @@ import { useLocation, useParams } from "react-router-dom";
 import DeviceComboActions from "../utils/DeviceComboActions";
 import { getSellers } from "../http/SellersAPI";
 import URLActions from "../utils/URLActions";
-import { filterDevicesByBrands, filterDevicesByPrice, filterDevicesBySellers, filterDevicesByStock } from "../utils/filterDevicesBySpecialFilters";
+import { filterDevicesByBrands, filterDevicesByOneSeller, filterDevicesByPrice, filterDevicesBySellers, filterDevicesByStock } from "../utils/filterDevicesBySpecialFilters";
 import getDeviceStructuredAttributes from "../utils/getDeviceStructuredAttributes";
 import getDeviceFiltersObj from "../utils/getDeviceFiltersObj";
 import filterDevicesWithCommonFilters from "../utils/filterDevicesWithCommonFilters";
@@ -19,7 +19,7 @@ import getDevicesBySearchQuery from "../utils/getDevicesBySearchQuery";
 import getPreparedForMockServerStr from "../utils/getPreparedForMockServerStr";
 
 // query params without pagination ones
-function useDeviceSectionFetching(deviceStore, app, originalType, setIsFoundDevicesByQuery = null, setSpellCheckedQuery = null) {
+function useDeviceSectionFetching(deviceStore, app, originalType, setIsFoundDevicesByQuery = null, setSpellCheckedQuery = null, seller = null) {
   const location = useLocation();
   const { categoryIdSlug } = useParams();
   const navigate = useNavigateToEncodedURL();
@@ -59,7 +59,8 @@ function useDeviceSectionFetching(deviceStore, app, originalType, setIsFoundDevi
       
       const toFilterByPrice = minQueryPrice && maxQueryPrice;
       const toFilterByStock = !!deviceStore.usedFilters["stock"]?.length;
-      const toFilterBySeller = !!deviceStore.usedFilters["seller"]?.length;
+      const toFilterBySellers = !!deviceStore.usedFilters["seller"]?.length;
+      const toFilterByOneSeller = type === "seller" && seller;
       const toFilterByBrand = !!deviceStore.usedFilters["brand"]?.length;
   
       const categoryIdParam = URLActions.getParamValue("categoryId");
@@ -98,9 +99,13 @@ function useDeviceSectionFetching(deviceStore, app, originalType, setIsFoundDevi
   
       const sellers = await getSellers();
       const brands = deviceStore.brands;
+
+      if (toFilterByOneSeller) {
+        devices = filterDevicesByOneSeller(devices, sellers, seller);
+      }
   
       // TODO: add there other "special" filters (that requires separate implementation) later on
-      const isSpecialFilters = toFilterByPrice || toFilterByStock || toFilterBySeller || toFilterByBrand;
+      const isSpecialFilters = toFilterByPrice || toFilterByStock || toFilterBySellers || toFilterByBrand;
   
       // we clone devices array deeply to prevent changing of a device combos
       // (it's important for stock filter because it doesn't change on using it)
@@ -111,7 +116,7 @@ function useDeviceSectionFetching(deviceStore, app, originalType, setIsFoundDevi
          filteredDevices = filterDevicesByStock(filteredDevices, stocks, deviceStore.usedFilters);
       }
   
-      if (toFilterBySeller) {
+      if (toFilterBySellers) {
         filteredDevices = filterDevicesBySellers(filteredDevices, sellers, deviceStore.usedFilters);
       }
   
@@ -131,7 +136,7 @@ function useDeviceSectionFetching(deviceStore, app, originalType, setIsFoundDevi
       }
   
       const attributes = await getDeviceStructuredAttributes(isSpecialFilters, filteredDevices);
-      let filters = getDeviceFiltersObj(devices, stocks, sellers, brands, deviceInfos, attributes);
+      let filters = getDeviceFiltersObj(devices, stocks, sellers, brands, deviceInfos, attributes, !toFilterByOneSeller);
   
       let filtersWithoutSpecial = {};
       for (let [key, value] of Object.entries({ ...deviceStore.usedFilters })) {
@@ -150,7 +155,7 @@ function useDeviceSectionFetching(deviceStore, app, originalType, setIsFoundDevi
         sortDevicesByPrice(filteredDevices, stocks, sales, saleTypeNames, splittedSortFilter[0] === "desc");
       }
 
-      // if (toFilterBySeller) {
+      // if (toFilterBySellers) {
       //   const devicesSellersIds = filteredDevices.map(dev => dev.sellerId);
       //   const devicesSellers = sellers.filter(seller => devicesSellersIds.includes(seller.id));
 
