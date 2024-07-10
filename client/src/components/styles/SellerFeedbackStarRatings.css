@@ -1,0 +1,51 @@
+.seller-feedback-star-ratings {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.seller-feedback-star-rating-wrap {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.seller-feedback-star-rating-wrap > p {
+  font-size: 1.2rem;
+  color: rgb(90, 90, 90);
+}
+
+.main-seller-page-separate-rating-section .seller-feedback-star-rating-wrap > p {
+  font-size: 1.4rem;
+}
+
+@media screen and (min-width: 320px) {
+  .seller-feedback-star-rating-wrap {
+    grid-template-columns: auto auto;
+  }
+}
+
+@media screen and (min-width: 800px) {
+  .comments-section .seller-feedback-star-ratings {
+    grid-template-columns: auto auto auto;
+    justify-content: start;
+  }
+
+  .comments-section .seller-feedback-star-rating-wrap {
+    justify-content: start;
+  }
+}
+
+@media screen and (min-width: 1060px) {
+  #comment-gallery-modal .seller-feedback-star-ratings {
+    grid-template-columns: 1fr;
+  }
+
+  #comment-gallery-modal .seller-feedback-star-rating-wrap {
+    grid-template-columns: auto auto;
+    justify-content: space-between;
+  }
+}

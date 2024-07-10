@@ -1,3 +1,4 @@
+import "./styles/SellerPage.css";
 import { useContext, useState } from 'react';
 import TabsPageLayout from '../components/UI/tabsPageLayout/TabsPageLayout';
 import useOneSellerFetching from '../hooks/useOneSellerFetching';
@@ -9,6 +10,7 @@ import SellerFeedbacksPage from './SellerFeedbacksPage';
 import SellerDevicesPage from './SellerDevicesPage';
 import { Context } from '../Context';
 import { observer } from 'mobx-react-lite';
+import StarRating from '../components/UI/starRating/StarRating';
 
 const POSSIBLE_TYPES = ["main", "feedbacks", "devices"];
 const SellerPage = observer(({ type }) => {
@@ -40,19 +42,34 @@ const SellerPage = observer(({ type }) => {
 
   const tabsData = [
     { name: "Everything about seller", to: SELLER_ROUTE + sellerIdSlug },
-    { name: 
-      `Comments (${app.sellerFeedbacks?.length || 0})`, 
-      to: SELLER_FEEDBACKS_ROUTE.replace(":sellerIdSlug", sellerIdSlug) 
+    {
+      name:
+        `Comments (${app.sellerFeedbacks?.length || 0})`,
+      to: SELLER_FEEDBACKS_ROUTE.replace(":sellerIdSlug", sellerIdSlug)
     },
     { name: "Devices", to: SELLER_DEVICES_ROUTE.replace(":sellerIdSlug", sellerIdSlug) },
   ];
 
   return (
-    <main>
-      <TabsPageLayout 
-        tabsData={tabsData} 
-        pageContent={renderInnerPage()} 
-        isToUsePaddingForPage={type !== "devices"} 
+    <main className="seller-page">
+      <h2 className="top-h2">
+        Seller {seller?.name || ""}
+      </h2>
+      <div className="seller-page-rating-wrap">
+        <p title={`seller rating`}>
+          {seller?.rating}
+        </p>
+        <StarRating 
+          readOnlyValue={seller?.rating} 
+          id="seller-page-rating" 
+          width={20}
+          height={20}
+        />
+      </div>
+      <TabsPageLayout
+        tabsData={tabsData}
+        pageContent={renderInnerPage()}
+        isToUsePaddingForPage={type !== "devices"}
       />
     </main>
   );

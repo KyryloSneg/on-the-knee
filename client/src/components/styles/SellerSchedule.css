@@ -1,0 +1,11 @@
+.seller-schedule {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.seller-schedule > div {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}

@@ -15,6 +15,7 @@ import { v4 } from "uuid";
 import setReplyModalVisibility from "../../../utils/setReplyModalVisibility";
 import StarRating from "../starRating/StarRating";
 import setAnswerModalVisibility from "../../../utils/setAnswerModalVisibility";
+import SellerFeedbackStarRatings from "../../SellerFeedbackStarRatings";
 
 const OriginalComment = observer(({ comment, user, type, singularCommentWord = "comment", isWithImages, closeGalleryModal }) => {
   const { user: userStore, app } = useContext(Context);
@@ -232,29 +233,12 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
           />
         )
         : (type === "sellerFeedbacks") && (
-          <div className="seller-feedback-star-ratings">
-            <div className="seller-feedback-star-rating-wrap">
-              <p>Service quality</p>
-              <StarRating
-                readOnlyValue={comment["service-quality-rate"]}
-                id={`${type}-${comment.id}-service-original-comment-rating`}
-              />
-            </div>
-            <div className="seller-feedback-star-rating-wrap">
-              <p>Up-to-date</p>
-              <StarRating
-                readOnlyValue={comment["is-up-to-date-rate"]}
-                id={`${type}-${comment.id}-up-to-date-original-comment-rating`}
-              />
-            </div>
-            <div className="seller-feedback-star-rating-wrap">
-              <p>Delivery speed</p>
-              <StarRating
-                readOnlyValue={comment["delivery-speed-rate"]}
-                id={`${type}-${comment.id}-del-speed-original-comment-rating`}
-              />
-            </div>
-          </div>
+          <SellerFeedbackStarRatings 
+            serviceQualityVal={comment["service-quality-rate"]} 
+            isUpToDateVal={comment["is-up-to-date-rate"]}
+            deliverySpeedVal={comment["delivery-speed-rate"]}
+            idStart={`${type}-${comment.id}`}
+          />
         )
       }
       {comment.message &&

@@ -1,0 +1,21 @@
+.main-seller-page {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.main-seller-page > * {
+  background-color: #fff;
+}
+
+.main-seller-page h3 {
+  font-size: 1.6rem;
+  margin: 0;
+  margin-bottom: 12px;
+}
+
+@media screen and (min-width: 920px) {
+  .main-seller-page {
+    grid-template-columns: 1fr auto;
+  }
+}

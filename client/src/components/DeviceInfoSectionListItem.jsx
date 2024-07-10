@@ -4,14 +4,14 @@ import StringActions from "../utils/StringActions";
 import useWindowWidth from "../hooks/useWindowWidth";
 import { WIDTH_TO_SHOW_DEVICE_INFO_DL_SEPARATOR } from "../utils/consts";
 
-const DeviceInfoSectionListItem = ({ info, type = "span", to = null }) => {
+const DeviceInfoSectionListItem = ({ info, type = "span", to = null, ...props }) => {
   const windowWidth = useWindowWidth();
 
   let infoName = StringActions.splitByUpperCaseLetters(info.name);
   infoName = StringActions.capitalize(infoName);
 
   return (
-    <div className="device-info-section-list-item">
+    <div className="device-info-section-list-item" {...props}>
       <dt>
         {infoName}
       </dt>
