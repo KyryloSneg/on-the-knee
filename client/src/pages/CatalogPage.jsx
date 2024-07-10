@@ -97,7 +97,7 @@ const CatalogPage = observer(({ type, seller = null }) => {
         ? <p className="spell-checked-query-p">Devices by query «<span>{spellCheckedQuery}</span>»</p>
         : (type === "search") && <div className="spell-checked-p-placeholder" />
       }
-      {type === "category" && <h2 className="category-name-heading">{category.name}</h2>}
+      {type === "category" && <h2 className="top-h2">{category.name}</h2>}
       <div className="sort-and-filter-bar-wrap">
         {(windowWidth < WIDTH_TO_SHOW_ASIDE && isToRenderFilters) &&
           <TopFilterBar />

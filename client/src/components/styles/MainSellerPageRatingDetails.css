@@ -1,0 +1,31 @@
+.main-seller-page-rating-details {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.main-seller-page-rating-details > div {
+  display: flex;
+  gap: 14px;
+  font-size: 1.4rem;
+}
+
+.main-seller-page-rating-details > div > dt {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.main-seller-page-rating-details > div > dd {
+  width: 85%;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.main-seller-page-rating-details > div > dt > span,
+.main-seller-page-rating-details > div > dd > span {
+  width: 2px;
+}

@@ -1,0 +1,16 @@
+.main-seller-page-rating-section {
+  display: grid;
+  grid-template-columns: 1fr;
+  border: 1px solid #dfdfdf;
+  border-radius: 8px;
+}
+
+.main-seller-page-rating-section > * {
+  padding: 24px 16px;
+}
+
+@media screen and (min-width: 1280px) {
+  .main-seller-page-rating-section {
+    grid-template-columns: 2fr 1fr;
+  }
+}

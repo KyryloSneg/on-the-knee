@@ -1,0 +1,22 @@
+.main-seller-page-overall-rating-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.main-seller-page-overall-rating-section > div {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+  gap: 24px;
+}
+
+.main-seller-page-overall-rating-section > div > * {
+  height: 100%;
+}
+
+@media screen and (min-width: 600px) {
+  .main-seller-page-overall-rating-section > div {
+    grid-template-columns: 1fr 2fr;
+  }
+}
