@@ -9,6 +9,10 @@ export const DEVICE_INFO_ROUTE = "/device/:deviceIdCombo/info";
 export const DEVICE_COMMENTS_ROUTE = "/device/:deviceIdCombo/comments";
 export const DEVICE_QUESTIONS_ROUTE = "/device/:deviceIdCombo/questions";
 
+export const SELLER_ROUTE = "/seller/"; // + :sellerIdSlug
+export const SELLER_FEEDBACKS_ROUTE = "/seller/:sellerIdSlug/feedbacks";
+export const SELLER_DEVICES_ROUTE = "/seller/:sellerIdSlug/devices";
+
 export const CHECKOUT_ROUTE = "/checkout";
 export const DESIRED_LIST_ROUTE = "/desired";
 export const USER_ROUTE = "/user";
@@ -31,6 +35,8 @@ export const ONE_DEVICE_FEEDBACKS_API_URL = "/device-feedbacks?deviceId=ID_TO_RE
 
 export const DEVICE_QUESTIONS_API_URL = "/device-questions?_embed=device-answers&_embed=device-question-likes&_embed=device-question-dislikes";
 export const ONE_DEVICE_QUESTIONS_API_URL = "/device-questions?deviceId=ID_TO_REPLACE&_embed=device-answers&_embed=device-question-likes&_embed=device-question-dislikes";
+
+export const ONE_SELLER_FEEDBACKS_API_URL = "/seller-feedbacks?sellerId=ID_TO_REPLACE";
 
 // value: (asc / desc),(rating / price)
 export const sortingOptions = [

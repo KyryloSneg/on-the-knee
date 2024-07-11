@@ -18,6 +18,7 @@ class AppStore {
     this._isVisibleReplyModal = false;
     this._isVisibleQuestionCommentModal = false;
     this._isVisibleAnswerModal = false;
+    this._isVisibleAskSellerModal = false;
     this._isVisibleCommentGalleryModal = false;
     this._isFocusedSearchForm = false;
 
@@ -41,10 +42,14 @@ class AppStore {
     this._deviceFeedbacks = [];
     this._deviceQuestions = [];
 
+    this._sellerFeedbacks = [];
+
     // we use these states in modals that are related to the info below
     this._selectedDeviceId = null;
+    this._selectedSellerId = null;
     this._selectedDeviceFeedbackId = null;
     this._selectedDeviceQuestionId = null;
+    this._selectedSellerFeedbackId = null;
     this._commentGalleryModalType = "deviceFeedbacks";
     this._commentGallerySelectedImageId = null;
 
@@ -110,6 +115,10 @@ class AppStore {
 
   setIsVisibleAnswerModal(bool) {
     this._isVisibleAnswerModal = bool;
+  }
+
+  setIsVisibleAskSellerModal(bool) {
+    this._isVisibleAskSellerModal = bool;
   }
 
   setIsVisibleCommentGalleryModal(bool) {
@@ -180,8 +189,16 @@ class AppStore {
     this._deviceQuestions = deviceQuestions;
   }
 
+  setSellerFeedbacks(sellerFeedbacks) {
+    this._sellerFeedbacks = sellerFeedbacks;
+  }
+
   setSelectedDeviceId(selectedDeviceId) {
     this._selectedDeviceId = selectedDeviceId;
+  }
+
+  setSelectedSellerId(selectedSellerId) {
+    this._selectedSellerId = selectedSellerId;
   }
   
   setSelectedDeviceFeedbackId(selectedDeviceFeedbackId) {
@@ -190,6 +207,10 @@ class AppStore {
 
   setSelectedDeviceQuestionId(selectedDeviceQuestionId) {
     this._selectedDeviceQuestionId = selectedDeviceQuestionId;
+  }
+
+  setSelectedSellerFeedbackId(selectedSellerFeedbackId) {
+    this._selectedSellerFeedbackId = selectedSellerFeedbackId;
   }
 
   setCommentGalleryModalType(commentGalleryModalType) {
@@ -264,6 +285,10 @@ class AppStore {
     return this._isVisibleAnswerModal;
   }
 
+  get isVisibleAskSellerModal() {
+    return this._isVisibleAskSellerModal;
+  }
+
   get isVisibleCommentGalleryModal() {
     return this._isVisibleCommentGalleryModal;
   }
@@ -332,8 +357,16 @@ class AppStore {
     return this._deviceQuestions;
   }
 
+  get sellerFeedbacks() {
+    return this._sellerFeedbacks;
+  }
+
   get selectedDeviceId() {
     return this._selectedDeviceId;
+  }
+
+  get selectedSellerId() {
+    return this._selectedSellerId;
   }
 
   get selectedDeviceFeedbackId() {
@@ -342,6 +375,10 @@ class AppStore {
 
   get selectedDeviceQuestionId() {
     return this._selectedDeviceQuestionId;
+  }
+
+  get selectedSellerFeedbackId() {
+    return this._selectedSellerFeedbackId;
   }
 
   get commentGalleryModalType() {

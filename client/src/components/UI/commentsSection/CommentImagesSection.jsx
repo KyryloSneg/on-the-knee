@@ -14,6 +14,8 @@ const CommentImagesSection = observer(({ imagesObjs, type }) => {
       app.setSelectedDeviceFeedbackId(commentId);
     } else if (type === "deviceQuestions") {
       app.setSelectedDeviceQuestionId(commentId);
+    } else if (type === "sellerFeedbacks") {
+      app.setSelectedSellerFeedbackId(commentId);
     }
 
     app.setCommentGalleryModalType(type);

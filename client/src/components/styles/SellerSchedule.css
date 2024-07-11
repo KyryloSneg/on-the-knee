@@ -1,0 +1,28 @@
+.seller-schedule {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.seller-schedule > div {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  font-size: 1.1rem;
+  gap: 5px;
+}
+
+.seller-schedule > div > * {
+  white-space: pre;
+}
+
+.seller-schedule > div > dd {
+  margin: 0;
+}
+
+@media screen and (min-width: 240px) {
+  .seller-schedule > div {
+    font-size: 1.4rem;
+  }
+}
