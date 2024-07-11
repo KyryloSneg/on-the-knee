@@ -6,6 +6,7 @@ import { observer } from "mobx-react-lite";
 import URLActions from "../utils/URLActions";
 import useResettingMinMaxPrices from "../hooks/useResettingMinMaxPrices";
 import useNavigateToEncodedURL from "../hooks/useNavigateToEncodedURL";
+import UIButton from "./UI/uiButton/UIButton";
 
 const PriceCategoryFilter = observer(() => {
   const { deviceStore } = useContext(Context);
@@ -63,9 +64,7 @@ const PriceCategoryFilter = observer(() => {
           />
         </div>
 
-        <button type="submit" disabled={!isValid} data-testid="price-category-filter-btn">
-          OK
-        </button>
+        <UIButton children="OK" type="submit" disabled={!isValid} data-testid="price-category-filter-btn" />
       </form>
     </div>
   );

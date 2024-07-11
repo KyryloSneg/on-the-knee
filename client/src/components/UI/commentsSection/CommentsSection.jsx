@@ -7,6 +7,7 @@ import CommentImagesSection from "./CommentImagesSection";
 import setDeviceFeedbackModalVisibility from "../../../utils/setDeviceFeedbackModalVisibility";
 import StarRating from "../starRating/StarRating";
 import setQuestionCommentModalVisibility from "../../../utils/setQuestionCommentModalVisibility";
+import UIButton from "../uiButton/UIButton";
 
 const POSSIBLE_TYPES = ["deviceFeedbacks", "deviceQuestions", "sellerFeedbacks"];
 const CommentsSection = observer(({ type, comments, isFullVersion = true, device = null, seller = null }) => {
@@ -101,12 +102,12 @@ const CommentsSection = observer(({ type, comments, isFullVersion = true, device
       {type !== "sellerFeedbacks" &&
         <>
           <CommentImagesSection imagesObjs={allTopLevelImageObjs} type={type} />
-          <button
-            className="create-comment-btn"
-            onClick={createComment}
-          >
-            {createCommentButtonText}
-          </button>
+          <UIButton
+            variant="primary2"
+            children={createCommentButtonText}
+            className="create-comment-btn" 
+            onClick={createComment} 
+          />
         </>
       }
       <CommentsList type={type} comments={comments} singularCommentWord={singularCommentWord} />

@@ -1,0 +1,98 @@
+button.ui-button {
+  font-size: 1.5rem;
+  transition: background 0.2s, border 0.2s !important; 
+  cursor: pointer;
+}
+
+button.ui-button:disabled {
+  cursor: auto;
+}
+
+button.primary1 {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  /* there can't be more than 2 lines of text */
+  max-height: 52px;
+  overflow: hidden;
+  padding: 8px 14px;
+  border-radius: 5px;
+  border: none;
+  background-color: #3354e7;
+  color: white;
+  outline: none;
+}
+
+button.primary1:disabled {
+  background-color: #676767;
+}
+
+button.primary1:enabled:hover,
+button.primary1:enabled:active,
+button.primary1:enabled:focus-visible {
+  background-color: #5171ff;
+}
+
+button.primary2 {
+  background: none;
+  padding: 8px 12px;
+  border: 1px solid #dfdfdf;
+  border-radius: 16px;
+  color: #7373ff;
+}
+
+button.primary2:hover,
+button.primary2:active,
+button.primary2:focus-visible {
+  border: 1px solid #c7c7c7;
+  background: #f1f1f1;
+}
+
+button.primary3 {
+  padding: 8px 10px;
+  border: 1px rgb(150, 150, 150) solid;
+  border-radius: 8px;
+  color: #8282ff;
+  outline: none;
+}
+
+button.primary3:hover,
+button.primary3:active,
+button.primary3:focus-visible {
+  background-color: #e0e0e0;
+}
+
+button.modal-submit, button.modal-deny {
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  outline: none;
+}
+
+button.modal-submit {
+  background-color: #8282ff;
+  color: #fff;
+  border: none;
+}
+
+button.modal-submit:disabled {
+  background-color: #b2b2b2;
+  cursor: auto;
+}
+
+button.modal-submit:enabled:hover,
+button.modal-submit:enabled:active,
+button.modal-submit:enabled:focus-visible {
+  background-color: #7070ff;
+}
+
+button.modal-deny {
+  color: #8282ff;
+  border: 1px rgb(150, 150, 150) solid;
+}
+
+button.modal-deny:hover,
+button.modal-deny:active,
+button.modal-deny:focus-visible {
+  background-color: #e0e0e0;
+}

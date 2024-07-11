@@ -1,0 +1,10 @@
+button.ask-seller-btn {
+  margin-top: 20px;
+  font-size: 1.2rem;
+}
+
+@media screen and (min-width: 220px) {
+  button.ask-seller-btn {
+    font-size: 1.5rem;
+  }
+}

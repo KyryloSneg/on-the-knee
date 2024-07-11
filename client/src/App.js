@@ -36,6 +36,7 @@ import ReplyModal from "./components/ReplyModal";
 import QuestionCommentModal from "./components/QuestionCommentModal";
 import AnswerModal from "./components/AnswerModal";
 import CommentGalleryModal from "./components/CommentGalleryModal";
+import AskSellerModal from "./components/AskSellerModal";
  
 const App = observer(() => {
   const { app, deviceStore } = useContext(Context);
@@ -140,6 +141,7 @@ const App = observer(() => {
       {app.isVisibleReplyModal && <ReplyModal />}
       {app.isVisibleQuestionCommentModal && <QuestionCommentModal />}
       {app.isVisibleAnswerModal && <AnswerModal />}
+      {app.isVisibleAskSellerModal && <AskSellerModal />}
       {app.isVisibleCommentGalleryModal && <CommentGalleryModal />}
       <header ref={headerRef}>
         <Navbar elemToFocus={pageElemToFocus} navCategoryBtnRef={navCategoryBtnRef} />

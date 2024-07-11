@@ -37,4 +37,11 @@ module.exports = class DateActions {
     date.setMinutes(parsedTime.minutes);
   }
 
+  static createSimpleDate(hours, minutes, seconds, ms) {
+    const date = new Date();
+    date.setHours(hours, minutes, seconds, ms);
+
+    return date;
+  }
+
 }

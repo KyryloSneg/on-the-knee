@@ -35,34 +35,9 @@
   justify-content: center;
 }
 
-.price-range-filter-wrap > button {
-  display: grid;
-  justify-content: center;
-  align-items: center;
-  align-self: center;
-  justify-self: center;
-  height: 34px;
+.price-range-filter-wrap > button.primary1 {
   width: 60px;
-  padding: 0;
+  height: 34px;
   margin: 0 10px;
-  border-radius: 5px;
-  /* border: 1px solid #3354e7; */
-  border: none;
-  background-color: #3354e7;
-  color: white;
-  cursor: pointer;
-  transition: 0.2s;
-  outline: none;
   align-self: end;
-}
-
-.price-range-filter-wrap > button:disabled {
-  background-color: #676767;
-  cursor: auto;
-}
-
-.price-range-filter-wrap > button:enabled:hover,
-  .price-range-filter-wrap > button:enabled:active,
-    .price-range-filter-wrap > button:enabled:focus {
-  background-color: #5171ff;
 }

@@ -7,13 +7,11 @@ const MainSellerPageRatingDetails = ({ ratingsObj, feedbacksAmount }) => {
     <dl className="main-seller-page-rating-details">
       {Object.entries(ratingsObj).map(([name, value]) => 
         <div key={`${name}-${value}`}>
-          <dt title={`${name} ${+name > 1 ? "stars" : "star"}`}>
+          <dt>
             <Star starIndex={1} value={1} width={14} height={14} starKey={`${name}-${value}`} />
             <span>{name}</span>
           </dt>
-          <dd 
-            title={`${value} ${value > 1 ? "ratings" : "rating"}`}
-          >
+          <dd >
             <CustomProgressBar progress={value / feedbacksAmount * 100} />
             <span>{value}</span>
           </dd>
