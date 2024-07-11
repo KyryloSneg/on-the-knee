@@ -1,4 +1,5 @@
 import "./styles/CommentModalBottomBtns.css";
+import UIButton from "./UI/uiButton/UIButton";
 
 const CommentModalBottomBtns = ({ type, setIsAnonymously, isAnonymously, closeModal, areErrors, areInputsBlocked }) => {
   let checkboxDivClass = "checkbox-div";
@@ -21,19 +22,21 @@ const CommentModalBottomBtns = ({ type, setIsAnonymously, isAnonymously, closeMo
         </button>
       }
       <div className="comment-modal-form-btn-group">
-        <button
+        <UIButton
+          variant="modal-deny"
           className="comment-modal-form-deny-btn"
           onClick={closeModal}
         >
           Deny
-        </button>
-        <button
+        </UIButton>
+        <UIButton
+          variant="modal-submit"
           className="comment-modal-form-submit-btn"
           type="submit"
           disabled={areErrors || areInputsBlocked}
         >
           Submit
-        </button>
+        </UIButton>
       </div>
     </div>
   );

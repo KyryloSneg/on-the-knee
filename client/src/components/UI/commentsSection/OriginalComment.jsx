@@ -16,6 +16,7 @@ import setReplyModalVisibility from "../../../utils/setReplyModalVisibility";
 import StarRating from "../starRating/StarRating";
 import setAnswerModalVisibility from "../../../utils/setAnswerModalVisibility";
 import SellerFeedbackStarRatings from "../../SellerFeedbackStarRatings";
+import UIButton from "../uiButton/UIButton";
 
 const OriginalComment = observer(({ comment, user, type, singularCommentWord = "comment", isWithImages, closeGalleryModal }) => {
   const { user: userStore, app } = useContext(Context);
@@ -267,14 +268,14 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
       }
       {(type === "deviceFeedbacks" || type === "deviceQuestions") &&
         <div className="original-comment-btn-group">
-          <button
+          <UIButton
+            variant="primary2"
             className="original-comment-reply-btn"
             onClick={reply}
           >
             <img src={replyIcon} alt="" draggable="false" />
             {commentReplyWord}
-          </button>
-
+          </UIButton>
           <div className="original-comment-rate-group-error-wrap">
             <div className="original-comment-rate-btn-group">
               <button

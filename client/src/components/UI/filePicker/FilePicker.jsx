@@ -1,4 +1,5 @@
 import "./FilePicker.css";
+import UIButton from "../uiButton/UIButton";
 import { useRef } from "react";
 
 // if we use our own handle change, don't pass setFiles
@@ -33,13 +34,14 @@ const FilePicker = ({ files, setFiles, isMultiple = true, propsHandleChange = nu
         multiple={isMultiple}
         ref={inputFileRef}
       />
-      <button
+      <UIButton
+        variant="primary3"
         className="file-picker-btn"
         type="button"
         onClick={() => inputFileRef.current?.click()}
       >
         Pick a file
-      </button>
+      </UIButton>
     </div>
   );
 }

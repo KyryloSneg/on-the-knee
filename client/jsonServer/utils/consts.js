@@ -1,3 +1,5 @@
+const DateActions = require("./DateActions");
+
 const POSSIBLE_DEVICE_INFOS = {
   "smartphones": [
     {
@@ -212,6 +214,43 @@ const POSSIBLE_SCHEDULE_TIME_RANGES = {
   ]
 };
 
+const POSSIBLE_SELLER_WORK_SCHEDULES = [
+  {
+    "Mon-Fri": {
+      "start": DateActions.createSimpleDate(11, 0, 0, 0),
+      "end": DateActions.createSimpleDate(20, 0, 0, 0)
+    },
+    "Sat-Sun": {
+      "start": DateActions.createSimpleDate(13, 0, 0, 0),
+      "end": DateActions.createSimpleDate(19, 0, 0, 0)
+    }
+  },
+  {
+    "Mon-Thu": {
+      "start": DateActions.createSimpleDate(8, 0, 0, 0),
+      "end": DateActions.createSimpleDate(18, 0, 0, 0)
+    },
+    "Fri-Sun": {
+      "start": DateActions.createSimpleDate(9, 0, 0, 0),
+      "end": DateActions.createSimpleDate(16, 0, 0, 0)
+    }
+  },
+  {
+    "Mon-Tue": {
+      "start": DateActions.createSimpleDate(11, 0, 0, 0),
+      "end": DateActions.createSimpleDate(22, 0, 0, 0)
+    },
+    "Wed-Fri": {
+      "start": DateActions.createSimpleDate(9, 0, 0, 0),
+      "end": DateActions.createSimpleDate(20, 0, 0, 0)
+    },
+    "Sat-Sun": {
+      "start": DateActions.createSimpleDate(10, 0, 0, 0),
+      "end": DateActions.createSimpleDate(21, 0, 0, 0)
+    }
+  }
+];
+
 const POSSIBLE_ORDER_STATUSES = ["Cancelled", "Pending", "Paid", "Confirmed", "Done"];
 const MAIN_CATEGORIES_AMOUNT = 2;
 const START_CATEGORIES_NEST_3_AMOUNT = 10;
@@ -254,6 +293,7 @@ module.exports = {
   POSSIBLE_DELIVERY_TYPES,
   POSSIBLE_SALE_TYPE_NAMES,
   POSSIBLE_SCHEDULE_TIME_RANGES,
+  POSSIBLE_SELLER_WORK_SCHEDULES,
   STORE_LOCATIONS,
   POSSIBLE_ORDER_STATUSES,
   MAIN_CATEGORIES_AMOUNT,

@@ -18,6 +18,7 @@ class AppStore {
     this._isVisibleReplyModal = false;
     this._isVisibleQuestionCommentModal = false;
     this._isVisibleAnswerModal = false;
+    this._isVisibleAskSellerModal = false;
     this._isVisibleCommentGalleryModal = false;
     this._isFocusedSearchForm = false;
 
@@ -45,6 +46,7 @@ class AppStore {
 
     // we use these states in modals that are related to the info below
     this._selectedDeviceId = null;
+    this._selectedSellerId = null;
     this._selectedDeviceFeedbackId = null;
     this._selectedDeviceQuestionId = null;
     this._selectedSellerFeedbackId = null;
@@ -113,6 +115,10 @@ class AppStore {
 
   setIsVisibleAnswerModal(bool) {
     this._isVisibleAnswerModal = bool;
+  }
+
+  setIsVisibleAskSellerModal(bool) {
+    this._isVisibleAskSellerModal = bool;
   }
 
   setIsVisibleCommentGalleryModal(bool) {
@@ -189,6 +195,10 @@ class AppStore {
 
   setSelectedDeviceId(selectedDeviceId) {
     this._selectedDeviceId = selectedDeviceId;
+  }
+
+  setSelectedSellerId(selectedSellerId) {
+    this._selectedSellerId = selectedSellerId;
   }
   
   setSelectedDeviceFeedbackId(selectedDeviceFeedbackId) {
@@ -275,6 +285,10 @@ class AppStore {
     return this._isVisibleAnswerModal;
   }
 
+  get isVisibleAskSellerModal() {
+    return this._isVisibleAskSellerModal;
+  }
+
   get isVisibleCommentGalleryModal() {
     return this._isVisibleCommentGalleryModal;
   }
@@ -349,6 +363,10 @@ class AppStore {
 
   get selectedDeviceId() {
     return this._selectedDeviceId;
+  }
+
+  get selectedSellerId() {
+    return this._selectedSellerId;
   }
 
   get selectedDeviceFeedbackId() {

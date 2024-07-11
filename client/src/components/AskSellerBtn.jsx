@@ -1,12 +1,24 @@
+import { useContext } from "react";
+import setAskSellerModalVisibility from "../utils/setAskSellerModalVisibility";
+import "./styles/AskSellerBtn.css";
+import UIButton from "./UI/uiButton/UIButton";
+import { Context } from "../Context";
+
 const AskSellerBtn = ({ seller }) => {
+  const { app } = useContext(Context);
+
   function onClick() {
-    // open the modal
+    app.setSelectedSellerId(seller.id);
+    setAskSellerModalVisibility(true, app);
   }
 
   return (
-    <button className="ask-seller-btn" onClick={onClick}>
+    <UIButton 
+      className="ask-seller-btn" 
+      onClick={onClick}
+    >
       Ask a question
-    </button>
+    </UIButton>
   );
 }
 

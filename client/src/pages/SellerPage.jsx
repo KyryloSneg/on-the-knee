@@ -56,7 +56,7 @@ const SellerPage = observer(({ type }) => {
         Seller {seller?.name || ""}
       </h2>
       <div className="seller-page-rating-wrap">
-        <p title={`seller rating`}>
+        <p>
           {seller?.rating}
         </p>
         <StarRating 

@@ -3,15 +3,17 @@ import "./styles/SellerSchedule.css";
 const SellerSchedule = ({ seller }) => {
   return (
     <dl className="seller-schedule">
-      <div>
-        <dt>Mon-Fri</dt>
-        <dd>11 AM - 8 PM</dd>
-      </div>
-      <div>
-        <dt>Sat-Sun</dt>
-        <dd>1 PM - 7 PM</dd>
-      </div>
-      Seller schedule
+      {Object.entries(seller.schedule).map(([key, value]) => {
+        const startTime = new Date(value.start).toLocaleTimeString([], { hour: "2-digit", minute:"2-digit" });
+        const endTime = new Date(value.end).toLocaleTimeString([], { hour: "2-digit", minute:"2-digit" });
+
+        return (
+          <div key={key}>
+            <dt>{key}</dt>
+            <dd>{startTime} - {endTime}</dd>
+          </div>
+        );
+      })}
     </dl>
   );
 }
