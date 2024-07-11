@@ -42,9 +42,12 @@ const DeviceInfoSectionList = observer(({ device, deviceInfos, linkDeviceInfoNam
           }
 
           return (
-            <li key={`${device.id}-${info.name}`}>
-              <DeviceInfoSectionListItem info={info} type={type} to={to} />
-            </li>
+            <DeviceInfoSectionListItem 
+              info={info} 
+              type={type} 
+              to={to} 
+              key={`${device.id}-${info.name}`} 
+            />
           );
         })}
       </dl>

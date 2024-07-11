@@ -471,6 +471,24 @@ ul {
   width: 700px;
 }
 
+.top-h2 {
+  font-size: 2rem;
+  text-align: start;
+  padding: 0 28px;
+}
+
+@media screen and (min-width: 400px) {
+  .top-h2 {
+    font-size: 2.5rem;
+  }
+}
+
+@media screen and (min-width: 600px) {
+  .top-h2 {
+    font-size: 3.2rem;
+  }
+}
+
 @media screen and (min-width: 1000px) {
   .app-global-loading-bar-rect {
     animation: 0.3s linear infinite app-global-loading;

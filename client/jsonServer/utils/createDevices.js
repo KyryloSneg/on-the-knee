@@ -1,5 +1,5 @@
 const { getAllDevices, getAllCategorySlugs } = require("../http/deviceAPI");
-const { faker, fa } = require('@faker-js/faker');
+const { faker } = require('@faker-js/faker');
 const createDeviceFeedbacks = require('./createDeviceFeedbacks');
 const createBrands = require('./createBrands');
 const createCategories = require('./createCategories');
@@ -44,8 +44,10 @@ module.exports = async () => {
   //   categoryObjects.push(categoryBrandObj);
   // }
 
+  let sellerQuestions = [];
+
   let categories = createCategories(categoryObjects);
-  const { sellers, sellerFeedbacks } = createSellers();
+  const { sellers, sellerFeedbacks } = createSellers(sellerQuestions);
 
   let devices = [];
   let deviceFeedbacks = [];
@@ -213,6 +215,7 @@ module.exports = async () => {
 
     sellers,
     sellerFeedbacks,
+    sellerQuestions,
 
     attributes,
     attributeNames,

@@ -5,8 +5,9 @@ import MainPage from "../pages/MainPage";
 import RenavigatingCatalogPage from "../pages/RenavigatingCatalogPage";
 import SalePage from "../pages/SalePage";
 import SalesPage from "../pages/SalesPage";
+import SellerPage from "../pages/SellerPage";
 import UserPage from "../pages/UserPage";
-import { BRAND_CATALOG_ROUTE, CATEGORY_CATALOG_ROUTE, CHECKOUT_ROUTE, DESIRED_LIST_ROUTE, DEVICE_COMMENTS_ROUTE, DEVICE_INFO_ROUTE, DEVICE_QUESTIONS_ROUTE, DEVICE_ROUTE, SALES_ROUTE, SEARCH_CATALOG_ROUTE, USER_ROUTE } from "../utils/consts";
+import { BRAND_CATALOG_ROUTE, CATEGORY_CATALOG_ROUTE, CHECKOUT_ROUTE, DESIRED_LIST_ROUTE, DEVICE_COMMENTS_ROUTE, DEVICE_INFO_ROUTE, DEVICE_QUESTIONS_ROUTE, DEVICE_ROUTE, SALES_ROUTE, SEARCH_CATALOG_ROUTE, SELLER_DEVICES_ROUTE, SELLER_FEEDBACKS_ROUTE, SELLER_ROUTE, USER_ROUTE } from "../utils/consts";
 
 export const PUBLIC_ROUTES = [
   {
@@ -37,6 +38,19 @@ export const PUBLIC_ROUTES = [
   {
     path: DEVICE_QUESTIONS_ROUTE,
     element: <DevicePage type="questions" />,
+  },
+  // same as with device-related pages
+  {
+    path: SELLER_ROUTE + ":sellerIdSlug",
+    element: <SellerPage type="main" />,
+  },
+  {
+    path: SELLER_FEEDBACKS_ROUTE,
+    element: <SellerPage type="feedbacks" />,
+  },
+  {
+    path: SELLER_DEVICES_ROUTE,
+    element: <SellerPage type="devices" />,
   },
   {
     path: CHECKOUT_ROUTE,

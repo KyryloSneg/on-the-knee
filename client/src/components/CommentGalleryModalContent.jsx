@@ -13,12 +13,16 @@ const CommentGalleryModalContent = observer(({ type, singularCommentWord, closeM
     comment = app.deviceFeedbacks?.find(feedback => feedback.id === app.selectedDeviceFeedbackId);
   } else if (type === "deviceQuestions") {
     comment = app.deviceQuestions?.find(question => question.id === app.selectedDeviceQuestionId);
+  } else if (type === "sellerFeedbacks") {
+    comment = app.sellerFeedbacks?.find(feedback => feedback.id === app.selectedSellerFeedbackId);
   }
 
   let carouselImages = [];
-  for (let image of comment?.images) {
-    const src = typeof image === "object" ? image?.fileObj : image;
-    carouselImages.push({ src: src, alt: "", style: { transform: `rotate(${image?.rotateDegrees || 0}deg)` } })
+  if (comment) {
+    for (let image of comment?.images) {
+      const src = typeof image === "object" ? image?.fileObj : image;
+      carouselImages.push({ src: src, alt: "", style: { transform: `rotate(${image?.rotateDegrees || 0}deg)` } })
+    }
   }
 
   return (  

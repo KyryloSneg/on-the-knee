@@ -37,10 +37,24 @@ export function filterDevicesBySellers(devices, sellers, usedFilters) {
   return filteredDevices;
 }
 
+export function filterDevicesByOneSeller(devices, sellers, sellerToFilterBy) {
+  const filteredDevices = [...devices].filter(dev => {
+    const devSeller = sellers.find(s => s.id === dev.sellerId);
+    return sellerToFilterBy.name === devSeller.name;
+  });
+
+  return filteredDevices;
+}
+
 export function filterDevicesByBrands(devices, brands, usedFilters) {
   const filteredDevices = [...devices].filter(dev => {
     const brand = brands.find(b => b.id === dev.brandId);
-    return usedFilters["brand"]?.includes(brand.name);
+
+    if (brand) {
+      return usedFilters["brand"]?.includes(brand.name);
+    } else {
+      return false;
+    }
   });
 
   return filteredDevices;

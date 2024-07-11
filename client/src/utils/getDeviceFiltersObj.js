@@ -41,7 +41,7 @@ export function pushFilters(filtersObj, array) {
 
 }
 
-export default function getDeviceFiltersObj(devices, stocks, sellers, brands, deviceInfos, attributes) {
+export default function getDeviceFiltersObj(devices, stocks, sellers, brands, deviceInfos, attributes, isToPushSellers = true) {
   let filters = {};
 
   // pushing device combinations' stocks and device's sellers with brands
@@ -57,11 +57,13 @@ export default function getDeviceFiltersObj(devices, stocks, sellers, brands, de
       pushValueToFiltersObj(filters, "stock", status);
     }
 
-    const seller = sellers.find(s => s.id === dev.sellerId);
-    const brand = brands.find(b => b.id === dev.brandId);
+    if (isToPushSellers) {
+      const seller = sellers.find(s => s.id === dev.sellerId);
+      pushValueToFiltersObj(filters, "seller", seller.name);
+    }
 
-    pushValueToFiltersObj(filters, "seller", seller.name);
-    pushValueToFiltersObj(filters, "brand", brand.name);
+    const brand = brands.find(b => b.id === dev.brandId);
+    if (brand) pushValueToFiltersObj(filters, "brand", brand.name);
   }
 
   const infosWithoutAdditional = deviceInfos.filter(info => info.name !== "additionalInfo");

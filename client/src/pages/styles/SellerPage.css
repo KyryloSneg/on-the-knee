@@ -1,0 +1,11 @@
+.seller-page > h2, .seller-page-rating-wrap {
+  padding: 0 10%;
+}
+
+.seller-page-rating-wrap {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 16px;
+  color: #a10e0e;
+}
