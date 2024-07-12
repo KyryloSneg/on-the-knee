@@ -1,17 +1,49 @@
 .device-seller-block {
   display: flex;
-  align-items: center;
-  gap: 4px;
+  flex-direction: column;
+  gap: 6px;
   padding: 10px;
   box-sizing: border-box;
-}
-
-.device-seller-block > span {
-  color: rgb(90, 90, 90);
 }
 
 .device-right-desc-seller-purchase-wrap > .device-seller-block {
   width: 100%;
   border-bottom: 1px #dfdfdf solid;;
   border-radius: 18px 18px 0 0;
+}
+
+.device-seller-block > p {
+  display: flex;
+  align-items: center;
+  font-size: 1.2rem;
+  gap: 4px;
+}
+
+.device-seller-block > p > span {
+  color: rgb(90, 90, 90);
+}
+
+.device-seller-block > p > a {
+  overflow: hidden;
+  white-space: pre;
+  text-overflow: ellipsis;
+}
+
+.device-seller-block-rating-wrap {
+  display: flex;
+  align-items: center;
+  font-size: 1.2rem;
+  gap: 4px;
+}
+
+.device-seller-block-rating-wrap > p {
+  font-size: 1.2rem;
+}
+
+@media screen and (min-width: 300px) {
+  .device-seller-block > p,
+  .device-seller-block-rating-wrap,
+  .device-seller-block-rating-wrap > p {
+    font-size: 1.5rem;
+  }
 }
