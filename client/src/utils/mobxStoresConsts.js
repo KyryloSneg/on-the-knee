@@ -1,6 +1,6 @@
 export const MOCK_USER = {
   // i changed it a bit compared to the mock server version
-  "_id": "6348acd2e1a47ca32e79f46g",
+  "_id": "6348acd2e1a47ca32e79f46f",
   "name": "mock",
   "surname": "user",
   "roles": ["PUBLIC", "ORDER-MANAGER", "CONTENT-MANAGER", "SELLER", "OWNER"],

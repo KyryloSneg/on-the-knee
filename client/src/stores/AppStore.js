@@ -20,6 +20,7 @@ class AppStore {
     this._isVisibleAnswerModal = false;
     this._isVisibleAskSellerModal = false;
     this._isVisibleCommentGalleryModal = false;
+    this._isVisibleCartModal = false;
     this._isFocusedSearchForm = false;
 
     this._hintSearchResults = []
@@ -123,6 +124,10 @@ class AppStore {
 
   setIsVisibleCommentGalleryModal(bool) {
     this._isVisibleCommentGalleryModal = bool;
+  }
+
+  setIsVisibleCartModal(bool) {
+    this._isVisibleCartModal = bool;
   }
 
   setIsFocusedSearchForm(bool) {
@@ -291,6 +296,10 @@ class AppStore {
 
   get isVisibleCommentGalleryModal() {
     return this._isVisibleCommentGalleryModal;
+  }
+
+  get isVisibleCartModal() {
+    return this._isVisibleCartModal;
   }
 
   get isFocusedSearchForm() {

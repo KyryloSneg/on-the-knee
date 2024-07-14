@@ -25,7 +25,7 @@ const PurchaseDeviceFooter = ({ device, selectedCombo }) => {
       </p>
       <DeviceItemPrice price={selectedCombo.price} discountPercentage={discountPercentage} />
       <AddToDesiredListBtn />
-      <DeviceItemAddToCartBtn />
+      <DeviceItemAddToCartBtn combinations={device["device-combinations"]} combo={selectedCombo} />
     </section>
   );
 }
