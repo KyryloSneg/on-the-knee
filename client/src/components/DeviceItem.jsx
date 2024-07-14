@@ -117,7 +117,7 @@ const DeviceItem = ({ device, isInStock, defaultCombination, stocks, sales, sale
       />
       <div className="price-add-to-cart-wrap">
         <DeviceItemPrice price={defaultCombination.price} discountPercentage={discountPercentage} />
-        <DeviceItemAddToCartBtn />
+        <DeviceItemAddToCartBtn combinations={device["device-combinations"]} combo={defaultCombination} />
       </div>
       {!isInStock
         ? <p className="main-device-stock-alert">Not in stock</p>

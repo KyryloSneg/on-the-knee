@@ -62,6 +62,7 @@ const DeviceRightDescription = forwardRef(({
           price={price} 
           discountPercentage={discountPercentage} 
           device={device} 
+          selectedCombo={selectedCombination}
         />
       </div>
       {/* TODO: create courier delivery item??? */}

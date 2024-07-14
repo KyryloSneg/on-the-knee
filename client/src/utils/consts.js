@@ -38,6 +38,9 @@ export const ONE_DEVICE_QUESTIONS_API_URL = "/device-questions?deviceId=ID_TO_RE
 
 export const ONE_SELLER_FEEDBACKS_API_URL = "/seller-feedbacks?sellerId=ID_TO_REPLACE";
 
+export const ONE_CART_API_URL = "/carts?userId=USER_ID_TO_REPLACE";
+export const ONE_CART_DEVICE_COMBINATIONS_API_URL = "/cart-device-combinations?_expand=device&_expand=device-combination&cartId=CART_ID_TO_REPLACE";
+
 // value: (asc / desc),(rating / price)
 export const sortingOptions = [
   {
