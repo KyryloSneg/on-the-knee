@@ -76,7 +76,7 @@
   .modal-window:not(.create-comment-modal) {
     width: auto;
     height: auto;
-    max-height: 90%;
+    max-height: 95%;
     border-radius: 6px;
     padding: 0 0 1px 0;
   }

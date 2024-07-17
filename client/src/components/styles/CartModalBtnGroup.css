@@ -1,0 +1,22 @@
+.cart-modal-btn-group {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.cart-modal-btn-group > button {
+  font-size: 1.2rem;
+}
+
+@media screen and (min-width: 200px) {
+  .cart-modal-btn-group > button {
+    font-size: 1.5rem;
+  }
+}
+
+@media screen and (min-width: 400px) {
+  .cart-modal-btn-group {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+}

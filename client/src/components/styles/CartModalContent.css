@@ -1,0 +1,27 @@
+.cart-modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+}
+
+.cart-modal-total-price-wrap {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 5px;
+}
+
+.cart-modal-total-price-wrap > span {
+  font-size: 1.5rem;
+}
+
+.cart-modal-loader {
+  margin: auto;
+}
+
+@media screen and (min-width: 200px) {
+  .cart-modal-total-price-wrap > span {
+    font-size: 2rem;
+  }
+}
