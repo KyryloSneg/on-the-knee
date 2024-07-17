@@ -1,3 +1,4 @@
+import "./styles/CartModal.css";
 import { useContext } from 'react';
 import ModalWindow from './UI/modalWindow/ModalWindow';
 import { Context } from '../Context';
@@ -21,7 +22,6 @@ const CartModal = () => {
         />
       }
       headerText="Cart"
-      propsClassName="cart-modal"
       id="cart-modal"
     />
   );
