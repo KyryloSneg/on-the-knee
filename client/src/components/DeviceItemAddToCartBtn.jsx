@@ -7,6 +7,7 @@ import { v4 } from "uuid";
 import { createCartDeviceCombination } from "../http/CartAPI";
 import { observer } from "mobx-react-lite";
 import setCartModalVisibility from "../utils/setCartModalVisibility";
+import { getDevice } from "../http/DeviceApi";
 
 const DeviceItemAddToCartBtn = observer(({ combinations, combo, isWithText = false, isPreOrder = false }) => {
   const { app, user } = useContext(Context);
@@ -26,18 +27,24 @@ const DeviceItemAddToCartBtn = observer(({ combinations, combo, isWithText = fal
       try {
         setIsAlreadyAdding(true);
 
-        if (user.isAuth) {
-          const cartDevCombo = {
-            "id": v4(),
-            "cartId": user.cart?.id,
-            "deviceId": combo.deviceId,
-            "device-combinationId": combo.id,
-            "amount": 1,
-          };
+        let cartDevCombo = {
+          "id": v4(),
+          "deviceId": combo.deviceId,
+          "device-combinationId": combo.id,
+          "amount": 1,
+        };
 
+        if (user.isAuth) {
+          cartDevCombo["cartId"] = user.cart?.id;
           await createCartDeviceCombination(cartDevCombo);
         } else {
-          const newCartDevCombos = [...user.cartDeviceCombinations, combo];
+          const device = await getDevice(combo.deviceId);
+          
+          cartDevCombo["cartId"] = user.cart?.id;
+          cartDevCombo["device"] = device;
+          cartDevCombo["device-combination"] = combo;
+
+          const newCartDevCombos = [...user.cartDeviceCombinations, cartDevCombo];
           localStorage.setItem("cartDeviceCombinations", JSON.stringify(newCartDevCombos));
         }
 

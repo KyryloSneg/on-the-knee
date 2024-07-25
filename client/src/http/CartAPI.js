@@ -15,3 +15,11 @@ export async function createCartDeviceCombination(combo) {
   const { data } = await $mockApi.post("/cart-device-combinations", combo);
   return data;
 }
+
+export async function deleteCartDeviceCombination(id) {
+  await $mockApi.delete("/cart-device-combinations/" + id);
+}
+
+export async function patchCartDeviceCombination(id, contentToReplaceWith) {
+  await $mockApi.patch("/cart-device-combinations/" + id, contentToReplaceWith);
+}

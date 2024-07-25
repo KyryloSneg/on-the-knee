@@ -2,6 +2,12 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: 10px;
+  position: sticky;
+  padding: 16px 0;
+  margin: 0 16px;
+  bottom: 0;
+  background-color: #f1f1f1;
+  z-index: 2;
 }
 
 .cart-modal-btn-group > button {

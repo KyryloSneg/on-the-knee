@@ -13,7 +13,7 @@ module.exports = (deviceCombos) => {
       "userId": user._id,
     };
 
-    createCartDeviceCombos(cartDeviceCombos, cart.id, deviceCombos);
+    // createCartDeviceCombos(cartDeviceCombos, cart.id, deviceCombos);
     carts.push(cart);
   } 
 

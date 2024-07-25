@@ -15,6 +15,7 @@ import setAnswerModalVisibility from "../utils/setAnswerModalVisibility";
 import setAskSellerModalVisibility from "../utils/setAskSellerModalVisibility";
 import setCommentGalleryModalVisibility from "../utils/setCommentGalleryModalVisibility";
 import setSelfDeliveryModalVisibility from "../utils/setSelfDeliveryModalVisibility";
+import setCartModalVisibility from "../utils/setCartModalVisibility";
 
 function useClosingAllWindows() {
   const location = useLocation();
@@ -37,6 +38,7 @@ function useClosingAllWindows() {
     setAnswerModalVisibility(false, app);
     setCommentGalleryModalVisibility(false, app);
     setAskSellerModalVisibility(false, app);
+    setCartModalVisibility(false, app);
 
     app.setDarkBgVisible(false, app);
     app.setIsBlockedScroll(false, app);

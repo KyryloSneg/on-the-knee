@@ -1,0 +1,33 @@
+.cart-modal-item-options-wrap {
+  position: relative;
+  width: 34px;
+  height: 34px;
+}
+
+.cart-modal-item-options-popup {
+  z-index: 1;
+  position: absolute;
+  right: 0;
+  background-color: #fff;
+  border: 1px solid #dfdfdf;
+  border-radius: 6px;
+  padding: 6px 10px;
+}
+
+.cart-modal-item-options-btn {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 5px;
+  background: none;
+  border: none;
+}
+
+.cart-modal-item-options-btn svg {
+  transition: fill 0.2s;
+}
+
+.cart-open-options-btn svg {
+  fill: #434343;
+}
