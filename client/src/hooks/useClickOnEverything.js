@@ -4,7 +4,8 @@ import { useEffect } from "react";
 // on clicking anything else than elem and btnOfElem (if we have one)
 
 // btnOfElem - the button that opens up our elem
-export default function useClickOnEverything(func, elemRef, btnOfElemRef = null) {
+// capture phase can help us when element closes immediately without btnOfElemRef
+export default function useClickOnEverything(func, elemRef, btnOfElemRef = null, isCapturePhase = false) {
   function effectFn() {
     if (func) {
 
@@ -13,18 +14,18 @@ export default function useClickOnEverything(func, elemRef, btnOfElemRef = null)
 
         if (elemRef.current && !elemRef.current?.contains(e.target)) {
           func();
-          document.body.removeEventListener("click", clickHandler);
+          document.body.removeEventListener("click", clickHandler, { capture: isCapturePhase });
         }
 
       }
 
       // doing this, so it, for example, doesn't close window immediately after opening it
       setTimeout(() => {
-        document.body.addEventListener("click", clickHandler);
+        document.body.addEventListener("click", clickHandler, { capture: isCapturePhase });
       }, 0);
   
       return () => {
-        document.body.removeEventListener("click", clickHandler);
+        document.body.removeEventListener("click", clickHandler, { capture: isCapturePhase });
       }
     }
   }

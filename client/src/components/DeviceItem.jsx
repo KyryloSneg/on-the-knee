@@ -12,7 +12,7 @@ import useWindowWidth from "../hooks/useWindowWidth";
 import { DEVICE_ROUTE, WIDTH_TO_SHOW_DEV_HID_CONTENT } from "../utils/consts";
 import { useRef, useState } from "react";
 
-const DeviceItem = ({ device, isInStock, defaultCombination, stocks, sales, saleTypeNames }) => {
+const DeviceItem = ({ device, isInStock, isPreOrder, defaultCombination, stocks, sales, saleTypeNames }) => {
   const screenWidth = useWindowWidth();
   const deviceRef = useRef(null); 
   const [isVisibleHidContent, setIsVisibleHidContent] = useState(false);
@@ -64,7 +64,7 @@ const DeviceItem = ({ device, isInStock, defaultCombination, stocks, sales, sale
   const thumbnail = defaultCombination.images[0];
 
   let className = "main-device-item";
-  if (!isInStock) {
+  if (!isInStock && !isPreOrder) {
     className += " out-of-stock";
   }
 
@@ -117,9 +117,15 @@ const DeviceItem = ({ device, isInStock, defaultCombination, stocks, sales, sale
       />
       <div className="price-add-to-cart-wrap">
         <DeviceItemPrice price={defaultCombination.price} discountPercentage={discountPercentage} />
-        <DeviceItemAddToCartBtn combinations={device["device-combinations"]} combo={defaultCombination} />
+        {(isInStock || isPreOrder) && 
+          <DeviceItemAddToCartBtn 
+            combinations={device["device-combinations"]} 
+            combo={defaultCombination} 
+            isPreOrder={isPreOrder}
+          />
+        }
       </div>
-      {!isInStock
+      {(!isInStock && !isPreOrder)
         ? <p className="main-device-stock-alert">Not in stock</p>
         : <div className="main-device-stock-alert-placeholder" />
       }

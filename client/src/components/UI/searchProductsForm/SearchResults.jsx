@@ -9,8 +9,7 @@ import { Context } from "../../../Context";
 const SearchResults = ({ 
   results, setResults, backupValue, setValue,
   minId, maxId, selectedId, setSelectedId, 
-  isInputFocused, inputRef,
-  sales, saleTypeNames, stocks
+  isInputFocused, inputRef, stocks
 }) => {
   const { app } = useContext(Context);
 
@@ -78,8 +77,6 @@ const SearchResults = ({
                       value={result}
                       id={index}
                       inputValue={backupValue}
-                      sales={sales}
-                      saleTypeNames={saleTypeNames}
                       stocks={stocks}
                     />
                   )

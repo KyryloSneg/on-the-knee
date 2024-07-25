@@ -177,6 +177,15 @@ class DeviceComboActions {
     return attributesList;
   }
 
+  static getStockInfo(combination, stocks) {
+    const stock = stocks.find(stock => stock.id === combination.stockId);
+
+    let isInStock = !!stock?.totalStock;
+    let isPreOrder = stock?.stockStatus === "Awaiting";
+
+    return { isInStock, isPreOrder };
+  }
+
   static findDefaultCombination(device, stocks) {
     const defaultCombination = device["device-combinations"].find(combo => combo.default);
     let defaultCombinationInStock = {...defaultCombination};
@@ -203,8 +212,8 @@ class DeviceComboActions {
 
     }
 
-    let isInStock = !!getStock(defaultCombinationInStock.stockId)?.totalStock;
-    return { defaultCombinationInStock, isInStock };
+    const { isInStock, isPreOrder } = this.getStockInfo(defaultCombinationInStock, stocks);
+    return { defaultCombinationInStock, isInStock, isPreOrder };
   }
 
   static getDeviceMinMaxPrices(devices, sales = [], saleTypeNames = []) {

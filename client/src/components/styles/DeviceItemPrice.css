@@ -29,3 +29,7 @@
 .main-device-currency {
   padding-left: 1px;
 }
+
+.price-add-to-cart-wrap > .main-device-price {
+  height: 32px;
+}
