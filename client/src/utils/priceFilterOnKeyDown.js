@@ -1,6 +1,12 @@
 import validateMinMaxPrice from "./validateMinMaxPrice";
+import validateNumberInput from "./validateNumberInput";
 
-function priceFilterOnKeyDown(e, value, isMin, initialMinPrice, initialMaxPrice, minPriceValue, maxPriceValue, setIsValid, setValue) {
+function priceFilterOnKeyDown(
+  e, type, value, setValue, setIsValid, minValue = 0,
+  onSetValueCb = null, isMin = null, 
+  initialMinPrice = null, initialMaxPrice = null, 
+  minPriceValue = null, maxPriceValue = null
+) {
   let nextValue;
 
   let changeNumber = 1;
@@ -12,10 +18,10 @@ function priceFilterOnKeyDown(e, value, isMin, initialMinPrice, initialMaxPrice,
 
       // do not handle adding / substracting value if it is not a number
       if (isNaN(+value)) break;
-      if (+value - changeNumber > 0) {
+      if (+value - changeNumber > minValue) {
         nextValue = +value - changeNumber;
       } else {
-        nextValue = 0;
+        nextValue = minValue;
       }
       
       break;
@@ -29,17 +35,26 @@ function priceFilterOnKeyDown(e, value, isMin, initialMinPrice, initialMaxPrice,
   }
 
   if (!nextValue && nextValue !== 0) return;
-  const { nextIsValid } = validateMinMaxPrice(
-    isMin,
-    nextValue,
-    initialMinPrice,
-    initialMaxPrice,
-    minPriceValue,
-    maxPriceValue
-  );
+
+  let nextIsValid;
+  if (type === "price") {
+    nextIsValid = validateMinMaxPrice(
+      isMin,
+      nextValue,
+      initialMinPrice,
+      initialMaxPrice,
+      minPriceValue,
+      maxPriceValue
+    ).nextIsValid;
+
+    setValue(`${nextValue.toFixed(2)}`);
+  } else if (type === "default") {
+    nextIsValid = validateNumberInput(nextValue, minValue);
+    setValue(nextValue);
+  }
 
   setIsValid(nextIsValid);
-  setValue(`${nextValue.toFixed(2)}`);
+  if (onSetValueCb) onSetValueCb();
 }
 
 export default priceFilterOnKeyDown;

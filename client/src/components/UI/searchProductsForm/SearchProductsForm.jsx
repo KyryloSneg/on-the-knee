@@ -20,8 +20,6 @@ import getPreparedForMockServerStr from "../../../utils/getPreparedForMockServer
 const SearchProductsForm = observer(({ navbarRef }) => {
   const { app, isTest, isEmptySearchResults } = useContext(Context);
   const navigate = useNavigateToEncodedURL();
-  const [sales, setSales] = useState([]);
-  const [saleTypeNames, setSaleTypeNames] = useState([]);
   const [stocks, setStocks] = useState([]);
   const [value, setValue] = useState(""); // the value that will be submitted to the form
   // the value that user can return to (it renders as the first search option if the input value isn't empty)
@@ -216,8 +214,8 @@ const SearchProductsForm = observer(({ navbarRef }) => {
   }
 
   useSearchResultsFetching(setResults, backupValue);
-  useGettingDeviceRelatedData(setSales, setSaleTypeNames, setStocks, results);
-
+  useGettingDeviceRelatedData(null, null, setStocks, results);
+  
   return (
     <form className="search-product-form" role="search" onSubmit={onSubmit} onBlur={onFormBlur} ref={formRef}>
       <div className="search-product-with-results">
@@ -243,8 +241,6 @@ const SearchProductsForm = observer(({ navbarRef }) => {
             setSelectedId={setSelectedId}
             isInputFocused={isInputFocused}
             inputRef={inputRef}
-            sales={sales}
-            saleTypeNames={saleTypeNames}
             stocks={stocks}
           />
         }

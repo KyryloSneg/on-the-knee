@@ -5,6 +5,7 @@ class AppStore {
     this._darkBgVisible = false;
     this._isBlockedScroll = false;
     this._isGlobalLoading = false;
+    this._isCartModalLoading = false;
     this._modalVisible = false;
 
     this._isVisibleMenu = false;
@@ -20,6 +21,7 @@ class AppStore {
     this._isVisibleAnswerModal = false;
     this._isVisibleAskSellerModal = false;
     this._isVisibleCommentGalleryModal = false;
+    this._isVisibleCartModal = false;
     this._isFocusedSearchForm = false;
 
     this._hintSearchResults = []
@@ -53,6 +55,8 @@ class AppStore {
     this._commentGalleryModalType = "deviceFeedbacks";
     this._commentGallerySelectedImageId = null;
 
+    this._deviceListItemsValues = null;
+
     this._storePickupPoints = [];
     makeAutoObservable(this);
   }
@@ -67,6 +71,10 @@ class AppStore {
 
   setIsGlobalLoading(bool) {
     this._isGlobalLoading = bool;
+  }
+
+  setIsCartModalLoading(bool) {
+    this._isCartModalLoading = bool;
   }
 
   setModalVisible(bool) {
@@ -123,6 +131,10 @@ class AppStore {
 
   setIsVisibleCommentGalleryModal(bool) {
     this._isVisibleCommentGalleryModal = bool;
+  }
+
+  setIsVisibleCartModal(bool) {
+    this._isVisibleCartModal = bool;
   }
 
   setIsFocusedSearchForm(bool) {
@@ -221,6 +233,10 @@ class AppStore {
     this._commentGallerySelectedImageId = commentGallerySelectedImageId;
   }
 
+  setDeviceListItemsValues(deviceListItemsValues) {
+    this._deviceListItemsValues = deviceListItemsValues;
+  }
+
   setStorePickupPoints(storePickupPoints) {
     this._storePickupPoints = storePickupPoints;
   }
@@ -235,6 +251,10 @@ class AppStore {
 
   get isGlobalLoading() {
     return this._isGlobalLoading;
+  }
+
+  get isCartModalLoading() {
+    return this._isCartModalLoading;
   }
 
   get modalVisible() {
@@ -291,6 +311,10 @@ class AppStore {
 
   get isVisibleCommentGalleryModal() {
     return this._isVisibleCommentGalleryModal;
+  }
+
+  get isVisibleCartModal() {
+    return this._isVisibleCartModal;
   }
 
   get isFocusedSearchForm() {
@@ -387,6 +411,10 @@ class AppStore {
 
   get commentGallerySelectedImageId() {
     return this._commentGallerySelectedImageId;
+  }
+
+  get deviceListItemsValues() {
+    return this._deviceListItemsValues;
   }
 
   get storePickupPoints() {
