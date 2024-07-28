@@ -1,15 +1,20 @@
 import { useEffect } from "react";
 import useFetching from "./useFetching";
-import { getAdditionalService } from "../http/AdditionalServicesAPI";
 import { getDevice } from "../http/DeviceApi";
 import _ from "lodash";
+import { getAdditionalService, getOneDevAdditionalServiceDevices } from "../http/AdditionalServicesAPI";
 
 function useGettingAddServicesRelatedData(device, setAdditionalServicesObj) {
 
   async function fetchingFunc(dev) {
     let deviceClone = _.cloneDeep(dev);
-    let additionalServiceDevices = deviceClone["additional-service-devices"];
-
+    let additionalServiceDevices;
+    if (deviceClone["additional-service-devices"]?.length) {
+      additionalServiceDevices = deviceClone["additional-service-devices"];
+    } else {
+      additionalServiceDevices = await getOneDevAdditionalServiceDevices(device?.id);
+    }
+    
     // extending additional service devices with deeper and deeper values
     // (doing it in deeply cloned device's field)
 

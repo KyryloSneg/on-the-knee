@@ -21,6 +21,7 @@ const DeviceItemAddToCartBtn = observer(({ combinations, combo, isWithText = fal
   async function onClick() {
     if (isAdded) {
       setCartModalVisibility(true, app);
+      return;
     } else {
       if (isAlreadyAdding) return;
 

@@ -35,6 +35,7 @@ module.exports = function createData () {
 
     "carts": [],
     "cart-device-combinations": [],
+    "cart-selected-additional-services": [],
 
     "desired-lists": [],
     "desired-list-devices": [],
@@ -118,9 +119,10 @@ module.exports = function createData () {
     data["sale-type-names"] = result.saleTypeNames;
     data["sale-devices"] = result.saleDevices;
 
-    const { carts, cartDeviceCombos } = createCarts(result.deviceCombinations);
+    const { carts, cartDeviceCombos, cartSelectedAdditionalServices } = createCarts(result.deviceCombinations);
     data["carts"] = carts;
     data["cart-device-combinations"] = cartDeviceCombos;
+    data["cart-selected-additional-services"] = cartSelectedAdditionalServices;
 
     const { desiredLists, desiredListDevices } = createDesiredList(result.devices);
     data["desired-lists"] = desiredLists;

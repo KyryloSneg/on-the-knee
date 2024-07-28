@@ -8,12 +8,12 @@ import { Context } from "../Context";
 
 const DevicePurchaseSection = observer(({ price, discountPercentage, device, selectedCombo }) => {
   const { deviceStore } = useContext(Context);
-  const { isInStock, isPreOrder } = DeviceComboActions.getStockInfo(selectedCombo, deviceStore.stocks);
+  const { isInStock } = DeviceComboActions.getStockInfo(selectedCombo, deviceStore.stocks);
 
   return (
     <section className="device-purchase-section">
       <DeviceItemPrice price={price} discountPercentage={discountPercentage} />
-      {(isInStock || isPreOrder)
+      {(isInStock || device.isPreOrder)
         ? (
           <DeviceItemAddToCartBtn
             combinations={device["device-combinations"]}

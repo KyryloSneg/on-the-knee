@@ -3,12 +3,16 @@ import { useContext, useRef, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Context } from '../Context';
 import useClickOnEverything from '../hooks/useClickOnEverything';
-import { deleteCartDeviceCombination, getOneCartDeviceCombinations } from '../http/CartAPI';
+import { deleteCartDeviceCombination, getOneCartDeviceCombinations, patchCartSelectedAdditionalServices } from '../http/CartAPI';
+import _ from "lodash";
+import updateCartData from "../utils/updateCartData";
+import useGettingCartData from "../hooks/useGettingCartData";
 
 const CartModalItemOptions = observer(({ combination }) => {
   const { user, app } = useContext(Context);
   const wrapperRef = useRef(null);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const fetching = useGettingCartData(app.cart?.id, null, true, false);
 
   function onOpen() {
     setIsPopupVisible(true);
@@ -26,8 +30,33 @@ const CartModalItemOptions = observer(({ combination }) => {
 
     try {
       app.setIsCartModalLoading(true);
+      // updating cart data because user could change amount and selected additional services for remained combos
+      await updateCartData(user, fetching);
 
-      await deleteCartDeviceCombination(combination.id)
+      // deleting additional service related to the deleted combo
+      let newCartSelectedAdditionalServices = _.cloneDeep(user.cartSelectedAdditionalServices);
+      if (newCartSelectedAdditionalServices["selected-additional-services"][combination.id]) {
+        delete newCartSelectedAdditionalServices["selected-additional-services"][combination.id]
+      };
+
+      if (user.isAuth) {
+        try {
+          await deleteCartDeviceCombination(combination.id);
+        } catch (e) {
+          if (e.response.status !== 500) console.log(e.message);
+        }
+        
+        await patchCartSelectedAdditionalServices(
+          newCartSelectedAdditionalServices.id, 
+          { "selected-additional-services": newCartSelectedAdditionalServices["selected-additional-services"] }
+        );
+      } else {
+        const newCombos = user.cartDeviceCombinations?.filter(combo => combo.id !== combination.id) || [];
+
+        localStorage.setItem("cartDeviceCombinations", JSON.stringify(newCombos));
+        localStorage.setItem("cartSelectedAddServices", JSON.stringify(newCartSelectedAdditionalServices));
+      }
+
       onSuccess();
     } catch (e) {
       if (e.response.status === 500) {
@@ -66,7 +95,7 @@ const CartModalItemOptions = observer(({ combination }) => {
             onClick={onOpen}
           >
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343" role="img" aria-label="Options">
-              <path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/>
+              <path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z" />
             </svg>
           </button>
         )

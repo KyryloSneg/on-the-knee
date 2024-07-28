@@ -11,6 +11,11 @@ export async function getOneCartDeviceCombinations(cartId) {
   return data;
 }
 
+export async function getOneCartSelectedAdditionalServices(cartId) {
+  const { data } = await $mockApi.get("/cart-selected-additional-services?cartId=" + cartId);
+  return data;
+}
+
 export async function createCartDeviceCombination(combo) {
   const { data } = await $mockApi.post("/cart-device-combinations", combo);
   return data;
@@ -22,4 +27,8 @@ export async function deleteCartDeviceCombination(id) {
 
 export async function patchCartDeviceCombination(id, contentToReplaceWith) {
   await $mockApi.patch("/cart-device-combinations/" + id, contentToReplaceWith);
+}
+
+export async function patchCartSelectedAdditionalServices(id, contentToReplaceWith) {
+  await $mockApi.patch("/cart-selected-additional-services/" + id, contentToReplaceWith);
 }

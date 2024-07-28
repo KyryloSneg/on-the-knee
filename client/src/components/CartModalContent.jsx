@@ -17,22 +17,23 @@ const CartModalContent = observer(({ closeModal }) => {
   const areCombosAndValuesSynced = Object.keys(app.deviceListItemsValues || {})?.length !== user.cartDeviceCombinations?.length;
   const isLoadingContent = (
     (user.isAuth && !_.isEqual(user.user, {})) && _.isEqual(user.cart, {})
-  ) || !deviceStore.sales.length || !deviceStore.saleTypeNames.length || !app.deviceListItemsValues
-  || areCombosAndValuesSynced;
+  ) || !deviceStore.sales?.length || !deviceStore.saleTypeNames?.length || !app.deviceListItemsValues
+  || !Object.keys(user.cartSelectedAdditionalServices)?.length || areCombosAndValuesSynced;
 
   let totalPrice;
   if (!isLoadingContent) {
-    // TODO: add additional services' prices too
     totalPrice = user.cartDeviceCombinations?.reduce((acc, currValue) => {
       const comboPrice = getDiscountedPriceOrDefaultOne(
         currValue["device-combination"], currValue.device, deviceStore.sales, deviceStore.saleTypeNames
       );
 
-      const itemValue = app.deviceListItemsValues[currValue.id]
+      const itemValue = app.deviceListItemsValues[currValue.id];
+      // there's some weird bug that causes itemValue to be undefined or null, so handle it
+      if (!itemValue) return acc + 0;
       // if value is too big, show price of max device amount
       const amount = itemValue.value > itemValue.totalStock ? itemValue.totalStock : itemValue.value;
 
-      return acc + (comboPrice * amount);
+      return acc + (comboPrice * amount) + itemValue.addServicesTotalPrice;
     }, 0);
 
     totalPrice = totalPrice.toFixed(2);

@@ -5,6 +5,7 @@ const createCartDeviceCombos = require("./createCartDeviceCombos");
 module.exports = (deviceCombos) => {
   let carts = [];
   let cartDeviceCombos = [];
+  let cartSelectedAdditionalServicesArr = [];
 
   // USERS
   for (let user of [MOCK_USER]) {
@@ -13,12 +14,20 @@ module.exports = (deviceCombos) => {
       "userId": user._id,
     };
 
+    const cartSelectedAdditionalServices = {
+      "id": faker.string.uuid(),
+      "cartId": cart.id,
+      "selected-additional-services": {},
+    }
+    
     // createCartDeviceCombos(cartDeviceCombos, cart.id, deviceCombos);
     carts.push(cart);
+    cartSelectedAdditionalServicesArr.push(cartSelectedAdditionalServices);
   } 
 
   return {
     carts,
     cartDeviceCombos,
+    cartSelectedAdditionalServices: cartSelectedAdditionalServicesArr
   };
 }

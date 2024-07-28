@@ -5,8 +5,8 @@ import { Context } from '../Context';
 import CartModalContent from './CartModalContent';
 import setCartModalVisibility from '../utils/setCartModalVisibility';
 import { observer } from "mobx-react-lite";
-import { patchCartDeviceCombination } from "../http/CartAPI";
 import useGettingCartData from "../hooks/useGettingCartData";
+import updateCartData from "../utils/updateCartData";
 
 const CartModal = observer(() => {
   const { app, user } = useContext(Context);
@@ -22,46 +22,32 @@ const CartModal = observer(() => {
       // we can add device to cart and immediately open one,
       // so don't create / overwrite already created fields
       if (initialDeviceListItemsValues[cartCombo.id]) continue;
-      initialDeviceListItemsValues[cartCombo.id] = { value: cartCombo.amount, totalStock: Infinity };
+      let addServicesTotalPrice = 0;
+
+      const selectedAddServices = user.cartSelectedAdditionalServices["selected-additional-services"];
+      if (selectedAddServices && selectedAddServices[cartCombo.id]) {
+        for (let selectedItem of selectedAddServices[cartCombo.id]) {
+          addServicesTotalPrice += +selectedItem.price;
+        }
+      }
+
+      initialDeviceListItemsValues[cartCombo.id] = {
+        value: cartCombo.amount,
+        totalStock: Infinity,
+        selectedAddServices: selectedAddServices,
+        addServicesTotalPrice: addServicesTotalPrice,
+      };
     }
 
     app.setDeviceListItemsValues(initialDeviceListItemsValues);
-  }, [app, user.cartDeviceCombinations]);
+  }, [app, user.cartDeviceCombinations, user.cartSelectedAdditionalServices]);
 
-  // before closing the modal update combos' amount
+  // before closing the modal update combos' amount and selected additional services
   useLayoutEffect(() => {
     return async () => {
-      const deviceListItems = Array.from(document.querySelectorAll(".cart-modal-device-list-item"));
-      let storageCartCombos = JSON.parse(localStorage.getItem("cartDeviceCombinations")) || [];
-
-      try {
-        for (let listItem of deviceListItems) {
-          // awaiting just in case of theoretically opened cart right after closing it
-          const newAmount = +listItem.dataset.amount;
-          const totalStock = listItem.dataset.totalstock;
-
-          // if amount is greater than available total stock of device,
-          // set total stock as the new amount
-          if (user.isAuth) {
-            await patchCartDeviceCombination(
-              listItem.dataset.comboid,
-              { amount: newAmount > totalStock ? totalStock : newAmount }
-            );
-          } else {
-            let storageCombo = storageCartCombos.find(combo => combo.id === listItem.dataset.comboid);
-            storageCombo.amount = newAmount > totalStock ? totalStock : newAmount;
-          }
-        };
-
-        // updating cart device combinations
-        if (user.isAuth) {
-          await fetching(user.cart?.id, null, true);
-        } else {
-          localStorage.setItem("cartDeviceCombinations", JSON.stringify(storageCartCombos));
-        }
-      } catch (e) {
-        console.log(e.message);
-      }
+      // we have need in cleanup function on modal closing only
+      if (app.isVisibleCartModal) return;
+      await updateCartData(user, fetching);
     }
     // eslint-disable-next-line 
   }, [user.cart?.id]);

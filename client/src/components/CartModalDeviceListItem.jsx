@@ -12,6 +12,8 @@ import { getOneStock } from "../http/StocksAPI";
 import useLodashDebounce from "../hooks/useLodashDebounce";
 import addIcon from "../assets/add_24x24_7373FF.svg";
 import removeIcon from "../assets/remove-minus_24x24_7373FF.svg";
+import AdditionalServicesSection from "./AdditionalServicesSection";
+import useGettingAddServicesRelatedData from "../hooks/useGettingAddServicesRelatedData";
 
 // [] - no stock error
 // [error] - stock error is rendered
@@ -19,12 +21,19 @@ import removeIcon from "../assets/remove-minus_24x24_7373FF.svg";
 // [] => [error] with 1200ms delay (using isPossibleToShowStockError state and debounce)
 // [error] => [] with 1200ms delay (adding to the above ones isEnoughDevices STATE, not variable)
 const CartModalDeviceListItem = observer(({ combination }) => {
-  const { app, deviceStore } = useContext(Context);
+  const { app, user, deviceStore } = useContext(Context);
   const [value, setValue] = useState(combination.amount);
   const [isValid, setIsValid] = useState(true);
   const [stateStock, setStateStock] = useState(deviceStore.stocks.find(stock => stock.id === combination["device-combination"].stockId));
   const [isPossibleToShowStockError, setIsPossibleToShowStockError] = useState(true);
-  const [isEnoughDevices, setIsEnoughDevices] = useState(value <= stateStock?.totalStock);
+  const [isEnoughDevices, setIsEnoughDevices] = useState(value <= (combination["device-combination"]?.maxPreOrderAmount || stateStock?.totalStock));
+  const [additionalServicesObj, setAdditionalServicesObj] = useState([]);
+
+  let initSelectedItems = [];
+  if (user.cartSelectedAdditionalServices["selected-additional-services"]) {
+    initSelectedItems = user.cartSelectedAdditionalServices["selected-additional-services"][combination.id] || [];
+  }
+  const [selectedAddServices, setSelectedAddServices] = useState(initSelectedItems);
 
   const deviceRouteCombo = combination["device-combination"].combinationString || "default";
   const to = DEVICE_ROUTE + `${combination.device.id}--${deviceRouteCombo}`;
@@ -35,17 +44,31 @@ const CartModalDeviceListItem = observer(({ combination }) => {
 
   const updateStock = async () => {
     try {
-      const fetchedStock = await getOneStock(stateStock?.id);
-
-      // if totalStock has changed, update stock
-      if (fetchedStock.totalStock !== stateStock?.totalStock) {
-        setStateStock(fetchedStock);
-      };
+      if (!combination.device.isPreOrder) {
+        const fetchedStock = await getOneStock(stateStock?.id);
+  
+        // if totalStock has changed, update stock
+        if (fetchedStock.totalStock !== stateStock?.totalStock) {
+          setStateStock(fetchedStock);
+        };
+      }
     } catch (e) {
       console.log(e.message);
     } finally {
+      let nextIsEnoughDevices;
+      const maxPreOrderAmount = combination["device-combination"].maxPreOrderAmount;
+
+      if (combination.device.isPreOrder) {
+        nextIsEnoughDevices = value <= maxPreOrderAmount;
+        if (!nextIsEnoughDevices) setValue(+maxPreOrderAmount);
+      } else {
+        nextIsEnoughDevices = value <= stateStock?.totalStock;
+        // auto-setting max possible amount
+        if (!nextIsEnoughDevices) setValue(+stateStock?.totalStock);
+      }
+
       setIsPossibleToShowStockError(true);
-      setIsEnoughDevices(value <= stateStock?.totalStock);
+      setIsEnoughDevices(nextIsEnoughDevices);
     }
   };
 
@@ -69,23 +92,32 @@ const CartModalDeviceListItem = observer(({ combination }) => {
     }
   }
 
+  useGettingAddServicesRelatedData(combination.device, setAdditionalServicesObj);
   useEffect(() => {
-    // updating total price value
+    // updating values
     let nextDeviceListItemsValues = {...app.deviceListItemsValues};
-    nextDeviceListItemsValues[combination.id] = { value, totalStock: stateStock?.totalStock };
+    const addServicesTotalPrice = selectedAddServices.reduce((acc, currValue) => acc + +currValue.price, 0);
+    nextDeviceListItemsValues[combination.id] = { 
+      value, 
+      totalStock: combination["device-combination"]?.maxPreOrderAmount || stateStock?.totalStock,
+      selectedAddServices,
+      addServicesTotalPrice: addServicesTotalPrice,
+    };
 
     app.setDeviceListItemsValues(nextDeviceListItemsValues);
-  }, [app, combination.id, value, stateStock?.totalStock]);
+  }, [app, combination, combination.id, value, stateStock?.totalStock, selectedAddServices]);
 
   const minInputValue = 1;
 
-  const renderAmountErrorCondition =
-    (isPossibleToShowStockError && stateStock?.stockStatus !== "Awaiting")
-    && !isEnoughDevices;
+  const renderAmountErrorCondition = isPossibleToShowStockError && !isEnoughDevices;
 
   // if value is too big, show price of max device amount
   const price = (
-    combination["device-combination"].price * (value > stateStock?.totalStock ? stateStock?.totalStock : value)
+    combination["device-combination"].price * (
+      value > (combination["device-combination"]?.maxPreOrderAmount || stateStock?.totalStock) 
+        ? (combination["device-combination"]?.maxPreOrderAmount || stateStock?.totalStock)
+        : value
+    )
   ).toFixed(2);
 
   return (
@@ -93,7 +125,8 @@ const CartModalDeviceListItem = observer(({ combination }) => {
       className="cart-modal-device-list-item" 
       data-comboid={combination.id} 
       data-amount={value} 
-      data-totalstock={stateStock?.totalStock}
+      data-totalstock={combination["device-combination"]?.maxPreOrderAmount || stateStock?.totalStock}
+      data-selectedaddservices={JSON.stringify(selectedAddServices)}
     >
       <div className="cart-modal-list-item-main-row">
         <Link to={to} className="cart-modal-item-img-wrap">
@@ -137,6 +170,13 @@ const CartModalDeviceListItem = observer(({ combination }) => {
           discountPercentage={discountPercentage}
         />
       </div>
+      {(additionalServicesObj || true) && 
+        <AdditionalServicesSection 
+          additionalServices={additionalServicesObj} 
+          selectedItems={selectedAddServices}
+          setSelectedItems={setSelectedAddServices}
+        />
+      }
     </div>
   );
 });
