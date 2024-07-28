@@ -37,6 +37,11 @@
   font-size: 1rem;
 }
 
+.out-of-stock-msg {
+  font-size: 1.8rem;
+  color: rgb(90, 90, 90);
+}
+
 @media screen and (min-width: 270px) {
   .device-purchase-section .main-device-add-to-cart {
     width: max-content;

@@ -45,6 +45,8 @@ module.exports = (device, attributeValues, deviceCombinations, stocks, isPreOrde
       const price = (dollars + cents).toFixed(2);
 
       const stock = createStock(device, id, stocks, isPreOrder);
+      const maxPreOrderAmount = isPreOrder ? faker.number.int({ min: 1, max: 50 }) : null;
+
       const deviceCombination = {
         "id": deviceCombinations.length + 1,
         "combinationString": combo,
@@ -52,6 +54,7 @@ module.exports = (device, attributeValues, deviceCombinations, stocks, isPreOrde
         "sku": faker.string.alphanumeric({ length: { min: 8, max: 15 } }),
         "deviceCode": faker.number.int({ min: 100000000, max: 999999999 }),
         "stockId": stock.id,
+        "maxPreOrderAmount": maxPreOrderAmount,
         // Number() doesn't work properly 'cause of the json format, so we must parse it on the frontend side
         "price": price,
         "thumbnail": thumbnail,
@@ -77,6 +80,8 @@ module.exports = (device, attributeValues, deviceCombinations, stocks, isPreOrde
     const id = deviceCombinations.length + 1;
 
     const stock = createStock(device, id, stocks, isPreOrder);
+    const maxPreOrderAmount = isPreOrder ? faker.number.int({ min: 1, max: 50 }) : null;
+    
     const deviceCombination = {
       "id": id,
       "combinationString": null,
@@ -84,6 +89,7 @@ module.exports = (device, attributeValues, deviceCombinations, stocks, isPreOrde
       "sku": faker.string.alphanumeric({ length: { min: 8, max: 15 } }),
       "deviceCode": faker.number.int({ min: 100000000, max: 999999999 }),
       "stockId": stock.id,
+      "maxPreOrderAmount": maxPreOrderAmount,
       "price": faker.commerce.price(),
       "thumbnail": thumbnail,
       "images": images,

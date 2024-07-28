@@ -5,7 +5,7 @@ import DeviceSearchResultItem from "./DeviceSearchResultItem";
 import "./SearchResultItem.css";
 import { Link } from "react-router-dom";
 
-const SearchResultItem = ({ type, active = false, value, id, onFocus, inputValue, results, setResults, inputRef, isBackupValueOption = false, sales = null, saleTypeNames = null, stocks = null }) => {  
+const SearchResultItem = ({ type, active = false, value, id, onFocus, inputValue, results, setResults, inputRef, isBackupValueOption = false, stocks = null }) => {  
   let className = type !== "hint" ? `search-result-${type}` : "";
   className = active ? `${className} active` : className;
   const tabIndex = type === "hidden" ? "-1" : "0" ;
@@ -29,9 +29,6 @@ const SearchResultItem = ({ type, active = false, value, id, onFocus, inputValue
       return <DeviceSearchResultItem 
                 device={value} 
                 defaultCombo={defaultComboInStock} 
-                sales={sales} 
-                saleTypeNames={saleTypeNames} 
-                stocks={stocks} 
               />;
     } else if (type === "category") {
       return (

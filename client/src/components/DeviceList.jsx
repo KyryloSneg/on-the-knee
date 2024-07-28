@@ -11,7 +11,8 @@ const DeviceList = ({ devices, stocks, sales, saleTypeNames }) => {
       {devices.map(dev => {
         const { 
           defaultCombinationInStock: defaultCombination,
-          isInStock
+          isInStock,
+          isPreOrder
         } = DeviceComboActions.findDefaultCombination(dev, stocks); 
         
         return (
@@ -19,6 +20,7 @@ const DeviceList = ({ devices, stocks, sales, saleTypeNames }) => {
             <DeviceItem 
               device={dev} 
               isInStock={isInStock} 
+              isPreOrder={isPreOrder}
               defaultCombination={defaultCombination}
               stocks={stocks}
               sales={sales}

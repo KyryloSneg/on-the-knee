@@ -24,6 +24,10 @@
   font-weight: 400;
 }
 
+#cart-modal .additional-services-section {
+  margin: 4px 0 14px 0;
+}
+
 @media screen and (min-width: 460px) {
   .additional-services-section > h3 {
     flex-direction: row;

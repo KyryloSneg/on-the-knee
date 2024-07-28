@@ -100,7 +100,7 @@ const AdditionalServicesSection = ({ additionalServices, selectedItems, setSelec
         Additional services
         {totalPrice > 0 &&
           <span className="add-services-section-price">
-            (<b>{selectedItems.length}</b> {serviceWord} for <strong>{totalPrice}$</strong>)
+            (<b>{selectedItems.length}</b> {serviceWord} for <strong>{totalPrice.toFixed(2)}$</strong>)
           </span>
         }
       </h3>

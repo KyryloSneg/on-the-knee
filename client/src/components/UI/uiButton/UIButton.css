@@ -1,14 +1,18 @@
-button.ui-button {
+.ui-button {
   font-size: 1.5rem;
   transition: background 0.2s, border 0.2s !important; 
   cursor: pointer;
 }
 
-button.ui-button:disabled {
+a.ui-button {
+  text-align: center;
+}
+
+.ui-button:disabled, a.ui-button.disabled {
   cursor: auto;
 }
 
-button.primary1 {
+.primary1 {
   display: grid;
   justify-content: center;
   align-items: center;
@@ -23,17 +27,17 @@ button.primary1 {
   outline: none;
 }
 
-button.primary1:disabled {
+.primary1:disabled, a.primary1.disabled {
   background-color: #676767;
 }
 
-button.primary1:enabled:hover,
-button.primary1:enabled:active,
-button.primary1:enabled:focus-visible {
+.primary1:enabled:hover, a.primary1:not(.disabled):hover,
+.primary1:enabled:active, a.primary1:not(.disabled):active,
+.primary1:enabled:focus-visible a.primary1:not(.disabled):focus-visible {
   background-color: #5171ff;
 }
 
-button.primary2 {
+.primary2 {
   background: none;
   padding: 8px 12px;
   border: 1px solid #dfdfdf;
@@ -41,14 +45,14 @@ button.primary2 {
   color: #7373ff;
 }
 
-button.primary2:hover,
-button.primary2:active,
-button.primary2:focus-visible {
+.primary2:hover,
+.primary2:active,
+.primary2:focus-visible {
   border: 1px solid #c7c7c7;
   background: #f1f1f1;
 }
 
-button.primary3 {
+.primary3 {
   padding: 8px 10px;
   border: 1px rgb(150, 150, 150) solid;
   border-radius: 8px;
@@ -56,43 +60,43 @@ button.primary3 {
   outline: none;
 }
 
-button.primary3:hover,
-button.primary3:active,
-button.primary3:focus-visible {
+.primary3:hover,
+.primary3:active,
+.primary3:focus-visible {
   background-color: #e0e0e0;
 }
 
-button.modal-submit, button.modal-deny {
+.modal-submit, .modal-deny {
   padding: 8px 10px;
   border-radius: 8px;
   cursor: pointer;
   outline: none;
 }
 
-button.modal-submit {
+.modal-submit {
   background-color: #8282ff;
   color: #fff;
   border: none;
 }
 
-button.modal-submit:disabled {
+.modal-submit:disabled, a.modal-submit.disabled {
   background-color: #b2b2b2;
   cursor: auto;
 }
 
-button.modal-submit:enabled:hover,
-button.modal-submit:enabled:active,
-button.modal-submit:enabled:focus-visible {
+.modal-submit:enabled:hover, a.modal-submit:not(.disabled):hover,
+.modal-submit:enabled:active, a.modal-submit:not(.disabled):active,
+.modal-submit:enabled:focus-visible, a.modal-submit:not(.disabled):focus-visible {
   background-color: #7070ff;
 }
 
-button.modal-deny {
+.modal-deny {
   color: #8282ff;
   border: 1px rgb(150, 150, 150) solid;
 }
 
-button.modal-deny:hover,
-button.modal-deny:active,
-button.modal-deny:focus-visible {
+.modal-deny:hover,
+.modal-deny:active,
+.modal-deny:focus-visible {
   background-color: #e0e0e0;
 }

@@ -1,23 +1,33 @@
 const { faker } = require("@faker-js/faker");
-const { USERS } = require("./consts");
-const createCartDevices = require("./createCartDevices");
+const { MOCK_USER } = require("./consts");
+const createCartDeviceCombos = require("./createCartDeviceCombos");
 
-module.exports = (devices) => {
+module.exports = (deviceCombos) => {
   let carts = [];
-  let cartDevices = [];
+  let cartDeviceCombos = [];
+  let cartSelectedAdditionalServicesArr = [];
 
-  for (let user of USERS) {
+  // USERS
+  for (let user of [MOCK_USER]) {
     const cart = {
       "id": faker.string.uuid(),
       "userId": user._id,
     };
 
-    createCartDevices(cartDevices, cart.id, devices);
+    const cartSelectedAdditionalServices = {
+      "id": faker.string.uuid(),
+      "cartId": cart.id,
+      "selected-additional-services": {},
+    }
+    
+    // createCartDeviceCombos(cartDeviceCombos, cart.id, deviceCombos);
     carts.push(cart);
+    cartSelectedAdditionalServicesArr.push(cartSelectedAdditionalServices);
   } 
 
   return {
     carts,
-    cartDevices,
+    cartDeviceCombos,
+    cartSelectedAdditionalServices: cartSelectedAdditionalServicesArr
   };
 }
