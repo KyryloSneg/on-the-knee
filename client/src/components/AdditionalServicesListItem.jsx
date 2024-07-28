@@ -5,7 +5,8 @@ import AdditionalServicesExpandedList from './AdditionalServicesExpandedList';
 import _ from "lodash";
 
 const AdditionalServicesListItem = ({ additionalService, id, selectedItems, setSelectedItems }) => {
-  const [isChecked, setIsChecked] = useState(false);
+  let initIsChecked = !!selectedItems?.find(item => item.parentId === id);
+  const [isChecked, setIsChecked] = useState(initIsChecked);
   const [isExpanded, setIsExpanded] = useState(false);
   // finding device-combinations of device in "additional-service" field
   const additionalServiceOptions = additionalService["additional-service"].device["device-combinations"];

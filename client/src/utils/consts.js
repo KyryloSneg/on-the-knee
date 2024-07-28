@@ -29,6 +29,7 @@ export const ONE_DEVICE_API_URL = "/devices/ID_TO_REPLACE?_embed=device-combinat
 export const SALES_API_URL = "/sales?_embed=sale-types";
 export const ATRIBUTES_API_URL = "/attributes?_expand=attribute-value&_expand=attribute-name";
 export const ONE_ADDITIONAL_SERVICES_API_URL = "/additional-services/ID_TO_REPLACE";
+export const ONE_DEV_ADDITIONAL_SERVICE_DEVICES_API_URL = "/additional-service-devices?deviceId=ID_TO_REPLACE";
 
 export const DEVICE_FEEDBACKS_API_URL = "/device-feedbacks?_embed=device-feedback-replies&_embed=device-feedback-likes&_embed=device-feedback-dislikes";
 export const ONE_DEVICE_FEEDBACKS_API_URL = "/device-feedbacks?deviceId=ID_TO_REPLACE&_embed=device-feedback-replies&_embed=device-feedback-likes&_embed=device-feedback-dislikes";
