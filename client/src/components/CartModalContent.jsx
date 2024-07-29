@@ -42,7 +42,7 @@ const CartModalContent = observer(({ closeModal }) => {
   return (
     <div className="cart-modal-content">
       {(isLoadingContent || app.isCartModalLoading)
-        ? <Loader className="cart-modal-loader" />
+        ? <Loader />
         : (
           <>
             {!!user.cartDeviceCombinations?.length
