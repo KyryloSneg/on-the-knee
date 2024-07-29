@@ -39,6 +39,22 @@ class DeviceStore {
 
     this._categories = [];
     this._brands = [];
+
+    // we moved states below from DevicePage to reload them on creating a feedback or a question
+    this._deviceFeedbacks = [];
+    this._deviceQuestions = [];
+
+    this._sellerFeedbacks = [];
+
+    // we use these states in modals that are related to the info below
+    this._selectedDeviceId = null;
+    this._selectedSellerId = null;
+
+    this._selectedDeviceFeedbackId = null;
+    this._selectedDeviceQuestionId = null;
+    this._selectedSellerFeedbackId = null;
+
+    this._deviceListItemsValues = null;
     
     this._page = 1;
     this._pagesToFetch = 1;
@@ -157,6 +173,78 @@ class DeviceStore {
 
   get brands() {
     return this._brands;
+  }
+
+  setDeviceFeedbacks(deviceFeedbacks) {
+    this._deviceFeedbacks = deviceFeedbacks;
+  }
+
+  get deviceFeedbacks() {
+    return this._deviceFeedbacks;
+  }
+
+  setDeviceQuestions(deviceQuestions) {
+    this._deviceQuestions = deviceQuestions;
+  }
+
+  get deviceQuestions() {
+    return this._deviceQuestions;
+  }
+
+  setSellerFeedbacks(sellerFeedbacks) {
+    this._sellerFeedbacks = sellerFeedbacks;
+  }
+
+  get sellerFeedbacks() {
+    return this._sellerFeedbacks;
+  }
+
+  setSelectedDeviceId(selectedDeviceId) {
+    this._selectedDeviceId = selectedDeviceId;
+  }
+
+  get selectedDeviceId() {
+    return this._selectedDeviceId;
+  }
+
+  setSelectedSellerId(selectedSellerId) {
+    this._selectedSellerId = selectedSellerId;
+  }
+
+  get selectedSellerId() {
+    return this._selectedSellerId;
+  }
+
+  setSelectedDeviceFeedbackId(selectedDeviceFeedbackId) {
+    this._selectedDeviceFeedbackId = selectedDeviceFeedbackId;
+  }
+
+  get selectedDeviceFeedbackId() {
+    return this._selectedDeviceFeedbackId;
+  }
+
+  setSelectedDeviceQuestionId(selectedDeviceQuestionId) {
+    this._selectedDeviceQuestionId = selectedDeviceQuestionId;
+  }
+
+  get selectedDeviceQuestionId() {
+    return this._selectedDeviceQuestionId;
+  }
+
+  setSelectedSellerFeedbackId(selectedSellerFeedbackId) {
+    this._selectedSellerFeedbackId = selectedSellerFeedbackId;
+  }
+
+  get selectedSellerFeedbackId() {
+    return this._selectedSellerFeedbackId;
+  }
+
+  setDeviceListItemsValues(deviceListItemsValues) {
+    this._deviceListItemsValues = deviceListItemsValues;
+  }
+
+  get deviceListItemsValues() {
+    return this._deviceListItemsValues;
   }
 
   setStocks(stocks) {

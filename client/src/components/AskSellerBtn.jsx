@@ -5,10 +5,10 @@ import UIButton from "./UI/uiButton/UIButton";
 import { Context } from "../Context";
 
 const AskSellerBtn = ({ seller }) => {
-  const { app } = useContext(Context);
+  const { app, deviceStore } = useContext(Context);
 
   function onClick() {
-    app.setSelectedSellerId(seller.id);
+    deviceStore.setSelectedSellerId(seller.id);
     setAskSellerModalVisibility(true, app);
   }
 

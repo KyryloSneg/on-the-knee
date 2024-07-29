@@ -6,16 +6,16 @@ import { Context } from "../Context";
 import { observer } from "mobx-react-lite";
 
 const CommentImagesSection = observer(({ imagesObjs, type }) => {
-  const { app } = useContext(Context);
+  const { app, deviceStore } = useContext(Context);
 
   function onClick(commentId, index) {
     // set visibility and some states of a comment's image modal to true
     if (type === "deviceFeedbacks") {
-      app.setSelectedDeviceFeedbackId(commentId);
+      deviceStore.setSelectedDeviceFeedbackId(commentId);
     } else if (type === "deviceQuestions") {
-      app.setSelectedDeviceQuestionId(commentId);
+      deviceStore.setSelectedDeviceQuestionId(commentId);
     } else if (type === "sellerFeedbacks") {
-      app.setSelectedSellerFeedbackId(commentId);
+      deviceStore.setSelectedSellerFeedbackId(commentId);
     }
 
     app.setCommentGalleryModalType(type);

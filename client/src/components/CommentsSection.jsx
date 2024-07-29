@@ -11,7 +11,7 @@ import UIButton from "./UI/uiButton/UIButton";
 
 const POSSIBLE_TYPES = ["deviceFeedbacks", "deviceQuestions", "sellerFeedbacks"];
 const CommentsSection = observer(({ type, comments, isFullVersion = true, device = null, seller = null }) => {
-  const { app } = useContext(Context);
+  const { app, deviceStore } = useContext(Context);
 
   if (!POSSIBLE_TYPES.includes(type)) throw Error("type of Comments Section is not defined or incorrect");
   if (
@@ -21,7 +21,7 @@ const CommentsSection = observer(({ type, comments, isFullVersion = true, device
   ) return <div />;
 
   function createComment() {
-    app.setSelectedDeviceId(device.id);
+    deviceStore.setSelectedDeviceId(device.id);
 
     if (type === "deviceFeedbacks") {
       setDeviceFeedbackModalVisibility(true, app);
