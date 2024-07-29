@@ -1,4 +1,4 @@
-import "./CommentsList.css";
+import "./styles/CommentsList.css";
 import CommentsListItem from "./CommentsListItem";
 
 const CommentsList = ({ type, comments, singularCommentWord }) => {

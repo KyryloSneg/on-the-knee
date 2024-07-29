@@ -1,9 +1,9 @@
-import DeviceItemPrice from '../../DeviceItemPrice';
-import DeviceSalesActions from '../../../utils/DeviceSalesActions';
-import "./DeviceSearchResultItem.css";
+import DeviceItemPrice from './DeviceItemPrice';
+import DeviceSalesActions from '../utils/DeviceSalesActions';
+import "./styles/DeviceSearchResultItem.css";
 import { observer } from 'mobx-react-lite';
 import { useContext } from 'react';
-import { Context } from '../../../Context';
+import { Context } from '../Context';
 
 const DeviceSearchResultItem = observer(({ device, defaultCombo }) => {
   const { deviceStore } = useContext(Context);

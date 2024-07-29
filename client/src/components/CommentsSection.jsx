@@ -1,13 +1,13 @@
-import "./CommentsSection.css";
+import "./styles/CommentsSection.css";
 import { useContext } from "react";
-import { Context } from "../../../Context";
+import { Context } from "../Context";
 import { observer } from "mobx-react-lite";
 import CommentsList from "./CommentsList";
 import CommentImagesSection from "./CommentImagesSection";
-import setDeviceFeedbackModalVisibility from "../../../utils/setDeviceFeedbackModalVisibility";
-import StarRating from "../starRating/StarRating";
-import setQuestionCommentModalVisibility from "../../../utils/setQuestionCommentModalVisibility";
-import UIButton from "../uiButton/UIButton";
+import setDeviceFeedbackModalVisibility from "../utils/setDeviceFeedbackModalVisibility";
+import StarRating from "./UI/starRating/StarRating";
+import setQuestionCommentModalVisibility from "../utils/setQuestionCommentModalVisibility";
+import UIButton from "./UI/uiButton/UIButton";
 
 const POSSIBLE_TYPES = ["deviceFeedbacks", "deviceQuestions", "sellerFeedbacks"];
 const CommentsSection = observer(({ type, comments, isFullVersion = true, device = null, seller = null }) => {

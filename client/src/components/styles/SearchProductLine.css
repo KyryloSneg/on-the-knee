@@ -90,7 +90,7 @@ div.focusedSearch .input-back-btn {
 
 @media screen and (min-width: 700px) {
   nav .search-product-line {
-    background: white url("../../../assets/search.svg") no-repeat 6px center;
+    background: white url("../../assets/search.svg") no-repeat 6px center;
     background-color: #e9e9e9;
     padding-left: 32px;
   }

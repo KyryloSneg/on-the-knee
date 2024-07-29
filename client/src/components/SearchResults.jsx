@@ -1,10 +1,10 @@
 import { useContext, useRef } from "react";
-import useSearchResultControl from "../../../hooks/useSearchResultControls";
-import useSelectedSearchValue from "../../../hooks/useSelectedSearchValue";
+import useSearchResultControl from "../hooks/useSearchResultControls";
+import useSelectedSearchValue from "../hooks/useSelectedSearchValue";
 import SearchResultItem from "./SearchResultItem";
-import "./SearchResults.css";
-import useChangingMinMaxIds from "../../../hooks/useChangingMinMaxIds";
-import { Context } from "../../../Context";
+import "./styles/SearchResults.css";
+import useChangingMinMaxIds from "../hooks/useChangingMinMaxIds";
+import { Context } from "../Context";
 
 const SearchResults = ({ 
   results, setResults, backupValue, setValue,

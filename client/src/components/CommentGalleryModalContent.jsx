@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { Context } from "../Context";
 import { observer } from "mobx-react-lite";
 import ImagesCarousel from "./UI/imagesCarousel/ImagesCarousel";
-import CommentsListItem from "./UI/commentsSection/CommentsListItem";
+import CommentsListItem from "./CommentsListItem";
 
 const CommentGalleryModalContent = observer(({ type, singularCommentWord, closeModal }) => {
   const { app } = useContext(Context);

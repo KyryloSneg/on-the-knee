@@ -1,8 +1,8 @@
-import DeviceComboActions from "../../../utils/DeviceComboActions";
-import StringActions from "../../../utils/StringActions";
-import { CATEGORY_CATALOG_ROUTE, DEVICE_ROUTE, SEARCH_CATALOG_ROUTE } from "../../../utils/consts";
+import DeviceComboActions from "../utils/DeviceComboActions";
+import StringActions from "../utils/StringActions";
+import { CATEGORY_CATALOG_ROUTE, DEVICE_ROUTE, SEARCH_CATALOG_ROUTE } from "../utils/consts";
 import DeviceSearchResultItem from "./DeviceSearchResultItem";
-import "./SearchResultItem.css";
+import "./styles/SearchResultItem.css";
 import { Link } from "react-router-dom";
 
 const SearchResultItem = ({ type, active = false, value, id, onFocus, inputValue, results, setResults, inputRef, isBackupValueOption = false, stocks = null }) => {  

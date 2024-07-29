@@ -1,22 +1,22 @@
-import "./OriginalComment.css";
-import getDateStr from "../../../utils/getDateStr";
+import "./styles/OriginalComment.css";
 import CommentImagesSection from "./CommentImagesSection";
-import replyIcon from "../../../assets/reply_24x24_7373FF.svg";
-import filledLikeIcon from "../../../assets/thumb_up_24x24_filled_3348E6.svg";
-import notFilledLikeIcon from "../../../assets/thumb_up_24x24_not-filled_3348E6.svg";
-import filledDislikeIcon from "../../../assets/thumb_down_24x24_filled_3348E6.svg";
-import notFilledDislikeIcon from "../../../assets/thumb_down_24x24_not-filled_3348E6.svg";
+import replyIcon from "../assets/reply_24x24_7373FF.svg";
+import filledLikeIcon from "../assets/thumb_up_24x24_filled_3348E6.svg";
+import notFilledLikeIcon from "../assets/thumb_up_24x24_not-filled_3348E6.svg";
+import filledDislikeIcon from "../assets/thumb_down_24x24_filled_3348E6.svg";
+import notFilledDislikeIcon from "../assets/thumb_down_24x24_not-filled_3348E6.svg";
 import { useContext, useState } from "react";
-import { Context } from "../../../Context";
+import { Context } from "../Context";
 import { observer } from "mobx-react-lite";
-import DeviceCommentRatesActions from "../../../utils/DeviceCommentRatesActions";
-import useFetchingDeviceCommentRates from "../../../hooks/useFetchingDeviceCommentRates";
+import DeviceCommentRatesActions from "../utils/DeviceCommentRatesActions";
+import useFetchingDeviceCommentRates from "../hooks/useFetchingDeviceCommentRates";
 import { v4 } from "uuid";
-import setReplyModalVisibility from "../../../utils/setReplyModalVisibility";
-import StarRating from "../starRating/StarRating";
-import setAnswerModalVisibility from "../../../utils/setAnswerModalVisibility";
-import SellerFeedbackStarRatings from "../../SellerFeedbackStarRatings";
-import UIButton from "../uiButton/UIButton";
+import setReplyModalVisibility from "../utils/setReplyModalVisibility";
+import StarRating from "./UI/starRating/StarRating";
+import setAnswerModalVisibility from "../utils/setAnswerModalVisibility";
+import SellerFeedbackStarRatings from "./SellerFeedbackStarRatings";
+import UIButton from "./UI/uiButton/UIButton";
+import getDateStr from "../utils/getDateStr";
 
 const OriginalComment = observer(({ comment, user, type, singularCommentWord = "comment", isWithImages, closeGalleryModal }) => {
   const { user: userStore, app } = useContext(Context);
