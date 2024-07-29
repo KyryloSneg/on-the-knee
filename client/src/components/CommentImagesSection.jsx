@@ -1,8 +1,8 @@
-import "./CommentImagesSection.css";
-import CustomScrollbar from '../customScrollbar/CustomScrollbar';
-import setCommentGalleryModalVisibility from "../../../utils/setCommentGalleryModalVisibility";
+import "./styles/CommentImagesSection.css";
+import CustomScrollbar from './UI/customScrollbar/CustomScrollbar';
+import setCommentGalleryModalVisibility from "../utils/setCommentGalleryModalVisibility";
 import { useContext } from "react";
-import { Context } from "../../../Context";
+import { Context } from "../Context";
 import { observer } from "mobx-react-lite";
 
 const CommentImagesSection = observer(({ imagesObjs, type }) => {

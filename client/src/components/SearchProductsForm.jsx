@@ -1,21 +1,21 @@
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
-import "./SearchProductsForm.css";
-import { Context } from "../../../Context";
+import "./styles/SearchProductsForm.css";
+import { Context } from "../Context";
 import { observer } from "mobx-react-lite";
 import SearchProductLine from "./SearchProductLine";
 import SearchResults from "./SearchResults";
-import useFnOnSomeValue from "../../../hooks/useFnOnSomeValue";
-import { DEVICE_ROUTE, HISTORY_SEARCH_RESULTS_MAX_AMOUNT, mockSearchResults } from "../../../utils/consts";
-import useDeleteValueOnEsc from "../../../hooks/useDeleteValueOnEsc";
-import StringActions from "../../../utils/StringActions";
-import setSearchFormVisibility from "../../../utils/setSearchFormVisibility";
-import useSearchResultsFetching from "../../../hooks/useSearchResultsFetching";
-import { addHintSearchResult } from "../../../http/HintSearchResultsAPI";
-import getDevicesBySearchQuery from "../../../utils/getDevicesBySearchQuery";
-import useGettingDeviceRelatedData from "../../../hooks/useGettingDeviceRelatedData";
-import useNavigateToEncodedURL from "../../../hooks/useNavigateToEncodedURL";
-import DeviceComboActions from "../../../utils/DeviceComboActions";
-import getPreparedForMockServerStr from "../../../utils/getPreparedForMockServerStr";
+import useFnOnSomeValue from "../hooks/useFnOnSomeValue";
+import { DEVICE_ROUTE, HISTORY_SEARCH_RESULTS_MAX_AMOUNT, mockSearchResults } from "../utils/consts";
+import useDeleteValueOnEsc from "../hooks/useDeleteValueOnEsc";
+import StringActions from "../utils/StringActions";
+import setSearchFormVisibility from "../utils/setSearchFormVisibility";
+import useSearchResultsFetching from "../hooks/useSearchResultsFetching";
+import { addHintSearchResult } from "../http/HintSearchResultsAPI";
+import getDevicesBySearchQuery from "../utils/getDevicesBySearchQuery";
+import useGettingDeviceRelatedData from "../hooks/useGettingDeviceRelatedData";
+import useNavigateToEncodedURL from "../hooks/useNavigateToEncodedURL";
+import DeviceComboActions from "../utils/DeviceComboActions";
+import getPreparedForMockServerStr from "../utils/getPreparedForMockServerStr";
 
 const SearchProductsForm = observer(({ navbarRef }) => {
   const { app, isTest, isEmptySearchResults } = useContext(Context);

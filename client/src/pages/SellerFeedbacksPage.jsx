@@ -1,5 +1,5 @@
 import React from 'react';
-import CommentsSection from '../components/UI/commentsSection/CommentsSection';
+import CommentsSection from '../components/CommentsSection';
 
 const SellerFeedbacksPage = ({ seller, feedbacks }) => {
   if (!seller || !feedbacks?.length) return <div />;
