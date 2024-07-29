@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useState } from "react";
 import { Context } from "../Context";
 import MainDevicePage from "./MainDevicePage";
 import DeviceInfoPage from "./DeviceInfoPage";
@@ -16,7 +16,6 @@ const DevicePage = observer(({ type }) => {
   if (!POSSIBLE_TYPES.includes(type)) throw Error("type of Device Page is not defined or incorrect");
 
   const { app } = useContext(Context);
-  const pageRef = useRef(null);
   const { deviceIdCombo } = useParams();
   const [device, setDevice] = useState(null);
 
@@ -25,10 +24,6 @@ const DevicePage = observer(({ type }) => {
 
   useOneDeviceFetching(id, setDevice);
   useOneDeviceFeedbacksFetching(device?.id, null, null, app);
-
-  useEffect(() => {
-    app.setPageRef(pageRef);
-  }, [app]);
 
   function renderInnerPage() {
     let innerPage;
@@ -78,7 +73,7 @@ const DevicePage = observer(({ type }) => {
   ];
 
   return (
-    <main ref={pageRef}>
+    <main>
       <TabsPageLayout tabsData={tabsData} pageContent={renderInnerPage()} />
     </main>
   );

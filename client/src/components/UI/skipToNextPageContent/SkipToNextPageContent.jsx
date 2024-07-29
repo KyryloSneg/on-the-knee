@@ -10,6 +10,7 @@ const SkipToNextPageContent = ({ title, elemToFocus, focusCallback = null, iconS
 
     // sometimes in order to fix some bugs we need to use refs
     // (for example when we don't want to re-render a component to use correct element to focus)
+    console.log(elemToFocus);
     if (elemToFocus?.current) {
       elemToFocus.current?.focus();
     } else {
