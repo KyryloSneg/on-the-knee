@@ -72,6 +72,11 @@
   width: 100%;
 }
 
+.modal-window.create-comment-modal .my-scrollbar.os-scrollbar-vertical .os-scrollbar-track,
+.modal-window.create-comment-modal .my-scrollbar.os-scrollbar-vertical .os-scrollbar-handle {
+  border-radius: 0;
+}
+
 @media screen and (min-width: 500px) {
   .modal-window:not(.create-comment-modal) {
     width: auto;
@@ -83,6 +88,11 @@
 
   .modal-window:not(.create-comment-modal) > header > h2 {
     font-size: 2.5rem;
+  }
+
+  .modal-window .my-scrollbar.os-scrollbar-vertical .os-scrollbar-track,
+  .modal-window .my-scrollbar.os-scrollbar-vertical .os-scrollbar-handle {
+    border-radius: 0 0 6px 0;
   }
 }
 
@@ -98,5 +108,10 @@
 
   .modal-window.create-comment-modal > header > h2 {
     font-size: 2.5rem;
+  }
+
+  .modal-window.create-comment-modal .my-scrollbar.os-scrollbar-vertical .os-scrollbar-track,
+  .modal-window.create-comment-modal .my-scrollbar.os-scrollbar-vertical .os-scrollbar-handle {
+    border-radius: 0 0 6px 0;
   }
 }

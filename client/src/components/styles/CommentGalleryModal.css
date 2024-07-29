@@ -6,6 +6,11 @@
   padding: 0;
 }
 
+#comment-gallery-modal .my-scrollbar.os-scrollbar-vertical .os-scrollbar-track,
+#comment-gallery-modal .my-scrollbar.os-scrollbar-vertical .os-scrollbar-handle {
+  border-radius: 0;
+}
+
 /* +30px */
 @media screen and (min-width: 750px) {
   #comment-gallery-modal {
@@ -18,6 +23,11 @@
 
   #comment-gallery-modal > header > h2 {
     font-size: 2.5rem;
+  }
+
+  #comment-gallery-modal .my-scrollbar.os-scrollbar-vertical .os-scrollbar-track,
+  #comment-gallery-modal .my-scrollbar.os-scrollbar-vertical .os-scrollbar-handle {
+    border-radius: 0 0 6px 0;
   }
 }
 
