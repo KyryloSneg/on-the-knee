@@ -33,13 +33,16 @@ const DeviceItem = ({ device, isInStock, isPreOrder, defaultCombination, stocks,
   const defaultComboColorHrefObjects =
     DeviceComboActions.getComboColorHrefObjects(defaultComboColorHrefs, device, stocks);
 
+  const {
+    deviceSaleTypes,
+    discountPercentage
+  } = DeviceSalesActions.getSaleTypesAndDiscount(device, sales, saleTypeNames);
+
+  const textSaleTypes = deviceSaleTypes.filter(type => !type.logo);
+  const logoSaleTypes = deviceSaleTypes.filter(type => type.logo);
+
   let attributesList = [];
-  let discountPercentage = null;
-  let textSaleTypes = [];
-  let logoSaleTypes = [];
-
   if (screenWidth >= WIDTH_TO_SHOW_DEV_HID_CONTENT) {
-
     if (defaultCombination.combinationString) {
       attributesList = DeviceComboActions.getAttributesList(
         defaultCombination,
@@ -47,16 +50,6 @@ const DeviceItem = ({ device, isInStock, isPreOrder, defaultCombination, stocks,
         device
       );
     }
-
-    const {
-      deviceSaleTypes,
-      discountPercentage: saleDiscountPercentage
-    } = DeviceSalesActions.getSaleTypesAndDiscount(device, sales, saleTypeNames);
-
-    textSaleTypes = deviceSaleTypes.filter(type => !type.logo);
-    logoSaleTypes = deviceSaleTypes.filter(type => type.logo);
-    
-    discountPercentage = saleDiscountPercentage;
   }
 
   const deviceRouteCombo = defaultCombination.combinationString || "default";

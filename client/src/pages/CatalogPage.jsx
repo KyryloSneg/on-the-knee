@@ -4,7 +4,7 @@ import "./styles/CatalogPage.css";
 import useWindowWidth from "../hooks/useWindowWidth";
 import DeviceSection from "../components/DeviceSection";
 import { WIDTH_TO_SHOW_ASIDE, sortingOptions } from "../utils/consts";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Context } from "../Context";
 import CatalogAside from "../components/CatalogAside";
 import useDeviceSectionFetching from "../hooks/useDeviceSectionFetching";
@@ -25,7 +25,6 @@ const CatalogPage = observer(({ type, seller = null }) => {
   const { categoryIdSlug } = useParams();
   const navigate = useNavigateToEncodedURL();
   const { deviceStore, app, isTest } = useContext(Context);
-  const pageRef = useRef(null);
   const windowWidth = useWindowWidth();
   const [isFoundDevicesByQuery, setIsFoundDevicesByQuery] = useState(true);
   const [spellCheckedQuery, setSpellCheckedQuery] = useState(type === "search" ? URLActions.getParamValue("text") : null);
@@ -37,10 +36,6 @@ const CatalogPage = observer(({ type, seller = null }) => {
   useEffect(() => {
     window.scroll(0, 0);
   }, [location.pathname, isFoundDevicesByQuery]);
-
-  useEffect(() => {
-    app.setPageRef(pageRef);
-  }, [app, windowWidth]);
 
   // resetting states below because user can navigate to this page from another page
   useEffect(() => {
@@ -77,7 +72,7 @@ const CatalogPage = observer(({ type, seller = null }) => {
   if (!isFoundDevicesByQuery && type === "search") {
     return (
       <main>
-        <div className="display-grid" ref={pageRef}>
+        <div className="display-grid">
           {/* amazon copy + paste */}
           <p className="wrong-search-query-p">
             <span>No results for «<span className="wrong-search-query-span">{spellCheckedQuery}</span>».</span>
@@ -92,7 +87,7 @@ const CatalogPage = observer(({ type, seller = null }) => {
   const wrapperClassName = !isToRenderFilters ? "no-catalog-aside" : "";
 
   return (
-    <div className="display-grid" ref={pageRef}>
+    <div className="display-grid">
       {(!!deviceStore.devices.length && type === "search")
         ? <p className="spell-checked-query-p">Devices by query «<span>{spellCheckedQuery}</span>»</p>
         : (type === "search") && <div className="spell-checked-p-placeholder" />

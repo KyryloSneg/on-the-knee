@@ -37,7 +37,7 @@ const CommentImagesSection = observer(({ imagesObjs, type }) => {
                   <button onClick={() => onClick(imageObj.commentId, innerIndex)}>
                     <img 
                       src={src} 
-                      alt="" 
+                      alt="Open" 
                       draggable="false" 
                       style={{ transform: `rotate(${image?.rotateDegrees || 0}deg)` }} 
                     />
