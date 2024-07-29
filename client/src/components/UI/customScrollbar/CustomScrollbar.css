@@ -52,6 +52,11 @@
   --os-handle-border-radius: none;
 }
 
+.custom-scrollbar-div.rect > .my-scrollbar.os-scrollbar-horizontal {
+  /* horizontal scroll must take up the entire area, even if vertical one is appeared */
+  right: 0;
+}
+
 .filters-aside-scroll {
   width: 100%;
   border-radius: 20px;
@@ -64,6 +69,11 @@
 
 .tabs-page-layout.no-page-padding .tabs-page-scroll {
   margin: 0 10%;
+}
+
+.modal-window .my-scrollbar.os-scrollbar-vertical .os-scrollbar-track,
+.modal-window .my-scrollbar.os-scrollbar-vertical .os-scrollbar-handle {
+  border-radius: 0;
 }
 
 .self-delivery-modal-scrollbar .os-scrollbar-vertical {

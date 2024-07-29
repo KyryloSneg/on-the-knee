@@ -4,6 +4,11 @@
   padding: 0;
 }
 
+#select-user-location-modal .my-scrollbar.os-scrollbar-vertical .os-scrollbar-track,
+#select-user-location-modal .my-scrollbar.os-scrollbar-vertical .os-scrollbar-handle {
+  border-radius: 0;
+}
+
 @media screen and (min-width: 600px) {
   #select-user-location-modal {
     width: 600px;
@@ -15,5 +20,10 @@
 
   #select-user-location-modal > header > h2 {
     font-size: 2.5rem;
+  }
+
+  #select-user-location-modal .my-scrollbar.os-scrollbar-vertical .os-scrollbar-track,
+  #select-user-location-modal .my-scrollbar.os-scrollbar-vertical .os-scrollbar-handle {
+    border-radius: 0 0 6px 0;
   }
 }
