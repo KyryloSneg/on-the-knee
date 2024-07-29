@@ -1,4 +1,3 @@
-import "./styles/QuestionCommentModal.css";
 import { useContext } from "react";
 import { Context } from "../Context";
 import ModalWindow from "./UI/modalWindow/ModalWindow";
