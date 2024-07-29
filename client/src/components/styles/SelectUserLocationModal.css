@@ -1,6 +1,8 @@
 #select-user-location-modal {
   width: 100%;
-  max-width: 600px;
+  height: 100%;
+  max-height: 100%;
+  border-radius: 0;
   padding: 0;
 }
 
@@ -9,7 +11,7 @@
   border-radius: 0;
 }
 
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 630px) {
   #select-user-location-modal {
     width: 600px;
     height: auto;
