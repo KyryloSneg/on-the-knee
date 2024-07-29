@@ -1,4 +1,3 @@
-import "./styles/DeviceFeedbackModal.css";
 import { useContext } from "react";
 import { Context } from "../Context";
 import ModalWindow from "./UI/modalWindow/ModalWindow";
