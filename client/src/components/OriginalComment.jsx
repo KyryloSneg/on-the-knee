@@ -19,7 +19,7 @@ import UIButton from "./UI/uiButton/UIButton";
 import getDateStr from "../utils/getDateStr";
 
 const OriginalComment = observer(({ comment, user, type, singularCommentWord = "comment", isWithImages, closeGalleryModal }) => {
-  const { user: userStore, app } = useContext(Context);
+  const { user: userStore, app, deviceStore } = useContext(Context);
 
   // we must update likes and dislikes after user clicking on one of them
   const [likes, setLikes] = useState(comment["device-feedback-likes"] || comment["device-question-likes"]);
@@ -49,13 +49,13 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
   const isYourComment = (userStore.user?._id === user?.id && !!user);
 
   function reply() {
-    app.setSelectedDeviceId(comment.deviceId);
+    deviceStore.setSelectedDeviceId(comment.deviceId);
 
     if (type === "deviceFeedbacks") {
-      app.setSelectedDeviceFeedbackId(comment.id);
+      deviceStore.setSelectedDeviceFeedbackId(comment.id);
       setReplyModalVisibility(true, app);
     } else if (type === "deviceQuestions") {
-      app.setSelectedDeviceQuestionId(comment.id);
+      deviceStore.setSelectedDeviceQuestionId(comment.id);
       setAnswerModalVisibility(true, app);
     }
 

@@ -21,7 +21,7 @@ import useGettingAddServicesRelatedData from "../hooks/useGettingAddServicesRela
 // [] => [error] with 1200ms delay (using isPossibleToShowStockError state and debounce)
 // [error] => [] with 1200ms delay (adding to the above ones isEnoughDevices STATE, not variable)
 const CartModalDeviceListItem = observer(({ combination }) => {
-  const { app, user, deviceStore } = useContext(Context);
+  const { user, deviceStore } = useContext(Context);
   const [value, setValue] = useState(combination.amount);
   const [isValid, setIsValid] = useState(true);
   const [stateStock, setStateStock] = useState(deviceStore.stocks.find(stock => stock.id === combination["device-combination"].stockId));
@@ -95,7 +95,7 @@ const CartModalDeviceListItem = observer(({ combination }) => {
   useGettingAddServicesRelatedData(combination.device, setAdditionalServicesObj);
   useEffect(() => {
     // updating values
-    let nextDeviceListItemsValues = {...app.deviceListItemsValues};
+    let nextDeviceListItemsValues = {...deviceStore.deviceListItemsValues};
     const addServicesTotalPrice = selectedAddServices.reduce((acc, currValue) => acc + +currValue.price, 0);
     nextDeviceListItemsValues[combination.id] = { 
       value, 
@@ -104,8 +104,8 @@ const CartModalDeviceListItem = observer(({ combination }) => {
       addServicesTotalPrice: addServicesTotalPrice,
     };
 
-    app.setDeviceListItemsValues(nextDeviceListItemsValues);
-  }, [app, combination, combination.id, value, stateStock?.totalStock, selectedAddServices]);
+    deviceStore.setDeviceListItemsValues(nextDeviceListItemsValues);
+  }, [deviceStore, combination, combination.id, value, stateStock?.totalStock, selectedAddServices]);
 
   const minInputValue = 1;
 

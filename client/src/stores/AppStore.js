@@ -40,22 +40,9 @@ class AppStore {
     this._isToShowUserLocationNotification = false;
     this._isUserLocationDeterminedCorrectly = true;
 
-    // we moved states below from DevicePage to reload them on creating a feedback or a question
-    this._deviceFeedbacks = [];
-    this._deviceQuestions = [];
-
-    this._sellerFeedbacks = [];
-
     // we use these states in modals that are related to the info below
-    this._selectedDeviceId = null;
-    this._selectedSellerId = null;
-    this._selectedDeviceFeedbackId = null;
-    this._selectedDeviceQuestionId = null;
-    this._selectedSellerFeedbackId = null;
     this._commentGalleryModalType = "deviceFeedbacks";
     this._commentGallerySelectedImageId = null;
-
-    this._deviceListItemsValues = null;
 
     this._storePickupPoints = [];
     makeAutoObservable(this);
@@ -193,48 +180,12 @@ class AppStore {
     this._isUserLocationDeterminedCorrectly = isUserLocationDeterminedCorrectly;
   }
 
-  setDeviceFeedbacks(deviceFeedbacks) {
-    this._deviceFeedbacks = deviceFeedbacks;
-  }
-
-  setDeviceQuestions(deviceQuestions) {
-    this._deviceQuestions = deviceQuestions;
-  }
-
-  setSellerFeedbacks(sellerFeedbacks) {
-    this._sellerFeedbacks = sellerFeedbacks;
-  }
-
-  setSelectedDeviceId(selectedDeviceId) {
-    this._selectedDeviceId = selectedDeviceId;
-  }
-
-  setSelectedSellerId(selectedSellerId) {
-    this._selectedSellerId = selectedSellerId;
-  }
-  
-  setSelectedDeviceFeedbackId(selectedDeviceFeedbackId) {
-    this._selectedDeviceFeedbackId = selectedDeviceFeedbackId;
-  }
-
-  setSelectedDeviceQuestionId(selectedDeviceQuestionId) {
-    this._selectedDeviceQuestionId = selectedDeviceQuestionId;
-  }
-
-  setSelectedSellerFeedbackId(selectedSellerFeedbackId) {
-    this._selectedSellerFeedbackId = selectedSellerFeedbackId;
-  }
-
   setCommentGalleryModalType(commentGalleryModalType) {
     this._commentGalleryModalType = commentGalleryModalType;
   }
 
   setCommentGallerySelectedImageId(commentGallerySelectedImageId) {
     this._commentGallerySelectedImageId = commentGallerySelectedImageId;
-  }
-
-  setDeviceListItemsValues(deviceListItemsValues) {
-    this._deviceListItemsValues = deviceListItemsValues;
   }
 
   setStorePickupPoints(storePickupPoints) {
@@ -373,48 +324,12 @@ class AppStore {
     return this._isUserLocationDeterminedCorrectly;
   }
 
-  get deviceFeedbacks() {
-    return this._deviceFeedbacks;
-  }
-
-  get deviceQuestions() {
-    return this._deviceQuestions;
-  }
-
-  get sellerFeedbacks() {
-    return this._sellerFeedbacks;
-  }
-
-  get selectedDeviceId() {
-    return this._selectedDeviceId;
-  }
-
-  get selectedSellerId() {
-    return this._selectedSellerId;
-  }
-
-  get selectedDeviceFeedbackId() {
-    return this._selectedDeviceFeedbackId;
-  }
-
-  get selectedDeviceQuestionId() {
-    return this._selectedDeviceQuestionId;
-  }
-
-  get selectedSellerFeedbackId() {
-    return this._selectedSellerFeedbackId;
-  }
-
   get commentGalleryModalType() {
     return this._commentGalleryModalType;
   }
 
   get commentGallerySelectedImageId() {
     return this._commentGallerySelectedImageId;
-  }
-
-  get deviceListItemsValues() {
-    return this._deviceListItemsValues;
   }
 
   get storePickupPoints() {

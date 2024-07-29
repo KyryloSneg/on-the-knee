@@ -3,7 +3,7 @@ import useFetching from "./useFetching";
 import { getOneDeviceFeedbacks } from "../http/FeedbacksAPI";
 import { getOneDeviceQuestions } from "../http/DeviceQuestionsAPI";
 
-function useOneDeviceFeedbacksFetching(deviceId, setFeedbacks = null, setQuestions = null, app = null) {
+function useOneDeviceFeedbacksFetching(deviceId, setFeedbacks = null, setQuestions = null, deviceStore = null) {
 
   async function fetchingFunc(id) {
     const feedbacks = await getOneDeviceFeedbacks(id);
@@ -12,9 +12,9 @@ function useOneDeviceFeedbacksFetching(deviceId, setFeedbacks = null, setQuestio
     if (setFeedbacks) setFeedbacks(feedbacks);
     if (setQuestions) setQuestions(questions);
     
-    if (app) {
-      app.setDeviceFeedbacks(feedbacks);
-      app.setDeviceQuestions(questions);
+    if (deviceStore) {
+      deviceStore.setDeviceFeedbacks(feedbacks);
+      deviceStore.setDeviceQuestions(questions);
     }
   }
 

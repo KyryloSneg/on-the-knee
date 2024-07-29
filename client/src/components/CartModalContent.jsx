@@ -14,10 +14,10 @@ const CartModalContent = observer(({ closeModal }) => {
   const { deviceStore, user, app } = useContext(Context);
   useGettingCartData(user.cart?.id, null, user);
 
-  const areCombosAndValuesSynced = Object.keys(app.deviceListItemsValues || {})?.length !== user.cartDeviceCombinations?.length;
+  const areCombosAndValuesSynced = Object.keys(deviceStore.deviceListItemsValues || {})?.length !== user.cartDeviceCombinations?.length;
   const isLoadingContent = (
     (user.isAuth && !_.isEqual(user.user, {})) && _.isEqual(user.cart, {})
-  ) || !deviceStore.sales?.length || !deviceStore.saleTypeNames?.length || !app.deviceListItemsValues
+  ) || !deviceStore.sales?.length || !deviceStore.saleTypeNames?.length || !deviceStore.deviceListItemsValues
   || !Object.keys(user.cartSelectedAdditionalServices)?.length || areCombosAndValuesSynced;
 
   let totalPrice;
@@ -27,7 +27,7 @@ const CartModalContent = observer(({ closeModal }) => {
         currValue["device-combination"], currValue.device, deviceStore.sales, deviceStore.saleTypeNames
       );
 
-      const itemValue = app.deviceListItemsValues[currValue.id];
+      const itemValue = deviceStore.deviceListItemsValues[currValue.id];
       // there's some weird bug that causes itemValue to be undefined or null, so handle it
       if (!itemValue) return acc + 0;
       // if value is too big, show price of max device amount

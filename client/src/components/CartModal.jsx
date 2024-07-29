@@ -9,7 +9,7 @@ import useGettingCartData from "../hooks/useGettingCartData";
 import updateCartData from "../utils/updateCartData";
 
 const CartModal = observer(() => {
-  const { app, user } = useContext(Context);
+  const { app, user, deviceStore } = useContext(Context);
   const fetching = useGettingCartData(app.cart?.id, null, true, false);
 
   async function setIsCartModalVisible(isVisible) {
@@ -39,8 +39,8 @@ const CartModal = observer(() => {
       };
     }
 
-    app.setDeviceListItemsValues(initialDeviceListItemsValues);
-  }, [app, user.cartDeviceCombinations, user.cartSelectedAdditionalServices]);
+    deviceStore.setDeviceListItemsValues(initialDeviceListItemsValues);
+  }, [deviceStore, user.cartDeviceCombinations, user.cartSelectedAdditionalServices]);
 
   // before closing the modal update combos' amount and selected additional services
   useLayoutEffect(() => {

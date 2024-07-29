@@ -6,15 +6,15 @@ import ImagesCarousel from "./UI/imagesCarousel/ImagesCarousel";
 import CommentsListItem from "./CommentsListItem";
 
 const CommentGalleryModalContent = observer(({ type, singularCommentWord, closeModal }) => {
-  const { app } = useContext(Context);
+  const { app, deviceStore } = useContext(Context);
 
   let comment;
   if (type === "deviceFeedbacks") {
-    comment = app.deviceFeedbacks?.find(feedback => feedback.id === app.selectedDeviceFeedbackId);
+    comment = deviceStore.deviceFeedbacks?.find(feedback => feedback.id === deviceStore.selectedDeviceFeedbackId);
   } else if (type === "deviceQuestions") {
-    comment = app.deviceQuestions?.find(question => question.id === app.selectedDeviceQuestionId);
+    comment = deviceStore.deviceQuestions?.find(question => question.id === deviceStore.selectedDeviceQuestionId);
   } else if (type === "sellerFeedbacks") {
-    comment = app.sellerFeedbacks?.find(feedback => feedback.id === app.selectedSellerFeedbackId);
+    comment = deviceStore.sellerFeedbacks?.find(feedback => feedback.id === deviceStore.selectedSellerFeedbackId);
   }
 
   let carouselImages = [];
