@@ -6,6 +6,8 @@ function setCommentGalleryModalVisibility(isToShowModal, app, isToKeepDarkBg = f
 
   app.setDarkBgVisible(isToShowModal);
   app.setIsBlockedScroll(isToShowModal);
+
+  if (!isToShowModal && app.commentGalleryModalBtnRef?.current) app.commentGalleryModalBtnRef?.current?.focus();
 }
 
 export default setCommentGalleryModalVisibility;

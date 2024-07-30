@@ -26,6 +26,7 @@ class AppStore {
 
     this._hintSearchResults = []
     // some important app refs below are used to skip a big amount of props passing
+    // or to use in modals / sidebars etc.
     this._pageRef = null;
     this._deviceSectionRef = null;
     this._filtersAsideRef = null;
@@ -34,6 +35,16 @@ class AppStore {
     this._filtersShortcutRef = null;
     this._usedFiltersShortcutRef = null;
     this._navBtnGroupRef = null;
+    this._userLocationBtnRef = null;
+    this._selfDeliveryModalBtnRef = null;
+    this._cartModalBtnRef = null;
+    
+    this._commentGalleryModalBtnRef = null;
+    this._answerModalBtnRef = null;
+    this._deviceFeedbackModalBtnRef = null;
+    this._questionCommentModalBtnRef = null;
+    this._replyModalBtnRef = null;
+    this._askSellerModalBtnRef = null;
 
     this._userLocation = null;
     this._allLocations = [];
@@ -158,6 +169,42 @@ class AppStore {
 
   setNavBtnGroupRef(ref) {
     this._navBtnGroupRef = ref;
+  }
+
+  setUserLocationBtnRef(ref) {
+    this._userLocationBtnRef = ref;
+  }
+
+  setSelfDeliveryModalBtnRef(ref) {
+    this._selfDeliveryModalBtnRef = ref;
+  }
+
+  setCartModalBtnRef(ref) {
+    this._cartModalBtnRef = ref;
+  }
+
+  setCommentGalleryModalBtnRef(ref) {
+    this._commentGalleryModalBtnRef = ref;
+  }
+
+  setAnswerModalBtnRef(ref) {
+    this._answerModalBtnRef = ref;
+  }
+
+  setDeviceFeedbackModalBtnRef(ref) {
+    this._deviceFeedbackModalBtnRef = ref;
+  }
+
+  setQuestionCommentModalBtnRef(ref) {
+    this._questionCommentModalBtnRef = ref;
+  }
+
+  setReplyModalBtnRef(ref) {
+    this._replyModalBtnRef = ref;
+  }
+
+  setAskSellerModalBtnRef(ref) {
+    this._askSellerModalBtnRef = ref;
   }
 
   setHintSearchResults(results) {
@@ -302,6 +349,42 @@ class AppStore {
 
   get navBtnGroupRef() {
     return this._navBtnGroupRef;
+  }
+
+  get userLocationBtnRef() {
+    return this._userLocationBtnRef;
+  }
+
+  get selfDeliveryModalBtnRef() {
+    return this._selfDeliveryModalBtnRef;
+  }
+
+  get cartModalBtnRef() {
+    return this._cartModalBtnRef;
+  }
+
+  get commentGalleryModalBtnRef() {
+    return this._commentGalleryModalBtnRef;
+  }
+
+  get answerModalBtnRef() {
+    return this._answerModalBtnRef;
+  }
+
+  get deviceFeedbackModalBtnRef() {
+    return this._deviceFeedbackModalBtnRef;
+  }
+
+  get questionCommentModalBtnRef() {
+    return this._questionCommentModalBtnRef;
+  }
+
+  get replyModalBtnRef() {
+    return this._replyModalBtnRef;
+  }
+
+  get askSellerModalBtnRef() {
+    return this._askSellerModalBtnRef;
   }
 
   get hintSearchResults() {
