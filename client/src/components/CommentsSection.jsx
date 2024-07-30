@@ -1,5 +1,5 @@
 import "./styles/CommentsSection.css";
-import { useContext } from "react";
+import { useContext, useRef } from "react";
 import { Context } from "../Context";
 import { observer } from "mobx-react-lite";
 import CommentsList from "./CommentsList";
@@ -12,6 +12,7 @@ import UIButton from "./UI/uiButton/UIButton";
 const POSSIBLE_TYPES = ["deviceFeedbacks", "deviceQuestions", "sellerFeedbacks"];
 const CommentsSection = observer(({ type, comments, isFullVersion = true, device = null, seller = null }) => {
   const { app, deviceStore } = useContext(Context);
+  const createCommentBtnRef = useRef(null);
 
   if (!POSSIBLE_TYPES.includes(type)) throw Error("type of Comments Section is not defined or incorrect");
   if (
@@ -24,8 +25,10 @@ const CommentsSection = observer(({ type, comments, isFullVersion = true, device
     deviceStore.setSelectedDeviceId(device.id);
 
     if (type === "deviceFeedbacks") {
+      app.setDeviceFeedbackModalBtnRef(createCommentBtnRef);
       setDeviceFeedbackModalVisibility(true, app);
     } else if (type === "deviceQuestions") {
+      app.setQuestionCommentModalBtnRef(createCommentBtnRef);
       setQuestionCommentModalVisibility(true, app);
     }
   }
@@ -107,6 +110,7 @@ const CommentsSection = observer(({ type, comments, isFullVersion = true, device
             children={createCommentButtonText}
             className="create-comment-btn" 
             onClick={createComment} 
+            ref={createCommentBtnRef}
           />
         </>
       }

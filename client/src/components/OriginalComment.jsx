@@ -5,7 +5,7 @@ import filledLikeIcon from "../assets/thumb_up_24x24_filled_3348E6.svg";
 import notFilledLikeIcon from "../assets/thumb_up_24x24_not-filled_3348E6.svg";
 import filledDislikeIcon from "../assets/thumb_down_24x24_filled_3348E6.svg";
 import notFilledDislikeIcon from "../assets/thumb_down_24x24_not-filled_3348E6.svg";
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { Context } from "../Context";
 import { observer } from "mobx-react-lite";
 import DeviceCommentRatesActions from "../utils/DeviceCommentRatesActions";
@@ -20,6 +20,7 @@ import getDateStr from "../utils/getDateStr";
 
 const OriginalComment = observer(({ comment, user, type, singularCommentWord = "comment", isWithImages, closeGalleryModal }) => {
   const { user: userStore, app, deviceStore } = useContext(Context);
+  const replyBtnRef = useRef(null);
 
   // we must update likes and dislikes after user clicking on one of them
   const [likes, setLikes] = useState(comment["device-feedback-likes"] || comment["device-question-likes"]);
@@ -53,9 +54,13 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
 
     if (type === "deviceFeedbacks") {
       deviceStore.setSelectedDeviceFeedbackId(comment.id);
+      app.setReplyModalBtnRef(replyBtnRef);
+
       setReplyModalVisibility(true, app);
     } else if (type === "deviceQuestions") {
       deviceStore.setSelectedDeviceQuestionId(comment.id);
+      app.setAnswerModalBtnRef(replyBtnRef);
+
       setAnswerModalVisibility(true, app);
     }
 
@@ -272,6 +277,7 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
             variant="primary2"
             className="original-comment-reply-btn"
             onClick={reply}
+            ref={replyBtnRef}
           >
             <img src={replyIcon} alt="" draggable="false" />
             {commentReplyWord}
