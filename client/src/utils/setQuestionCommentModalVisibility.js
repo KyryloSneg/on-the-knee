@@ -3,7 +3,7 @@ function setQuestionCommentModalVisibility(isToShowModal, app) {
   app.setDarkBgVisible(isToShowModal);
   app.setIsBlockedScroll(isToShowModal);
 
-  if (!isToShowModal && app.questionCommentModalBtnRef?.current) app.questionCommentModalBtnRef?.current?.focus();
+  if (isToShowModal) app.setIsToSetLastBtnRefInCurrWindow(true);
 }
 
 export default setQuestionCommentModalVisibility;

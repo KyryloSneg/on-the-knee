@@ -24,6 +24,12 @@ class AppStore {
     this._isVisibleCartModal = false;
     this._isFocusedSearchForm = false;
 
+    // contains the last element's ref from which was opened a modal window, a sidebar etc.
+    this._lastWindowBtnRef = null;
+    // using this to prevent redundant setting of lastWindowBtnRef state
+    // (useful in reply modal opened from comment gallery one for example)
+    this._isToSetLastBtnRefInCurrWindow = true;
+
     this._hintSearchResults = []
     // some important app refs below are used to skip a big amount of props passing
     // or to use in modals / sidebars etc.
@@ -31,10 +37,14 @@ class AppStore {
     this._deviceSectionRef = null;
     this._filtersAsideRef = null;
     this._headerRef = null;
+
     this._menuShortcutRef = null;
+    this._menuCategoriesBtnRef = null;
+
     this._filtersShortcutRef = null;
     this._usedFiltersShortcutRef = null;
     this._navBtnGroupRef = null;
+
     this._userLocationBtnRef = null;
     this._selfDeliveryModalBtnRef = null;
     this._cartModalBtnRef = null;
@@ -139,6 +149,14 @@ class AppStore {
     this._isFocusedSearchForm = bool;
   }
 
+  setLastWindowBtnRef(bool) {
+    this._lastWindowBtnRef = bool;
+  }
+
+  setIsToSetLastBtnRefInCurrWindow(bool) {
+    this._isToSetLastBtnRefInCurrWindow = bool;
+  }
+
   setPageRef(ref) {
     this._pageRef = ref;
   }
@@ -157,6 +175,10 @@ class AppStore {
 
   setMenuShortcutRef(ref) {
     this._menuShortcutRef = ref;
+  }
+
+  setMenuCategoriesBtnRef(ref) {
+    this._menuCategoriesBtnRef = ref;
   }
 
   setFiltersShortcutRef(ref) {
@@ -319,6 +341,14 @@ class AppStore {
     return this._isFocusedSearchForm;
   }
   
+  get lastWindowBtnRef() {
+    return this._lastWindowBtnRef;
+  }
+
+  get isToSetLastBtnRefInCurrWindow() {
+    return this._isToSetLastBtnRefInCurrWindow;
+  }
+  
   get pageRef() {
     return this._pageRef;
   }
@@ -337,6 +367,10 @@ class AppStore {
 
   get menuShortcutRef() {
     return this._menuShortcutRef;
+  }
+
+  get menuCategoriesBtnRef() {
+    return this._menuCategoriesBtnRef;
   }
 
   get filtersShortcutRef() {

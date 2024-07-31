@@ -3,7 +3,7 @@ function setAskSellerModalVisibility(isToShowModal, app) {
   app.setDarkBgVisible(isToShowModal);
   app.setIsBlockedScroll(isToShowModal);
 
-  if (!isToShowModal && app.askSellerModalBtnRef?.current) app.askSellerModalBtnRef?.current?.focus();
+  if (isToShowModal) app.setIsToSetLastBtnRefInCurrWindow(true);
 }
 
 export default setAskSellerModalVisibility;

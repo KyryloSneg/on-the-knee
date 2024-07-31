@@ -3,8 +3,9 @@ import { Context } from "../Context";
 import ModalWindow from "./UI/modalWindow/ModalWindow";
 import setAnswerModalVisibility from "../utils/setAnswerModalVisibility";
 import CommentModalContent from "./CommentModalContent";
+import { observer } from "mobx-react-lite";
 
-const AnswerModal = () => {
+const AnswerModal = observer(() => {
   const { app } = useContext(Context);
 
   function setIsAnswerModalVisible(isVisible) {
@@ -24,8 +25,9 @@ const AnswerModal = () => {
       headerText="Answer"
       propsClassName="create-comment-modal"
       id="answer-modal"
+      triggerElemRef={app.answerModalBtnRef}
     />
   );
-}
+});
 
 export default AnswerModal;

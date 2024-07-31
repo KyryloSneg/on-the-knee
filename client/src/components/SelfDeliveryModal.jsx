@@ -20,6 +20,7 @@ const SelfDeliveryModal = observer(() => {
       children={<SelfDeliveryModalContent />}
       headerText="Pickup points"
       id="self-delivery-modal"
+      triggerElemRef={app.selfDeliveryModalBtnRef}
       key="self-delivery-modal"
     />
   );

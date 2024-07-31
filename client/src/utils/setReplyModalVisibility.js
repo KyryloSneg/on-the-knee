@@ -1,9 +1,9 @@
-function setReplyModalVisibility(isToShowModal, app) {
+function setReplyModalVisibility(isToShowModal, app, isOpenedFromGallery = false) {
   app.setIsVisibleReplyModal(isToShowModal);
   app.setDarkBgVisible(isToShowModal);
   app.setIsBlockedScroll(isToShowModal);
 
-  if (!isToShowModal && app.replyModalBtnRef?.current) app.replyModalBtnRef?.current?.focus();
+  if (isToShowModal) app.setIsToSetLastBtnRefInCurrWindow(!isOpenedFromGallery);
 }
 
 export default setReplyModalVisibility;

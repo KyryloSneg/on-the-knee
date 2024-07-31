@@ -3,7 +3,7 @@ function setSelectUserLocationVisibility(isToShowModal, app) {
   app.setDarkBgVisible(isToShowModal);
   app.setIsBlockedScroll(isToShowModal);
 
-  if (!isToShowModal && app.userLocationBtnRef?.current) app.userLocationBtnRef?.current?.focus();
+  if (isToShowModal) app.setIsToSetLastBtnRefInCurrWindow(true);
 }
 
 export default setSelectUserLocationVisibility;

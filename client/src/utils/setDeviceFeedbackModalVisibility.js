@@ -3,7 +3,7 @@ function setDeviceFeedbackModalVisibility(isToShowModal, app) {
   app.setDarkBgVisible(isToShowModal);
   app.setIsBlockedScroll(isToShowModal);
 
-  if (!isToShowModal && app.deviceFeedbackModalBtnRef?.current) app.deviceFeedbackModalBtnRef?.current?.focus();
+  if (isToShowModal) app.setIsToSetLastBtnRefInCurrWindow(true);
 }
 
 export default setDeviceFeedbackModalVisibility;
