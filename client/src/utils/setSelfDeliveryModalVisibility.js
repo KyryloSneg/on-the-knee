@@ -3,7 +3,7 @@ function setSelfDeliveryModalVisibility(isToShowModal, app) {
   app.setDarkBgVisible(isToShowModal);
   app.setIsBlockedScroll(isToShowModal);
 
-  if (!isToShowModal && app.selfDeliveryModalBtnRef?.current) app.selfDeliveryModalBtnRef?.current?.focus();
+  if (isToShowModal) app.setIsToSetLastBtnRefInCurrWindow(true);
 }
 
 export default setSelfDeliveryModalVisibility;

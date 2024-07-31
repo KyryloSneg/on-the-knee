@@ -3,7 +3,7 @@ function setCartModalVisibility(isToShowModal, app) {
   app.setDarkBgVisible(isToShowModal);
   app.setIsBlockedScroll(isToShowModal);
 
-  if (!isToShowModal && app.cartModalBtnRef?.current) app.cartModalBtnRef?.current?.focus();
+  if (isToShowModal) app.setIsToSetLastBtnRefInCurrWindow(true);
 }
 
 export default setCartModalVisibility;

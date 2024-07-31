@@ -63,6 +63,7 @@ const CartModal = observer(() => {
       }
       headerText="Cart"
       id="cart-modal"
+      triggerElemRef={app.cartModalBtnRef}
     />
   );
 });

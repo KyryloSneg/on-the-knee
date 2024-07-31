@@ -56,12 +56,12 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
       deviceStore.setSelectedDeviceFeedbackId(comment.id);
       app.setReplyModalBtnRef(replyBtnRef);
 
-      setReplyModalVisibility(true, app);
+      setReplyModalVisibility(true, app, !!closeGalleryModal);
     } else if (type === "deviceQuestions") {
       deviceStore.setSelectedDeviceQuestionId(comment.id);
       app.setAnswerModalBtnRef(replyBtnRef);
 
-      setAnswerModalVisibility(true, app);
+      setAnswerModalVisibility(true, app, !!closeGalleryModal);
     }
 
     if (closeGalleryModal) closeGalleryModal();

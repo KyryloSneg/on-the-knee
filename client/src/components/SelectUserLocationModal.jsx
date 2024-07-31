@@ -20,6 +20,7 @@ const SelectUserLocationModal = observer(() => {
       children={<SelectUserLocationModalContent />}
       headerText="Choose your location"
       id="select-user-location-modal"
+      triggerElemRef={app.userLocationBtnRef}
       key="select-user-location-modal"
     />
   );

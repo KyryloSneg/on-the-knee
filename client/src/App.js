@@ -140,6 +140,7 @@ const App = observer(() => {
           children={<CategoriesModalContent />}
           headerText="Categories"
           id="categories-modal"
+          triggerElemRef={app.menuCategoriesBtnRef}
         />
       }
       {app.isVisibleUserLocationModal && <SelectUserLocationModal />}
