@@ -6,8 +6,9 @@ import useClickOnTheDarkBg from "../../../hooks/useClickOnTheDarkBg";
 import { observer } from "mobx-react-lite";
 import useWindowInvisibleFocus from "../../../hooks/useWindowInvisibleFocus";
 import CustomScrollbar from "../customScrollbar/CustomScrollbar";
+import useWindowTriggerElemHandle from "../../../hooks/useWindowTriggerElemHandle";
 
-const ModalWindow = observer(({ isVisible, setIsVisible, children, headerText, id, propsClassName = "", ...props }) => {
+const ModalWindow = observer(({ isVisible, setIsVisible, children, headerText, id, triggerElemRef, propsClassName = "", ...props }) => {
   const { app } = useContext(Context)
 
   const modalRef = useRef(null);
@@ -45,6 +46,7 @@ const ModalWindow = observer(({ isVisible, setIsVisible, children, headerText, i
   useWindowInvisibleFocus(closeModalBtnRef, isVisible);
   useFocusTraps(firstFocusTrapRef, lastFocusTrapRef, modalRef);
   useClickOnTheDarkBg(closeModalWindow, app.darkBgVisible);
+  useWindowTriggerElemHandle(triggerElemRef, id);
 
   return (
     <section 

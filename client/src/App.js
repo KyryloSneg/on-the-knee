@@ -1,9 +1,8 @@
 import Navbar from "./components/Navbar";
 import "./App.css";
-import "./styles/ReactCustomScroll.css";
 import MyFooter from "./components/MyFooter";
 import { useCallback, useContext, useEffect, useRef } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { Context } from "./Context";
 import { observer } from "mobx-react-lite";
 import getAllFocusableElements from "./utils/getAllFocusableElements";
@@ -43,6 +42,8 @@ const App = observer(() => {
   const { app, deviceStore } = useContext(Context);
   // ref for the "skip to next page content" btn
   const headerRef = useRef(null);
+  const pageRef = useRef(null);
+  const location = useLocation();
   const navCategoryBtnRef = useRef(null);
   const windowWidth = useWindowWidth();
 
@@ -50,6 +51,11 @@ const App = observer(() => {
   if (app.pageRef?.current) {
     pageElemToFocus = getAllFocusableElements(app.pageRef.current)[0];
   }
+
+  // adding windowWidth to the dependencies because there could be some differences in desktop and mobile versions
+  useEffect(() => {
+    app.setPageRef(pageRef);
+  }, [app, location.pathname, windowWidth]);
 
   const closeFiltersSidebar = useCallback(() => {
     setFiltersSidebarVisibility(false, app)
@@ -134,6 +140,7 @@ const App = observer(() => {
           children={<CategoriesModalContent />}
           headerText="Categories"
           id="categories-modal"
+          triggerElemRef={app.menuCategoriesBtnRef}
         />
       }
       {app.isVisibleUserLocationModal && <SelectUserLocationModal />}
@@ -151,7 +158,9 @@ const App = observer(() => {
           <CategoriesMenu navCategoryBtnRef={navCategoryBtnRef} />
         }
       </header>
-      <Outlet />
+      <div ref={pageRef}>
+        <Outlet />
+      </div>
       <MyFooter />
     </div>
   );

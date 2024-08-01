@@ -1,5 +1,5 @@
 import "./styles/DeviceItemAddToCartBtn.css";
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import addToCartIcon from "../assets/show-cart-button.svg";
 import inCartIcon from "../assets/in_cart_24x24_FFF.svg";
 import { Context } from "../Context";
@@ -12,6 +12,7 @@ import { getDevice } from "../http/DeviceApi";
 const DeviceItemAddToCartBtn = observer(({ combinations, combo, isWithText = false, isPreOrder = false }) => {
   const { app, user } = useContext(Context);
   const [isAlreadyAdding, setIsAlreadyAdding] = useState(false);
+  const btnRef = useRef(null);
 
   let className = "main-device-add-to-cart";
   if (isPreOrder) {
@@ -20,6 +21,7 @@ const DeviceItemAddToCartBtn = observer(({ combinations, combo, isWithText = fal
 
   async function onClick() {
     if (isAdded) {
+      app.setCartModalBtnRef(btnRef);
       setCartModalVisibility(true, app);
       return;
     } else {
@@ -63,7 +65,7 @@ const DeviceItemAddToCartBtn = observer(({ combinations, combo, isWithText = fal
   const src = isAdded ? inCartIcon : addToCartIcon;
 
   return (
-    <button className={className} onClick={onClick}>
+    <button className={className} onClick={onClick} ref={btnRef}>
       {isWithText && (
         isAdded
           ? <span>In cart</span>

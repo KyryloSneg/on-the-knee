@@ -1,14 +1,17 @@
-import { useContext } from "react";
+import { useContext, useRef } from "react";
 import setAskSellerModalVisibility from "../utils/setAskSellerModalVisibility";
 import "./styles/AskSellerBtn.css";
 import UIButton from "./UI/uiButton/UIButton";
 import { Context } from "../Context";
 
 const AskSellerBtn = ({ seller }) => {
-  const { app } = useContext(Context);
+  const { app, deviceStore } = useContext(Context);
+  const btnRef = useRef(null);
 
   function onClick() {
-    app.setSelectedSellerId(seller.id);
+    app.setAskSellerModalBtnRef(btnRef);
+    deviceStore.setSelectedSellerId(seller.id);
+
     setAskSellerModalVisibility(true, app);
   }
 
@@ -16,6 +19,7 @@ const AskSellerBtn = ({ seller }) => {
     <UIButton 
       className="ask-seller-btn" 
       onClick={onClick}
+      ref={btnRef}
     >
       Ask a question
     </UIButton>

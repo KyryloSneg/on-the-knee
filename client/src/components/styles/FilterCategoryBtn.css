@@ -14,11 +14,11 @@
   position: relative;
 }
 
-.filter-category-block button:active {
+.filter-category-block > button:active {
   background: none;
 }
 
-.filter-category-block button:hover {
+.filter-category-block > button:hover {
   background: none;
 }
 

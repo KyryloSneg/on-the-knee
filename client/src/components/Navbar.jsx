@@ -1,4 +1,4 @@
-import SearchProductsForm from "./UI/searchProductsForm/SearchProductsForm";
+import SearchProductsForm from "./SearchProductsForm";
 import "./styles/Navbar.css";
 import StoreTitle from "./UI/storeTitle/StoreTitle";
 import NavMenuBtn from "./NavMenuBtn";

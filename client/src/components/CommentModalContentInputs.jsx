@@ -82,11 +82,14 @@ const CommentModalContentInputs = ({
                 {...register("advantages", {
                   minLength: {
                     value: 3,
-                    message: "This field must contain over than 3 characters"
+                    message: "This field must contain more than or equal to 3 characters"
                   },
                   maxLength: {
                     value: 1000,
-                    message: "This field must contain less than 1000 characters"
+                    message: "This field must contain less than or equal to 1000 characters"
+                  },
+                  validate: (value) => {
+                    return value.trim().length >= 3 || "This field must contain more than or equal to 3 characters"
                   }
                 })}
               />
@@ -109,11 +112,14 @@ const CommentModalContentInputs = ({
                 {...register("disadvantages", {
                   minLength: {
                     value: 3,
-                    message: "This field must contain over than 3 characters"
+                    message: "This field must contain more than or equal to 3 characters"
                   },
                   maxLength: {
                     value: 1000,
-                    message: "This field must contain less than 1000 characters"
+                    message: "This field must contain less than or equal to 1000 characters"
+                  },
+                  validate: (value) => {
+                    return value.trim().length >= 3 || "This field must contain more than or equal to 3 characters"
                   }
                 })}
               />
@@ -138,11 +144,14 @@ const CommentModalContentInputs = ({
               required: "This field is required",
               minLength: {
                 value: 3,
-                message: "This field must contain over than 3 characters"
+                message: "This field must contain more than or equal to 3 characters"
               },
               maxLength: {
                 value: 3000,
-                message: "This field must contain less than 3000 characters"
+                message: "This field must contain less than or equal to 3000 characters"
+              },
+              validate: (value) => {
+                return value.trim().length >= 3 || "This field must contain more than or equal to 3 characters"
               }
             })}
           />

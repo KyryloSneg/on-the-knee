@@ -482,7 +482,11 @@ ul {
 /* device categories modal */
 
 #categories-modal {
-  width: 700px;
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  border-radius: 0;
+  padding: 0;
 }
 
 .top-h2 {
@@ -500,6 +504,20 @@ ul {
 @media screen and (min-width: 600px) {
   .top-h2 {
     font-size: 3.2rem;
+  }
+}
+
+@media screen and (min-width: 730px) {
+  #categories-modal {
+    max-width: 700px;
+    height: auto;
+    max-height: 95%;
+    border-radius: 6px;
+    padding: 0 0 1px 0;
+  }
+
+  #categories-modal > header > h2 {
+    font-size: 2.5rem;
   }
 }
 

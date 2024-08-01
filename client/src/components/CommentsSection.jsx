@@ -1,17 +1,18 @@
-import "./CommentsSection.css";
-import { useContext } from "react";
-import { Context } from "../../../Context";
+import "./styles/CommentsSection.css";
+import { useContext, useRef } from "react";
+import { Context } from "../Context";
 import { observer } from "mobx-react-lite";
 import CommentsList from "./CommentsList";
 import CommentImagesSection from "./CommentImagesSection";
-import setDeviceFeedbackModalVisibility from "../../../utils/setDeviceFeedbackModalVisibility";
-import StarRating from "../starRating/StarRating";
-import setQuestionCommentModalVisibility from "../../../utils/setQuestionCommentModalVisibility";
-import UIButton from "../uiButton/UIButton";
+import setDeviceFeedbackModalVisibility from "../utils/setDeviceFeedbackModalVisibility";
+import StarRating from "./UI/starRating/StarRating";
+import setQuestionCommentModalVisibility from "../utils/setQuestionCommentModalVisibility";
+import UIButton from "./UI/uiButton/UIButton";
 
 const POSSIBLE_TYPES = ["deviceFeedbacks", "deviceQuestions", "sellerFeedbacks"];
 const CommentsSection = observer(({ type, comments, isFullVersion = true, device = null, seller = null }) => {
-  const { app } = useContext(Context);
+  const { app, deviceStore } = useContext(Context);
+  const createCommentBtnRef = useRef(null);
 
   if (!POSSIBLE_TYPES.includes(type)) throw Error("type of Comments Section is not defined or incorrect");
   if (
@@ -21,11 +22,13 @@ const CommentsSection = observer(({ type, comments, isFullVersion = true, device
   ) return <div />;
 
   function createComment() {
-    app.setSelectedDeviceId(device.id);
+    deviceStore.setSelectedDeviceId(device.id);
 
     if (type === "deviceFeedbacks") {
+      app.setDeviceFeedbackModalBtnRef(createCommentBtnRef);
       setDeviceFeedbackModalVisibility(true, app);
     } else if (type === "deviceQuestions") {
+      app.setQuestionCommentModalBtnRef(createCommentBtnRef);
       setQuestionCommentModalVisibility(true, app);
     }
   }
@@ -107,6 +110,7 @@ const CommentsSection = observer(({ type, comments, isFullVersion = true, device
             children={createCommentButtonText}
             className="create-comment-btn" 
             onClick={createComment} 
+            ref={createCommentBtnRef}
           />
         </>
       }

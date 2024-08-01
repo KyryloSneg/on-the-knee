@@ -5,7 +5,7 @@ import { Context } from '../Context';
 import { observer } from 'mobx-react-lite';
 import setSelectUserLocationVisibility from "../utils/setSelectUserLocationModalVisibility";
 
-const UserLocationNotification = observer(() => {
+const UserLocationNotification = observer(({ userLocationBtnRef }) => {
   const { app } = useContext(Context);
 
   function acceptLocation() {
@@ -13,7 +13,8 @@ const UserLocationNotification = observer(() => {
   }
 
   function changeLocation() {
-    setSelectUserLocationVisibility(true, app);
+    console.log(userLocationBtnRef);
+    setSelectUserLocationVisibility(true, app, userLocationBtnRef);
     app.setIsToShowUserLocationNotification(false);
   }
 

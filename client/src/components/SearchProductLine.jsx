@@ -1,6 +1,6 @@
 import { forwardRef, useImperativeHandle, useRef } from "react";
-import "./SearchProductLine.css"
-import DeleteInputContent from "../deleteInputContent/DeleteInputContent";
+import "./styles/SearchProductLine.css"
+import DeleteInputContent from "./UI/deleteInputContent/DeleteInputContent";
 
 const SearchProductLine = forwardRef(({ value, onChange, deleteInputContent, backToNavbar, onInputFocus, onInputBlur }, ref) => {
   const searchLineRef = useRef(null);

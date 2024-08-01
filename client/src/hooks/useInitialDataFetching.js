@@ -19,77 +19,104 @@ function useInitialDataFetching() {
   const { app, deviceStore, user } = useContext(Context);
 
   async function fetchData() {
-    const brands = await getBrands();
-    const categories = await getCategories();
-    const sales = await getSales();
-    const saleTypeNames = await getSaleTypeNames();
-    const stocks = await getStocks();
-    const hintSearchResults = await getHintSearchResults();
-    const allLocations = await getLocations();
-    const allStorePickupPoints = await getStorePickupPoints();
+    // pasting separate block of fetching data in a different try...catch block
+    // because, for example, unsuccesful fetching of brands mustn't affect
+    // getting user location and so on  
+    try {
+      const brands = await getBrands();
+      const categories = await getCategories();
+      const sales = await getSales();
+      const saleTypeNames = await getSaleTypeNames();
+      const stocks = await getStocks();
 
-    let userLocation = JSON.parse(localStorage.getItem("location"));
-    if (!userLocation) {
-      try {
-        // auto-getting user location
-        // (using try ... catch because ipify crushes sometimes)
-        const fetchedUserLocation = await getUserLocation();
-        userLocation = allLocations.find(location => location.name === fetchedUserLocation.city);
-      } catch (e) {
-        console.log(e.message);
+      // sorting categories by id
+      const sortedCategories = ArrayActions.sortNumberObjectArray(categories, "id");
+
+      deviceStore.setBrands(brands);
+      deviceStore.setCategories(sortedCategories);
+      deviceStore.setSales(sales);
+      deviceStore.setSaleTypeNames(saleTypeNames);
+      deviceStore.setStocks(stocks);
+    } catch (e) {
+      console.log(e.message);
+    }
+
+    try {
+      const hintSearchResults = await getHintSearchResults();
+
+      let uniqueHintResults = [];
+      for (let result of hintSearchResults) {
+        const isIncludedAlready = !!uniqueHintResults.find(res => res.value === result.value);
+        if (!isIncludedAlready) uniqueHintResults.push(result);
       }
+  
+      let resultsWithAmount = uniqueHintResults.map(result => ({ value: result.value, amount: 0 }));
+  
+      for (let result of hintSearchResults) {
+        const resultWithAmount = resultsWithAmount.find(res => res.value === result.value);
+        resultWithAmount.amount = resultWithAmount.amount + 1;
+      }
+  
+      // most popular hints are shown first
+      const sortedHintResults = ArrayActions.sortNumberObjectArray(resultsWithAmount, "amount").reverse();
+      app.setHintSearchResults(sortedHintResults);
+    } catch (e) {
+      console.log(e.message);
+    }
 
-      app.setIsUserLocationDeterminedCorrectly(!!userLocation);
+    try {
+      const allLocations = await getLocations();
+
+      let userLocation = JSON.parse(localStorage.getItem("location"));
       if (!userLocation) {
-        // if we still haven't found user location, set default one (Kyiv)
-        userLocation = allLocations.find(location => location.name === DEFAULT_USER_LOCATION_NAME);
+        try {
+          // auto-getting user location
+          // (using try ... catch because ipify crushes sometimes)
+          const fetchedUserLocation = await getUserLocation();
+          userLocation = allLocations.find(location => location.name === fetchedUserLocation.city);
+        } catch (e) {
+          console.log(e.message);
+        }
+
+        app.setIsUserLocationDeterminedCorrectly(!!userLocation);
+        if (!userLocation) {
+          // if we still haven't found user location, set default one (Kyiv)
+          userLocation = allLocations.find(location => location.name === DEFAULT_USER_LOCATION_NAME);
+        }
+
+        app.setIsToShowUserLocationNotification(true);
+        localStorage.setItem("location", JSON.stringify(userLocation))
       }
 
-      app.setIsToShowUserLocationNotification(true);
-      localStorage.setItem("location", JSON.stringify(userLocation))
+      app.setAllLocations(allLocations);
+      app.setUserLocation(userLocation);
+    } catch (e) {
+      console.log(e.message);
     }
 
-    let uniqueHintResults = [];
-    for (let result of hintSearchResults) {
-      const isIncludedAlready = !!uniqueHintResults.find(res => res.value === result.value);
-      if (!isIncludedAlready) uniqueHintResults.push(result);
+    try {
+      const allStorePickupPoints = await getStorePickupPoints();
+      app.setStorePickupPoints(allStorePickupPoints);
+    } catch (e) {
+      console.log(e.message);
     }
-
-    let resultsWithAmount = uniqueHintResults.map(result => ({ value: result.value, amount: 0 }));
-
-    for (let result of hintSearchResults) {
-      const resultWithAmount = resultsWithAmount.find(res => res.value === result.value);
-      resultWithAmount.amount = resultWithAmount.amount + 1;
-    }
-
-    // most popular hints are shown first
-    const sortedHintResults = ArrayActions.sortNumberObjectArray(resultsWithAmount, "amount").reverse();
-    // sorting categories by id
-    const sortedCategories = ArrayActions.sortNumberObjectArray(categories, "id");
-
-    let cart = {};
-    let cartDeviceCombinations = [];
-
-    if (user.isAuth) {
-      cart = await getOneCart(MOCK_USER._id);
-      cartDeviceCombinations = await getOneCartDeviceCombinations(cart?.id);
-    } else {
-      cartDeviceCombinations = JSON.parse(localStorage.getItem("cartDeviceCombinations")) || [];
-    }
-
-    deviceStore.setBrands(brands);
-    deviceStore.setCategories(sortedCategories);
-    deviceStore.setSales(sales);
-    deviceStore.setSaleTypeNames(saleTypeNames);
-    deviceStore.setStocks(stocks);
     
-    app.setHintSearchResults(sortedHintResults);
-    app.setAllLocations(allLocations);
-    app.setUserLocation(userLocation);
-    app.setStorePickupPoints(allStorePickupPoints);
-
-    if (cart) user.setCart(cart);
-    if (cartDeviceCombinations) user.setCartDeviceCombinations(cartDeviceCombinations);
+    try {
+      let cart = {};
+      let cartDeviceCombinations = [];
+  
+      if (user.isAuth) {
+        cart = await getOneCart(MOCK_USER._id);
+        cartDeviceCombinations = await getOneCartDeviceCombinations(cart?.id);
+      } else {
+        cartDeviceCombinations = JSON.parse(localStorage.getItem("cartDeviceCombinations")) || [];
+      }
+      
+      if (cart) user.setCart(cart);
+      if (cartDeviceCombinations) user.setCartDeviceCombinations(cartDeviceCombinations);
+    } catch (e) {
+      console.log(e.message);
+    }
   }
 
   const [fetching, isLoading, error] = useFetching(fetchData);

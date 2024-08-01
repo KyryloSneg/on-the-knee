@@ -85,7 +85,7 @@ class DeviceComboActions {
         const stock = stocks.find(stockItem => stockItem.id === combination.stockId);
         const hrefObj = {
           href: href,
-          isDisabled: stock.totalStock <= 0,
+          isDisabled: device.isPreOrder ? false : stock.totalStock <= 0,
         };
 
         return hrefObj
@@ -164,7 +164,7 @@ class DeviceComboActions {
         return {
           attrValue: value,
           href: href,
-          isDisabled: !attrHrefsInStock.includes(href)
+          isDisabled: device.isPreOrder ? false : !attrHrefsInStock.includes(href)
         };
       });
 
@@ -180,6 +180,7 @@ class DeviceComboActions {
   static getStockInfo(combination, stocks) {
     const stock = stocks.find(stock => stock.id === combination.stockId);
 
+    // works only for non-preorder devices
     let isInStock = !!stock?.totalStock;
     let isPreOrder = stock?.stockStatus === "Awaiting";
 
@@ -195,7 +196,7 @@ class DeviceComboActions {
     }
 
     // if there are some different combinations and stocks exist
-    if (defaultCombination.combinationString && !!stocks?.length) {
+    if (!device.isPreOrder && defaultCombination.combinationString && !!stocks?.length) {
       const stock = getStock(defaultCombination.stockId).totalStock;
 
       // check is default combination not in stock

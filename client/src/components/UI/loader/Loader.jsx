@@ -2,7 +2,7 @@ import { Spinner } from "react-bootstrap";
 import "./Loader.css";
 
 const Loader = ({ className, ...props }) => {
-  let spinnerClassName = "no-select";
+  let spinnerClassName = "custom-loader no-select";
   if (className) {
     spinnerClassName += ` ${className}`;
   }

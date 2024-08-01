@@ -1,25 +1,26 @@
-import "./OriginalComment.css";
-import getDateStr from "../../../utils/getDateStr";
+import "./styles/OriginalComment.css";
 import CommentImagesSection from "./CommentImagesSection";
-import replyIcon from "../../../assets/reply_24x24_7373FF.svg";
-import filledLikeIcon from "../../../assets/thumb_up_24x24_filled_3348E6.svg";
-import notFilledLikeIcon from "../../../assets/thumb_up_24x24_not-filled_3348E6.svg";
-import filledDislikeIcon from "../../../assets/thumb_down_24x24_filled_3348E6.svg";
-import notFilledDislikeIcon from "../../../assets/thumb_down_24x24_not-filled_3348E6.svg";
-import { useContext, useState } from "react";
-import { Context } from "../../../Context";
+import replyIcon from "../assets/reply_24x24_7373FF.svg";
+import filledLikeIcon from "../assets/thumb_up_24x24_filled_3348E6.svg";
+import notFilledLikeIcon from "../assets/thumb_up_24x24_not-filled_3348E6.svg";
+import filledDislikeIcon from "../assets/thumb_down_24x24_filled_3348E6.svg";
+import notFilledDislikeIcon from "../assets/thumb_down_24x24_not-filled_3348E6.svg";
+import { useContext, useRef, useState } from "react";
+import { Context } from "../Context";
 import { observer } from "mobx-react-lite";
-import DeviceCommentRatesActions from "../../../utils/DeviceCommentRatesActions";
-import useFetchingDeviceCommentRates from "../../../hooks/useFetchingDeviceCommentRates";
+import DeviceCommentRatesActions from "../utils/DeviceCommentRatesActions";
+import useFetchingDeviceCommentRates from "../hooks/useFetchingDeviceCommentRates";
 import { v4 } from "uuid";
-import setReplyModalVisibility from "../../../utils/setReplyModalVisibility";
-import StarRating from "../starRating/StarRating";
-import setAnswerModalVisibility from "../../../utils/setAnswerModalVisibility";
-import SellerFeedbackStarRatings from "../../SellerFeedbackStarRatings";
-import UIButton from "../uiButton/UIButton";
+import setReplyModalVisibility from "../utils/setReplyModalVisibility";
+import StarRating from "./UI/starRating/StarRating";
+import setAnswerModalVisibility from "../utils/setAnswerModalVisibility";
+import SellerFeedbackStarRatings from "./SellerFeedbackStarRatings";
+import UIButton from "./UI/uiButton/UIButton";
+import getDateStr from "../utils/getDateStr";
 
 const OriginalComment = observer(({ comment, user, type, singularCommentWord = "comment", isWithImages, closeGalleryModal }) => {
-  const { user: userStore, app } = useContext(Context);
+  const { user: userStore, app, deviceStore } = useContext(Context);
+  const replyBtnRef = useRef(null);
 
   // we must update likes and dislikes after user clicking on one of them
   const [likes, setLikes] = useState(comment["device-feedback-likes"] || comment["device-question-likes"]);
@@ -49,14 +50,18 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
   const isYourComment = (userStore.user?._id === user?.id && !!user);
 
   function reply() {
-    app.setSelectedDeviceId(comment.deviceId);
+    deviceStore.setSelectedDeviceId(comment.deviceId);
 
     if (type === "deviceFeedbacks") {
-      app.setSelectedDeviceFeedbackId(comment.id);
-      setReplyModalVisibility(true, app);
+      deviceStore.setSelectedDeviceFeedbackId(comment.id);
+      app.setReplyModalBtnRef(replyBtnRef);
+
+      setReplyModalVisibility(true, app, !!closeGalleryModal);
     } else if (type === "deviceQuestions") {
-      app.setSelectedDeviceQuestionId(comment.id);
-      setAnswerModalVisibility(true, app);
+      deviceStore.setSelectedDeviceQuestionId(comment.id);
+      app.setAnswerModalBtnRef(replyBtnRef);
+
+      setAnswerModalVisibility(true, app, !!closeGalleryModal);
     }
 
     if (closeGalleryModal) closeGalleryModal();
@@ -272,6 +277,7 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
             variant="primary2"
             className="original-comment-reply-btn"
             onClick={reply}
+            ref={replyBtnRef}
           >
             <img src={replyIcon} alt="" draggable="false" />
             {commentReplyWord}

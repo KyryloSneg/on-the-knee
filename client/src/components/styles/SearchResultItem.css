@@ -28,26 +28,26 @@
 .search-result-history a:hover,
 .search-result-history a:focus,
 .search-result-history[aria-checked="true"] a {
-  background: #e9e9e9 url("../../../assets/history.svg") 6px center no-repeat;
+  background: #e9e9e9 url("../../assets/history.svg") 6px center no-repeat;
 }
 
 .search-result-category a:hover,
 .search-result-category a:focus,
 .search-result-category[aria-checked="true"] a {
-  background: #e9e9e9 url("../../../assets/category.svg") 6px center no-repeat;
+  background: #e9e9e9 url("../../assets/category.svg") 6px center no-repeat;
 }
 
 .search-result-history a {
-  background: url("../../../assets/history.svg") 6px center no-repeat;
+  background: url("../../assets/history.svg") 6px center no-repeat;
   grid-template-columns: 1fr auto;
 }
 
 .search-result-category a {
-  background: url("../../../assets/category.svg") 6px center no-repeat;
+  background: url("../../assets/category.svg") 6px center no-repeat;
 }
 
 .search-result-category-search a {
-  background: url("../../../assets/search.svg") 6px center no-repeat;
+  background: url("../../assets/search.svg") 6px center no-repeat;
 }
 
 .search-result-hidden {
@@ -83,7 +83,7 @@
   border: none;
   border-radius: 4px;
   padding: 1px;
-  background: url("../../../assets/close.svg") no-repeat;
+  background: url("../../assets/close.svg") no-repeat;
   transition: 0.2s;
   cursor: pointer;
   outline: none;

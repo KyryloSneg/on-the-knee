@@ -20,6 +20,16 @@ const TopFilterBar = observer(() => {
     app.setUsedFiltersShortcutRef(usedFiltersShortcutRef);
   }, [app]);
 
+  useEffect(() => {
+    // returning to our btn ref after selecting / deleting a filter
+    if (!!app.lastWindowBtnRef?.current 
+      && (app.lastWindowBtnRef?.current === filtersShortcutRef.current
+        || app.lastWindowBtnRef?.current === usedFiltersShortcutRef.current
+      )
+    ) app.lastWindowBtnRef?.current?.focus();
+    // eslint-disable-next-line
+  }, []);
+
   function showCategories() {
     if (!Object.keys(deviceStore.filters).length) return;
 

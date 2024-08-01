@@ -17,12 +17,17 @@
 
 .comment-username {
   font-weight: bold;
+  word-break: break-word;
 }
 
 .comment-date {
   font-size: 1.2rem;
   color: rgb(90, 90, 90);
   height: 100%;
+}
+
+.original-comment-message {
+  word-break: break-word;
 }
 
 .original-comment-dis-and-advantages-list {
@@ -41,6 +46,7 @@
 .original-comment-dis-and-advantages-list dd {
   margin: 0;
   display: inline;
+  word-break: break-word;
 }
 
 .original-comment-reply-btn {

@@ -6,6 +6,11 @@
   padding: 0;
 }
 
+#cart-modal .my-scrollbar.os-scrollbar-vertical .os-scrollbar-track,
+#cart-modal .my-scrollbar.os-scrollbar-vertical .os-scrollbar-handle {
+  border-radius: 0;
+}
+
 @media screen and (min-width: 680px) {
   #cart-modal {
     max-width: 95%;
@@ -17,6 +22,11 @@
 
   #cart-modal > header > h2 {
     font-size: 2.5rem;
+  }
+
+  #cart-modal .my-scrollbar.os-scrollbar-vertical .os-scrollbar-track,
+  #cart-modal .my-scrollbar.os-scrollbar-vertical .os-scrollbar-handle {
+    border-radius: 0 0 6px 0;
   }
 }
 

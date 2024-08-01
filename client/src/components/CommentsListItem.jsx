@@ -1,7 +1,7 @@
 import { useState } from "react";
 import CommentRepliesList from "./CommentRepliesList";
-import "./CommentsListItem.css";
-import useGettingOneUser from "../../../hooks/useGettingOneUser";
+import "./styles/CommentsListItem.css";
+import useGettingOneUser from "../hooks/useGettingOneUser";
 import OriginalComment from "./OriginalComment";
 
 const CommentsListItem = ({ type, comment, singularCommentWord, isWithImages = true, closeGalleryModal = null }) => {
