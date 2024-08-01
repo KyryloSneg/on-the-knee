@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useState } from "react";
 import { Context } from "../Context";
 import MainDevicePage from "./MainDevicePage";
 import DeviceInfoPage from "./DeviceInfoPage";
@@ -15,8 +15,7 @@ const POSSIBLE_TYPES = ["main", "info", "comments", "questions"];
 const DevicePage = observer(({ type }) => {
   if (!POSSIBLE_TYPES.includes(type)) throw Error("type of Device Page is not defined or incorrect");
 
-  const { app } = useContext(Context);
-  const pageRef = useRef(null);
+  const { deviceStore } = useContext(Context);
   const { deviceIdCombo } = useParams();
   const [device, setDevice] = useState(null);
 
@@ -24,17 +23,13 @@ const DevicePage = observer(({ type }) => {
   id = +id;
 
   useOneDeviceFetching(id, setDevice);
-  useOneDeviceFeedbacksFetching(device?.id, null, null, app);
-
-  useEffect(() => {
-    app.setPageRef(pageRef);
-  }, [app]);
+  useOneDeviceFeedbacksFetching(device?.id, null, null, deviceStore);
 
   function renderInnerPage() {
     let innerPage;
 
     if (type === "main") {
-      const sortedByDateFeedbacks = [...app.deviceFeedbacks].sort(
+      const sortedByDateFeedbacks = [...deviceStore.deviceFeedbacks].sort(
         (a, b) => b.date.localeCompare(a.date)
       );
 
@@ -48,13 +43,13 @@ const DevicePage = observer(({ type }) => {
     } else if (type === "info") {
       innerPage = <DeviceInfoPage device={device} />;
     } else if (type === "comments") {
-      const sortedByDateFeedbacks = [...app.deviceFeedbacks].sort(
+      const sortedByDateFeedbacks = [...deviceStore.deviceFeedbacks].sort(
         (a, b) => b.date.localeCompare(a.date)
       );
 
       innerPage = <DeviceCommentsPage device={device} feedbacks={sortedByDateFeedbacks} />;
     } else if (type === "questions") {
-      const sortedByDateQuestions = [...app.deviceQuestions].sort(
+      const sortedByDateQuestions = [...deviceStore.deviceQuestions].sort(
         (a, b) => b.date.localeCompare(a.date)
       );
 
@@ -68,17 +63,17 @@ const DevicePage = observer(({ type }) => {
     { name: "Everything about device", to: DEVICE_ROUTE + deviceIdCombo },
     { name: "Info", to: DEVICE_INFO_ROUTE.replace(":deviceIdCombo", deviceIdCombo) },
     { name: 
-      `Comments (${app.deviceFeedbacks?.length || 0})`, 
+      `Comments (${deviceStore.deviceFeedbacks?.length || 0})`, 
       to: DEVICE_COMMENTS_ROUTE.replace(":deviceIdCombo", deviceIdCombo) 
     },
     { 
-      name: `Questions (${app.deviceQuestions?.length || 0})`, 
+      name: `Questions (${deviceStore.deviceQuestions?.length || 0})`, 
       to: DEVICE_QUESTIONS_ROUTE.replace(":deviceIdCombo", deviceIdCombo) 
     },
   ];
 
   return (
-    <main ref={pageRef}>
+    <main>
       <TabsPageLayout tabsData={tabsData} pageContent={renderInnerPage()} />
     </main>
   );

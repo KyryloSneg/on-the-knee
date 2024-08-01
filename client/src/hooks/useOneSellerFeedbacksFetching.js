@@ -4,7 +4,7 @@ import { Context } from "../Context";
 import { getOneSellerFeedbacks } from "../http/FeedbacksAPI";
 
 function useOneSellerFeedbacksFetching(sellerId, setFeedbacks = null) {
-  const { app } = useContext(Context);
+  const { app, deviceStore } = useContext(Context);
 
   async function fetchingCallback(propsSellerId) {
     const feedbacks = await getOneSellerFeedbacks(propsSellerId);
@@ -12,7 +12,7 @@ function useOneSellerFeedbacksFetching(sellerId, setFeedbacks = null) {
     if (setFeedbacks) {
       setFeedbacks(feedbacks);
     } else {
-      app.setSellerFeedbacks(feedbacks);
+      deviceStore.setSellerFeedbacks(feedbacks);
     }
   }
 

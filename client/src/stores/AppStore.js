@@ -24,38 +24,46 @@ class AppStore {
     this._isVisibleCartModal = false;
     this._isFocusedSearchForm = false;
 
+    // contains the last element's ref from which was opened a modal window, a sidebar etc.
+    this._lastWindowBtnRef = null;
+    // using this to prevent redundant setting of lastWindowBtnRef state
+    // (useful in reply modal opened from comment gallery one for example)
+    this._isToSetLastBtnRefInCurrWindow = true;
+
     this._hintSearchResults = []
     // some important app refs below are used to skip a big amount of props passing
+    // or to use in modals / sidebars etc.
     this._pageRef = null;
     this._deviceSectionRef = null;
     this._filtersAsideRef = null;
     this._headerRef = null;
+
     this._menuShortcutRef = null;
+    this._menuCategoriesBtnRef = null;
+
     this._filtersShortcutRef = null;
     this._usedFiltersShortcutRef = null;
     this._navBtnGroupRef = null;
+
+    this._userLocationBtnRef = null;
+    this._selfDeliveryModalBtnRef = null;
+    this._cartModalBtnRef = null;
+    
+    this._commentGalleryModalBtnRef = null;
+    this._answerModalBtnRef = null;
+    this._deviceFeedbackModalBtnRef = null;
+    this._questionCommentModalBtnRef = null;
+    this._replyModalBtnRef = null;
+    this._askSellerModalBtnRef = null;
 
     this._userLocation = null;
     this._allLocations = [];
     this._isToShowUserLocationNotification = false;
     this._isUserLocationDeterminedCorrectly = true;
 
-    // we moved states below from DevicePage to reload them on creating a feedback or a question
-    this._deviceFeedbacks = [];
-    this._deviceQuestions = [];
-
-    this._sellerFeedbacks = [];
-
     // we use these states in modals that are related to the info below
-    this._selectedDeviceId = null;
-    this._selectedSellerId = null;
-    this._selectedDeviceFeedbackId = null;
-    this._selectedDeviceQuestionId = null;
-    this._selectedSellerFeedbackId = null;
     this._commentGalleryModalType = "deviceFeedbacks";
     this._commentGallerySelectedImageId = null;
-
-    this._deviceListItemsValues = null;
 
     this._storePickupPoints = [];
     makeAutoObservable(this);
@@ -141,6 +149,14 @@ class AppStore {
     this._isFocusedSearchForm = bool;
   }
 
+  setLastWindowBtnRef(bool) {
+    this._lastWindowBtnRef = bool;
+  }
+
+  setIsToSetLastBtnRefInCurrWindow(bool) {
+    this._isToSetLastBtnRefInCurrWindow = bool;
+  }
+
   setPageRef(ref) {
     this._pageRef = ref;
   }
@@ -161,6 +177,10 @@ class AppStore {
     this._menuShortcutRef = ref;
   }
 
+  setMenuCategoriesBtnRef(ref) {
+    this._menuCategoriesBtnRef = ref;
+  }
+
   setFiltersShortcutRef(ref) {
     this._filtersShortcutRef = ref;
   }
@@ -171,6 +191,42 @@ class AppStore {
 
   setNavBtnGroupRef(ref) {
     this._navBtnGroupRef = ref;
+  }
+
+  setUserLocationBtnRef(ref) {
+    this._userLocationBtnRef = ref;
+  }
+
+  setSelfDeliveryModalBtnRef(ref) {
+    this._selfDeliveryModalBtnRef = ref;
+  }
+
+  setCartModalBtnRef(ref) {
+    this._cartModalBtnRef = ref;
+  }
+
+  setCommentGalleryModalBtnRef(ref) {
+    this._commentGalleryModalBtnRef = ref;
+  }
+
+  setAnswerModalBtnRef(ref) {
+    this._answerModalBtnRef = ref;
+  }
+
+  setDeviceFeedbackModalBtnRef(ref) {
+    this._deviceFeedbackModalBtnRef = ref;
+  }
+
+  setQuestionCommentModalBtnRef(ref) {
+    this._questionCommentModalBtnRef = ref;
+  }
+
+  setReplyModalBtnRef(ref) {
+    this._replyModalBtnRef = ref;
+  }
+
+  setAskSellerModalBtnRef(ref) {
+    this._askSellerModalBtnRef = ref;
   }
 
   setHintSearchResults(results) {
@@ -193,48 +249,12 @@ class AppStore {
     this._isUserLocationDeterminedCorrectly = isUserLocationDeterminedCorrectly;
   }
 
-  setDeviceFeedbacks(deviceFeedbacks) {
-    this._deviceFeedbacks = deviceFeedbacks;
-  }
-
-  setDeviceQuestions(deviceQuestions) {
-    this._deviceQuestions = deviceQuestions;
-  }
-
-  setSellerFeedbacks(sellerFeedbacks) {
-    this._sellerFeedbacks = sellerFeedbacks;
-  }
-
-  setSelectedDeviceId(selectedDeviceId) {
-    this._selectedDeviceId = selectedDeviceId;
-  }
-
-  setSelectedSellerId(selectedSellerId) {
-    this._selectedSellerId = selectedSellerId;
-  }
-  
-  setSelectedDeviceFeedbackId(selectedDeviceFeedbackId) {
-    this._selectedDeviceFeedbackId = selectedDeviceFeedbackId;
-  }
-
-  setSelectedDeviceQuestionId(selectedDeviceQuestionId) {
-    this._selectedDeviceQuestionId = selectedDeviceQuestionId;
-  }
-
-  setSelectedSellerFeedbackId(selectedSellerFeedbackId) {
-    this._selectedSellerFeedbackId = selectedSellerFeedbackId;
-  }
-
   setCommentGalleryModalType(commentGalleryModalType) {
     this._commentGalleryModalType = commentGalleryModalType;
   }
 
   setCommentGallerySelectedImageId(commentGallerySelectedImageId) {
     this._commentGallerySelectedImageId = commentGallerySelectedImageId;
-  }
-
-  setDeviceListItemsValues(deviceListItemsValues) {
-    this._deviceListItemsValues = deviceListItemsValues;
   }
 
   setStorePickupPoints(storePickupPoints) {
@@ -321,6 +341,14 @@ class AppStore {
     return this._isFocusedSearchForm;
   }
   
+  get lastWindowBtnRef() {
+    return this._lastWindowBtnRef;
+  }
+
+  get isToSetLastBtnRefInCurrWindow() {
+    return this._isToSetLastBtnRefInCurrWindow;
+  }
+  
   get pageRef() {
     return this._pageRef;
   }
@@ -341,6 +369,10 @@ class AppStore {
     return this._menuShortcutRef;
   }
 
+  get menuCategoriesBtnRef() {
+    return this._menuCategoriesBtnRef;
+  }
+
   get filtersShortcutRef() {
     return this._filtersShortcutRef;
   }
@@ -351,6 +383,42 @@ class AppStore {
 
   get navBtnGroupRef() {
     return this._navBtnGroupRef;
+  }
+
+  get userLocationBtnRef() {
+    return this._userLocationBtnRef;
+  }
+
+  get selfDeliveryModalBtnRef() {
+    return this._selfDeliveryModalBtnRef;
+  }
+
+  get cartModalBtnRef() {
+    return this._cartModalBtnRef;
+  }
+
+  get commentGalleryModalBtnRef() {
+    return this._commentGalleryModalBtnRef;
+  }
+
+  get answerModalBtnRef() {
+    return this._answerModalBtnRef;
+  }
+
+  get deviceFeedbackModalBtnRef() {
+    return this._deviceFeedbackModalBtnRef;
+  }
+
+  get questionCommentModalBtnRef() {
+    return this._questionCommentModalBtnRef;
+  }
+
+  get replyModalBtnRef() {
+    return this._replyModalBtnRef;
+  }
+
+  get askSellerModalBtnRef() {
+    return this._askSellerModalBtnRef;
   }
 
   get hintSearchResults() {
@@ -373,48 +441,12 @@ class AppStore {
     return this._isUserLocationDeterminedCorrectly;
   }
 
-  get deviceFeedbacks() {
-    return this._deviceFeedbacks;
-  }
-
-  get deviceQuestions() {
-    return this._deviceQuestions;
-  }
-
-  get sellerFeedbacks() {
-    return this._sellerFeedbacks;
-  }
-
-  get selectedDeviceId() {
-    return this._selectedDeviceId;
-  }
-
-  get selectedSellerId() {
-    return this._selectedSellerId;
-  }
-
-  get selectedDeviceFeedbackId() {
-    return this._selectedDeviceFeedbackId;
-  }
-
-  get selectedDeviceQuestionId() {
-    return this._selectedDeviceQuestionId;
-  }
-
-  get selectedSellerFeedbackId() {
-    return this._selectedSellerFeedbackId;
-  }
-
   get commentGalleryModalType() {
     return this._commentGalleryModalType;
   }
 
   get commentGallerySelectedImageId() {
     return this._commentGallerySelectedImageId;
-  }
-
-  get deviceListItemsValues() {
-    return this._deviceListItemsValues;
   }
 
   get storePickupPoints() {

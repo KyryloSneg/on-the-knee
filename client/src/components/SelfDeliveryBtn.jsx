@@ -1,13 +1,15 @@
 import "./styles/SelfDeliveryBtn.css";
 import deliveryIcon from "../assets/delivery_24x24_434343.svg";
 import setSelfDeliveryModalVisibility from "../utils/setSelfDeliveryModalVisibility";
-import { useContext } from "react";
+import { useContext, useRef } from "react";
 import { Context } from "../Context";
 
 const SelfDeliveryBtn = () => {
   const { app } = useContext(Context);
+  const btnRef = useRef(null);
 
   function onClick() {
+    app.setSelfDeliveryModalBtnRef(btnRef);
     setSelfDeliveryModalVisibility(true, app);
   }
 
@@ -20,6 +22,7 @@ const SelfDeliveryBtn = () => {
         <button 
           className="self-delivery-btn link-colors"
           onClick={onClick}
+          ref={btnRef}
         >
           Self-delivery from our stores
         </button>

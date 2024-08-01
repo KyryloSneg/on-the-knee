@@ -12,7 +12,7 @@ import { createSellerQuestion } from "../http/SellerQuestionsAPI";
 
 const POSSIBLE_TYPES = ["feedback", "reply", "question", "answer", "askSeller"];
 const CommentModalContent = observer(({ type, closeModal }) => {
-  const { app, user } = useContext(Context);
+  const { deviceStore, user } = useContext(Context);
   const [isToShowErrors, setIsToShowErrors] = useState(true);
   const [isAnonymously, setIsAnonymously] = useState(false);
   const [settedStarRating, setSettedStarRating] = useState(0);
@@ -70,7 +70,7 @@ const CommentModalContent = observer(({ type, closeModal }) => {
     if (type === "feedback") {
       const newFeedback = {
         "id": id,
-        "deviceId": app.selectedDeviceId,
+        "deviceId": deviceStore.selectedDeviceId,
         "userId": isAnonymously ? null : user.user?._id,
         "isAnonymously": isAnonymously,
         "images": filesToSend,
@@ -84,12 +84,12 @@ const CommentModalContent = observer(({ type, closeModal }) => {
       await createDeviceFeedback(newFeedback);
 
       // updating device's feedbacks
-      const feedbacks = await getOneDeviceFeedbacks(app.selectedDeviceId);
-      app.setDeviceFeedbacks(feedbacks);
+      const feedbacks = await getOneDeviceFeedbacks(deviceStore.selectedDeviceId);
+      deviceStore.setDeviceFeedbacks(feedbacks);
     } else if (type === "reply") {
       const newReply = {
         "id": id,
-        "device-feedbackId": app.selectedDeviceFeedbackId,
+        "device-feedbackId": deviceStore.selectedDeviceFeedbackId,
         "userId": user.user?._id || null,
         "message": data.comment,
         "date": date,
@@ -97,12 +97,12 @@ const CommentModalContent = observer(({ type, closeModal }) => {
 
       await createDeviceFeedbackReply(newReply);
 
-      const feedbacks = await getOneDeviceFeedbacks(app.selectedDeviceId);
-      app.setDeviceFeedbacks(feedbacks);
+      const feedbacks = await getOneDeviceFeedbacks(deviceStore.selectedDeviceId);
+      deviceStore.setDeviceFeedbacks(feedbacks);
     } else if (type === "question") {
       const newQuestion = {
         "id": id,
-        "deviceId": app.selectedDeviceId,
+        "deviceId": deviceStore.selectedDeviceId,
         "userId": isAnonymously ? null : user.user?._id,
         "isAnonymously": isAnonymously,
         "images": filesToSend,
@@ -113,12 +113,12 @@ const CommentModalContent = observer(({ type, closeModal }) => {
       await createDeviceQuestion(newQuestion);
 
       // updating device's questions
-      const questions = await getOneDeviceQuestions(app.selectedDeviceId);
-      app.setDeviceQuestions(questions);
+      const questions = await getOneDeviceQuestions(deviceStore.selectedDeviceId);
+      deviceStore.setDeviceQuestions(questions);
     } else if (type === "answer") {
       const newAnswer = {
         "id": id,
-        "device-questionId": app.selectedDeviceQuestionId,
+        "device-questionId": deviceStore.selectedDeviceQuestionId,
         "userId": user.user?._id || null,
         "message": data.comment,
         "date": date,
@@ -126,12 +126,12 @@ const CommentModalContent = observer(({ type, closeModal }) => {
 
       await createDeviceAnswer(newAnswer);
 
-      const questions = await getOneDeviceQuestions(app.selectedDeviceId);
-      app.setDeviceQuestions(questions);
+      const questions = await getOneDeviceQuestions(deviceStore.selectedDeviceId);
+      deviceStore.setDeviceQuestions(questions);
     } else if (type === "askSeller") {
       const newQuestion = {
         "id": id,
-        "sellerId": app.selectedSellerId,
+        "sellerId": deviceStore.selectedSellerId,
         "userId": user.user?._id || null,
         "message": data.comment,
         "date": date,

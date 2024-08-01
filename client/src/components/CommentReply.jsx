@@ -1,7 +1,7 @@
 import { useState } from "react";
-import "./CommentReply.css";
-import useGettingOneUser from "../../../hooks/useGettingOneUser";
-import getDateStr from "../../../utils/getDateStr";
+import "./styles/CommentReply.css";
+import useGettingOneUser from "../hooks/useGettingOneUser";
+import getDateStr from "../utils/getDateStr";
 
 const CommentReply = ({ reply, type }) => {
   const [user, setUser] = useState(null);

@@ -1,4 +1,4 @@
-import CommentsSection from "../components/UI/commentsSection/CommentsSection";
+import CommentsSection from "../components/CommentsSection";
 
 const DeviceQuestionsPage = ({ device, questions }) => {
   return (

@@ -37,6 +37,7 @@ const CommentGalleryModal = observer(() => {
       }
       headerText={`Photos of ${singularCommentWord}`}
       id="comment-gallery-modal"
+      triggerElemRef={app.commentGalleryModalBtnRef}
     />
   );
 });

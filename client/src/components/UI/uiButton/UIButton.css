@@ -33,7 +33,7 @@ a.ui-button {
 
 .primary1:enabled:hover, a.primary1:not(.disabled):hover,
 .primary1:enabled:active, a.primary1:not(.disabled):active,
-.primary1:enabled:focus-visible a.primary1:not(.disabled):focus-visible {
+.primary1:enabled:focus-visible, a.primary1:not(.disabled):focus-visible {
   background-color: #5171ff;
 }
 

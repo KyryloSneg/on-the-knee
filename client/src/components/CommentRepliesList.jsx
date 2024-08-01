@@ -1,4 +1,4 @@
-import "./CommentRepliesList.css";
+import "./styles/CommentRepliesList.css";
 import CommentReply from './CommentReply';
 
 const CommentRepliesList = ({ replies, type }) => {

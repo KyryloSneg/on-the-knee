@@ -2,7 +2,7 @@ import "./styles/MainDevicePage.css";
 import DeviceImagesCarousel from "../components/DeviceImagesCarousel";
 import DeviceInfoSection from "../components/DeviceInfoSection";
 import DeviceRightDescription from "../components/DeviceRightDescription";
-import CommentsSection from "../components/UI/commentsSection/CommentsSection";
+import CommentsSection from "../components/CommentsSection";
 import DeviceSalesActions from "../utils/DeviceSalesActions";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Context } from "../Context";

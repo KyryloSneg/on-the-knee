@@ -10,6 +10,7 @@ import useFocusTraps from "../../../hooks/useFocusTraps";
 import useWindowInvisibleFocus from "../../../hooks/useWindowInvisibleFocus";
 import { observer } from "mobx-react-lite";
 import CustomScrollbar from "../customScrollbar/CustomScrollbar";
+import useWindowTriggerElemHandle from "../../../hooks/useWindowTriggerElemHandle";
 
 const Sidebar = observer(({ children, closeSidebar, shortcutRef, id, headerText = "", className = "" }) => {
   const { app } = useContext(Context);
@@ -103,6 +104,7 @@ const Sidebar = observer(({ children, closeSidebar, shortcutRef, id, headerText 
   }
 
   useClickOnTheDarkBg(onClickOnTheDarkBg, app.darkBgVisible);
+  useWindowTriggerElemHandle(shortcutRef, id);
 
   // if user clicked on the area of future sidebar while it's opening, do not close it 
   // (so we need sidebar placeholder for such behaviour)

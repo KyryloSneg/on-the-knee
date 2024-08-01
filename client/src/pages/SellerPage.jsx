@@ -14,7 +14,7 @@ import StarRating from '../components/UI/starRating/StarRating';
 
 const POSSIBLE_TYPES = ["main", "feedbacks", "devices"];
 const SellerPage = observer(({ type }) => {
-  const { app } = useContext(Context);
+  const { deviceStore } = useContext(Context);
   const { sellerIdSlug } = useParams();
   const [seller, setSeller] = useState(null);
 
@@ -30,9 +30,9 @@ const SellerPage = observer(({ type }) => {
     let innerPage;
 
     if (type === "main") {
-      innerPage = <MainSellerPage seller={seller} feedbacks={app.sellerFeedbacks} />;
+      innerPage = <MainSellerPage seller={seller} feedbacks={deviceStore.sellerFeedbacks} />;
     } else if (type === "feedbacks") {
-      innerPage = <SellerFeedbacksPage seller={seller} feedbacks={app.sellerFeedbacks} />;
+      innerPage = <SellerFeedbacksPage seller={seller} feedbacks={deviceStore.sellerFeedbacks} />;
     } else if (type === "devices") {
       innerPage = <SellerDevicesPage seller={seller} />;
     }
@@ -44,7 +44,7 @@ const SellerPage = observer(({ type }) => {
     { name: "Everything about seller", to: SELLER_ROUTE + sellerIdSlug },
     {
       name:
-        `Comments (${app.sellerFeedbacks?.length || 0})`,
+        `Comments (${deviceStore.sellerFeedbacks?.length || 0})`,
       to: SELLER_FEEDBACKS_ROUTE.replace(":sellerIdSlug", sellerIdSlug)
     },
     { name: "Devices", to: SELLER_DEVICES_ROUTE.replace(":sellerIdSlug", sellerIdSlug) },

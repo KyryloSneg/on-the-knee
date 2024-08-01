@@ -6,6 +6,11 @@
   padding: 0;
 }
 
+#self-delivery-modal .my-scrollbar.os-scrollbar-vertical .os-scrollbar-track,
+#self-delivery-modal .my-scrollbar.os-scrollbar-vertical .os-scrollbar-handle {
+  border-radius: 0;
+}
+
 @media screen and (min-width: 800px) {
   #self-delivery-modal {
     width: calc(100% - 30px);
@@ -13,6 +18,11 @@
     height: auto;
     max-height: 95%;
     padding: 0 0 1px 0;
+  }
+
+  #self-delivery-modal .my-scrollbar.os-scrollbar-vertical .os-scrollbar-track,
+  #self-delivery-modal .my-scrollbar.os-scrollbar-vertical .os-scrollbar-handle {
+    border-radius: 0 0 6px 0;
   }
 }
 

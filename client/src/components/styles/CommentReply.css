@@ -7,6 +7,10 @@
   gap: 8px;
 }
 
+.comment-reply > p {
+  word-break: break-word;
+}
+
 .comment-reply-reply-p {
   text-align: center;
   padding: 6px 8px;
