@@ -19,7 +19,7 @@ function useInitialDataFetching() {
   const { app, deviceStore, user } = useContext(Context);
 
   async function fetchData() {
-    // pasting separate block of fetching data
+    // pasting separate block of fetching data in a different try...catch block
     // because, for example, unsuccesful fetching of brands mustn't affect
     // getting user location and so on  
     try {
