@@ -1,7 +1,7 @@
 .cart-modal-device-list-item {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
 }
 
 .cart-modal-list-item-main-row {
@@ -49,6 +49,7 @@
 .cart-modal-list-item-amount-wrap {
   display: flex;
   align-items: center;
+  margin: 0 auto 0 0;
   gap: 6px;
 }
 
@@ -76,10 +77,22 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  flex-wrap: wrap;
   gap: 14px;
 }
 
 .cart-modal-list-item-price-row > .main-device-price {
   min-width: 110px;
   text-align: end;
+}
+
+.cart-modal-list-item-price-row > main-device-price-wrap {
+  min-width: 30%;
+  justify-content: flex-end;
+}
+
+@media screen and (min-width: 680px) {
+  .cart-modal-list-item-amount-wrap {
+    margin: 0;
+  }
 }

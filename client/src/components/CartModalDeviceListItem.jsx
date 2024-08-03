@@ -2,7 +2,7 @@ import "./styles/CartModalDeviceListItem.css";
 import { Link } from "react-router-dom";
 import DeviceItemPrice from "./DeviceItemPrice";
 import DeviceSalesActions from "../utils/DeviceSalesActions";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Context } from "../Context";
 import { observer } from "mobx-react-lite";
 import { DEVICE_ROUTE } from "../utils/consts";
@@ -23,6 +23,7 @@ import useGettingAddServicesRelatedData from "../hooks/useGettingAddServicesRela
 const CartModalDeviceListItem = observer(({ combination }) => {
   const { user, deviceStore } = useContext(Context);
   const [value, setValue] = useState(combination.amount);
+  const initialAmount = useRef(combination.amount);
   const [isValid, setIsValid] = useState(true);
   const [stateStock, setStateStock] = useState(deviceStore.stocks.find(stock => stock.id === combination["device-combination"].stockId));
   const [isPossibleToShowStockError, setIsPossibleToShowStockError] = useState(true);
@@ -74,7 +75,6 @@ const CartModalDeviceListItem = observer(({ combination }) => {
 
   const debouncedUpdateStock = useLodashDebounce(updateStock, 1200);
 
-
   function onSetValueCb() {
     if (isEnoughDevices) setIsPossibleToShowStockError(false);
     debouncedUpdateStock();
@@ -93,6 +93,13 @@ const CartModalDeviceListItem = observer(({ combination }) => {
   }
 
   useGettingAddServicesRelatedData(combination.device, setAdditionalServicesObj);
+  useEffect(() => {
+    // if we validated amount got from the localstorage and changed it,
+    // change it in the device list item which amount was changed 
+    // to the validated one
+    if (combination.amount !== initialAmount.current) setValue(combination.amount);
+  }, [combination.amount]);
+
   useEffect(() => {
     // updating values
     let nextDeviceListItemsValues = {...deviceStore.deviceListItemsValues};
