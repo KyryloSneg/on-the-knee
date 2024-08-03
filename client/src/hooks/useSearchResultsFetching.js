@@ -5,6 +5,7 @@ import StringActions from "../utils/StringActions";
 import getDevicesBySearchQuery from "../utils/getDevicesBySearchQuery";
 import { CATEGORY_SEARCH_RESULTS_MAX_AMOUNT, DEVICE_SEARCH_RESULTS_MAX_AMOUNT, HINT_SEARCH_RESULTS_MAX_AMOUNT } from "../utils/consts";
 import getPreparedForMockServerStr from "../utils/getPreparedForMockServerStr";
+import LocalStorageActions from "../utils/LocalStorageActions";
 
 // query params without pagination ones
 function useSearchResultsFetching(setResults, backupValue) {
@@ -37,7 +38,7 @@ function useSearchResultsFetching(setResults, backupValue) {
       return category;
     });
 
-    const historyResults = JSON.parse(localStorage.getItem("historyResults")) || [];
+    const historyResults = LocalStorageActions.getItem("historyResults") || [];
     const nextResults = {
       hint: hintResults.slice(0, HINT_SEARCH_RESULTS_MAX_AMOUNT),
       device: deviceResults.slice(0, DEVICE_SEARCH_RESULTS_MAX_AMOUNT),

@@ -4,6 +4,7 @@ import { deleteCartDeviceCombination, getOneCartDeviceCombinations, getOneCartSe
 import { Context } from "../Context";
 import { getOneStock } from "../http/StocksAPI";
 import _ from "lodash";
+import LocalStorageActions from "../utils/LocalStorageActions";
 
 // haven't implemented setCartSelectedAdditionalServices 'cause i have no need in it rn
 function useGettingCartData(cartId, setCartDevCombos = null, isUserStore = false, isToFetch = true) {
@@ -35,10 +36,10 @@ function useGettingCartData(cartId, setCartDevCombos = null, isUserStore = false
         (await getOneCartSelectedAdditionalServices(propsCartId))[0]
         || cartSelectedAddServicesPlaceholder;
     } else {
-      cartDevCombos = JSON.parse(localStorage.getItem("cartDeviceCombinations")) || [];
+      cartDevCombos = LocalStorageActions.getItem("cartDeviceCombinations") || [];
       const combosWithValidatedAmounts = await Promise.all(cartDevCombos?.map(async combo => {
         const stock = await getOneStock(combo["device-combination"].stockId);
-        
+
         let validatedAmount;
         if (stock?.totalStock) {
           if (combo.amount > stock.totalStock) {
@@ -62,8 +63,8 @@ function useGettingCartData(cartId, setCartDevCombos = null, isUserStore = false
         localStorage.setItem("cartDeviceCombinations", JSON.stringify(combosWithValidatedAmounts));
       };
 
-      initCartSelectedAdditionalServices =
-        JSON.parse(localStorage.getItem("cartSelectedAddServices"))
+      initCartSelectedAdditionalServices = 
+        LocalStorageActions.getItem("cartSelectedAddServices") 
         || cartSelectedAddServicesPlaceholder;
 
       if (_.isEqual(initCartSelectedAdditionalServices, {})) {
@@ -144,11 +145,11 @@ function useGettingCartData(cartId, setCartDevCombos = null, isUserStore = false
     }
 
     if (!userStore.isAuth) {
-      if (_.isEqual(JSON.parse(localStorage.getItem("cartDeviceCombinations")), {})) {
+      if (_.isEqual(LocalStorageActions.getItem("cartDeviceCombinations"), {})) {
         localStorage.setItem("cartDeviceCombinations", JSON.stringify(cartDevCombos));
       }
 
-      if (_.isEqual(JSON.parse(localStorage.getItem("cartSelectedAddServices")), {})) {
+      if (_.isEqual(LocalStorageActions.getItem("cartSelectedAddServices"), {})) {
         localStorage.setItem("cartSelectedAddServices", JSON.stringify(cartSelectedAddServicesPlaceholder));
       }
     }
