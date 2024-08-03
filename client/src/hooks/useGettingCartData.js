@@ -36,6 +36,32 @@ function useGettingCartData(cartId, setCartDevCombos = null, isUserStore = false
         || cartSelectedAddServicesPlaceholder;
     } else {
       cartDevCombos = JSON.parse(localStorage.getItem("cartDeviceCombinations")) || [];
+      const combosWithValidatedAmounts = await Promise.all(cartDevCombos?.map(async combo => {
+        const stock = await getOneStock(combo["device-combination"].stockId);
+        
+        let validatedAmount;
+        if (stock?.totalStock) {
+          if (combo.amount > stock.totalStock) {
+            validatedAmount = stock.totalStock;
+          } else if (combo.amount < 1) {
+            validatedAmount = 1;
+          } else {
+            validatedAmount = combo.amount;
+          }
+        } else {
+          validatedAmount = 1;
+        }
+
+        return { ...combo, amount: validatedAmount };
+      }));
+
+      console.log(combosWithValidatedAmounts, cartDevCombos);
+
+      if (combosWithValidatedAmounts && !_.isEqual(cartDevCombos, combosWithValidatedAmounts)) {
+        cartDevCombos = combosWithValidatedAmounts;
+        localStorage.setItem("cartDeviceCombinations", JSON.stringify(combosWithValidatedAmounts));
+      };
+
       initCartSelectedAdditionalServices =
         JSON.parse(localStorage.getItem("cartSelectedAddServices"))
         || cartSelectedAddServicesPlaceholder;
@@ -69,7 +95,7 @@ function useGettingCartData(cartId, setCartDevCombos = null, isUserStore = false
         } else {
           const stock = await getOneStock(combo["device-combination"].stockId);
           let isInStock = stock?.totalStock !== 0;
-  
+
           return isInStock;
         }
       });
@@ -121,12 +147,12 @@ function useGettingCartData(cartId, setCartDevCombos = null, isUserStore = false
       if (_.isEqual(JSON.parse(localStorage.getItem("cartDeviceCombinations")), {})) {
         localStorage.setItem("cartDeviceCombinations", JSON.stringify(cartDevCombos));
       }
-  
+
       if (_.isEqual(JSON.parse(localStorage.getItem("cartSelectedAddServices")), {})) {
         localStorage.setItem("cartSelectedAddServices", JSON.stringify(cartSelectedAddServicesPlaceholder));
       }
     }
-    
+
     if (propsIsUserStore) {
       userStore.setCartDeviceCombinations(cartDevCombos);
       userStore.setCartSelectedAdditionalServices(cartSelectedAdditionalServices);
