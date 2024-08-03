@@ -14,6 +14,7 @@ import { getStorePickupPoints } from "../http/StorePickupPointsAPI";
 import { getOneCart, getOneCartDeviceCombinations } from "../http/CartAPI";
 import { MOCK_USER } from "../utils/mobxStoresConsts";
 import useGettingCartData from "./useGettingCartData";
+import LocalStorageActions from "../utils/LocalStorageActions";
 
 function useInitialDataFetching() {
   const { app, deviceStore, user } = useContext(Context);
@@ -67,7 +68,7 @@ function useInitialDataFetching() {
     try {
       const allLocations = await getLocations();
 
-      let userLocation = JSON.parse(localStorage.getItem("location"));
+      let userLocation = LocalStorageActions.getItem("location");
       if (!userLocation) {
         try {
           // auto-getting user location
@@ -109,7 +110,7 @@ function useInitialDataFetching() {
         cart = await getOneCart(MOCK_USER._id);
         cartDeviceCombinations = await getOneCartDeviceCombinations(cart?.id);
       } else {
-        cartDeviceCombinations = JSON.parse(localStorage.getItem("cartDeviceCombinations")) || [];
+        cartDeviceCombinations = LocalStorageActions.getItem("cartDeviceCombinations") || [];
       }
       
       if (cart) user.setCart(cart);

@@ -7,6 +7,7 @@ import { deleteCartDeviceCombination, getOneCartDeviceCombinations, patchCartSel
 import _ from "lodash";
 import updateCartData from "../utils/updateCartData";
 import useGettingCartData from "../hooks/useGettingCartData";
+import LocalStorageActions from "../utils/LocalStorageActions";
 
 const CartModalItemOptions = observer(({ combination }) => {
   const { user, app } = useContext(Context);
@@ -24,7 +25,13 @@ const CartModalItemOptions = observer(({ combination }) => {
 
   async function onRemove() {
     async function onSuccess() {
-      const nextCartDevCombos = await getOneCartDeviceCombinations(user.cart?.id);
+      let nextCartDevCombos;
+      if (user.isAuth) {
+        nextCartDevCombos = await getOneCartDeviceCombinations(user.cart?.id);
+      } else {
+        nextCartDevCombos = LocalStorageActions.getItem("cartDeviceCombinations");
+      }
+
       user.setCartDeviceCombinations(nextCartDevCombos);
     }
 

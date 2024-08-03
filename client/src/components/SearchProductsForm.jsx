@@ -16,6 +16,7 @@ import useGettingDeviceRelatedData from "../hooks/useGettingDeviceRelatedData";
 import useNavigateToEncodedURL from "../hooks/useNavigateToEncodedURL";
 import DeviceComboActions from "../utils/DeviceComboActions";
 import getPreparedForMockServerStr from "../utils/getPreparedForMockServerStr";
+import LocalStorageActions from "../utils/LocalStorageActions";
 
 const SearchProductsForm = observer(({ navbarRef }) => {
   const { app, isTest, isEmptySearchResults } = useContext(Context);
@@ -28,7 +29,7 @@ const SearchProductsForm = observer(({ navbarRef }) => {
     hint: [],
     device: [],
     category: [],
-    history: JSON.parse(localStorage.getItem("historyResults")) || []
+    history: LocalStorageActions.getItem("historyResults") || []
   };
 
   if (!isEmptySearchResults && isTest) {
@@ -162,7 +163,7 @@ const SearchProductsForm = observer(({ navbarRef }) => {
     if (!!value.trim().length) {
       try {
         // we can't store array in localStorage, so we save it as string and getting with JSON.parse(...) method
-        let storageHistoryResults = JSON.parse(localStorage.getItem("historyResults")) || [];
+        let storageHistoryResults = LocalStorageActions.getItem("historyResults") || [];
         let newHistoryResult = { value: value.trim() };
 
         let newHistoryResults = [...storageHistoryResults];

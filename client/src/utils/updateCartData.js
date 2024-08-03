@@ -1,9 +1,10 @@
 import _ from "lodash";
 import { patchCartDeviceCombination, patchCartSelectedAdditionalServices } from "../http/CartAPI";
+import LocalStorageActions from "./LocalStorageActions";
 
 async function updateCartData(user, fetching) {
   const deviceListItems = Array.from(document.querySelectorAll(".cart-modal-device-list-item"));
-  let storageCartCombos = JSON.parse(localStorage.getItem("cartDeviceCombinations")) || [];
+  let storageCartCombos = LocalStorageActions.getItem("cartDeviceCombinations") || [];
   let cartSelectedAddServicesObj = {};
 
   try {
