@@ -48,14 +48,24 @@ const CheckoutPage = observer(() => {
     setTimeout(() => navigate("/", { replace: true }, 0));
   };
 
-  function onSubmit() {
+  function checkIsPhoneNumberInputValid() {
     const isPhoneNumberValid = isPhoneValidFn(phoneInputValue);
     if (!isPhoneNumberValid) {
       // setting the dirty state to true to show the error if we have one
       setIsPhoneInputDirty(true);
-      phoneNumberInputRef.current?.focus();      
+      
+      if (!Object.keys(errors).length) {
+        phoneNumberInputRef.current?.focus(); 
+      };
+
       return;
     };
+
+    return isPhoneNumberValid;
+  }
+
+  function onSubmit() {
+    if (!checkIsPhoneNumberInputValid()) return;
   }
 
   return (
@@ -63,7 +73,7 @@ const CheckoutPage = observer(() => {
       <header>
         <h2>Checkout order</h2>
       </header>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit, checkIsPhoneNumberInputValid)}>
         <CheckoutPageMainContent 
           register={register} 
           errors={errors} 

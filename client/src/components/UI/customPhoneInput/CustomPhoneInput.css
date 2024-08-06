@@ -28,6 +28,10 @@ div.react-international-phone-input-container .react-international-phone-input {
   transition: border-color 0.2s, background-color 0.2s, outline 0s;
 }
 
+div.react-international-phone-input-container.invalid .react-international-phone-input {
+  border: 1px solid #e41515;
+}
+
 div.react-international-phone-input-container .react-international-phone-input:focus {
   background-color: #fff;
 }
