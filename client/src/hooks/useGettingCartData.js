@@ -7,10 +7,12 @@ import _ from "lodash";
 import LocalStorageActions from "../utils/LocalStorageActions";
 
 // haven't implemented setCartSelectedAdditionalServices 'cause i have no need in it rn
-function useGettingCartData(cartId, setCartDevCombos = null, isUserStore = false, isToFetch = true) {
-  const { user: userStore } = useContext(Context);
+function useGettingCartData(cartId, setCartDevCombos = null, isUserStore = false, isToFetch = true, isToSetGlobalLoading = false) {
+  const { user: userStore, app } = useContext(Context);
 
   async function fetchingFunc(propsCartId = null, propsSetCartDevCombos = null, propsIsUserStore = false) {
+    if (isToSetGlobalLoading) app.setIsGlobalLoading(true);
+
     let cartDevCombos = [];
     let initCartSelectedAdditionalServices = {};
     const cartSelectedAddServicesPlaceholder = {
@@ -55,8 +57,6 @@ function useGettingCartData(cartId, setCartDevCombos = null, isUserStore = false
 
         return { ...combo, amount: validatedAmount };
       }));
-
-      console.log(combosWithValidatedAmounts, cartDevCombos);
 
       if (combosWithValidatedAmounts && !_.isEqual(cartDevCombos, combosWithValidatedAmounts)) {
         cartDevCombos = combosWithValidatedAmounts;
@@ -164,7 +164,8 @@ function useGettingCartData(cartId, setCartDevCombos = null, isUserStore = false
 
   const [fetching] = useFetching(
     (propsCartId, propsSetCartDevCombos, propsIsUserStore) =>
-      fetchingFunc(propsCartId, propsSetCartDevCombos, propsIsUserStore)
+      fetchingFunc(propsCartId, propsSetCartDevCombos, propsIsUserStore),
+    0, () => { if (isToSetGlobalLoading) app.setIsGlobalLoading(false) }
   );
 
   useEffect(() => {

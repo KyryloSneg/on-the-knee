@@ -1,0 +1,44 @@
+.react-hook-form-input {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.react-hook-form-input label,
+.react-hook-form-input-error-msg {
+  font-size: 1.3rem;
+}
+
+.react-hook-form-input label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: rgb(90, 90, 90);
+}
+
+.react-hook-form-input input {
+  box-sizing: border-box;
+  width: 100%;
+  height: 32px;
+  padding: 0 6px;
+  border: 1px solid rgb(130, 130, 130);
+  border-radius: 8px;
+  background-color: #e9e9e9;
+  font-size: 1.3rem;
+  font-family: 'Montserrat', sans-serif;
+  transition: border-color 0.2s, background-color 0.2s, outline 0s;
+  outline: none;
+}
+
+.react-hook-form-input input:focus {
+  background-color: #ffffff;
+  border: 1px solid #c1c1c1;
+}
+
+.react-hook-form-input input.invalid {
+  border: 1px solid #e41515;
+}
+
+.react-hook-form-input-error-msg {
+  color: #a10e0e;
+}

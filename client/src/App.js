@@ -1,5 +1,6 @@
-import Navbar from "./components/Navbar";
 import "./App.css";
+import "react-international-phone/style.css";
+import Navbar from "./components/Navbar";
 import MyFooter from "./components/MyFooter";
 import { useCallback, useContext, useEffect, useRef } from "react";
 import { Outlet, useLocation } from "react-router-dom";
@@ -78,7 +79,6 @@ const App = observer(() => {
   }, [app, headerRef]);
 
   useInitialDataFetching();
-  useScrollingToPagesTop();
   useClosingAllWindows();
 
   useClosingFiltersSidebarWidth(windowWidth, app.isVisibleFiltersSidebar, closeFiltersSidebar);
@@ -90,6 +90,8 @@ const App = observer(() => {
   useClosingUsedFiltersBarValue(deviceStore.usedFilters, app.isVisibleUsedFiltersSidebar, closeUsedFiltersSidebar);
 
   useBlockingScroll(app.isBlockedScroll);
+  useScrollingToPagesTop();
+
   return (
     <div>
       {/* our gray bg on global loading */}

@@ -3,9 +3,9 @@ import { MOCK_USER } from "../utils/mobxStoresConsts";
 
 class UserStore {
   constructor() {
-    this._isAuth = false;
+    this._isAuth = true;
     // TODO: change it to {} when I'll implement user authentication logic
-    this._user = {};
+    this._user = MOCK_USER;
     this._cart = {};
     this._cartDeviceCombinations = [];
     this._cartSelectedAdditionalServices = {};
