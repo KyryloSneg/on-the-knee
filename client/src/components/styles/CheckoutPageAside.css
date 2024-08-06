@@ -1,0 +1,11 @@
+.checkout-page-aside {
+  position: flex;
+  height: max-content;
+}
+
+@media screen and (min-width: 1000px) {
+  .checkout-page-aside {
+    position: sticky;
+    top: 90px;
+  }
+}

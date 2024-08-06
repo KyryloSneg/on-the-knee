@@ -1,0 +1,26 @@
+.checkout-page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 0 20px;
+}
+
+.checkout-page > form {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 30px;
+  padding: 0 10px;
+}
+
+.checkout-page > header > h2 {
+  text-align: start;
+  font-size: 3rem;
+  padding-right: 4px;
+}
+
+@media screen and (min-width: 1000px) {
+  .checkout-page > form {
+    grid-template-columns: 1fr auto;
+  }
+}
