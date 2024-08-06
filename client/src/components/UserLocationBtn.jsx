@@ -5,7 +5,7 @@ import { Context } from "../Context";
 import geoIcon from "../assets/location_24x24_434343.svg";
 import { observer } from "mobx-react-lite";
 
-const UserLocationBtn = observer(forwardRef(({ additionalText = "", className = "" }, ref) => {
+const UserLocationBtn = observer(forwardRef(({ additionalText = "", className = "", ...props }, ref) => {
   const { app } = useContext(Context);
   const fallbackBtnRef = useRef(null);
 
@@ -29,7 +29,7 @@ const UserLocationBtn = observer(forwardRef(({ additionalText = "", className = 
   }, [app, refToUse]);
 
   return (
-    <button className={btnClassName} onClick={onClick} ref={refToUse}>
+    <button className={btnClassName} onClick={onClick} ref={refToUse} {...props}>
       <img src={geoIcon} alt="" draggable="false" />
       {additionalText
         ? <span>

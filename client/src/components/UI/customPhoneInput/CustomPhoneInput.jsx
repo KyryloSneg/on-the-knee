@@ -2,7 +2,7 @@ import "./CustomPhoneInput.css";
 import { PhoneInput } from "react-international-phone";
 import { forwardRef, useEffect, useRef } from "react";
 
-const CustomPhoneInput = forwardRef(({ value, onChange, id, defaultCountry = "ua", ...props }, ref) => {
+const CustomPhoneInput = forwardRef(({ value, onChange, id, defaultCountry = "ua", isInvalid, ...props }, ref) => {
   const inputRef = useRef(null);
   const refToUse = ref || inputRef;
 
@@ -19,6 +19,7 @@ const CustomPhoneInput = forwardRef(({ value, onChange, id, defaultCountry = "ua
       value={value}
       onChange={onChange}
       ref={ref}
+      className={isInvalid ? "invalid" : ""}
       {...props}
     />
   );

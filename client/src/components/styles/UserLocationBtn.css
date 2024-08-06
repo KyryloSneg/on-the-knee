@@ -7,7 +7,7 @@
   padding: 8px;
   background: none;
   border: none;
-  transition: color 0.2s;
+  transition: color 0.2s, outline 0s;
 }
 
 .user-location-btn:hover,
@@ -16,8 +16,28 @@
   color: #7373ff;
 }
 
-.user-location-btn.device-right-desc-location-btn {
+.user-location-btn.device-right-desc-location-btn, 
+.user-location-btn.sender-section-version {
   border: 1px #dfdfdf solid;
+}
+
+.user-location-btn.device-right-desc-location-btn {
   border-radius: 18px;
   width: max-content;
+}
+
+.user-location-btn.sender-section-version {
+  justify-content: start;
+  width: 100%;
+  padding: 12px 10px;
+  background-color: none;
+  border: 1px solid rgb(180, 180, 180);
+  border-radius: 8px;
+  transition: color 0.2s, background-color 0.2s, border-color 0.2s, outline 0s;
+}
+
+.user-location-btn.sender-section-version:focus-visible,
+.user-location-btn.sender-section-version:hover,
+.user-location-btn.sender-section-version:active {
+  background-color: #dfdfdf;
 }
