@@ -4,6 +4,12 @@
   cursor: pointer;
 }
 
+.ui-button.has-icon {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 a.ui-button {
   text-align: center;
 }
@@ -33,7 +39,8 @@ a.ui-button {
 
 .primary1:enabled:hover, a.primary1:not(.disabled):hover,
 .primary1:enabled:active, a.primary1:not(.disabled):active,
-.primary1:enabled:focus-visible, a.primary1:not(.disabled):focus-visible {
+.primary1:enabled:focus-visible, a.primary1:not(.disabled):focus-visible,
+.primary1.active {
   background-color: #5171ff;
 }
 
@@ -47,7 +54,8 @@ a.ui-button {
 
 .primary2:hover,
 .primary2:active,
-.primary2:focus-visible {
+.primary2:focus-visible,
+.primary2.active {
   border: 1px solid #c7c7c7;
   background: #f1f1f1;
 }
@@ -62,7 +70,8 @@ a.ui-button {
 
 .primary3:hover,
 .primary3:active,
-.primary3:focus-visible {
+.primary3:focus-visible,
+.primary3.active {
   background-color: #e0e0e0;
 }
 
@@ -86,7 +95,8 @@ a.ui-button {
 
 .modal-submit:enabled:hover, a.modal-submit:not(.disabled):hover,
 .modal-submit:enabled:active, a.modal-submit:not(.disabled):active,
-.modal-submit:enabled:focus-visible, a.modal-submit:not(.disabled):focus-visible {
+.modal-submit:enabled:focus-visible, a.modal-submit:not(.disabled):focus-visible,
+.modal-submit.active {
   background-color: #7070ff;
 }
 
@@ -97,6 +107,7 @@ a.ui-button {
 
 .modal-deny:hover,
 .modal-deny:active,
-.modal-deny:focus-visible {
+.modal-deny:focus-visible,
+.modal-deny.active {
   background-color: #e0e0e0;
 }

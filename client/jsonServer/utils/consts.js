@@ -192,7 +192,7 @@ const MOCK_USER = {
   "phoneNumber": "+380 82 0172 6701"
 };
 
-const POSSIBLE_DELIVERY_TYPES = { "courier": 5, "self-delivery": 0 };
+const POSSIBLE_DELIVERY_TYPES = { "self-delivery": 0, "courier": 5 };
 const POSSIBLE_SALE_TYPE_NAMES = [
   {"name": "discount", "bgColor": "#ff1212"},
   {"name": "freeDelivery", "logo": "https://loremflickr.com/40/40?lock=5239500858982400", "bgColor": "#ff1212"}

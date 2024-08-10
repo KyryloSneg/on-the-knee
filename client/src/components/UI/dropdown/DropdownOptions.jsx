@@ -11,16 +11,18 @@ const DropdownOptions = (props) => {
 
   useEffect(() => {
     if (props.selectedId >= 0) {
-      optionRefs.current[props.selectedId].focus();
+      optionRefs.current[props.selectedId]?.focus();
     }
     // eslint-disable-next-line
   }, [])
 
   useClickOutsideOptions(props.hide);
 
-  function onSelectButton(value, id) {
-    props.setValue(value);
+  function onSelectButton(title, id) {
+    props.setValue(title);
     props.setSelectedId(id);
+
+    if (props.onSelectCb) props.onSelectCb(id);
   }
 
   return (
@@ -60,7 +62,7 @@ const DropdownOptions = (props) => {
         return (
           <li key={opt.id} className={isSelected ? "active" : ""}>
             <button
-              onClick={() => onSelectButton(opt.value, opt.title, opt.id)}
+              onClick={() => onSelectButton(opt.title, opt.id)}
               onKeyDown={(e) => onKeyDown(e, opt.id, props.options, optionRefs)}
               data-testid={`option ${opt.id}`}
               ref={ref => {

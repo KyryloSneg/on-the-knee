@@ -133,7 +133,6 @@ export const mockSearchResults = {
   ],
   "history": []
 };
-
 // params that don't appear in used filters like a sort filter
 export const SPECIAL_QUERY_PARAMS = ["sort", "page", "pagesToFetch", "text", "categoryId"];
 

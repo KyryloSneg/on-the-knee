@@ -66,7 +66,7 @@ const DeviceRightDescription = forwardRef(({
         />
       </div>
       {/* TODO: create courier delivery item??? */}
-      <SelfDeliveryBtn />
+      <SelfDeliveryBtn variant="device-page" />
       <UserLocationBtn additionalText="Deliver to" className="device-right-desc-location-btn" />
     </section>
   );
