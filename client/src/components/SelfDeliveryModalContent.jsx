@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import "./styles/SelfDeliveryModalContent.css";
 import { Context } from "../Context";
 import { observer } from "mobx-react-lite";
@@ -21,6 +21,10 @@ const SelfDeliveryModalContent = observer(() => {
   const [selectedId, setSelectedId] = useState(null);
   const [coords, setCoords] = useState(DEFAULT_INIT_MAP_COORDS);
   const mapRef = useRef(null);
+
+  useEffect(() => {
+    if (selectedId) app.setSelectedStorePickupPointId(selectedId);
+  }, [app, selectedId]);
 
   useGettingUserLocationCoords(setCoords);
   const storePickupPoints = app.storePickupPoints?.filter(point => point.cityId === app.userLocation.id);

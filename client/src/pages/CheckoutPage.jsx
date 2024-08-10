@@ -1,5 +1,5 @@
 import "./styles/CheckoutPage.css";
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import useGettingCartData from "../hooks/useGettingCartData";
 import { Context } from "../Context";
 import _ from "lodash";
@@ -17,7 +17,7 @@ const CheckoutPage = observer(() => {
   // {list of { component with device img, device name, user amount, current available amount }}
   // do you want to order ones in current available amounts?" or smth like that) 
 
-  const { user } = useContext(Context);
+  const { app, user } = useContext(Context);
   const navigate = useNavigateToEncodedURL();
   const phoneNumberInputRef = useRef(null);
   const emailInputRef = useRef(null);
@@ -36,6 +36,9 @@ const CheckoutPage = observer(() => {
   });
 
   useGettingCartData(user.cart?.id, null, true, true, true);
+  useEffect(() => {
+    app.setSelectedDeliveryId(app.deliveries[0]?.id);
+  }, [app, app.deliveries]);
 
   const isLoadingContent = (
     (user.isAuth && !_.isEqual(user.user, {})) && _.isEqual(user.cart, {})
@@ -53,9 +56,9 @@ const CheckoutPage = observer(() => {
     if (!isPhoneNumberValid) {
       // setting the dirty state to true to show the error if we have one
       setIsPhoneInputDirty(true);
-      
+
       if (!Object.keys(errors).length) {
-        phoneNumberInputRef.current?.focus(); 
+        phoneNumberInputRef.current?.focus();
       };
 
       return;
@@ -74,11 +77,11 @@ const CheckoutPage = observer(() => {
         <h2>Checkout order</h2>
       </header>
       <form onSubmit={handleSubmit(onSubmit, checkIsPhoneNumberInputValid)}>
-        <CheckoutPageMainContent 
-          register={register} 
-          errors={errors} 
+        <CheckoutPageMainContent
+          register={register}
+          errors={errors}
           trigger={trigger}
-          isPhoneInputDirty={isPhoneInputDirty} 
+          isPhoneInputDirty={isPhoneInputDirty}
           setIsPhoneInputDirty={setIsPhoneInputDirty}
           phoneInputValue={phoneInputValue}
           setPhoneInputValue={setPhoneInputValue}

@@ -66,6 +66,12 @@ class AppStore {
     this._commentGallerySelectedImageId = null;
 
     this._storePickupPoints = [];
+    this._selectedStorePickupPointId = 0;
+    this._deliveries = [];
+    this._selectedDeliveryId = 0;
+
+    this._isToShowDeliveryChangeMessage = false;
+
     makeAutoObservable(this);
   }
 
@@ -260,7 +266,23 @@ class AppStore {
   setStorePickupPoints(storePickupPoints) {
     this._storePickupPoints = storePickupPoints;
   }
+
+  setSelectedStorePickupPointId(selectedStorePickupPointId) {
+    this._selectedStorePickupPointId = selectedStorePickupPointId;
+  }
   
+  setDeliveries(deliveries) {
+    this._deliveries = deliveries;
+  }
+
+  setSelectedDeliveryId(selectedDeliveryId) {
+    this._selectedDeliveryId = selectedDeliveryId;
+  }
+
+  setIsToShowDeliveryChangeMessage(isToShowDeliveryChangeMessage) {
+    this._isToShowDeliveryChangeMessage = isToShowDeliveryChangeMessage;
+  }
+
   get darkBgVisible() {
     return this._darkBgVisible;
   }
@@ -452,6 +474,23 @@ class AppStore {
   get storePickupPoints() {
     return this._storePickupPoints;
   }
+
+  get selectedStorePickupPointId() {
+    return this._selectedStorePickupPointId;
+  }
+
+  get deliveries() {
+    return this._deliveries;
+  }
+
+  get selectedDeliveryId() {
+    return this._selectedDeliveryId;
+  }
+
+  get isToShowDeliveryChangeMessage() {
+    return this._isToShowDeliveryChangeMessage;
+  }
+
 }
 
 export default AppStore;

@@ -1,11 +1,17 @@
 import "./styles/CheckoutPageMainContent.css";
 import CheckoutPageSenderSection from "./CheckoutPageSenderSection";
+import CheckoutPageDeliverySection from "./CheckoutPageDeliverySection";
+import { useContext } from "react";
+import { Context } from "../Context";
+import { observer } from "mobx-react-lite";
 
-const CheckoutPageMainContent = ({ 
+const CheckoutPageMainContent = observer(({ 
   register, errors, trigger, isPhoneInputDirty, setIsPhoneInputDirty, 
   phoneInputValue, setPhoneInputValue, phoneNumberInputRef,
-  emailInputRef 
+  emailInputRef
 }) => {
+  const { app } = useContext(Context);
+
   return (
     <main className="checkout-page-main-content">
       <CheckoutPageSenderSection 
@@ -19,8 +25,14 @@ const CheckoutPageMainContent = ({
         phoneNumberInputRef={phoneNumberInputRef}
         emailInputRef={emailInputRef}
       />
+      {app.isToShowDeliveryChangeMessage &&
+        <div className="delivery-change-message">
+          <p>Delivery type has changed!</p>
+        </div>
+      }
+      <CheckoutPageDeliverySection />
     </main>
   );
-}
+});
 
 export default CheckoutPageMainContent;

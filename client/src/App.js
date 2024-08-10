@@ -38,6 +38,7 @@ import AnswerModal from "./components/AnswerModal";
 import CommentGalleryModal from "./components/CommentGalleryModal";
 import AskSellerModal from "./components/AskSellerModal";
 import CartModal from "./components/CartModal";
+import useDeliveriesFetching from "./hooks/useDeliveriesFetching";
  
 const App = observer(() => {
   const { app, deviceStore } = useContext(Context);
@@ -79,6 +80,7 @@ const App = observer(() => {
   }, [app, headerRef]);
 
   useInitialDataFetching();
+  useDeliveriesFetching();
   useClosingAllWindows();
 
   useClosingFiltersSidebarWidth(windowWidth, app.isVisibleFiltersSidebar, closeFiltersSidebar);
