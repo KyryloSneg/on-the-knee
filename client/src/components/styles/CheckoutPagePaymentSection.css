@@ -1,0 +1,12 @@
+.checkout-page-payment-info {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 12px 10px;
+  background-color: none;
+  border: 1px solid rgb(180, 180, 180);
+  border-radius: 8px;
+  box-sizing: border-box;
+}
