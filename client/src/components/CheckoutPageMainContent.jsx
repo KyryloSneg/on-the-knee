@@ -1,5 +1,5 @@
 import "./styles/CheckoutPageMainContent.css";
-import CheckoutPageSenderSection from "./CheckoutPageSenderSection";
+import CheckoutPageAddressDataSection from "./CheckoutPageAddressDataSection";
 import CheckoutPageDeliverySection from "./CheckoutPageDeliverySection";
 import { useContext } from "react";
 import { Context } from "../Context";
@@ -7,9 +7,11 @@ import { observer } from "mobx-react-lite";
 import CheckoutPagePaymentSection from "./CheckoutPagePaymentSection";
 
 const CheckoutPageMainContent = observer(({
-  register, errors, watch, trigger, isPhoneInputDirty, setIsPhoneInputDirty,
-  phoneInputValue, setPhoneInputValue, phoneNumberInputRef,
-  emailInputRef, hasElevator, setHasElevator, isToLiftOnTheFloor,
+  register, errors, watch, trigger, isSenderPhoneInputDirty, setIsSenderPhoneInputDirty,
+  senderPhoneInputValue, setSenderPhoneInputValue, senderPhoneNumberInputRef,
+  isReceiventPhoneInputDirty, setIsReceiventPhoneInputDirty,
+  receiventPhoneInputValue, setReceiventPhoneInputValue, receiventPhoneNumberInputRef,
+  hasElevator, setHasElevator, isToLiftOnTheFloor,
   setIsToLiftOnTheFloor, selectedCourierScheduleId, setSelectedCourierScheduleId,
   selectedCourierScheduleShift, setSelectedCourierScheduleShift
 }) => {
@@ -17,16 +19,16 @@ const CheckoutPageMainContent = observer(({
 
   return (
     <main className="checkout-page-main-content">
-      <CheckoutPageSenderSection
+      <CheckoutPageAddressDataSection
         register={register}
         errors={errors}
         trigger={trigger}
-        isPhoneInputDirty={isPhoneInputDirty}
-        setIsPhoneInputDirty={setIsPhoneInputDirty}
-        phoneInputValue={phoneInputValue}
-        setPhoneInputValue={setPhoneInputValue}
-        phoneNumberInputRef={phoneNumberInputRef}
-        emailInputRef={emailInputRef}
+        isPhoneInputDirty={isSenderPhoneInputDirty}
+        setIsPhoneInputDirty={setIsSenderPhoneInputDirty}
+        phoneInputValue={senderPhoneInputValue}
+        setPhoneInputValue={setSenderPhoneInputValue}
+        phoneNumberInputRef={senderPhoneNumberInputRef}
+        type="sender"
       />
       {app.isToShowDeliveryChangeMessage &&
         <div className="delivery-change-message">
@@ -47,6 +49,17 @@ const CheckoutPageMainContent = observer(({
         setSelectedCourierScheduleShift={setSelectedCourierScheduleShift}
       />
       <CheckoutPagePaymentSection />
+      <CheckoutPageAddressDataSection
+        register={register}
+        errors={errors}
+        trigger={trigger}
+        isPhoneInputDirty={isReceiventPhoneInputDirty}
+        setIsPhoneInputDirty={setIsReceiventPhoneInputDirty}
+        phoneInputValue={receiventPhoneInputValue}
+        setPhoneInputValue={setReceiventPhoneInputValue}
+        phoneNumberInputRef={receiventPhoneNumberInputRef}
+        type="receivent"
+      />
     </main>
   );
 });
