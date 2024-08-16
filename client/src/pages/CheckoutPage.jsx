@@ -20,18 +20,21 @@ const CheckoutPage = observer(() => {
 
   const { app, user } = useContext(Context);
   const navigate = useNavigateToEncodedURL();
-  const phoneNumberInputRef = useRef(null);
-  const emailInputRef = useRef(null);
+  const senderPhoneNumberInputRef = useRef(null);
+  const receiventPhoneNumberInputRef = useRef(null);
 
-  const [isPhoneInputDirty, setIsPhoneInputDirty] = useState(false);
-  const [phoneInputValue, setPhoneInputValue] = useState("");
+  const [isSenderPhoneInputDirty, setIsSenderPhoneInputDirty] = useState(false);
+  const [senderPhoneInputValue, setSenderPhoneInputValue] = useState("");
+
+  const [isReceiventPhoneInputDirty, setIsReceiventPhoneInputDirty] = useState(false);
+  const [receiventPhoneInputValue, setReceiventPhoneInputValue] = useState("");
+
   const [hasElevator, setHasElevator] = useState(null);
   const [isToLiftOnTheFloor, setIsToLiftOnTheFloor] = useState(false);
   const [selectedCourierScheduleId, setSelectedCourierScheduleId] = useState(null);
   const [selectedCourierScheduleShift, setSelectedCourierScheduleShift] = useState(null);
 
   // TODO: auto-fill sender data inputs with user data if he / she logged in
-  // TODO: provide default values for more inputs
   const {
     register,
     formState: { errors },
@@ -48,6 +51,9 @@ const CheckoutPage = observer(() => {
       "houseNumber": "",
       "flatNumber": "",
       "floor": "",
+      "receiventFirstName": "",
+      "receiventSecondName": "",
+      "receiventEmail": "",
     }
   });
 
@@ -68,24 +74,35 @@ const CheckoutPage = observer(() => {
     setTimeout(() => navigate("/", { replace: true }, 0));
   };
 
-  function checkIsPhoneNumberInputValid() {
-    const isPhoneNumberValid = isPhoneValidFn(phoneInputValue);
-    if (!isPhoneNumberValid) {
-      // setting the dirty state to true to show the error if we have one
-      setIsPhoneInputDirty(true);
+  function checkIsPhoneNumberInputValid(type) {
+    let isPhoneNumberValid = isPhoneValidFn(senderPhoneInputValue);
 
-      if (!Object.keys(errors).length) {
-        phoneNumberInputRef.current?.focus();
+    if (type === "sender") {
+      if (!isPhoneNumberValid) {
+        // setting the dirty state to true to show the error if we have one
+        setIsSenderPhoneInputDirty(true);
+  
+        if (!Object.keys(errors).length) {
+          senderPhoneNumberInputRef.current?.focus();
+        };
       };
-
-      return;
-    };
+    } else if (type === "receivent") {
+      if (!isPhoneNumberValid) {
+        setIsReceiventPhoneInputDirty(true);
+  
+        if (!Object.keys(errors).length) {
+          receiventPhoneNumberInputRef.current?.focus();
+        };
+      };
+    }
 
     return isPhoneNumberValid;
   }
 
   function onSubmit() {
-    if (!checkIsPhoneNumberInputValid()) return;
+    // sender phone number input must be focused first, not receivent one,
+    // so check sender phone number validity last
+    if (!checkIsPhoneNumberInputValid("receivent") || !checkIsPhoneNumberInputValid("sender")) return;
     console.log(hasElevator);
   }
 
@@ -103,12 +120,16 @@ const CheckoutPage = observer(() => {
             errors={{...errors}}
             watch={watch}
             trigger={trigger}
-            isPhoneInputDirty={isPhoneInputDirty}
-            setIsPhoneInputDirty={setIsPhoneInputDirty}
-            phoneInputValue={phoneInputValue}
-            setPhoneInputValue={setPhoneInputValue}
-            phoneNumberInputRef={phoneNumberInputRef}
-            emailInputRef={emailInputRef}
+            isSenderPhoneInputDirty={isSenderPhoneInputDirty}
+            setIsSenderPhoneInputDirty={setIsSenderPhoneInputDirty}
+            senderPhoneInputValue={senderPhoneInputValue}
+            setSenderPhoneInputValue={setSenderPhoneInputValue}
+            senderPhoneNumberInputRef={senderPhoneNumberInputRef}
+            isReceiventPhoneInputDirty={isReceiventPhoneInputDirty}
+            setIsReceiventPhoneInputDirty={setIsReceiventPhoneInputDirty}
+            receiventPhoneInputValue={receiventPhoneInputValue}
+            setReceiventPhoneInputValue={setReceiventPhoneInputValue}
+            receiventPhoneNumberInputRef={receiventPhoneNumberInputRef}
             hasElevator={hasElevator}
             setHasElevator={setHasElevator}
             isToLiftOnTheFloor={isToLiftOnTheFloor}

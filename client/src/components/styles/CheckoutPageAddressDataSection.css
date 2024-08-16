@@ -1,0 +1,25 @@
+.checkout-page-address-data-section > div {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.checkout-address-data-section-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.checkout-page-address-data-section.receivent-version {
+  /* creating enough space for phone number input's dropdown */
+  padding: 0 0 100px 0;
+}
+
+.checkout-page-receivent-data-warning {
+  padding: 12px;
+  margin: 14px 0 0 0;
+  border: 1px solid #7373ff;
+  border-radius: 5px;
+  background-color: #a7a7ff;
+  color: black;
+}
