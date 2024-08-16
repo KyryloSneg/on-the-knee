@@ -9,6 +9,7 @@ import CheckoutPageMainContent from "../components/CheckoutPageMainContent";
 import CheckoutPageAside from "../components/CheckoutPageAside";
 import { useForm } from "react-hook-form";
 import isPhoneValidFn from "../utils/isPhoneValid";
+import useSettingInitialSelectedScheduleId from "../hooks/useSettingInitialSelectedScheduleId";
 
 const CheckoutPage = observer(() => {
   // TODO: check are all devices available in such amount as user typed in or no,
@@ -24,21 +25,37 @@ const CheckoutPage = observer(() => {
 
   const [isPhoneInputDirty, setIsPhoneInputDirty] = useState(false);
   const [phoneInputValue, setPhoneInputValue] = useState("");
+  const [hasElevator, setHasElevator] = useState(null);
+  const [isToLiftOnTheFloor, setIsToLiftOnTheFloor] = useState(false);
+  const [selectedCourierScheduleId, setSelectedCourierScheduleId] = useState(null);
+  const [selectedCourierScheduleShift, setSelectedCourierScheduleShift] = useState(null);
 
   // TODO: auto-fill sender data inputs with user data if he / she logged in
+  // TODO: provide default values for more inputs
   const {
     register,
     formState: { errors },
     handleSubmit,
     trigger,
+    watch,
   } = useForm({
-    mode: "onBlur"
+    mode: "onBlur",
+    defaultValues: {
+      "firstName": "",
+      "secondName": "",
+      "email": "",
+      "street": "",
+      "houseNumber": "",
+      "flatNumber": "",
+      "floor": "",
+    }
   });
 
   useGettingCartData(user.cart?.id, null, true, true, true);
   useEffect(() => {
     app.setSelectedDeliveryId(app.deliveries[0]?.id);
   }, [app, app.deliveries]);
+  useSettingInitialSelectedScheduleId(setSelectedCourierScheduleId, setSelectedCourierScheduleShift);
 
   const isLoadingContent = (
     (user.isAuth && !_.isEqual(user.user, {})) && _.isEqual(user.cart, {})
@@ -69,28 +86,43 @@ const CheckoutPage = observer(() => {
 
   function onSubmit() {
     if (!checkIsPhoneNumberInputValid()) return;
+    console.log(hasElevator);
   }
 
   return (
-    <div className="checkout-page">
-      <header>
-        <h2>Checkout order</h2>
-      </header>
-      <form onSubmit={handleSubmit(onSubmit, checkIsPhoneNumberInputValid)}>
-        <CheckoutPageMainContent
-          register={register}
-          errors={errors}
-          trigger={trigger}
-          isPhoneInputDirty={isPhoneInputDirty}
-          setIsPhoneInputDirty={setIsPhoneInputDirty}
-          phoneInputValue={phoneInputValue}
-          setPhoneInputValue={setPhoneInputValue}
-          phoneNumberInputRef={phoneNumberInputRef}
-          emailInputRef={emailInputRef}
-        />
-        <CheckoutPageAside />
-      </form>
-    </div>
+    <>
+      <div className="checkout-page">
+        <header>
+          <h2>Checkout order</h2>
+        </header>
+        <form onSubmit={handleSubmit(onSubmit, checkIsPhoneNumberInputValid)}>
+          <CheckoutPageMainContent
+            register={register}
+            // i fucking hate this (errors obj was changing but it didn't lead to child's re-renders),
+            // so do it by ourselves (sorry app optimization)
+            errors={{...errors}}
+            watch={watch}
+            trigger={trigger}
+            isPhoneInputDirty={isPhoneInputDirty}
+            setIsPhoneInputDirty={setIsPhoneInputDirty}
+            phoneInputValue={phoneInputValue}
+            setPhoneInputValue={setPhoneInputValue}
+            phoneNumberInputRef={phoneNumberInputRef}
+            emailInputRef={emailInputRef}
+            hasElevator={hasElevator}
+            setHasElevator={setHasElevator}
+            isToLiftOnTheFloor={isToLiftOnTheFloor}
+            setIsToLiftOnTheFloor={setIsToLiftOnTheFloor}
+            selectedCourierScheduleId={selectedCourierScheduleId}
+            setSelectedCourierScheduleId={setSelectedCourierScheduleId}
+            selectedCourierScheduleShift={selectedCourierScheduleShift}
+            setSelectedCourierScheduleShift={setSelectedCourierScheduleShift}
+          />
+          <CheckoutPageAside />
+        </form>
+      </div>
+      {/* <DevTool control={control} /> */}
+    </>
   );
 });
 

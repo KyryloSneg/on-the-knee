@@ -12,8 +12,13 @@ module.exports = () => {
     const internationalNumber = numberObj.formatInternational(); 
     phoneNumber = internationalNumber;
 
-    const isRealUser = faker.datatype.boolean(0.4);
-    const userId = isRealUser ? REAL_USER._id : MOCK_USER._id;
+    let userId = null;
+    const isAuthUser = faker.datatype.boolean(0.5);
+
+    if (isAuthUser) {
+      const isRealUser = faker.datatype.boolean(0.4);
+      userId = isRealUser ? REAL_USER._id : MOCK_USER._id;
+    }
 
     const receivent = {
       "id": receivents.length + 1,

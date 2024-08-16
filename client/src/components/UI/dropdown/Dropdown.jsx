@@ -14,16 +14,35 @@ import useInitialDropdownValue from "../../../hooks/useInitialDropdownValue";
 // }
 
 // if we provided propsSelectedId it will be always used instead of default selectedId
-// thus we have to use our own setter fn (onSelectCb(index) or smth like this)
+// and we have to use our own setter fn (onSelectCb(index) or smth like this) 
+// if we want to read dropdown's current value
+
+// hasDefaultValue prop defines will dropdown initially has a value and selectedId 
+// (doesn't really matter if user has already selected an option)
 const Dropdown = forwardRef((
-  { variant = "default-select", options, propsSelectedId = null, paramKey = null, placeHolder, onSelectCb = null, ...props },
+  { 
+    variant = "default-select", options, propsSelectedId = null, paramKey = null,
+    hasDefaultValue = true, placeHolder = "", onSelectCb = null, ...props 
+  },
   ref
 ) => {
-  const [value, setValue] = useState(variant === "sorting-filter" ? options[0]?.title : placeHolder);
+  const [value, setValue] = useState(
+    hasDefaultValue
+      ? variant === "sorting-filter" ? options[0]?.title : placeHolder
+      : placeHolder
+  );
+
   const [visible, setVisible] = useState(false);
-  const [selectedId, setSelectedId] = useState(propsSelectedId || 0);
+  const [selectedId, setSelectedId] = useState(
+    hasDefaultValue
+      ? propsSelectedId || 0
+      : null
+  );
   
-  const selectedIdToUse = propsSelectedId >= 0 ? propsSelectedId : selectedId;
+  const selectedIdToUse = (!hasDefaultValue && selectedId === null)
+    ? null
+    : (propsSelectedId >= 0 && typeof propsSelectedId === "number") ? propsSelectedId : selectedId;
+
   const dropdownOptionsId = `dropdown-options-${paramKey || v4()}`;
 
   const paramValue = URLActions.getParamValue(paramKey);

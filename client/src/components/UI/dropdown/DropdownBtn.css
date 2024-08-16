@@ -1,6 +1,8 @@
 button.dropdown-default-select-btn {
   border: 1px solid #d4d4d4;
   border-radius: 12px;
+  justify-content: space-between;
+  overflow: hidden;
 }
 
 button.dropdown-default-select-btn:hover, 
@@ -8,4 +10,11 @@ button.dropdown-default-select-btn:active,
 button.dropdown-default-select-btn:focus-visible, 
 button.dropdown-default-select-btn.active {
   border: 1px solid #b7b7b7;
+}
+
+button.dropdown-default-select-btn > span {
+  text-align: left;
+  white-space: pre;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

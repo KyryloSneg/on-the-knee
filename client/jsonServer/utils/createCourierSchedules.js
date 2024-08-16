@@ -2,13 +2,15 @@ const { faker } = require("@faker-js/faker");
 const { POSSIBLE_SCHEDULE_TIME_RANGES } = require("./consts");
 const DateActions = require("./DateActions");
 
-module.exports = (cities) => {
+module.exports = (deliveries, deliveryTypes) => {
   let schedules = [];
 
   const startDate = new Date();
-  for (let city of cities) {
+  for (let delivery of deliveries) {
+    const delType = deliveryTypes.find(deliveryType => deliveryType.id === delivery["delivery-typeId"]);
+    if (delType.name !== "courier") continue; 
     
-    const shiftAmount = 2; // could change to random shifts from 1 to 4 later
+    const shiftAmount = faker.datatype.boolean(0.5) ? 2 : 4;
 
     const weekendAmount = 2;
     let workDays = [1, 2, 3, 4, 5, 6, 7];
@@ -45,7 +47,7 @@ module.exports = (cities) => {
 
       const schedule = {
         "id": schedules.length + 1,
-        "cityId": city.id,
+        "deliveryId": delivery.id,
         "date": date,
         "shifts": shifts,
       }

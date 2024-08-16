@@ -10,8 +10,11 @@ const DropdownOptions = (props) => {
   const optionRefs = useRef([]);
 
   useEffect(() => {
-    if (props.selectedId >= 0) {
+    if (props.selectedId >= 0 && typeof props.selectedId === "number") {
       optionRefs.current[props.selectedId]?.focus();
+    } else {
+      // we have to focus the first option if there's no any selected option
+      optionRefs.current[0]?.focus();
     }
     // eslint-disable-next-line
   }, [])

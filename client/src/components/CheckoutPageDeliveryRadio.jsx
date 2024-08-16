@@ -5,10 +5,12 @@ import onRadioKeyDown from "../utils/onRadioKeyDown";
 import DeliverySectionSelfDeliveryOption from "./DeliverySectionSelfDeliveryOption";
 import DeliverySectionCourierOption from "./DeliverySectionCourierOption";
 
-const CheckoutPageDeliveryRadio = forwardRef((
-  { delivery, isChecked, onCheck, checkPrev, checkNext }, 
-  ref
-) => {
+const CheckoutPageDeliveryRadio = forwardRef(({ 
+  delivery, isChecked, onCheck, checkPrev, checkNext,  
+  register = null, errors = null, watch = null, hasElevator = null, setHasElevator = null, isToLiftOnTheFloor = null, 
+  setIsToLiftOnTheFloor = null, selectedCourierScheduleId = null, setSelectedCourierScheduleId = null,
+  selectedCourierScheduleShift = null, setSelectedCourierScheduleShift = null
+}, ref) => {
   let radioClassName = "radio-div";
   let wrapperClassName = "checkout-page-delivery-radio";
 
@@ -21,7 +23,21 @@ const CheckoutPageDeliveryRadio = forwardRef((
   if (delivery.name === "self-delivery") {
     childrenToRenderIfChecked = <DeliverySectionSelfDeliveryOption />;
   } else if (delivery.name === "courier") {
-    childrenToRenderIfChecked = <DeliverySectionCourierOption />;
+    childrenToRenderIfChecked = (
+      <DeliverySectionCourierOption 
+        register={register}
+        errors={errors}
+        watch={watch}
+        hasElevator={hasElevator}
+        setHasElevator={setHasElevator}
+        isToLiftOnTheFloor={isToLiftOnTheFloor}
+        setIsToLiftOnTheFloor={setIsToLiftOnTheFloor}
+        selectedCourierScheduleId={selectedCourierScheduleId}
+        setSelectedCourierScheduleId={setSelectedCourierScheduleId}
+        selectedCourierScheduleShift={selectedCourierScheduleShift}
+        setSelectedCourierScheduleShift={setSelectedCourierScheduleShift}
+      />
+    );
   }
 
   const isFree = !delivery.price;
