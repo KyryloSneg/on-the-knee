@@ -4,6 +4,7 @@ import CheckoutPageDeliverySection from "./CheckoutPageDeliverySection";
 import { useContext } from "react";
 import { Context } from "../Context";
 import { observer } from "mobx-react-lite";
+import CheckoutPagePaymentSection from "./CheckoutPagePaymentSection";
 
 const CheckoutPageMainContent = observer(({
   register, errors, watch, trigger, isPhoneInputDirty, setIsPhoneInputDirty,
@@ -45,6 +46,7 @@ const CheckoutPageMainContent = observer(({
         selectedCourierScheduleShift={selectedCourierScheduleShift}
         setSelectedCourierScheduleShift={setSelectedCourierScheduleShift}
       />
+      <CheckoutPagePaymentSection />
     </main>
   );
 });
