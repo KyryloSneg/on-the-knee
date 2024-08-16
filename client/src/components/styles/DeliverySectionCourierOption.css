@@ -1,0 +1,9 @@
+.delivery-section-courier-option {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.selected-delivery-msg {
+  font-size: 1.2rem;
+}

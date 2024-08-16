@@ -1,0 +1,59 @@
+.delivery-section-courier-option-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.delivery-section-courier-option-inputs .react-hook-form-input > input {
+  height: 34px;
+}
+
+.courier-option-inputs-top-row {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 2fr 1fr 1fr;
+}
+
+.courier-option-inputs-bottom-row {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr 1fr;
+  padding-right: 16px;
+}
+
+.courier-option-inputs-bottom-row > .dropdown {
+  height: 32px;
+  align-self: flex-end;
+  position: relative;
+  bottom: 1px;
+  width: 100%;
+  width: calc(100% + 16px);
+}
+
+.courier-option-inputs-bottom-row > .dropdown > button,
+.courier-option-inputs-bottom-row > .dropdown > .dropdown-options {
+  width: 100%;
+}
+
+.courier-option-inputs-bottom-row > .dropdown > button {
+  height: 34px;
+}
+
+.is-to-lift-on-the-floor-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  width: max-content;
+  padding: 4px 0;
+}
+
+.is-to-lift-on-the-floor-checkbox:enabled {
+  cursor: pointer;
+}
+
+.is-to-lift-on-the-floor-checkbox:disabled > .checkbox-div {
+  border: 1px solid rgb(205 205 205);
+  background-color: #dfdfdf;
+}

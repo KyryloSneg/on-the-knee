@@ -6,7 +6,11 @@ import { observer } from "mobx-react-lite";
 import _ from "lodash";
 import { getOneDelivery } from "../http/DeliveriesAPI";
 
-const CheckoutPageDeliveryRadiogroup = observer(() => {
+const CheckoutPageDeliveryRadiogroup = observer(({
+  register, errors, watch, hasElevator, setHasElevator, isToLiftOnTheFloor, 
+  setIsToLiftOnTheFloor, selectedCourierScheduleId, setSelectedCourierScheduleId,
+  selectedCourierScheduleShift, setSelectedCourierScheduleShift
+}) => {
   const { app } = useContext(Context);
   const optionRefs = useRef([]);
   const prevDeliveries = useRef(null);
@@ -138,6 +142,17 @@ const CheckoutPageDeliveryRadiogroup = observer(() => {
               onCheck={onCheck}
               checkPrev={checkPrev}
               checkNext={checkNext}
+              register={register}
+              errors={errors}
+              watch={watch}
+              hasElevator={hasElevator}
+              setHasElevator={setHasElevator}
+              isToLiftOnTheFloor={isToLiftOnTheFloor}
+              setIsToLiftOnTheFloor={setIsToLiftOnTheFloor}
+              selectedCourierScheduleId={selectedCourierScheduleId}
+              setSelectedCourierScheduleId={setSelectedCourierScheduleId}
+              selectedCourierScheduleShift={selectedCourierScheduleShift}
+              setSelectedCourierScheduleShift={setSelectedCourierScheduleShift}
               ref={refCb}
             />
           </li>
