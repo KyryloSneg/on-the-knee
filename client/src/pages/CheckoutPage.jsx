@@ -44,16 +44,16 @@ const CheckoutPage = observer(() => {
   } = useForm({
     mode: "onBlur",
     defaultValues: {
-      "firstName": "",
-      "secondName": "",
-      "email": "",
+      "senderFirstName": "",
+      "senderSecondName": "",
+      "senderEmail": "",
       "street": "",
       "houseNumber": "",
       "flatNumber": "",
       "floor": "",
       "receiventFirstName": "",
       "receiventSecondName": "",
-      "receiventEmail": "",
+      "receiventPatronymic": "",
     }
   });
 
