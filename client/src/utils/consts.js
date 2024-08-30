@@ -175,6 +175,8 @@ export const DEFAULT_USER_LOCATION_NAME = "Kyiv";
 // coords of Kyiv
 export const DEFAULT_INIT_MAP_COORDS = { lng: 30.5241361, lat: 50.4500336 };
 
+export const FIRST_CHECKOUT_ORDER_ID = 1;
+
 // set up mock stores
 const deviceStoreInstance = new DeviceStore();
 const userStoreInstance = new UserStore();

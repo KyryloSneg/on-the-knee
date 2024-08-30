@@ -6,7 +6,7 @@ import { useRef } from "react";
 
 const AdditionalServicesExpandedList = ({ 
   names, deviceId, additionalServiceOptions, 
-  labelledBy, parentId, setParentIsChecked, 
+  labelledBy, parentId, 
   selectedItems, setSelectedItems 
 }) => {
   const optionRefs = useRef([]);
@@ -64,7 +64,6 @@ const AdditionalServicesExpandedList = ({
               }
             ];
 
-            setParentIsChecked(true);
             setSelectedItems(nextSelectedItems);
           }
         }

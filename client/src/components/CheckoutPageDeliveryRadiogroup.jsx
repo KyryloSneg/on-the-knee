@@ -7,8 +7,11 @@ import _ from "lodash";
 import { getOneDelivery } from "../http/DeliveriesAPI";
 
 const CheckoutPageDeliveryRadiogroup = observer(({
-  register, errors, watch, hasElevator, setHasElevator, isToLiftOnTheFloor, 
-  setIsToLiftOnTheFloor, selectedCourierScheduleId, setSelectedCourierScheduleId,
+  orderId, inputsId, setIsDirty, setIsToShowDeliveryChangeMessage,
+  selectedStorePickupPointId, setSelectedStorePickupPointId, 
+  selectedDeliveryId, setSelectedDeliveryId, register, errors, control,
+  hasElevator, setHasElevator, isToLiftOnTheFloor, setIsToLiftOnTheFloor, 
+  selectedCourierScheduleId, setSelectedCourierScheduleId,
   selectedCourierScheduleShift, setSelectedCourierScheduleShift
 }) => {
   const { app } = useContext(Context);
@@ -20,29 +23,32 @@ const CheckoutPageDeliveryRadiogroup = observer(({
   const [ignore, forceUpdate] = useReducer(x => x + 1, 0);
   // index is used for checking prev / next delivery
   const selectedIndex = app.deliveries?.indexOf(app.deliveries?.find(
-    delivery => delivery.id === app.selectedDeliveryId)
+    delivery => delivery.id === selectedDeliveryId)
   ) || 0;
 
   useEffect(() => {
     async function callback() {
+      // do not try to seek any logical reason to excuse why isInitialRender.current can be true only on ~2nd render
+      if (selectedDeliveryId === null) return;
+
       try {
         isCallbackInvoked.current = true;
-        // app.selectedDeliveryId contains id of delivery selected before app.deliveries has changed
+        // selectedDeliveryId contains id of delivery selected before app.deliveries has changed
         // app.deliveries contains actual deliveries
         // so we can use these to do next steps: identify has delivery type changed;
         // if deliveries has changed, select previously selected delivery with the same delivery type as it was before
         const deliveryTypesIds = app.deliveries?.map(delivery => delivery["delivery-typeId"]);
-        const prevSelectedDelivery = await getOneDelivery(app.selectedDeliveryId);
+        const prevSelectedDelivery = await getOneDelivery(selectedDeliveryId);
         const currentDeliveryWithPrevSelectedType = app.deliveries?.find(
           delivery => delivery["delivery-typeId"] === prevSelectedDelivery["delivery-typeId"]
         );
 
-        if (currentDeliveryWithPrevSelectedType) app.setSelectedDeliveryId(currentDeliveryWithPrevSelectedType.id);
+        if (currentDeliveryWithPrevSelectedType) setSelectedDeliveryId(currentDeliveryWithPrevSelectedType.id);
 
         if (prevSelectedDelivery && !!deliveryTypesIds?.length
           && !deliveryTypesIds.includes(prevSelectedDelivery["delivery-typeId"])
         ) {
-          app.setIsToShowDeliveryChangeMessage(true);
+          setIsToShowDeliveryChangeMessage(true);
         };
       } catch (e) {
         console.log(e.message);
@@ -54,15 +60,18 @@ const CheckoutPageDeliveryRadiogroup = observer(({
     }
 
     callback();
-  }, [app, app.deliveries]);
+    // eslint-disable-next-line
+  }, [app, app.deliveries, setSelectedDeliveryId]);
 
   if (!app.deliveries?.length) return <div />;
 
   function checkItem(index) {
     const nextSelectedId = app.deliveries[index]?.id;
 
-    app.setSelectedDeliveryId(nextSelectedId);
-    app.setIsToShowDeliveryChangeMessage(false);
+    setIsDirty(true);
+    setSelectedDeliveryId(nextSelectedId);
+
+    setIsToShowDeliveryChangeMessage(false);
   }
 
   function refCb(ref) {
@@ -90,8 +99,8 @@ const CheckoutPageDeliveryRadiogroup = observer(({
   // do not return div, use display-none instead (to not invoke controls errors once again)
   let className = "checkout-page-delivery-radiogroup";
   if (
-    ((app.selectedDeliveryId !== null || app.selectedDeliveryId !== undefined)
-    && (deliveryIds?.length && !deliveryIds?.includes(app.selectedDeliveryId)))
+    ((selectedDeliveryId !== null && selectedDeliveryId !== undefined)
+    && (deliveryIds?.length && !deliveryIds?.includes(selectedDeliveryId)))
     || (!isInitialRender.current && isCallbackInvoked.current)
   ) {
     className += " display-none";
@@ -142,9 +151,15 @@ const CheckoutPageDeliveryRadiogroup = observer(({
               onCheck={onCheck}
               checkPrev={checkPrev}
               checkNext={checkNext}
+              orderId={orderId}
+              inputsId={inputsId}
+              setIsDirty={setIsDirty}
+              selectedStorePickupPointId={selectedStorePickupPointId}
+              setSelectedStorePickupPointId={setSelectedStorePickupPointId}
+              selectedDeliveryId={selectedDeliveryId}
               register={register}
               errors={errors}
-              watch={watch}
+              control={control}
               hasElevator={hasElevator}
               setHasElevator={setHasElevator}
               isToLiftOnTheFloor={isToLiftOnTheFloor}

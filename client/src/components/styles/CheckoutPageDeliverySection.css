@@ -1,0 +1,7 @@
+.checkout-page-section-btn.error-variant {
+  grid-template-columns: auto auto auto 1fr;
+}
+
+.checkout-page-section-btn-required-error-msg {
+  color: #a10e0e;
+}

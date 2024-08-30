@@ -1,4 +1,5 @@
-import { forwardRef, useState } from "react";
+import "./styles/DeviceRightDescription.css";
+import { forwardRef } from "react";
 import AdditionalServicesSection from "./AdditionalServicesSection";
 import DeviceColorOptions from "./DeviceColorOptions";
 import DeviceItemAttrOptionSection from "./DeviceItemAttrOptionSection";
@@ -7,16 +8,15 @@ import DeviceRightDescHeading from "./DeviceRightDescHeading";
 import DeviceRightDescSales from "./DeviceRightDescSales";
 import DeviceSellerBlock from "./DeviceSellerBlock";
 import UserLocationBtn from "./UserLocationBtn";
-import "./styles/DeviceRightDescription.css";
 import SelfDeliveryBtn from "./SelfDeliveryBtn";
 
 const DeviceRightDescription = forwardRef(({ 
   device, combinationString, selectedCombination, 
   defaultCombo, salesAndTypes, attributesList, 
   hrefObjects, seller, price, discountPercentage,
-  additionalServicesObj 
+  additionalServicesObj, selectedAddServices, setSelectedAddServices, isInitialRenderRef
 }, ref) => {
-  const [selectedAddServices, setSelectedAddServices] = useState([]);
+  if (isInitialRenderRef.current) isInitialRenderRef.current = false;
 
   return (
     <section className="device-page-section device-right-description" ref={ref}>
@@ -63,6 +63,7 @@ const DeviceRightDescription = forwardRef(({
           discountPercentage={discountPercentage} 
           device={device} 
           selectedCombo={selectedCombination}
+          selectedAddServices={selectedAddServices}
         />
       </div>
       {/* TODO: create courier delivery item??? */}

@@ -3,7 +3,8 @@ import { forwardRef } from "react";
 
 const ReactHookFormInput = forwardRef(({ 
   labelText, inputName, errors, registerFnResult, 
-  autoComplete = "off", isDisabled = false, isErrorCondition = null, ...props
+  autoComplete = "off", isDisabled = false, isErrorCondition = null, 
+  onChangeCaptureCb = null, ...props
 }, ref) => {
   const isInvalid = isErrorCondition ? !!isErrorCondition : !!errors[inputName];
 
@@ -16,6 +17,7 @@ const ReactHookFormInput = forwardRef(({
           disabled={isDisabled}
           className={isInvalid ? "invalid" : ""}
           aria-invalid={isInvalid}
+          onChangeCapture={(e) => onChangeCaptureCb?.(e)}
           ref={ref}
           {...registerFnResult}
           {...props}

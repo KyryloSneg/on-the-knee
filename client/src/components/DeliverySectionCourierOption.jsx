@@ -8,12 +8,13 @@ import getWeekDay from "../utils/getWeekDay";
 import { observer } from "mobx-react-lite";
 
 const DeliverySectionCourierOption = observer(({
-  register, errors, watch, hasElevator, setHasElevator, isToLiftOnTheFloor, setIsToLiftOnTheFloor,
-  selectedCourierScheduleId, setSelectedCourierScheduleId, selectedCourierScheduleShift, setSelectedCourierScheduleShift
+  inputsId, setIsDirty, register, errors, control, selectedDeliveryId, hasElevator, setHasElevator, 
+  isToLiftOnTheFloor, setIsToLiftOnTheFloor, selectedCourierScheduleId, setSelectedCourierScheduleId, 
+  selectedCourierScheduleShift, setSelectedCourierScheduleShift
 }) => {
   const { app } = useContext(Context);
 
-  const selectedDelivery = app.deliveries?.find(delivery => delivery.id === app.selectedDeliveryId);
+  const selectedDelivery = app.deliveries?.find(delivery => delivery.id === selectedDeliveryId);
   const selectedSchedule = selectedDelivery?.["courier-schedules"]?.find(schedule => schedule.id === selectedCourierScheduleId);
   const selectedShift = selectedSchedule?.shifts?.[selectedCourierScheduleShift];
 
@@ -41,15 +42,18 @@ const DeliverySectionCourierOption = observer(({
         </p>
       }
       <DeliverySectionCourierOptionInputs
+        inputsId={inputsId}
         register={register}
         errors={errors}
-        watch={watch}
+        control={control}
         hasElevator={hasElevator}
         setHasElevator={setHasElevator}
         isToLiftOnTheFloor={isToLiftOnTheFloor}
         setIsToLiftOnTheFloor={setIsToLiftOnTheFloor} 
       />
       <DeliverySectionCourierOptionSchedules 
+        setIsDirty={setIsDirty}
+        selectedDeliveryId={selectedDeliveryId}
         selectedCourierScheduleId={selectedCourierScheduleId}
         setSelectedCourierScheduleId={setSelectedCourierScheduleId}
         selectedCourierScheduleShift={selectedCourierScheduleShift}

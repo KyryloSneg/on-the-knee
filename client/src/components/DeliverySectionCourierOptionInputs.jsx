@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import Dropdown from "./UI/dropdown/Dropdown";
 import ReactHookFormInput from "./UI/reactHookFormInput/ReactHookFormInput";
 import _ from "lodash";
+import { useWatch } from "react-hook-form";
 
 const OPTIONS = Object.freeze([
   {
@@ -19,7 +20,7 @@ const OPTIONS = Object.freeze([
 
 // we have no need in hasElevator state because it doesn't have any initial value (=== null by default)
 const DeliverySectionCourierOptionInputs = ({
-  register, errors, watch, hasElevator, setHasElevator, isToLiftOnTheFloor, setIsToLiftOnTheFloor,
+  inputsId, register, errors, control, hasElevator, setHasElevator, isToLiftOnTheFloor, setIsToLiftOnTheFloor,
 }) => {
   const numberInputOptions = {
     validate: {
@@ -39,6 +40,12 @@ const DeliverySectionCourierOptionInputs = ({
   floorInputOptions.validate.isNotNegative = value => (+value > 0 || value === "") || "Only a positive number";
   flatNumberInputOptions.validate.isNotNegative = value => (+value > 0 || value === "") || "Only a positive number";
 
+  // we must define the values below only once
+  const streetInputName = "street-" + inputsId;
+  const houseNumberInputName = "houseNumber-" + inputsId;
+  const flatNumberInputName = "flatNumber-" + inputsId;
+  const floorInputName = "floor-" + inputsId;
+
   function onSelectCb(id) {
     const selectedOption = OPTIONS.find(option => option.id === id);
     
@@ -55,8 +62,11 @@ const DeliverySectionCourierOptionInputs = ({
 
   const propsSelectedId = OPTIONS.find(option => option.value === hasElevator)?.id || null;
 
-  const formValues = watch();
-  const areAllInputsFilled = !!formValues.street && !!formValues.houseNumber && !!formValues.flatNumber && !!formValues.floor;
+  const formValues = useWatch({ control });
+  const areAllInputsFilled = 
+    !!formValues[streetInputName] && !!formValues[houseNumberInputName] 
+    && !!formValues[flatNumberInputName] && !!formValues[floorInputName];
+
   const isDisabled = !areAllInputsFilled || Object.keys(errors)?.length !== 0 || !hasElevator;
 
   let checkboxDivClassName = "checkbox-div";
@@ -67,15 +77,15 @@ const DeliverySectionCourierOptionInputs = ({
   useEffect(() => {
     if (isDisabled) setIsToLiftOnTheFloor(false);
   }, [isDisabled, setIsToLiftOnTheFloor]);
-  
+
   return (
     <div className="delivery-section-courier-option-inputs">
       <div className="courier-option-inputs-top-row">
         <ReactHookFormInput
           labelText="Street"
-          inputName="street"
+          inputName={streetInputName}
           errors={errors}
-          registerFnResult={register("street", {
+          registerFnResult={register(streetInputName, {
             validate: {
               required: value => value.trim().length > 0 || "Required",
               isTooLong: value => value.trim().length <= 1000 || "Can't be more than 1000 characters",
@@ -87,10 +97,10 @@ const DeliverySectionCourierOptionInputs = ({
         />
         <ReactHookFormInput
           labelText="House number"
-          inputName="houseNumber"
+          inputName={houseNumberInputName}
           errors={errors}
           type="number"
-          registerFnResult={register("houseNumber", {
+          registerFnResult={register(houseNumberInputName, {
             ...numberInputOptions,
             validate: {
               required: value => value.trim().length > 0 || "Required",
@@ -100,19 +110,19 @@ const DeliverySectionCourierOptionInputs = ({
         />
         <ReactHookFormInput
           labelText="Flat number"
-          inputName="flatNumber"
+          inputName={flatNumberInputName}
           errors={errors}
           type="number"
-          registerFnResult={register("flatNumber", flatNumberInputOptions)}
+          registerFnResult={register(flatNumberInputName, flatNumberInputOptions)}
         />
       </div>
       <div className="courier-option-inputs-bottom-row">
         <ReactHookFormInput
           labelText="Floor"
-          inputName="floor"
+          inputName={floorInputName}
           errors={errors}
           type="number"
-          registerFnResult={register("floor", floorInputOptions)}
+          registerFnResult={register(floorInputName, floorInputOptions)}
         />
         <Dropdown 
           options={OPTIONS} 

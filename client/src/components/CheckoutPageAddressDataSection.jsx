@@ -9,12 +9,17 @@ import { useMemo } from "react";
 
 const POSSIBLE_TYPES = ["sender", "receivent"];
 
+// orderId is used for receivent type of the section
 // there can't be more than one address data sections of the same type at the same time
 const CheckoutPageAddressDataSection = ({
   register, errors, trigger, isPhoneInputDirty, setIsPhoneInputDirty,
-  phoneInputValue, setPhoneInputValue, phoneNumberInputRef, type = "sender"
+  phoneInputValue, setPhoneInputValue, phoneNumberInputRef,
+  type = "sender", orderId = null,
 }) => {
   if (!POSSIBLE_TYPES.includes(type)) throw Error("type of CheckoutPageAddressDataSection is incorrect");
+
+  const phoneNumberInputId = useMemo(() => "checkout-phone-number-" + (orderId || v4()), [orderId]);
+  if (type === "receivent" && orderId === null) return <div />;
 
   const baseOptions = {
     validate: {
@@ -24,6 +29,27 @@ const CheckoutPageAddressDataSection = ({
       )
     }
   };
+
+  const textInputOptions = {
+    ...baseOptions,
+    validate: {
+      ...baseOptions.validate.isRequired,
+      isOnlyLetters: value => {
+        // do not forget that our regex doesn't detect whitespaces, so matches.length might be less than value.length.
+        // to prevent that, delete all whitespaces from the value
+        const valueWithoutSpaces = value.split("").filter(char => char !== " ").join("");
+        const matches = valueWithoutSpaces.match(/\p{Letter}/gu);
+
+        const isOnlyLetters = matches?.length === valueWithoutSpaces.length;
+        return isOnlyLetters || "Letters only";
+      },
+      ...baseOptions.validate,
+    }
+  }
+
+  function onPhoneInputChange(value) {
+    setPhoneInputValue(value);
+  }
 
   const isPhoneValid = isPhoneValidFn(phoneInputValue);
 
@@ -37,13 +63,15 @@ const CheckoutPageAddressDataSection = ({
     secondNameFieldName = "senderSecondName";
   } else if (type === "receivent") {
     heading = "Receivent data";
-    firstNameFieldName = "receiventFirstName";
-    secondNameFieldName = "receiventSecondName";
+    firstNameFieldName = "receiventFirstName-" + orderId;
+    secondNameFieldName = "receiventSecondName-" + orderId;
   }
 
   // doing this to prevent focusing email (patronymic) input while there are first and second names' inputs' errors 
-  const firstNameRegisterResult = register(firstNameFieldName, baseOptions);
-  const secondNameRegisterResult = register(secondNameFieldName, baseOptions);
+  const firstNameRegisterResult = register(firstNameFieldName, textInputOptions);
+  const secondNameRegisterResult = register(secondNameFieldName, textInputOptions);
+
+  const receiventPatronymicFieldName = "receiventPatronymic-" + orderId;
 
   let emailInputRegisterResult;
   let patronymicRegisterResult;
@@ -63,20 +91,22 @@ const CheckoutPageAddressDataSection = ({
     });
 
   } else if (type === "receivent") {
-    patronymicRegisterResult = register("receiventPatronymic", baseOptions);
+    patronymicRegisterResult = register(
+      receiventPatronymicFieldName, textInputOptions
+    );
   }
 
-  const phoneNumberInputId = useMemo(() => "checkout-phone-number-" + v4(), []);
-
-  let className = "checkout-page-address-data-section";
-  if (type === "receivent") {
-    className += " receivent-version";
+  let headerContent = "";
+  if (type === "sender") {
+    headerContent = <h3>{heading}</h3>;
+  } else if (type === "receivent") {
+    headerContent = <h4>{heading}</h4>;
   }
 
   return (
-    <section className={className}>
+    <section className="checkout-page-address-data-section">
       <header>
-        <h3>{heading}</h3>
+        {headerContent}
       </header>
       <div>
         <div className="checkout-address-data-section-inputs">
@@ -104,7 +134,7 @@ const CheckoutPageAddressDataSection = ({
           {(type === "receivent" && patronymicRegisterResult) &&
             <ReactHookFormInput
               labelText="Patronymic"
-              inputName="receiventPatronymic"
+              inputName={receiventPatronymicFieldName}
               errors={errors}
               registerFnResult={patronymicRegisterResult}
             />
@@ -115,7 +145,7 @@ const CheckoutPageAddressDataSection = ({
               <CustomPhoneInput
                 defaultCountry="ua"
                 value={phoneInputValue}
-                onChange={setPhoneInputValue}
+                onChange={onPhoneInputChange}
                 onFocus={() => setIsPhoneInputDirty(true)}
                 id={phoneNumberInputId}
                 isInvalid={isPhoneInputDirty && !isPhoneValid}
@@ -135,13 +165,14 @@ const CheckoutPageAddressDataSection = ({
         {type === "receivent" &&
           <div className="checkout-page-receivent-data-warning">
             <p>
-              Please note that the order will be received by passport. 
-              Enter first name, second name, patronymic as indicated in the document and 
+              Please note that the order will be received by passport.
+              Enter first name, second name, patronymic as indicated in the document and
               the mobile phone number of the order receivent
             </p>
           </div>
         }
       </div>
+
     </section>
   );
 }

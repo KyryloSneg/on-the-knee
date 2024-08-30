@@ -14,21 +14,31 @@ import useGettingAddServicesRelatedData from "../hooks/useGettingAddServicesRela
 import PurchaseDeviceFooter from "../components/PurchaseDeviceFooter";
 import useWindowWidth from "../hooks/useWindowWidth";
 import { WIDTH_TO_SHOW_PURCHASE_DEVICE_FOOTER } from "../utils/consts";
+import useGettingCartData from "../hooks/useGettingCartData";
+import useSynchronizingAdditionalServices from "../hooks/useSynchronizingAdditionalServices";
+import useChangingServerAddServicesOnChange from "../hooks/useChangingServerAddServicesOnChange";
 
 const MainDevicePage = observer(({ device, combinationString, feedbacks }) => {
-  const { deviceStore } = useContext(Context);
+  const { deviceStore, user } = useContext(Context);
   const windowWidth = useWindowWidth();
 
+  const isInitialRender = useRef(true);
   const observer = useRef(null);
   const rightDescRef = useRef(null);
 
   const [sellers, setSellers] = useState([]);
   const [additionalServicesObj, setAdditionalServicesObj] = useState([]);
+  const [selectedAddServices, setSelectedAddServices] = useState([]);
   const [isRightDescScrolled, setIsRightDescScrolled] = useState(false);
   // theoretically setting sales and sale type names would not lead to bugs in the catalog page
   useGettingSalesAndTypeNames(deviceStore);
   useGettingSellers(setSellers);
   useGettingAddServicesRelatedData(device, setAdditionalServicesObj);
+
+  const fetching = useGettingCartData(user.cart?.id, null, true, true, true);
+  function cartDataFetching() {
+    fetching(user.cart?.id, null, true);
+  }
 
   // i think we can implement it without the observer but i already did it
   useEffect(() => {
@@ -58,18 +68,25 @@ const MainDevicePage = observer(({ device, combinationString, feedbacks }) => {
     // eslint-disable-next-line
   }, [isRightDescScrolled, rightDescRef.current]);
 
-  if (!device || !deviceStore.sales.length || !deviceStore.stocks.length || !sellers.length) {
-    return <div />
-  }
-
-  const devCombos = device["device-combinations"];
-  const defaultCombo = devCombos.find(combo => combo.default);
+  const devCombos = device?.["device-combinations"];
+  const defaultCombo = devCombos?.find(combo => combo.default);
   let selectedCombination;
 
-  if (devCombos.length > 1) {
-    selectedCombination = devCombos.find(combo => combo.combinationString === combinationString);
+  if (devCombos?.length > 1) {
+    selectedCombination = devCombos?.find(combo => combo.combinationString === combinationString);
   } else {
-    selectedCombination = devCombos[0];
+    selectedCombination = devCombos?.[0];
+  }
+
+  const combinationInCart = user.cartDeviceCombinations?.find(cartCombo => 
+    cartCombo?.["device-combination"]?.id === selectedCombination.id
+  );
+
+  useSynchronizingAdditionalServices(setSelectedAddServices, combinationInCart?.id);
+  useChangingServerAddServicesOnChange(selectedAddServices, combinationInCart?.id, cartDataFetching, isInitialRender);
+
+  if (!device || !deviceStore.sales.length || !deviceStore.stocks.length || !sellers.length) {
+    return <div />
   }
 
   let deviceSaleTypes = [];
@@ -149,6 +166,9 @@ const MainDevicePage = observer(({ device, combinationString, feedbacks }) => {
           price={price}
           discountPercentage={discountPercentage}
           additionalServicesObj={additionalServicesObj}
+          selectedAddServices={selectedAddServices}
+          setSelectedAddServices={setSelectedAddServices}
+          isInitialRenderRef={isInitialRender}
           ref={rightDescRef}
         />
       </div>
@@ -162,8 +182,12 @@ const MainDevicePage = observer(({ device, combinationString, feedbacks }) => {
         />
       </div>
       {(isRightDescScrolled && windowWidth >= WIDTH_TO_SHOW_PURCHASE_DEVICE_FOOTER) && 
-        <PurchaseDeviceFooter device={device} selectedCombo={selectedCombination} 
-      />}
+        <PurchaseDeviceFooter 
+          device={device} 
+          selectedCombo={selectedCombination} 
+          selectedAddServices={selectedAddServices} 
+        />
+      }
     </section>
   );
 });

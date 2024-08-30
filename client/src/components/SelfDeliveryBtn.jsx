@@ -5,14 +5,33 @@ import setSelfDeliveryModalVisibility from "../utils/setSelfDeliveryModalVisibil
 import { useContext, useRef } from "react";
 import { Context } from "../Context";
 import UIButton from "./UI/uiButton/UIButton";
+import { observer } from "mobx-react-lite";
 
-const SelfDeliveryBtn = ({ variant = "default", placeholder = null }) => {
+const POSSIBLE_VARIANTS = ["default", "device-page"];
+const POSSIBLE_TYPES = ["default", "checkout-page"];
+
+// variant changes returned jsx
+// type changes opened modal logic ("default" || "checkout-page")
+const SelfDeliveryBtn = observer(({ 
+  variant = "default", type = "default", 
+  placeholder = null, selfDeliveryModalSelectedPointValueId = null, onModalOptionSelectCb = null
+}) => {
   const { app } = useContext(Context);
   const btnRef = useRef(null);
+
+  if (!POSSIBLE_VARIANTS.includes(variant)) throw Error("variant of SelfDeliveryBtn is incorrect");
+  if (!POSSIBLE_TYPES.includes(type)) throw Error("type of SelfDeliveryBtn is incorrect");
 
   function onClick() {
     app.setSelfDeliveryModalBtnRef(btnRef);
     setSelfDeliveryModalVisibility(true, app);
+
+    if (type === "checkout-page" && selfDeliveryModalSelectedPointValueId) {
+      app.setSelfDeliveryModalSelectedPointValueId(selfDeliveryModalSelectedPointValueId);
+    };
+
+    app.setSelfDeliveryModalType(type);
+    if (onModalOptionSelectCb) app.setSelfDeliveryModalOnSelectCb(onModalOptionSelectCb);
   }
 
   if (variant === "device-page") {
@@ -50,6 +69,6 @@ const SelfDeliveryBtn = ({ variant = "default", placeholder = null }) => {
       </UIButton>
     );
   }
-}
+});
 
 export default SelfDeliveryBtn;

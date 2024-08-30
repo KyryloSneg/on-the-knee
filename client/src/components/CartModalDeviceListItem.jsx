@@ -144,7 +144,7 @@ const CartModalDeviceListItem = observer(({ combination }) => {
           />
         </Link>
         <Link to={to} className="link-colors">
-          {combination.device.name}
+          {combination.device.name} ({combination["device-combination"].sku})
         </Link>
         <CartModalItemOptions combination={combination} />
       </div>
@@ -177,7 +177,7 @@ const CartModalDeviceListItem = observer(({ combination }) => {
           discountPercentage={discountPercentage}
         />
       </div>
-      {(additionalServicesObj || true) && 
+      {!!additionalServicesObj?.length && 
         <AdditionalServicesSection 
           additionalServices={additionalServicesObj} 
           selectedItems={selectedAddServices}

@@ -6,8 +6,9 @@ import DeliverySectionSelfDeliveryOption from "./DeliverySectionSelfDeliveryOpti
 import DeliverySectionCourierOption from "./DeliverySectionCourierOption";
 
 const CheckoutPageDeliveryRadio = forwardRef(({ 
-  delivery, isChecked, onCheck, checkPrev, checkNext,  
-  register = null, errors = null, watch = null, hasElevator = null, setHasElevator = null, isToLiftOnTheFloor = null, 
+  delivery, isChecked, onCheck, checkPrev, checkNext, setIsDirty, orderId = null, inputsId = null,
+  selectedStorePickupPointId = null, setSelectedStorePickupPointId = null, selectedDeliveryId = null,
+  register = null, errors = null, control = null, hasElevator = null, setHasElevator = null, isToLiftOnTheFloor = null, 
   setIsToLiftOnTheFloor = null, selectedCourierScheduleId = null, setSelectedCourierScheduleId = null,
   selectedCourierScheduleShift = null, setSelectedCourierScheduleShift = null
 }, ref) => {
@@ -21,13 +22,23 @@ const CheckoutPageDeliveryRadio = forwardRef(({
 
   let childrenToRenderIfChecked = <div />;
   if (delivery.name === "self-delivery") {
-    childrenToRenderIfChecked = <DeliverySectionSelfDeliveryOption />;
+    childrenToRenderIfChecked = (
+      <DeliverySectionSelfDeliveryOption 
+        orderId={orderId}
+        setIsDirty={setIsDirty}
+        selectedStorePickupPointId={selectedStorePickupPointId} 
+        setSelectedStorePickupPointId={setSelectedStorePickupPointId} 
+      />
+    );
   } else if (delivery.name === "courier") {
     childrenToRenderIfChecked = (
       <DeliverySectionCourierOption 
+        inputsId={inputsId}
+        setIsDirty={setIsDirty}
         register={register}
         errors={errors}
-        watch={watch}
+        control={control}
+        selectedDeliveryId={selectedDeliveryId}
         hasElevator={hasElevator}
         setHasElevator={setHasElevator}
         isToLiftOnTheFloor={isToLiftOnTheFloor}

@@ -3,7 +3,7 @@ import getDateStr from '../utils/getDateStr';
 import getWeekDay from "../utils/getWeekDay";
 
 const DeliverySectionCourierOptionScheduleItem = ({ 
-  schedule, selectedCourierScheduleId, setSelectedCourierScheduleId, 
+  setIsDirty, schedule, selectedCourierScheduleId, setSelectedCourierScheduleId, 
   selectedCourierScheduleShift, setSelectedCourierScheduleShift
 }) => {
   const date = new Date(schedule.date);
@@ -35,6 +35,8 @@ const DeliverySectionCourierOptionScheduleItem = ({
         function onClick() {
           setSelectedCourierScheduleId(schedule.id);
           setSelectedCourierScheduleShift(number);
+
+          setIsDirty(true);
         }
 
         return (

@@ -1,7 +1,9 @@
 export default class StringActions {
 
   static capitalize(str) {
-    const result = str[0].toUpperCase() + str.slice(1);
+    let result = "";
+    if (str?.length) result = str[0]?.toUpperCase() + str.slice(1);
+    
     return result;
   }
 

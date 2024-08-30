@@ -6,7 +6,7 @@ import DeviceItemPrice from "./DeviceItemPrice";
 import { useContext } from "react";
 import { Context } from "../Context";
 
-const DevicePurchaseSection = observer(({ price, discountPercentage, device, selectedCombo }) => {
+const DevicePurchaseSection = observer(({ price, discountPercentage, device, selectedCombo, selectedAddServices }) => {
   const { deviceStore } = useContext(Context);
   const { isInStock } = DeviceComboActions.getStockInfo(selectedCombo, deviceStore.stocks);
 
@@ -18,6 +18,7 @@ const DevicePurchaseSection = observer(({ price, discountPercentage, device, sel
           <DeviceItemAddToCartBtn
             combinations={device["device-combinations"]}
             combo={selectedCombo}
+            selectedAddServices={selectedAddServices}
             isWithText={true}
             isPreOrder={device.isPreOrder}
           />
