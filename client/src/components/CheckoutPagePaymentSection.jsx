@@ -15,7 +15,7 @@ const CheckoutPagePaymentSection = () => {
         * a contract with payment services (it's just a learning project) 
         */
       }
-      <div className="checkout-page-payment-info">
+      <div className="checkout-page-section-btn">
         <img src={paymentIcon} alt="" draggable="false" />
         <p>
           Payment on receipt

@@ -5,9 +5,13 @@ import { Context } from "../Context";
 import { getOneStock } from "../http/StocksAPI";
 import _ from "lodash";
 import LocalStorageActions from "../utils/LocalStorageActions";
+import { getOneDeviceSaleDevices } from "../http/SalesAPI";
 
 // haven't implemented setCartSelectedAdditionalServices 'cause i have no need in it rn
-function useGettingCartData(cartId, setCartDevCombos = null, isUserStore = false, isToFetch = true, isToSetGlobalLoading = false) {
+function useGettingCartData(
+  cartId, setCartDevCombos = null, isUserStore = false, 
+  isToFetch = true, isToSetGlobalLoading = false, propToInvokeEffect = null
+) {
   const { user: userStore, app } = useContext(Context);
 
   async function fetchingFunc(propsCartId = null, propsSetCartDevCombos = null, propsIsUserStore = false) {
@@ -33,7 +37,20 @@ function useGettingCartData(cartId, setCartDevCombos = null, isUserStore = false
     // but getting only the first one (because we can't have more)
 
     if (userStore.isAuth) {
-      cartDevCombos = await getOneCartDeviceCombinations(propsCartId)
+      cartDevCombos = await getOneCartDeviceCombinations(propsCartId);
+      if (cartDevCombos?.device?.id || cartDevCombos?.device?.id === 0) {
+        cartDevCombos.device["sale-devices"] = await getOneDeviceSaleDevices(cartDevCombos?.device?.id);
+      }
+
+      // setting sale-devices to devices to save info about possible discounted price (and other sales related to devices)
+      await Promise.all(cartDevCombos.map(async combo => {
+        if (combo?.device?.id || combo?.device?.id === 0) {
+          combo.device["sale-devices"] = await getOneDeviceSaleDevices(combo?.device?.id);
+        }
+
+        return combo;
+      }));
+
       initCartSelectedAdditionalServices =
         (await getOneCartSelectedAdditionalServices(propsCartId))[0]
         || cartSelectedAddServicesPlaceholder;
@@ -72,7 +89,6 @@ function useGettingCartData(cartId, setCartDevCombos = null, isUserStore = false
       }
     }
 
-    cartDevCombos = [...cartDevCombos, ...cartDevCombos, ...cartDevCombos]
     let cartDevCombosCopy = [...cartDevCombos];
     // deleting repeating values
     let pushedCombos = [];
@@ -170,7 +186,7 @@ function useGettingCartData(cartId, setCartDevCombos = null, isUserStore = false
 
   useEffect(() => {
     if (isToFetch) fetching(cartId, setCartDevCombos, isUserStore);
-  }, [cartId, setCartDevCombos, isUserStore, isToFetch, fetching]);
+  }, [cartId, setCartDevCombos, isUserStore, isToFetch, fetching, propToInvokeEffect]);
 
   return fetching;
 }

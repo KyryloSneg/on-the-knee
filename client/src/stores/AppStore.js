@@ -66,11 +66,25 @@ class AppStore {
     this._commentGallerySelectedImageId = null;
 
     this._storePickupPoints = [];
-    this._selectedStorePickupPointId = 0;
+    this._selectedStorePickupPointIdValues = {};
     this._deliveries = [];
-    this._selectedDeliveryId = 0;
+    this._selectedDeliveryIdValues = {};
 
-    this._isToShowDeliveryChangeMessage = false;
+    this._isToShowDeliveryChangeMessageValues = {};
+    this._isToShowDeliverySectionRadiogroup = false;
+
+    // states that are used to handle multiple delivery sections in the checkout page
+    this._hasElevatorValues = {};
+    this._isToLiftOnTheFloorValues = {};
+    this._selectedCourierScheduleIdValues = {};
+    this._selectedCourierScheduleShiftValues = {};
+    this._receiventPhoneInputsValues = {};
+
+    // i think we should support non-checkout-page's self delivery modals, because we could possibly use them in the future 
+    this._selfDeliveryModalType = "default";
+    this._selfDeliveryModalDefaultSelectedPointId = null;
+    this._selfDeliveryModalSelectedPointValueId = null;
+    this._selfDeliveryModalOnSelectCb = null;
 
     makeAutoObservable(this);
   }
@@ -267,20 +281,60 @@ class AppStore {
     this._storePickupPoints = storePickupPoints;
   }
 
-  setSelectedStorePickupPointId(selectedStorePickupPointId) {
-    this._selectedStorePickupPointId = selectedStorePickupPointId;
+  setSelectedStorePickupPointIdValues(selectedStorePickupPointIdValues) {
+    this._selectedStorePickupPointIdValues = selectedStorePickupPointIdValues;
   }
   
   setDeliveries(deliveries) {
     this._deliveries = deliveries;
   }
 
-  setSelectedDeliveryId(selectedDeliveryId) {
-    this._selectedDeliveryId = selectedDeliveryId;
+  setSelectedDeliveryIdValues(selectedDeliveryIdValues) {
+    this._selectedDeliveryIdValues = selectedDeliveryIdValues;
   }
 
-  setIsToShowDeliveryChangeMessage(isToShowDeliveryChangeMessage) {
-    this._isToShowDeliveryChangeMessage = isToShowDeliveryChangeMessage;
+  setIsToShowDeliveryChangeMessageValues(isToShowDeliveryChangeMessageValues) {
+    this._isToShowDeliveryChangeMessageValues = isToShowDeliveryChangeMessageValues;
+  }
+
+  setIsToShowDeliverySectionRadiogroup(isToShowDeliverySectionRadiogroup) {
+    this._isToShowDeliverySectionRadiogroup = isToShowDeliverySectionRadiogroup;
+  }
+
+  setHasElevatorValues(hasElevatorValues) {
+    this._hasElevatorValues = hasElevatorValues;
+  }
+
+  setIsToLiftOnTheFloorValues(isToLiftOnTheFloorValues) {
+    this._isToLiftOnTheFloorValues = isToLiftOnTheFloorValues;
+  }
+
+  setSelectedCourierScheduleIdValues(selectedCourierScheduleIdValues) {
+    this._selectedCourierScheduleIdValues = selectedCourierScheduleIdValues;
+  }
+
+  setSelectedCourierScheduleShiftValues(selectedCourierScheduleShiftValues) {
+    this._selectedCourierScheduleShiftValues = selectedCourierScheduleShiftValues;
+  }
+
+  setReceiventPhoneInputsValues(receiventPhoneInputsValues) {
+    this._receiventPhoneInputsValues = receiventPhoneInputsValues;
+  }
+
+  setSelfDeliveryModalType(selfDeliveryModalType) {
+    this._selfDeliveryModalType = selfDeliveryModalType;
+  }
+
+  setSelfDeliveryModalDefaultSelectedPointId(selfDeliveryModalDefaultSelectedPointId) {
+    this._selfDeliveryModalDefaultSelectedPointId = selfDeliveryModalDefaultSelectedPointId;
+  }
+
+  setSelfDeliveryModalSelectedPointValueId(selfDeliveryModalSelectedPointValueId) {
+    this._selfDeliveryModalSelectedPointValueId = selfDeliveryModalSelectedPointValueId;
+  }
+
+  setSelfDeliveryModalOnSelectCb(selfDeliveryModalOnSelectCb) {
+    this._selfDeliveryModalOnSelectCb = selfDeliveryModalOnSelectCb;
   }
 
   get darkBgVisible() {
@@ -475,20 +529,60 @@ class AppStore {
     return this._storePickupPoints;
   }
 
-  get selectedStorePickupPointId() {
-    return this._selectedStorePickupPointId;
+  get selectedStorePickupPointIdValues() {
+    return this._selectedStorePickupPointIdValues;
   }
 
   get deliveries() {
     return this._deliveries;
   }
 
-  get selectedDeliveryId() {
-    return this._selectedDeliveryId;
+  get selectedDeliveryIdValues() {
+    return this._selectedDeliveryIdValues;
   }
 
-  get isToShowDeliveryChangeMessage() {
-    return this._isToShowDeliveryChangeMessage;
+  get isToShowDeliveryChangeMessageValues() {
+    return this._isToShowDeliveryChangeMessageValues;
+  }
+
+  get isToShowDeliverySectionRadiogroup() {
+    return this._isToShowDeliverySectionRadiogroup;
+  }
+
+  get hasElevatorValues() {
+    return this._hasElevatorValues;
+  }
+
+  get isToLiftOnTheFloorValues() {
+    return this._isToLiftOnTheFloorValues;
+  }
+
+  get selectedCourierScheduleIdValues() {
+    return this._selectedCourierScheduleIdValues;
+  }
+
+  get selectedCourierScheduleShiftValues() {
+    return this._selectedCourierScheduleShiftValues;
+  }
+
+  get receiventPhoneInputsValues() {
+    return this._receiventPhoneInputsValues;
+  }
+
+  get selfDeliveryModalType() {
+    return this._selfDeliveryModalType;
+  }
+
+  get selfDeliveryModalDefaultSelectedPointId() {
+    return this._selfDeliveryModalDefaultSelectedPointId;
+  }
+
+  get selfDeliveryModalSelectedPointValueId() {
+    return this._selfDeliveryModalSelectedPointValueId;
+  }
+
+  get selfDeliveryModalOnSelectCb() {
+    return this._selfDeliveryModalOnSelectCb;
   }
 
 }

@@ -13,7 +13,6 @@ const UserLocationNotification = observer(({ userLocationBtnRef }) => {
   }
 
   function changeLocation() {
-    console.log(userLocationBtnRef);
     setSelectUserLocationVisibility(true, app, userLocationBtnRef);
     app.setIsToShowUserLocationNotification(false);
   }

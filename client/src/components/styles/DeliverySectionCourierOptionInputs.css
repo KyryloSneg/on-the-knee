@@ -23,9 +23,8 @@
 
 .courier-option-inputs-bottom-row > .dropdown {
   height: 32px;
-  align-self: flex-end;
   position: relative;
-  bottom: 1px;
+  top: 22px;
   width: 100%;
   width: calc(100% + 16px);
 }

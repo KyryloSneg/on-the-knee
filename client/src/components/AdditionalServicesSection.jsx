@@ -93,14 +93,14 @@ const AdditionalServicesSection = ({ additionalServices, selectedItems, setSelec
     );
   }
 
-  const serviceWord = selectedItems.length === 1 ? "service" : "services";
+  const serviceWord = selectedItems?.length === 1 ? "service" : "services";
   return (
     <section className="additional-services-section">
       <h3>
         Additional services
         {totalPrice > 0 &&
           <span className="add-services-section-price">
-            (<b>{selectedItems.length}</b> {serviceWord} for <strong>{totalPrice.toFixed(2)}$</strong>)
+            (<b>{selectedItems?.length}</b> {serviceWord} for <strong>{totalPrice.toFixed(2)}$</strong>)
           </span>
         }
       </h3>

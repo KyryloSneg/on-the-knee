@@ -16,6 +16,7 @@ const AdditionalServicesExpandedListItem = forwardRef(({
   return (
     <div className="additional-services-expanded-list-item">
       <button
+        type="button"
         aria-checked={isChecked}
         role="radio"
         onClick={onCheck}

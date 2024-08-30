@@ -6,8 +6,8 @@ function useSettingInitialSelectedScheduleId(setScheduleId, setShift) {
 
   useEffect(() => {
     if (app.deliveries?.length) {
-      const delivery = app.deliveries[0];
-      const schedule = delivery["courier-schedules"][0];
+      const delivery = app.deliveries?.find(delivery => delivery.name === "courier");
+      const schedule = delivery?.["courier-schedules"]?.[0];
 
       if (schedule) {
         setScheduleId(schedule.id);

@@ -9,7 +9,6 @@ import CheckoutPageMainContent from "../components/CheckoutPageMainContent";
 import CheckoutPageAside from "../components/CheckoutPageAside";
 import { useForm } from "react-hook-form";
 import isPhoneValidFn from "../utils/isPhoneValid";
-import useSettingInitialSelectedScheduleId from "../hooks/useSettingInitialSelectedScheduleId";
 
 const CheckoutPage = observer(() => {
   // TODO: check are all devices available in such amount as user typed in or no,
@@ -21,18 +20,9 @@ const CheckoutPage = observer(() => {
   const { app, user } = useContext(Context);
   const navigate = useNavigateToEncodedURL();
   const senderPhoneNumberInputRef = useRef(null);
-  const receiventPhoneNumberInputRef = useRef(null);
 
   const [isSenderPhoneInputDirty, setIsSenderPhoneInputDirty] = useState(false);
   const [senderPhoneInputValue, setSenderPhoneInputValue] = useState("");
-
-  const [isReceiventPhoneInputDirty, setIsReceiventPhoneInputDirty] = useState(false);
-  const [receiventPhoneInputValue, setReceiventPhoneInputValue] = useState("");
-
-  const [hasElevator, setHasElevator] = useState(null);
-  const [isToLiftOnTheFloor, setIsToLiftOnTheFloor] = useState(false);
-  const [selectedCourierScheduleId, setSelectedCourierScheduleId] = useState(null);
-  const [selectedCourierScheduleShift, setSelectedCourierScheduleShift] = useState(null);
 
   // TODO: auto-fill sender data inputs with user data if he / she logged in
   const {
@@ -40,28 +30,34 @@ const CheckoutPage = observer(() => {
     formState: { errors },
     handleSubmit,
     trigger,
-    watch,
+    control
   } = useForm({
     mode: "onBlur",
     defaultValues: {
       "senderFirstName": "",
       "senderSecondName": "",
       "senderEmail": "",
-      "street": "",
-      "houseNumber": "",
-      "flatNumber": "",
-      "floor": "",
-      "receiventFirstName": "",
-      "receiventSecondName": "",
-      "receiventPatronymic": "",
+      // the delivery-section-related fields have names that are randomly generated
+      // (we can't include them here)
+
+      // the receivent-related fields' names are generated on their render and we can't include them here once again
     }
   });
 
-  useGettingCartData(user.cart?.id, null, true, true, true);
+  const fetching = useGettingCartData(user.cart?.id, null, true, true, true);
+  function getCartData() {
+    fetching(user.cart?.id, null, true);
+  }
+
   useEffect(() => {
-    app.setSelectedDeliveryId(app.deliveries[0]?.id);
+    let nextDeliveryIdValues = _.cloneDeep(app.selectedDeliveryIdValues);
+    for (let key of Object.keys(nextDeliveryIdValues)) { 
+      if (nextDeliveryIdValues[key]) nextDeliveryIdValues[key].value = app.deliveries[0]?.id;
+      if (nextDeliveryIdValues[key]) nextDeliveryIdValues[key].setter?.(app.deliveries[0]?.id);
+    }
+    
+    app.setSelectedDeliveryIdValues(nextDeliveryIdValues);
   }, [app, app.deliveries]);
-  useSettingInitialSelectedScheduleId(setSelectedCourierScheduleId, setSelectedCourierScheduleShift);
 
   const isLoadingContent = (
     (user.isAuth && !_.isEqual(user.user, {})) && _.isEqual(user.cart, {})
@@ -74,36 +70,32 @@ const CheckoutPage = observer(() => {
     setTimeout(() => navigate("/", { replace: true }, 0));
   };
 
-  function checkIsPhoneNumberInputValid(type) {
-    let isPhoneNumberValid = isPhoneValidFn(senderPhoneInputValue);
+  function checkArePhoneNumberInputsValid() {
+    let arePhoneNumbersValid = true;
+    let phoneNumberInputToFocus = null;
 
-    if (type === "sender") {
-      if (!isPhoneNumberValid) {
-        // setting the dirty state to true to show the error if we have one
-        setIsSenderPhoneInputDirty(true);
-  
-        if (!Object.keys(errors).length) {
-          senderPhoneNumberInputRef.current?.focus();
-        };
-      };
-    } else if (type === "receivent") {
-      if (!isPhoneNumberValid) {
-        setIsReceiventPhoneInputDirty(true);
-  
-        if (!Object.keys(errors).length) {
-          receiventPhoneNumberInputRef.current?.focus();
-        };
-      };
-    }
+    for (let [, phoneInput] of Object.entries(app.receiventPhoneInputsValues)) {
+      if (!phoneInput) break;
+      phoneInput?.setIsPhoneNumberDirty?.(true);
 
-    return isPhoneNumberValid;
+      const isValid = isPhoneValidFn(phoneInput?.value);
+      if (!isValid) {
+        arePhoneNumbersValid = false;
+        if (!phoneNumberInputToFocus) phoneNumberInputToFocus = phoneInput?.ref?.current;
+      }
+    };
+    
+    // TODO: focus the input only if it's located before invalid registered inputs,
+    // not if we have no errors in formState
+    if (!Object.keys(errors).length) {
+      phoneNumberInputToFocus?.focus();
+    };
+
+    return arePhoneNumbersValid;
   }
 
   function onSubmit() {
-    // sender phone number input must be focused first, not receivent one,
-    // so check sender phone number validity last
-    if (!checkIsPhoneNumberInputValid("receivent") || !checkIsPhoneNumberInputValid("sender")) return;
-    console.log(hasElevator);
+    if (!checkArePhoneNumberInputsValid()) return;
   }
 
   return (
@@ -112,32 +104,20 @@ const CheckoutPage = observer(() => {
         <header>
           <h2>Checkout order</h2>
         </header>
-        <form onSubmit={handleSubmit(onSubmit, checkIsPhoneNumberInputValid)}>
+        <form onSubmit={handleSubmit(onSubmit, checkArePhoneNumberInputsValid)}>
           <CheckoutPageMainContent
             register={register}
             // i fucking hate this (errors obj was changing but it didn't lead to child's re-renders),
             // so do it by ourselves (sorry app optimization)
             errors={{...errors}}
-            watch={watch}
             trigger={trigger}
+            control={control}
             isSenderPhoneInputDirty={isSenderPhoneInputDirty}
             setIsSenderPhoneInputDirty={setIsSenderPhoneInputDirty}
             senderPhoneInputValue={senderPhoneInputValue}
             setSenderPhoneInputValue={setSenderPhoneInputValue}
             senderPhoneNumberInputRef={senderPhoneNumberInputRef}
-            isReceiventPhoneInputDirty={isReceiventPhoneInputDirty}
-            setIsReceiventPhoneInputDirty={setIsReceiventPhoneInputDirty}
-            receiventPhoneInputValue={receiventPhoneInputValue}
-            setReceiventPhoneInputValue={setReceiventPhoneInputValue}
-            receiventPhoneNumberInputRef={receiventPhoneNumberInputRef}
-            hasElevator={hasElevator}
-            setHasElevator={setHasElevator}
-            isToLiftOnTheFloor={isToLiftOnTheFloor}
-            setIsToLiftOnTheFloor={setIsToLiftOnTheFloor}
-            selectedCourierScheduleId={selectedCourierScheduleId}
-            setSelectedCourierScheduleId={setSelectedCourierScheduleId}
-            selectedCourierScheduleShift={selectedCourierScheduleShift}
-            setSelectedCourierScheduleShift={setSelectedCourierScheduleShift}
+            cartDataFetching={getCartData}
           />
           <CheckoutPageAside />
         </form>
