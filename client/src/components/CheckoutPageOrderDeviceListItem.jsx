@@ -24,8 +24,8 @@ const CheckoutPageOrderDeviceListItem = observer(({ combination, cartDataFetchin
   const [selectedAddServices, setSelectedAddServices] = useState(initSelectedItems);
   const [additionalServicesObj, setAdditionalServicesObj] = useState([]);
 
-  useSynchronizingAdditionalServices(setSelectedAddServices, combination.id);
-  useChangingServerAddServicesOnChange(selectedAddServices, combination.id, cartDataFetching, isInitialRender);
+  useSynchronizingAdditionalServices(setSelectedAddServices, combination?.id);
+  useChangingServerAddServicesOnChange(selectedAddServices, combination?.id, cartDataFetching, isInitialRender);
   
   useGettingAddServicesRelatedData(combination.device, setAdditionalServicesObj);
 
