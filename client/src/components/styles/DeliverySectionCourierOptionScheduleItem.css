@@ -17,6 +17,10 @@
   margin: 0;
 }
 
+.delivery-section-courier-option-schedule-item > dd > button {
+  font-size: 1.4rem;
+}
+
 .courier-schedule-shift-btn {
   box-sizing: border-box;
   text-align: center;
@@ -30,4 +34,22 @@
 
 .courier-schedule-shift-btn.checked {
   border: 1px solid #7373ff;
+}
+
+@media screen and (min-width: 280px) {
+  .delivery-section-courier-option-schedule-item > dd > button {
+    font-size: 1.5rem;
+  }
+}
+
+@media screen and (min-width: 450px) {
+  .delivery-section-courier-option-schedule-item > dd > button {
+    font-size: 1.4rem;
+  }
+}
+
+@media screen and (min-width: 1550px) {
+  .delivery-section-courier-option-schedule-item > dd > button {
+    font-size: 1.5rem;
+  }
 }

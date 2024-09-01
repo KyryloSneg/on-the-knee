@@ -49,8 +49,20 @@
   margin-right: 4px;
 }
 
+@media screen and (min-width: 960px) {
+  .checkout-page {
+    padding: 0 5%;
+  }
+}
+
 @media screen and (min-width: 1000px) {
   .checkout-page > form {
     grid-template-columns: 1fr auto;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .checkout-page {
+    padding: 0 10%;
   }
 }

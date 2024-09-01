@@ -11,27 +11,28 @@
 .courier-option-inputs-top-row {
   display: grid;
   gap: 16px;
-  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-columns: 1fr;
 }
 
 .courier-option-inputs-bottom-row {
   display: grid;
   gap: 16px;
-  grid-template-columns: 1fr 1fr;
-  padding-right: 16px;
+  grid-template-columns: 1fr;
 }
 
 .courier-option-inputs-bottom-row > .dropdown {
   height: 32px;
   position: relative;
-  top: 22px;
   width: 100%;
-  width: calc(100% + 16px);
 }
 
 .courier-option-inputs-bottom-row > .dropdown > button,
 .courier-option-inputs-bottom-row > .dropdown > .dropdown-options {
   width: 100%;
+}
+
+.courier-option-inputs-bottom-row > .dropdown > .dropdown-options {
+  top: 48px;
 }
 
 .courier-option-inputs-bottom-row > .dropdown > button {
@@ -55,4 +56,24 @@
 .is-to-lift-on-the-floor-checkbox:disabled > .checkbox-div {
   border: 1px solid rgb(205 205 205);
   background-color: #dfdfdf;
+}
+
+@media screen and (min-width: 610px) {
+  .courier-option-inputs-top-row {
+    grid-template-columns: 2fr 1fr 1fr;
+  }
+
+  .courier-option-inputs-bottom-row {
+    grid-template-columns: 1fr 1fr;
+    padding-right: 16px;
+  }
+
+  .courier-option-inputs-bottom-row > .dropdown {
+    width: calc(100% + 16px);
+    top: 22px;
+  }
+  
+  .courier-option-inputs-bottom-row > .dropdown > .dropdown-options {
+    top: 56px;
+  }
 }

@@ -46,18 +46,20 @@ const MainDevicePage = observer(({ device, combinationString, feedbacks }) => {
       if (observer.current) observer.current.disconnect();
 
       function callback(entries, observer) {
-        const rightDescRect = rightDescRef.current.getBoundingClientRect();
-        const isScrolled = rightDescRect.top <= -(rightDescRect.height);
-
-        const nextIsRightDescScrolled = !entries[0].isIntersecting && isScrolled;
-
-        if (nextIsRightDescScrolled !== isRightDescScrolled) {
-          setIsRightDescScrolled(nextIsRightDescScrolled);
+        const rightDescRect = rightDescRef.current?.getBoundingClientRect();
+        if (rightDescRect) {
+          const isScrolled = rightDescRect.top <= -(rightDescRect.height);
+  
+          const nextIsRightDescScrolled = !entries[0].isIntersecting && isScrolled;
+  
+          if (nextIsRightDescScrolled !== isRightDescScrolled) {
+            setIsRightDescScrolled(nextIsRightDescScrolled);
+          }
         }
       }
 
       observer.current = new IntersectionObserver(callback);
-      observer.current.observe(rightDescRef.current);
+      if (rightDescRef.current) observer.current.observe(rightDescRef.current);
     }
 
     return () => {
@@ -79,13 +81,13 @@ const MainDevicePage = observer(({ device, combinationString, feedbacks }) => {
   }
 
   const combinationInCart = user.cartDeviceCombinations?.find(cartCombo => 
-    cartCombo?.["device-combination"]?.id === selectedCombination.id
+    cartCombo?.["device-combination"]?.id === selectedCombination?.id
   );
 
   useSynchronizingAdditionalServices(setSelectedAddServices, combinationInCart?.id);
   useChangingServerAddServicesOnChange(selectedAddServices, combinationInCart?.id, cartDataFetching, isInitialRender);
 
-  if (!device || !deviceStore.sales.length || !deviceStore.stocks.length || !sellers.length) {
+  if (!device || !deviceStore.sales.length || !deviceStore.stocks.length || !sellers.length || !selectedCombination) {
     return <div />
   }
 

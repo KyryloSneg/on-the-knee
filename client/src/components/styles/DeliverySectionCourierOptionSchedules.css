@@ -1,5 +1,23 @@
 .delivery-section-courier-option-schedules {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-  gap: 8px;
+  grid-template-columns: 1fr;
+  gap: 14px 8px;
+}
+
+@media screen and (min-width: 450px) {
+  .delivery-section-courier-option-schedules {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media screen and (min-width: 620px) {
+  .delivery-section-courier-option-schedules {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+@media screen and (min-width: 1480px) {
+  .delivery-section-courier-option-schedules {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  }
 }
