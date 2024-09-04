@@ -4,6 +4,7 @@ import Dropdown from "./UI/dropdown/Dropdown";
 import ReactHookFormInput from "./UI/reactHookFormInput/ReactHookFormInput";
 import _ from "lodash";
 import { useWatch } from "react-hook-form";
+import { CHECKOUT_PAGE_INPUT_SERVICE_CLASS } from "../utils/consts";
 
 const OPTIONS = Object.freeze([
   {
@@ -94,6 +95,7 @@ const DeliverySectionCourierOptionInputs = ({
               },
             }
           })}
+          className={CHECKOUT_PAGE_INPUT_SERVICE_CLASS}
         />
         <ReactHookFormInput
           labelText="House number"
@@ -107,6 +109,7 @@ const DeliverySectionCourierOptionInputs = ({
               ...numberInputOptions.validate,
             }
           })}
+          className={CHECKOUT_PAGE_INPUT_SERVICE_CLASS}
         />
         <ReactHookFormInput
           labelText="Flat number"
@@ -114,6 +117,7 @@ const DeliverySectionCourierOptionInputs = ({
           errors={errors}
           type="number"
           registerFnResult={register(flatNumberInputName, flatNumberInputOptions)}
+          className={CHECKOUT_PAGE_INPUT_SERVICE_CLASS}
         />
       </div>
       <div className="courier-option-inputs-bottom-row">
@@ -123,6 +127,7 @@ const DeliverySectionCourierOptionInputs = ({
           errors={errors}
           type="number"
           registerFnResult={register(floorInputName, floorInputOptions)}
+          className={CHECKOUT_PAGE_INPUT_SERVICE_CLASS}
         />
         <Dropdown 
           options={OPTIONS} 

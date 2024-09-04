@@ -86,6 +86,8 @@ class AppStore {
     this._selfDeliveryModalSelectedPointValueId = null;
     this._selfDeliveryModalOnSelectCb = null;
 
+    this._isToShowAsideDeliveryPrice = false;
+
     makeAutoObservable(this);
   }
 
@@ -336,6 +338,10 @@ class AppStore {
   setSelfDeliveryModalOnSelectCb(selfDeliveryModalOnSelectCb) {
     this._selfDeliveryModalOnSelectCb = selfDeliveryModalOnSelectCb;
   }
+  
+  setIsToShowAsideDeliveryPrice(isToShowAsideDeliveryPrice) {
+    this._isToShowAsideDeliveryPrice = isToShowAsideDeliveryPrice;
+  }
 
   get darkBgVisible() {
     return this._darkBgVisible;
@@ -583,6 +589,10 @@ class AppStore {
 
   get selfDeliveryModalOnSelectCb() {
     return this._selfDeliveryModalOnSelectCb;
+  }
+
+  get isToShowAsideDeliveryPrice() {
+    return this._isToShowAsideDeliveryPrice;
   }
 
 }

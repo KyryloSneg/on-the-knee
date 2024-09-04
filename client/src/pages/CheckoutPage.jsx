@@ -9,6 +9,7 @@ import CheckoutPageMainContent from "../components/CheckoutPageMainContent";
 import CheckoutPageAside from "../components/CheckoutPageAside";
 import { useForm } from "react-hook-form";
 import isPhoneValidFn from "../utils/isPhoneValid";
+import { CHECKOUT_PAGE_INPUT_SERVICE_CLASS } from "../utils/consts";
 
 const CheckoutPage = observer(() => {
   // TODO: check are all devices available in such amount as user typed in or no,
@@ -30,9 +31,11 @@ const CheckoutPage = observer(() => {
     formState: { errors },
     handleSubmit,
     trigger,
+    setFocus,
     control
   } = useForm({
     mode: "onBlur",
+    shouldFocusError: false,
     defaultValues: {
       "senderFirstName": "",
       "senderSecondName": "",
@@ -50,13 +53,17 @@ const CheckoutPage = observer(() => {
   }
 
   useEffect(() => {
-    let nextDeliveryIdValues = _.cloneDeep(app.selectedDeliveryIdValues);
-    for (let key of Object.keys(nextDeliveryIdValues)) { 
-      if (nextDeliveryIdValues[key]) nextDeliveryIdValues[key].value = app.deliveries[0]?.id;
-      if (nextDeliveryIdValues[key]) nextDeliveryIdValues[key].setter?.(app.deliveries[0]?.id);
+    try {
+      let nextDeliveryIdValues = _.cloneDeep(app.selectedDeliveryIdValues);;
+      for (let key of Object.keys(nextDeliveryIdValues)) {
+        if (nextDeliveryIdValues[key]) nextDeliveryIdValues[key].value = app.deliveries[0]?.id;
+        if (nextDeliveryIdValues[key]) nextDeliveryIdValues[key].setter?.(app.deliveries[0]?.id);
+      }
+
+      app.setSelectedDeliveryIdValues(nextDeliveryIdValues);
+    } finally {
+      app.setIsToShowAsideDeliveryPrice(true);
     }
-    
-    app.setSelectedDeliveryIdValues(nextDeliveryIdValues);
   }, [app, app.deliveries]);
 
   const isLoadingContent = (
@@ -70,32 +77,53 @@ const CheckoutPage = observer(() => {
     setTimeout(() => navigate("/", { replace: true }, 0));
   };
 
-  function checkArePhoneNumberInputsValid() {
+  function checkArePhoneNumberInputsValidAndHandleInvalidInputFocus(isErrorHandler, errorsFromHandler = null) {
     let arePhoneNumbersValid = true;
     let phoneNumberInputToFocus = null;
 
+    setIsSenderPhoneInputDirty(true);
+    if (!isPhoneValidFn(senderPhoneInputValue)) {
+      arePhoneNumbersValid = false;
+      phoneNumberInputToFocus = senderPhoneNumberInputRef.current;
+    }
+
     for (let [, phoneInput] of Object.entries(app.receiventPhoneInputsValues)) {
       if (!phoneInput) break;
-      phoneInput?.setIsPhoneNumberDirty?.(true);
+      phoneInput?.setIsPhoneInputDirty?.(true);
 
-      const isValid = isPhoneValidFn(phoneInput?.value);
-      if (!isValid) {
-        arePhoneNumbersValid = false;
-        if (!phoneNumberInputToFocus) phoneNumberInputToFocus = phoneInput?.ref?.current;
+      if (arePhoneNumbersValid && !phoneNumberInputToFocus) {
+        const isValid = isPhoneValidFn(phoneInput?.value);
+        if (!isValid) {
+          arePhoneNumbersValid = false;
+          if (!phoneNumberInputToFocus) phoneNumberInputToFocus = phoneInput?.ref?.current;
+        }
       }
     };
-    
-    // TODO: focus the input only if it's located before invalid registered inputs,
-    // not if we have no errors in formState
-    if (!Object.keys(errors).length) {
-      phoneNumberInputToFocus?.focus();
-    };
+
+    // handling focusing the first invalid input (or a delivery section btn) by ourselves 
+    // (because RHF sets focus for the input only after our manual focus, and so "overrides" it)
+    const formInputs = Array.from(document.querySelectorAll(`.${CHECKOUT_PAGE_INPUT_SERVICE_CLASS}`));
+
+    for (let input of formInputs) {
+      // we can't store boolean values in element props (they're converted into the string type)
+      if (input.dataset?.isinvaliddeliverysectionbtn === "true") {
+        input?.focus();
+        break;
+      } else if (isErrorHandler && errorsFromHandler?.[input?.name]) {
+        setFocus(input.name);
+        break;
+      } else if (phoneNumberInputToFocus?.isEqualNode(input)) {
+        // focus the invalid phone input only if it's located before invalid registered inputs
+        phoneNumberInputToFocus?.focus();
+        break;
+      }
+    }
 
     return arePhoneNumbersValid;
   }
 
   function onSubmit() {
-    if (!checkArePhoneNumberInputsValid()) return;
+    if (!checkArePhoneNumberInputsValidAndHandleInvalidInputFocus(false)) return;
   }
 
   return (
@@ -104,12 +132,14 @@ const CheckoutPage = observer(() => {
         <header>
           <h2>Checkout order</h2>
         </header>
-        <form onSubmit={handleSubmit(onSubmit, checkArePhoneNumberInputsValid)}>
+        <form onSubmit={handleSubmit(
+          onSubmit, (errors) => checkArePhoneNumberInputsValidAndHandleInvalidInputFocus(true, errors))
+        }>
           <CheckoutPageMainContent
             register={register}
             // i fucking hate this (errors obj was changing but it didn't lead to child's re-renders),
             // so do it by ourselves (sorry app optimization)
-            errors={{...errors}}
+            errors={{ ...errors }}
             trigger={trigger}
             control={control}
             isSenderPhoneInputDirty={isSenderPhoneInputDirty}

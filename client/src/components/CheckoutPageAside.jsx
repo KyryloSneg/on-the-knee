@@ -1,7 +1,7 @@
 import "./styles/CheckoutPageAside.css";
 import { observer } from "mobx-react-lite";
 import UIButton from "./UI/uiButton/UIButton";
-import { useContext } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { Context } from "../Context";
 import useGettingOrders from "../hooks/useGettingOrders";
 
@@ -10,6 +10,7 @@ const CheckoutPageAside = observer(() => {
 
   const orders = useGettingOrders();
   const orderAmount = Object.keys(orders).length;
+  const prevDeliveryPrice = useRef(0);
 
   let deviceAmount = 0;
   let devicePrice = 0;
@@ -30,9 +31,11 @@ const CheckoutPageAside = observer(() => {
   }
 
   let deliveryPrice = 0;
-  for (let selectedDeliveryIdValue of Object.values(app.selectedDeliveryIdValues || {})) {
-    const selectedDelivery = app.deliveries?.find(delivery => delivery?.id === selectedDeliveryIdValue?.value);
-    deliveryPrice += +selectedDelivery?.price || 0;
+  if (app.isToShowAsideDeliveryPrice) {
+    for (let selectedDeliveryIdValue of Object.values(app.selectedDeliveryIdValues || {})) {
+      const selectedDelivery = app.deliveries?.find(delivery => delivery?.id === selectedDeliveryIdValue?.value);
+      deliveryPrice += +selectedDelivery?.price || 0;
+    }
   }
 
   const totalPrice = devicePrice + deliveryPrice;
@@ -45,6 +48,10 @@ const CheckoutPageAside = observer(() => {
   const devicePriceStr = (devicePrice?.toFixed(2) || `${devicePrice}`) + "$";
   const deliveryPriceStr = (deliveryPrice?.toFixed(2) || `${deliveryPrice}`) + "$";
   const totalPriceStr = (totalPrice?.toFixed(2) || `${totalPrice}`) + "$";
+
+  useEffect(() => {
+    prevDeliveryPrice.current = deliveryPrice;
+  }, [deliveryPrice]);
 
   return (
     <aside className="checkout-page-aside">
@@ -65,8 +72,12 @@ const CheckoutPageAside = observer(() => {
             Delivery price
           </dt>
           <dd>
-            {/* it looks smoother when user changes his / her location and we show nothing instead of placeholder "0.00$" */}
-            {!!deliveryPrice && <>{deliveryPriceStr}</>}
+            {
+              /* it looks smoother when user changes his / her location and we show nothing instead of placeholder "0.00$"
+               * (free delivery still works well)  
+               */
+            }
+            {(app.isToShowAsideDeliveryPrice) && <>{deliveryPriceStr}</>}
           </dd>
         </div>
       </dl>

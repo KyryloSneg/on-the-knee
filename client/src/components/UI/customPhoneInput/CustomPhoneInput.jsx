@@ -6,6 +6,12 @@ const CustomPhoneInput = forwardRef(({ value, onChange, id, defaultCountry = "ua
   const inputRef = useRef(null);
   const refToUse = ref || inputRef;
 
+  let inputClassName = "";
+  if (props.className) {
+    inputClassName = props.className;
+    delete props.className;
+  }
+
   useEffect(() => {
     // set id using ref
     if (refToUse.current) {
@@ -20,6 +26,7 @@ const CustomPhoneInput = forwardRef(({ value, onChange, id, defaultCountry = "ua
       onChange={onChange}
       ref={ref}
       className={isInvalid ? "invalid" : ""}
+      inputClassName={inputClassName}
       {...props}
     />
   );
