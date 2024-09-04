@@ -7,6 +7,7 @@ import { observer } from "mobx-react-lite";
 import StringActions from "../utils/StringActions";
 import { useWatch } from "react-hook-form";
 import { v4 } from "uuid";
+import { CHECKOUT_PAGE_INPUT_SERVICE_CLASS } from "../utils/consts";
 
 const CheckoutPageDeliverySection = observer(({
   orderId, setIsDirty, register, errors, control, setIsToShowDeliveryChangeMessage,
@@ -37,7 +38,10 @@ const CheckoutPageDeliverySection = observer(({
     setSelectedDeliverySection(+orderId);
   }
   
-  let btnClassName = "checkout-page-section-btn";
+  // we use the class below that was initially created for inputs 
+  // for the button because it contains some general information (areRequiredCourierInputsFilled)
+  // about inputs in the CheckoutPageDeliveryRadiogroup
+  let btnClassName = `checkout-page-section-btn ${CHECKOUT_PAGE_INPUT_SERVICE_CLASS}`;
   if (!areRequiredCourierInputsFilled) {
     btnClassName += " error-variant";
   }
@@ -76,6 +80,7 @@ const CheckoutPageDeliverySection = observer(({
             className={btnClassName}
             type="button"
             onClick={onSectionSelect}
+            data-isinvaliddeliverysectionbtn={!areRequiredCourierInputsFilled}
           >
             <img src={deliveryIcon} alt="" draggable="false" />
             <span>{StringActions.capitalize(selectedDelivery?.name || "")}</span>

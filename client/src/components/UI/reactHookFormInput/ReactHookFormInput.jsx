@@ -8,6 +8,12 @@ const ReactHookFormInput = forwardRef(({
 }, ref) => {
   const isInvalid = isErrorCondition ? !!isErrorCondition : !!errors[inputName];
 
+  let inputClassName = isInvalid ? "invalid" : "";
+  if (props.className) {
+    inputClassName += ` ${props.className}`;
+    delete props.className;
+  }
+
   return (
     <div className="react-hook-form-input">
       <label>
@@ -15,7 +21,7 @@ const ReactHookFormInput = forwardRef(({
         <input
           autoComplete={autoComplete}
           disabled={isDisabled}
-          className={isInvalid ? "invalid" : ""}
+          className={inputClassName}
           aria-invalid={isInvalid}
           onChangeCapture={(e) => onChangeCaptureCb?.(e)}
           ref={ref}

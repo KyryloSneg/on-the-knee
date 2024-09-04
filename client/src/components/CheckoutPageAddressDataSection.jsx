@@ -5,7 +5,8 @@ import isEmailValidFn from "../utils/isEmailValid";
 import CustomPhoneInput from "./UI/customPhoneInput/CustomPhoneInput";
 import UserLocationBtn from "./UserLocationBtn";
 import { v4 } from "uuid";
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
+import { CHECKOUT_PAGE_INPUT_SERVICE_CLASS } from "../utils/consts";
 
 const POSSIBLE_TYPES = ["sender", "receivent"];
 
@@ -17,6 +18,7 @@ const CheckoutPageAddressDataSection = ({
   type = "sender", orderId = null,
 }) => {
   if (!POSSIBLE_TYPES.includes(type)) throw Error("type of CheckoutPageAddressDataSection is incorrect");
+  const isValidEmail = useRef(true);
 
   const phoneNumberInputId = useMemo(() => "checkout-phone-number-" + (orderId || v4()), [orderId]);
   if (type === "receivent" && orderId === null) return <div />;
@@ -33,7 +35,7 @@ const CheckoutPageAddressDataSection = ({
   const textInputOptions = {
     ...baseOptions,
     validate: {
-      ...baseOptions.validate.isRequired,
+      isRequired: baseOptions.validate.isRequired,
       isOnlyLetters: value => {
         // do not forget that our regex doesn't detect whitespaces, so matches.length might be less than value.length.
         // to prevent that, delete all whitespaces from the value
@@ -82,11 +84,16 @@ const CheckoutPageAddressDataSection = ({
       ...baseOptions,
       validate: {
         ...baseOptions.validate,
-        isValidEmail: value => isEmailValidFn(value) || "Incorrect email"
+        isValidEmail: value => isEmailValidFn(value.trim()) || "Incorrect email"
       },
-      onChange: () => {
-        // manually triggering validation fn like it was with "onChange" mode
-        trigger("senderEmail");
+      onChange: (e) => {
+        const isValid = isEmailValidFn(e.target.value.trim())
+        if (isValid !== isValidEmail.current) {
+          // manually triggering validation fn like it was with "onChange" mode
+          // (with some optimization because it hits app's perfomance badly)
+          trigger("senderEmail");
+          isValidEmail.current = isValid;
+        }
       }
     });
 
@@ -115,12 +122,14 @@ const CheckoutPageAddressDataSection = ({
             inputName={firstNameFieldName}
             errors={errors}
             registerFnResult={firstNameRegisterResult}
+            className={CHECKOUT_PAGE_INPUT_SERVICE_CLASS}
           />
           <ReactHookFormInput
             labelText="Second name"
             inputName={secondNameFieldName}
             errors={errors}
             registerFnResult={secondNameRegisterResult}
+            className={CHECKOUT_PAGE_INPUT_SERVICE_CLASS}
           />
           {(type === "sender" && emailInputRegisterResult) &&
             <ReactHookFormInput
@@ -129,6 +138,7 @@ const CheckoutPageAddressDataSection = ({
               errors={errors}
               autoComplete="on"
               registerFnResult={emailInputRegisterResult}
+              className={CHECKOUT_PAGE_INPUT_SERVICE_CLASS}
             />
           }
           {(type === "receivent" && patronymicRegisterResult) &&
@@ -137,6 +147,7 @@ const CheckoutPageAddressDataSection = ({
               inputName={receiventPatronymicFieldName}
               errors={errors}
               registerFnResult={patronymicRegisterResult}
+              className={CHECKOUT_PAGE_INPUT_SERVICE_CLASS}
             />
           }
           <div className="react-hook-form-input">
@@ -149,6 +160,7 @@ const CheckoutPageAddressDataSection = ({
                 onFocus={() => setIsPhoneInputDirty(true)}
                 id={phoneNumberInputId}
                 isInvalid={isPhoneInputDirty && !isPhoneValid}
+                className={CHECKOUT_PAGE_INPUT_SERVICE_CLASS}
                 ref={phoneNumberInputRef}
               />
             </label>
