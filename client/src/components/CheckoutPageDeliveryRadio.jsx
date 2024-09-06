@@ -6,7 +6,7 @@ import DeliverySectionSelfDeliveryOption from "./DeliverySectionSelfDeliveryOpti
 import DeliverySectionCourierOption from "./DeliverySectionCourierOption";
 
 const CheckoutPageDeliveryRadio = forwardRef(({ 
-  delivery, isChecked, onCheck, checkPrev, checkNext, setIsDirty, orderId = null, inputsId = null,
+  delivery, isChecked, onCheck, checkPrev, checkNext, setIsDirty, orderId = null, order = null, inputsId = null,
   selectedStorePickupPointId = null, setSelectedStorePickupPointId = null, selectedDeliveryId = null,
   register = null, errors = null, control = null, hasElevator = null, setHasElevator = null, isToLiftOnTheFloor = null, 
   setIsToLiftOnTheFloor = null, selectedCourierScheduleId = null, setSelectedCourierScheduleId = null,
@@ -33,6 +33,7 @@ const CheckoutPageDeliveryRadio = forwardRef(({
   } else if (delivery.name === "courier") {
     childrenToRenderIfChecked = (
       <DeliverySectionCourierOption 
+        order={order}
         inputsId={inputsId}
         setIsDirty={setIsDirty}
         register={register}
@@ -51,7 +52,7 @@ const CheckoutPageDeliveryRadio = forwardRef(({
     );
   }
 
-  const isFree = !delivery.price;
+  const isFree = order.isFreeDelivery || !delivery.price;
   
   return (
     <div className={wrapperClassName}>

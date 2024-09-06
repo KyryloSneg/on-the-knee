@@ -175,6 +175,9 @@ export const DEFAULT_USER_LOCATION_NAME = "Kyiv";
 // coords of Kyiv
 export const DEFAULT_INIT_MAP_COORDS = { lng: 30.5241361, lat: 50.4500336 };
 
+// in dollars
+export const TO_LIFT_ON_THE_FLOOR_PRICE = 6;
+
 export const FIRST_CHECKOUT_ORDER_ID = 1;
 export const CHECKOUT_PAGE_INPUT_SERVICE_CLASS = "dataset-checkout-page-input";
 

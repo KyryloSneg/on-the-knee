@@ -8,15 +8,17 @@ import getWeekDay from "../utils/getWeekDay";
 import { observer } from "mobx-react-lite";
 
 const DeliverySectionCourierOption = observer(({
-  inputsId, setIsDirty, register, errors, control, selectedDeliveryId, hasElevator, setHasElevator, 
+  order, inputsId, setIsDirty, register, errors, control, selectedDeliveryId, hasElevator, setHasElevator, 
   isToLiftOnTheFloor, setIsToLiftOnTheFloor, selectedCourierScheduleId, setSelectedCourierScheduleId, 
   selectedCourierScheduleShift, setSelectedCourierScheduleShift
 }) => {
   const { app } = useContext(Context);
 
-  const selectedDelivery = app.deliveries?.find(delivery => delivery.id === selectedDeliveryId);
-  const selectedSchedule = selectedDelivery?.["courier-schedules"]?.find(schedule => schedule.id === selectedCourierScheduleId);
-  const selectedShift = selectedSchedule?.shifts?.[selectedCourierScheduleShift];
+  const isPreOrderCombos = order.type === "preOrder";
+  const areMultipleDevicesInOrder = !!order.value?.length;
+
+  let selectedSchedule;
+  let selectedShift;
 
   let selectedScheduleDateStr;
   let startTimeDateStr;
@@ -24,17 +26,23 @@ const DeliverySectionCourierOption = observer(({
 
   let weekDay;
 
-  if (selectedSchedule && selectedShift) {
-    selectedScheduleDateStr = getDateStr(new Date(selectedSchedule?.date), "MMM Do");
-    startTimeDateStr = getDateStr(new Date(selectedShift?.startTime), "hh:mm A", false);
-    endTimeDateStr = getDateStr(new Date(selectedShift?.endTime), "hh:mm A", false);
-
-    weekDay = getWeekDay(new Date(selectedSchedule?.date));
+  if (!isPreOrderCombos) {
+    const selectedDelivery = app.deliveries?.find(delivery => delivery.id === selectedDeliveryId);
+    selectedSchedule = selectedDelivery?.["courier-schedules"]?.find(schedule => schedule.id === selectedCourierScheduleId);
+    selectedShift = selectedSchedule?.shifts?.[selectedCourierScheduleShift];
+  
+    if (selectedSchedule && selectedShift) {
+      selectedScheduleDateStr = getDateStr(new Date(selectedSchedule?.date), "MMM Do");
+      startTimeDateStr = getDateStr(new Date(selectedShift?.startTime), "hh:mm A", false);
+      endTimeDateStr = getDateStr(new Date(selectedShift?.endTime), "hh:mm A", false);
+  
+      weekDay = getWeekDay(new Date(selectedSchedule?.date));
+    }
   }
 
   return (
     <div className="delivery-section-courier-option">
-      {(selectedSchedule && selectedShift) &&
+      {(selectedSchedule && selectedShift && !isPreOrderCombos) &&
         <p className="selected-delivery-msg">
           <strong>
             Delivery from {selectedScheduleDateStr} {startTimeDateStr} - {endTimeDateStr} ({weekDay})
@@ -51,14 +59,26 @@ const DeliverySectionCourierOption = observer(({
         isToLiftOnTheFloor={isToLiftOnTheFloor}
         setIsToLiftOnTheFloor={setIsToLiftOnTheFloor} 
       />
-      <DeliverySectionCourierOptionSchedules 
-        setIsDirty={setIsDirty}
-        selectedDeliveryId={selectedDeliveryId}
-        selectedCourierScheduleId={selectedCourierScheduleId}
-        setSelectedCourierScheduleId={setSelectedCourierScheduleId}
-        selectedCourierScheduleShift={selectedCourierScheduleShift}
-        setSelectedCourierScheduleShift={setSelectedCourierScheduleShift}
-      />
+      {isPreOrderCombos
+        ? (
+          <div className="delivery-section-courier-preorder-msg">
+            <p>
+              Our manager will contact the receivent when the pre-order {areMultipleDevicesInOrder ? "devices" : "device"} will 
+              come out to discuss with the receivent the time when the courier will deliver this order
+            </p>
+          </div>
+        ) 
+        : (
+          <DeliverySectionCourierOptionSchedules 
+            setIsDirty={setIsDirty}
+            selectedDeliveryId={selectedDeliveryId}
+            selectedCourierScheduleId={selectedCourierScheduleId}
+            setSelectedCourierScheduleId={setSelectedCourierScheduleId}
+            selectedCourierScheduleShift={selectedCourierScheduleShift}
+            setSelectedCourierScheduleShift={setSelectedCourierScheduleShift}
+          />
+        )
+      }
     </div>
   );
 });

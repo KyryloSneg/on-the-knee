@@ -14,7 +14,7 @@ const CheckoutPageOrderDeviceList = ({ order, orderId, cartDataFetching }) => {
   return (
     <div className="checkout-page-order-device-list-wrap">
       <ul className="checkout-page-order-device-list">
-        {order.map(combo =>
+        {order.value.map(combo =>
           <li key={`${orderId}-${combo.id}`}>
             <CheckoutPageOrderDeviceListItem combination={combo} cartDataFetching={cartDataFetching} />
           </li>
