@@ -68,6 +68,7 @@ const CheckoutPageOrder = observer(({
       {app.isToShowDeliverySectionRadiogroup &&
         <CheckoutPageDeliverySection
           orderId={id}
+          order={order}
           setIsDirty={setIsRadiogroupDirty}
           register={register}
           errors={errors}

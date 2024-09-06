@@ -7,7 +7,7 @@ import _ from "lodash";
 import { getOneDelivery } from "../http/DeliveriesAPI";
 
 const CheckoutPageDeliveryRadiogroup = observer(({
-  orderId, inputsId, setIsDirty, setIsToShowDeliveryChangeMessage,
+  orderId, order, inputsId, setIsDirty, setIsToShowDeliveryChangeMessage,
   selectedStorePickupPointId, setSelectedStorePickupPointId, 
   selectedDeliveryId, setSelectedDeliveryId, register, errors, control,
   hasElevator, setHasElevator, isToLiftOnTheFloor, setIsToLiftOnTheFloor, 
@@ -152,6 +152,7 @@ const CheckoutPageDeliveryRadiogroup = observer(({
               checkPrev={checkPrev}
               checkNext={checkNext}
               orderId={orderId}
+              order={order}
               inputsId={inputsId}
               setIsDirty={setIsDirty}
               selectedStorePickupPointId={selectedStorePickupPointId}

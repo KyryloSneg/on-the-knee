@@ -10,7 +10,7 @@ import { v4 } from "uuid";
 import { CHECKOUT_PAGE_INPUT_SERVICE_CLASS } from "../utils/consts";
 
 const CheckoutPageDeliverySection = observer(({
-  orderId, setIsDirty, register, errors, control, setIsToShowDeliveryChangeMessage,
+  orderId, order, setIsDirty, register, errors, control, setIsToShowDeliveryChangeMessage,
   selectedStorePickupPointId, setSelectedStorePickupPointId,
   selectedDeliveryId, setSelectedDeliveryId,
   hasElevator, setHasElevator, isToLiftOnTheFloor,
@@ -55,6 +55,7 @@ const CheckoutPageDeliverySection = observer(({
         ? (
           <CheckoutPageDeliveryRadiogroup
             orderId={orderId}
+            order={order}
             inputsId={inputsId}
             setIsDirty={setIsDirty}
             setIsToShowDeliveryChangeMessage={setIsToShowDeliveryChangeMessage}

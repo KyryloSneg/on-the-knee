@@ -4,6 +4,7 @@ import UIButton from "./UI/uiButton/UIButton";
 import { useContext, useEffect, useRef } from "react";
 import { Context } from "../Context";
 import useGettingOrders from "../hooks/useGettingOrders";
+import { TO_LIFT_ON_THE_FLOOR_PRICE } from "../utils/consts";
 
 const CheckoutPageAside = observer(() => {
   const { app, user } = useContext(Context);
@@ -32,9 +33,18 @@ const CheckoutPageAside = observer(() => {
 
   let deliveryPrice = 0;
   if (app.isToShowAsideDeliveryPrice) {
-    for (let selectedDeliveryIdValue of Object.values(app.selectedDeliveryIdValues || {})) {
+    for (let [id, order] of Object.entries(orders)) {
+      const selectedDeliveryIdValue = app.selectedDeliveryIdValues?.[id]; 
       const selectedDelivery = app.deliveries?.find(delivery => delivery?.id === selectedDeliveryIdValue?.value);
-      deliveryPrice += +selectedDelivery?.price || 0;
+
+      if (selectedDelivery?.name === "courier") {
+        deliveryPrice += app.isToLiftOnTheFloorValues?.[id]?.value ? TO_LIFT_ON_THE_FLOOR_PRICE : 0;
+      }
+
+      // some orders can contain only the cart combos with free delivery
+      if (!order.isFreeDelivery) {
+        deliveryPrice += +selectedDelivery?.price || 0;
+      }
     }
   }
 

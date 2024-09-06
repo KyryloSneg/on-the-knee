@@ -18,60 +18,98 @@ export default function useGettingOrders() {
     let preOrderCartCombos = [];
     let nonDiscountSaleCartCombosObj = {};
 
-    for (let sellerId of uniqueCombinationSellerIds) {
-      if (!sellerId) return;
-      // adding a new combo
-      result[id] = user.cartDeviceCombinations?.filter(combo => {
-        const isPreOrder = combo?.device?.isPreOrder;
-        let isWithNonDiscountSale = false;
-        let nonDiscountSaleName;
+    // filter fn to separate cart combos of different sellers
+    function cartCombosFilterFn(combo, sellerId, isDefault = true) {
+      const isPreOrder = combo?.device?.isPreOrder;
+      let isWithNonDiscountSale = false;
+      let nonDiscountSaleName;
 
-        if (combo?.device?.["sale-devices"]) {
-          const { deviceSaleTypes } = DeviceSalesActions.getSaleTypesAndDiscount(
-            combo?.device, deviceStore.sales, deviceStore.saleTypeNames
-          );
+      if (combo?.device?.["sale-devices"]) {
+        const { deviceSaleTypes } = DeviceSalesActions.getSaleTypesAndDiscount(
+          combo?.device, deviceStore.sales, deviceStore.saleTypeNames
+        );
 
-          if (deviceSaleTypes) {
-            for (let saleType of deviceSaleTypes) {
-              const saleTypeName = deviceStore.saleTypeNames?.find(
-                typeName => typeName.id === saleType.saleTypeNameId
-              );
+        if (deviceSaleTypes) {
+          for (let saleType of deviceSaleTypes) {
+            const saleTypeName = deviceStore.saleTypeNames?.find(
+              typeName => typeName.id === saleType.saleTypeNameId
+            );
 
-              if (!!saleTypeName?.name && saleTypeName?.name !== "discount") {
-                isWithNonDiscountSale = true;
-                nonDiscountSaleName = saleTypeName?.name;
+            if (isDefault && !!saleTypeName?.name && saleTypeName?.name !== "discount") {
+              isWithNonDiscountSale = true;
+              nonDiscountSaleName = saleTypeName?.name;
 
-                nonDiscountSaleCartCombosObj[nonDiscountSaleName] = []; 
-              }
+              nonDiscountSaleCartCombosObj[nonDiscountSaleName] = [];
             }
           }
         }
+      }
 
-        if (isPreOrder) preOrderCartCombos.push(combo);
-        if (isWithNonDiscountSale && nonDiscountSaleName) {
+      if (isDefault) {
+        const isAlreadyEncounteredPreOrderCombo = !!preOrderCartCombos.find(existingCombo => existingCombo.id === combo.id);
+        if (isPreOrder && !isAlreadyEncounteredPreOrderCombo) preOrderCartCombos.push(combo);
+        
+        const isAlreadyEncounteredNonDiscountSaleCombo = !!Object.values(!!nonDiscountSaleCartCombosObj)?.find(
+          existingCombo => existingCombo.id === combo.id
+        );
+        if (
+          isWithNonDiscountSale && nonDiscountSaleName 
+          && !isAlreadyEncounteredNonDiscountSaleCombo
+        ) {
           nonDiscountSaleCartCombosObj[nonDiscountSaleName] = [
             ...nonDiscountSaleCartCombosObj[nonDiscountSaleName],
             combo
           ]; 
         }
+      }
 
-        console.log(preOrderCartCombos);
-        console.log(nonDiscountSaleCartCombosObj);
-        return !isPreOrder && !isWithNonDiscountSale && combo?.device?.sellerId === sellerId;
-      });
+      let passingComboCondition = !isPreOrder && !isWithNonDiscountSale && combo?.device?.sellerId === sellerId;
+      if (!isDefault) {
+        passingComboCondition = combo?.device?.sellerId === sellerId;
+      }
+
+      return passingComboCondition;
+    }
+
+    for (let sellerId of uniqueCombinationSellerIds) {
+      if (!sellerId) return;
+      // adding a new combo if the possible result is not empty 
+      const possibleResult = user.cartDeviceCombinations?.filter(combo => cartCombosFilterFn(combo, sellerId));
     
-      id++;
-    }
-
-    if (preOrderCartCombos?.length) {
-      result[id] = preOrderCartCombos;
-      id++;
-    }
-
-    for (let values of Object.values(nonDiscountSaleCartCombosObj)) {
-      if (values?.length) {
-        result[id] = values;
+      if (possibleResult?.length) {
+        result[id] = { value: possibleResult, type: "default", isFreeDelivery: false };
         id++;
+      }
+    }
+
+    // preOrder and withNonDiscountSale orders are separate ones to make it easier to handle them properly
+    if (preOrderCartCombos?.length) {
+      for (let sellerId of uniqueCombinationSellerIds) {
+        if (!sellerId) return;
+        // adding a new combo if the possible result is not empty 
+        const possibleResult = preOrderCartCombos?.filter(combo => cartCombosFilterFn(combo, sellerId, false));
+      
+        if (possibleResult?.length) {
+          result[id] = { value: possibleResult, type: "preOrder", isFreeDelivery: false };
+          id++;
+        }
+      }
+    }
+
+    for (let [key, values] of Object.entries(nonDiscountSaleCartCombosObj)) {
+      if (values?.length) {
+        const isFreeDelivery = key === "freeDelivery";
+
+        for (let sellerId of uniqueCombinationSellerIds) {
+          if (!sellerId) return;
+          // adding a new combo if the possible result is not empty 
+          const possibleResult = values?.filter(combo => cartCombosFilterFn(combo, sellerId, false));
+        
+          if (possibleResult?.length) {
+            result[id] = { value: possibleResult, type: "withNonDiscountSale", isFreeDelivery };
+            id++;
+          }
+        }
       }
     }
 

@@ -7,3 +7,13 @@
 .selected-delivery-msg {
   font-size: 1.2rem;
 }
+
+.delivery-section-courier-preorder-msg {
+  padding: 12px;
+  margin: 14px 0 0 0;
+  border: 1px solid #ff7300;
+  border-radius: 5px;
+  background-color: #ff831d;
+  color: black;
+  font-size: 1.6rem;
+}

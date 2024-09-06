@@ -4,7 +4,7 @@ import Dropdown from "./UI/dropdown/Dropdown";
 import ReactHookFormInput from "./UI/reactHookFormInput/ReactHookFormInput";
 import _ from "lodash";
 import { useWatch } from "react-hook-form";
-import { CHECKOUT_PAGE_INPUT_SERVICE_CLASS } from "../utils/consts";
+import { CHECKOUT_PAGE_INPUT_SERVICE_CLASS, TO_LIFT_ON_THE_FLOOR_PRICE } from "../utils/consts";
 
 const OPTIONS = Object.freeze([
   {
@@ -147,7 +147,7 @@ const DeliverySectionCourierOptionInputs = ({
         disabled={isDisabled}
       >
         <div className={checkboxDivClassName} />
-        <span>To lift on the floor (+ 6$)</span>
+        <span>To lift on the floor (+ {TO_LIFT_ON_THE_FLOOR_PRICE}$)</span>
       </button>
       {
         /* i won't implement message "We couldn't lift on the floor if there's no lift and any availability to do it, 
