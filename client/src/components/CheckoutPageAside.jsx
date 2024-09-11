@@ -4,27 +4,18 @@ import UIButton from "./UI/uiButton/UIButton";
 import { useContext, useEffect, useRef } from "react";
 import { Context } from "../Context";
 import useGettingOrders from "../hooks/useGettingOrders";
-import { TO_LIFT_ON_THE_FLOOR_PRICE } from "../utils/consts";
+import CartComboActions from "../utils/CartComboActions";
 
 const CheckoutPageAside = observer(() => {
-  const { app, user } = useContext(Context);
+  const { app, deviceStore, user } = useContext(Context);
 
   const orders = useGettingOrders();
   const orderAmount = Object.keys(orders).length;
   const prevDeliveryPrice = useRef(0);
 
-  let deviceAmount = 0;
-  let devicePrice = 0;
-
-  for (let cartCombo of user.cartDeviceCombinations) {
-    if (cartCombo?.amount) {
-      deviceAmount += +cartCombo.amount;
-
-      if (cartCombo?.["device-combination"]?.price) {
-        devicePrice += +cartCombo?.["device-combination"]?.price * +cartCombo.amount;
-      }
-    }
-  }
+  const { deviceAmount, devicePrice } = CartComboActions.getDeviceAmountAndTotalPrice(
+    user.cartDeviceCombinations, deviceStore.sales, deviceStore.saleTypeNames
+  );
 
   let devicePriceWord = "Device";
   if (deviceAmount > 1) {
@@ -33,19 +24,9 @@ const CheckoutPageAside = observer(() => {
 
   let deliveryPrice = 0;
   if (app.isToShowAsideDeliveryPrice) {
-    for (let [id, order] of Object.entries(orders)) {
-      const selectedDeliveryIdValue = app.selectedDeliveryIdValues?.[id]; 
-      const selectedDelivery = app.deliveries?.find(delivery => delivery?.id === selectedDeliveryIdValue?.value);
-
-      if (selectedDelivery?.name === "courier") {
-        deliveryPrice += app.isToLiftOnTheFloorValues?.[id]?.value ? TO_LIFT_ON_THE_FLOOR_PRICE : 0;
-      }
-
-      // some orders can contain only the cart combos with free delivery
-      if (!order.isFreeDelivery) {
-        deliveryPrice += +selectedDelivery?.price || 0;
-      }
-    }
+    deliveryPrice = CartComboActions.getDeliveryTotalPrice(
+      orders, app.selectedDeliveryIdValues, app.deliveries, app.isToLiftOnTheFloorValues
+    );
   }
 
   const totalPrice = devicePrice + deliveryPrice;

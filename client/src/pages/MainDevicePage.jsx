@@ -87,7 +87,7 @@ const MainDevicePage = observer(({ device, combinationString, feedbacks }) => {
   useSynchronizingAdditionalServices(setSelectedAddServices, combinationInCart?.id);
   useChangingServerAddServicesOnChange(selectedAddServices, combinationInCart?.id, cartDataFetching, isInitialRender);
 
-  if (!device || !deviceStore.sales.length || !deviceStore.stocks.length || !sellers.length || !selectedCombination) {
+  if (!device || !deviceStore.sales || !deviceStore.stocks.length || !sellers.length || !selectedCombination) {
     return <div />
   }
 

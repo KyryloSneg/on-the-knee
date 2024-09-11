@@ -9,7 +9,7 @@ import { Context } from "../Context";
 
 const PurchaseDeviceFooter = observer(({ device, selectedCombo, selectedAddServices }) => {
   const { deviceStore } = useContext(Context); 
-  if (!deviceStore.sales?.length || !deviceStore.saleTypeNames?.length) return <div />;
+  if (!deviceStore.sales || !deviceStore.saleTypeNames) return <div />;
 
   const image = selectedCombo.images[0];
   const { discountPercentage } =

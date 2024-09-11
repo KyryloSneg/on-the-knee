@@ -14,7 +14,7 @@ const DeliverySectionCourierOption = observer(({
 }) => {
   const { app } = useContext(Context);
 
-  const isPreOrderCombos = order.type === "preOrder";
+  const isPreOrderCombos = order.types.includes("preOrder");
   const areMultipleDevicesInOrder = !!order.value?.length;
 
   let selectedSchedule;
@@ -64,7 +64,7 @@ const DeliverySectionCourierOption = observer(({
           <div className="delivery-section-courier-preorder-msg">
             <p>
               Our manager will contact the receivent when the pre-order {areMultipleDevicesInOrder ? "devices" : "device"} will 
-              come out to discuss with the receivent the time when the courier will deliver this order
+              come out to discuss the time when the courier will deliver this order
             </p>
           </div>
         ) 

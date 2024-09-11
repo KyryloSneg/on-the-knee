@@ -1,12 +1,11 @@
 import "./styles/CheckoutPageDeliverySection.css";
 import CheckoutPageDeliveryRadiogroup from "./CheckoutPageDeliveryRadiogroup";
 import deliveryIcon from "../assets/delivery_24x24_434343.svg";
-import { useContext, useMemo } from "react";
+import { useContext } from "react";
 import { Context } from "../Context";
 import { observer } from "mobx-react-lite";
 import StringActions from "../utils/StringActions";
 import { useWatch } from "react-hook-form";
-import { v4 } from "uuid";
 import { CHECKOUT_PAGE_INPUT_SERVICE_CLASS } from "../utils/consts";
 
 const CheckoutPageDeliverySection = observer(({
@@ -20,16 +19,19 @@ const CheckoutPageDeliverySection = observer(({
 }) => {
   const { app } = useContext(Context);
   const formValues = useWatch({ control });
-  const inputsId = useMemo(() => v4(), [])
+  const inputsId = orderId;
 
   let selectedDelivery;
-  let areRequiredCourierInputsFilled;
+  let areRequiredCourierInputsFilled = false;
   // orderId is a string after prop passing somehow
   const isSelected = selectedDeliverySection === +orderId;
 
   if (!isSelected) {
     selectedDelivery = app.deliveries?.find(delivery => delivery.id === selectedDeliveryId);
-    if (selectedDelivery?.name === "courier") {
+    
+    if (selectedDelivery?.name === "self-delivery") {
+      areRequiredCourierInputsFilled = selectedCourierScheduleId !== null && selectedCourierScheduleId !== undefined;
+    } else if (selectedDelivery?.name === "courier") {
       areRequiredCourierInputsFilled = !!formValues["street-" + inputsId] && !!formValues["houseNumber-" + inputsId];
     }
   }

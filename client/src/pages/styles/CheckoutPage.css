@@ -49,6 +49,11 @@
   margin-right: 4px;
 }
 
+.checkout-page-error-modal {
+  padding: 16px;
+  font-size: 1.6rem;
+}
+
 @media screen and (min-width: 960px) {
   .checkout-page {
     padding: 0 5%;
