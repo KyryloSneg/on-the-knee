@@ -39,6 +39,7 @@ import CommentGalleryModal from "./components/CommentGalleryModal";
 import AskSellerModal from "./components/AskSellerModal";
 import CartModal from "./components/CartModal";
 import useDeliveriesFetching from "./hooks/useDeliveriesFetching";
+import ErrorModal from "./components/ErrorModal";
  
 const App = observer(() => {
   const { app, deviceStore } = useContext(Context);
@@ -156,6 +157,7 @@ const App = observer(() => {
       {app.isVisibleAskSellerModal && <AskSellerModal />}
       {app.isVisibleCommentGalleryModal && <CommentGalleryModal />}
       {app.isVisibleCartModal && <CartModal />}
+      {app.isVisibleErrorModal && <ErrorModal />}
       <header ref={headerRef}>
         <Navbar elemToFocus={pageElemToFocus} navCategoryBtnRef={navCategoryBtnRef} />
         {(app.isVisibleCategoriesMenu && !!Object.keys(deviceStore.categories).length) && 

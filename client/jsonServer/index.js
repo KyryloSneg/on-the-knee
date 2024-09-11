@@ -63,6 +63,7 @@ module.exports = function createData () {
     "orders": [],
     "order-courier-deliveries": [],
     "order-device-combinations": [],
+    "order-selected-additional-services": [],
 
     "deliveries": [],
     "delivery-types": [],

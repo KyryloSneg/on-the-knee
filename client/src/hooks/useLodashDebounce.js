@@ -10,8 +10,8 @@ export default function useLodashDebounce(callback, delay) {
   }, [callback]);
 
   const debouncedCallback = useMemo(() => {
-    const func = () => {
-      ref.current?.();
+    const func = (...args) => {
+      ref.current?.(...args);
     };
 
     return _.debounce(func, delay);

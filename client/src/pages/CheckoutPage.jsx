@@ -9,7 +9,18 @@ import CheckoutPageMainContent from "../components/CheckoutPageMainContent";
 import CheckoutPageAside from "../components/CheckoutPageAside";
 import { useForm } from "react-hook-form";
 import isPhoneValidFn from "../utils/isPhoneValid";
-import { CHECKOUT_PAGE_INPUT_SERVICE_CLASS } from "../utils/consts";
+import { CHECKOUT_PAGE_INPUT_SERVICE_CLASS, ROOT_ROUTE } from "../utils/consts";
+import useGettingOrders from "../hooks/useGettingOrders";
+import setErrorModalVisibility from "../utils/setErrorModalVisibility";
+import { v4 } from "uuid";
+import CartComboActions from "../utils/CartComboActions";
+import { getOneDeviceSaleDevices } from "../http/SalesAPI";
+import StringActions from "../utils/StringActions";
+import { parsePhoneNumber } from "libphonenumber-js";
+import { createOrder, createOrderCourierDelivery, createOrderDeviceCombinations, createOrderSelectedAdditionalServices, createReceivent } from "../http/OrderAPI";
+import useLodashDebounce from "../hooks/useLodashDebounce";
+import { deleteCartDeviceCombination, patchCartSelectedAdditionalServices } from "../http/CartAPI";
+import updateCartData from "../utils/updateCartData";
 
 const CheckoutPage = observer(() => {
   // TODO: check are all devices available in such amount as user typed in or no,
@@ -18,12 +29,14 @@ const CheckoutPage = observer(() => {
   // {list of { component with device img, device name, user amount, current available amount }}
   // do you want to order ones in current available amounts?" or smth like that) 
 
-  const { app, user } = useContext(Context);
+  const { app, deviceStore, user } = useContext(Context);
   const navigate = useNavigateToEncodedURL();
   const senderPhoneNumberInputRef = useRef(null);
 
   const [isSenderPhoneInputDirty, setIsSenderPhoneInputDirty] = useState(false);
   const [senderPhoneInputValue, setSenderPhoneInputValue] = useState("");
+
+  const orders = useGettingOrders();
 
   // TODO: auto-fill sender data inputs with user data if he / she logged in
   const {
@@ -68,7 +81,191 @@ const CheckoutPage = observer(() => {
 
   const isLoadingContent = (
     (user.isAuth && !_.isEqual(user.user, {})) && _.isEqual(user.cart, {})
-  ) || !Object.keys(user.cartSelectedAdditionalServices)?.length;
+  ) || !Object.keys(user.cartSelectedAdditionalServices)?.length || !deviceStore.sales || !deviceStore.saleTypeNames;
+
+
+  // making it almost not possible to submit the same order a couple times in a row 
+  const debouncedSubmitCallback = useLodashDebounce(submitCallback, 2000);
+
+  async function submitCallback(value) {
+    try {
+      //{ 
+      //  order: {...}, 
+      //  receivent: {...}, 
+      //  orderCourierDelivery: {...} || null, 
+      //  orderDeviceCombinations: [...] 
+      //  orderSelectedAdditionalServices: {...}
+      //}
+      let ordersToPost = [];
+
+      for (let [id, order] of Object.entries(orders)) {
+        let orderResult = {};
+        let receiventResult = {};
+        let orderCourierDeliveryResult = null;
+        let orderDeviceCombinationsResult = [];
+        
+        orderResult.id = v4();
+        orderResult.orderTypes = order.types;
+        
+        let orderSelectedAdditionalServicesResult = { 
+          "id": v4(), 
+          "orderId": orderResult.id, 
+          "selected-additional-services": {} 
+        };
+
+        if (user.isAuth && (user.user?.id !== null && user.user?.id !== undefined)) {
+          orderResult.userId = user.user.id;
+        } else {
+          orderResult.name = StringActions.removeRedundantSpaces(value.senderFirstName);
+          orderResult.surname = StringActions.removeRedundantSpaces(value.senderSecondName);
+          orderResult.email = StringActions.removeRedundantSpaces(value.senderEmail);
+          // we save our phone number the same way as we do on the server (the international format)
+          orderResult.phoneNumber = parsePhoneNumber(senderPhoneInputValue).formatInternational();
+        }
+
+        const { deviceAmount, devicePrice } = CartComboActions.getDeviceAmountAndTotalPrice(
+          order.value, deviceStore.sales, deviceStore.saleTypeNames
+        );
+
+        const deliveryPrice = CartComboActions.getDeliveryTotalPrice(
+          orders, app.selectedDeliveryIdValues, app.deliveries, app.isToLiftOnTheFloorValues
+        );
+
+        orderResult.devicePrice = devicePrice.toFixed(2);
+        orderResult.deliveryPrice = deliveryPrice.toFixed(2);
+        orderResult.totalPrice = (devicePrice + deliveryPrice).toFixed(2);
+
+        orderResult.totalDeviceAmount = deviceAmount;
+        orderResult.status = "Pending";
+        // order's name is just a random number as i understood
+        orderResult.orderName = +Math.random().toString().slice(2);
+        orderResult.date = new Date().toISOString();
+        // BOL number, the same as before
+        orderResult.info = +Math.random().toString().slice(2);
+
+        receiventResult.id = v4();
+        receiventResult.name = StringActions.removeRedundantSpaces(value[`receiventFirstName-${id}`]);
+        receiventResult.surname = StringActions.removeRedundantSpaces(value[`receiventSecondName-${id}`]);
+        receiventResult.patronymic = StringActions.removeRedundantSpaces(value[`receiventPatronymic-${id}`]);
+        receiventResult.phoneNumber = parsePhoneNumber(app.receiventPhoneInputsValues[id].value).formatInternational();
+
+        const selectedDeliveryIdValue = app.selectedDeliveryIdValues[id].value;
+        const selectedDelivery = app.deliveries.find(delivery => delivery.id === selectedDeliveryIdValue);
+        
+        if (selectedDelivery.name === "courier") {
+          orderCourierDeliveryResult = {};
+          orderCourierDeliveryResult.id = v4();
+          orderCourierDeliveryResult.orderId = orderResult.id;
+          orderCourierDeliveryResult.deliveryId = selectedDelivery.id;
+          
+          orderCourierDeliveryResult["courier-scheduleId"] = app.selectedCourierScheduleIdValues[id].value;
+          orderCourierDeliveryResult.courierShift = app.selectedCourierScheduleShiftValues[id].value;
+
+          orderCourierDeliveryResult.street = StringActions.removeRedundantSpaces(value[`street-${id}`]);
+          orderCourierDeliveryResult.houseNumber = StringActions.removeRedundantSpaces(value[`houseNumber-${id}`]);
+
+          const flatNumber = StringActions.removeAllSpaces(value[`flatNumber-${id}`]);
+          const floor = StringActions.removeAllSpaces(value[`floor-${id}`]);
+
+          orderCourierDeliveryResult.flatNumber = !!flatNumber.length ? flatNumber : null;
+          orderCourierDeliveryResult.floor = !!floor.length ? floor : null;
+
+          orderCourierDeliveryResult.toLiftOnTheFloor = app.isToLiftOnTheFloorValues[id].value;
+        }
+
+        orderResult["receiventId"] = receiventResult.id;
+        orderResult["store-pickup-pointId"] = app.selectedStorePickupPointIdValues[id].value;
+        orderResult["order-courier-deliveryId"] = orderCourierDeliveryResult?.id || null;
+
+        // saving current saleDevices to save sales atm of submitting the form by user
+        let saleDevices = [];
+        for (let cartCombo of order.value) {
+          const orderDeviceCombo = {
+            "id": v4(),
+            "orderId": orderResult.id,
+            "deviceId": cartCombo.deviceId,
+            "device-combinationId": cartCombo["device-combinationId"],
+            "amount": cartCombo.amount
+          };
+
+          orderSelectedAdditionalServicesResult["selected-additional-services"][orderDeviceCombo.id] = 
+            user.cartSelectedAdditionalServices["selected-additional-services"][cartCombo.id];
+
+          // TODO: check is the current amount is the available one and
+          // show a modal with message that states that there's no such an amount rn
+          // with selecting new amount component (like in the cart modal)
+
+          orderDeviceCombinationsResult.push(orderDeviceCombo);
+          saleDevices.push(await getOneDeviceSaleDevices(cartCombo.device.id));
+        }
+
+        orderResult.saleDevices = saleDevices;
+
+        const result = { 
+          order: orderResult, 
+          receivent: receiventResult,
+          orderCourierDelivery: orderCourierDeliveryResult,
+          orderDeviceCombinations: orderDeviceCombinationsResult,
+          orderSelectedAdditionalServices: orderSelectedAdditionalServicesResult
+        };
+
+        ordersToPost.push(result);
+      }
+
+      // create orders on the server only if EVERY single order succesfully was added from the loop above 
+      for (let result of ordersToPost) {
+        await createOrder(result.order);
+        await createReceivent(result.receivent);
+        await createOrderCourierDelivery(result.orderCourierDelivery);
+        await createOrderDeviceCombinations(result.orderDeviceCombinations);
+        await createOrderSelectedAdditionalServices(result.orderSelectedAdditionalServices);
+      }
+      
+      // clear the cart (this logic should NOT prevent navigating to the main page logic)
+      try {
+        if (user.isAuth) {
+          await patchCartSelectedAdditionalServices(
+            user.cartSelectedAdditionalServices.id,
+            { "selected-additional-services": {} }
+          );
+  
+          for (let cartCombo of user.cartDeviceCombinations) {  
+            try {
+              await deleteCartDeviceCombination(cartCombo.id);
+            } catch (e) {
+              if (e.response.status !== 500) console.log(e.message);
+            }
+          }
+        } else {
+          const newCartSelectedAdditionalServices = {
+            "id": null,
+            "cartId": null,
+            "selected-additional-services": {},
+          };
+
+          localStorage.setItem("cartDeviceCombinations", JSON.stringify([]));
+          localStorage.setItem("cartSelectedAddServices", JSON.stringify(newCartSelectedAdditionalServices));
+        }
+
+        // do not forget to update userStore's states after changing data on the server / in localStorage
+        updateCartData(user, fetching);
+      } catch (e) {
+        console.log(e.message);
+      }
+
+      navigate(ROOT_ROUTE);
+    } catch (e) {
+      console.log(e.message);
+
+      const errorModalInfoChildren = (
+        <p className="checkout-page-error-modal">
+          Submitting the form leaded to the error. Try a bit later
+        </p>
+      );
+      app.setErrorModalInfo({ children: errorModalInfoChildren, id: "checkout-page-submit-error", className: "" });
+      setErrorModalVisibility(true, app);
+    }
+  }
 
   if (isLoadingContent) return <div />;
   if (!user.cartDeviceCombinations?.length) {
@@ -122,8 +319,10 @@ const CheckoutPage = observer(() => {
     return arePhoneNumbersValid;
   }
 
-  function onSubmit() {
+  async function onSubmit(value) {
     if (!checkArePhoneNumberInputsValidAndHandleInvalidInputFocus(false)) return;
+
+    debouncedSubmitCallback(value);
   }
 
   return (

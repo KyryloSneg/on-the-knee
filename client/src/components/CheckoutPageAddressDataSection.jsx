@@ -7,6 +7,7 @@ import UserLocationBtn from "./UserLocationBtn";
 import { v4 } from "uuid";
 import { useMemo, useRef } from "react";
 import { CHECKOUT_PAGE_INPUT_SERVICE_CLASS } from "../utils/consts";
+import StringActions from "../utils/StringActions";
 
 const POSSIBLE_TYPES = ["sender", "receivent"];
 
@@ -20,8 +21,11 @@ const CheckoutPageAddressDataSection = ({
   if (!POSSIBLE_TYPES.includes(type)) throw Error("type of CheckoutPageAddressDataSection is incorrect");
   const isValidEmail = useRef(true);
 
-  const phoneNumberInputId = useMemo(() => "checkout-phone-number-" + (orderId || v4()), [orderId]);
-  if (type === "receivent" && orderId === null) return <div />;
+  const phoneNumberInputId = useMemo(() => 
+    "checkout-phone-number-" + ((orderId !== null && orderId !== undefined) ? orderId : v4()), 
+  [orderId]);
+
+  if (type === "receivent" && orderId === null && orderId !== undefined) return <div />;
 
   const baseOptions = {
     validate: {
@@ -39,7 +43,7 @@ const CheckoutPageAddressDataSection = ({
       isOnlyLetters: value => {
         // do not forget that our regex doesn't detect whitespaces, so matches.length might be less than value.length.
         // to prevent that, delete all whitespaces from the value
-        const valueWithoutSpaces = value.split("").filter(char => char !== " ").join("");
+        const valueWithoutSpaces = StringActions.removeAllSpaces(value);
         const matches = valueWithoutSpaces.match(/\p{Letter}/gu);
 
         const isOnlyLetters = matches?.length === valueWithoutSpaces.length;
@@ -65,15 +69,15 @@ const CheckoutPageAddressDataSection = ({
     secondNameFieldName = "senderSecondName";
   } else if (type === "receivent") {
     heading = "Receivent data";
-    firstNameFieldName = "receiventFirstName-" + orderId;
-    secondNameFieldName = "receiventSecondName-" + orderId;
+    firstNameFieldName = "receiventFirstName-" + ((orderId !== null && orderId !== undefined) ? orderId : v4());
+    secondNameFieldName = "receiventSecondName-" + ((orderId !== null && orderId !== undefined) ? orderId : v4());
   }
 
   // doing this to prevent focusing email (patronymic) input while there are first and second names' inputs' errors 
   const firstNameRegisterResult = register(firstNameFieldName, textInputOptions);
   const secondNameRegisterResult = register(secondNameFieldName, textInputOptions);
 
-  const receiventPatronymicFieldName = "receiventPatronymic-" + orderId;
+  const receiventPatronymicFieldName = "receiventPatronymic-" + ((orderId !== null && orderId !== undefined) ? orderId : v4());
 
   let emailInputRegisterResult;
   let patronymicRegisterResult;

@@ -12,7 +12,7 @@ const DeviceSearchResultItem = observer(({ device, defaultCombo }) => {
     || { discountPercentage: 0 };
 
   const image = defaultCombo.images[0];
-  if (!deviceStore.sales?.length || !deviceStore.saleTypeNames?.length) return <div />;
+  if (!deviceStore.sales || !deviceStore.saleTypeNames) return <div />;
 
   return (
     <section className="search-result-device">

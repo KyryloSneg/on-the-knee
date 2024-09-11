@@ -22,6 +22,7 @@ class AppStore {
     this._isVisibleAskSellerModal = false;
     this._isVisibleCommentGalleryModal = false;
     this._isVisibleCartModal = false;
+    this._isVisibleErrorModal = false;
     this._isFocusedSearchForm = false;
 
     // contains the last element's ref from which was opened a modal window, a sidebar etc.
@@ -55,6 +56,7 @@ class AppStore {
     this._questionCommentModalBtnRef = null;
     this._replyModalBtnRef = null;
     this._askSellerModalBtnRef = null;
+    this._errorModalBtnRef = null;
 
     this._userLocation = null;
     this._allLocations = [];
@@ -87,6 +89,8 @@ class AppStore {
     this._selfDeliveryModalOnSelectCb = null;
 
     this._isToShowAsideDeliveryPrice = false;
+
+    this._errorModalInfo = { children: "", id: "error-modal", className: "" };
 
     makeAutoObservable(this);
   }
@@ -165,6 +169,10 @@ class AppStore {
 
   setIsVisibleCartModal(bool) {
     this._isVisibleCartModal = bool;
+  }
+
+  setIsVisibleErrorModal(bool) {
+    this._isVisibleErrorModal = bool;
   }
 
   setIsFocusedSearchForm(bool) {
@@ -249,6 +257,10 @@ class AppStore {
 
   setAskSellerModalBtnRef(ref) {
     this._askSellerModalBtnRef = ref;
+  }
+
+  setErrorModalBtnRef(ref) {
+    this._errorModalBtnRef = ref;
   }
 
   setHintSearchResults(results) {
@@ -343,6 +355,10 @@ class AppStore {
     this._isToShowAsideDeliveryPrice = isToShowAsideDeliveryPrice;
   }
 
+  setErrorModalInfo(errorModalInfo) {
+    this._errorModalInfo = errorModalInfo;
+  }
+
   get darkBgVisible() {
     return this._darkBgVisible;
   }
@@ -417,6 +433,10 @@ class AppStore {
 
   get isVisibleCartModal() {
     return this._isVisibleCartModal;
+  }
+
+  get isVisibleErrorModal() {
+    return this._isVisibleErrorModal;
   }
 
   get isFocusedSearchForm() {
@@ -501,6 +521,10 @@ class AppStore {
 
   get askSellerModalBtnRef() {
     return this._askSellerModalBtnRef;
+  }
+
+  get errorModalBtnRef() {
+    return this._errorModalBtnRef;
   }
 
   get hintSearchResults() {
@@ -593,6 +617,10 @@ class AppStore {
 
   get isToShowAsideDeliveryPrice() {
     return this._isToShowAsideDeliveryPrice;
+  }
+
+  get errorModalInfo() {
+    return this._errorModalInfo;
   }
 
 }
