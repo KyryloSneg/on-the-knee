@@ -1,0 +1,73 @@
+.checkout-page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 0 20px;
+}
+
+.checkout-page > form {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 30px;
+  padding: 0 10px;
+}
+
+.checkout-page > header > h2 {
+  text-align: start;
+  font-size: 3rem;
+  padding-right: 4px;
+}
+
+.checkout-page-section-btn {
+  box-sizing: border-box;
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: auto auto 1fr; /* img, span, .checkout-page-section-btn-change-msg */
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  padding: 8px;
+  background: none;
+  width: 100%;
+  padding: 12px 10px;
+  border: 1px solid rgb(180, 180, 180);
+  border-radius: 8px;
+  transition: color 0.2s, background-color 0.2s, border-color 0.2s, outline 0s;
+}
+
+.checkout-page-section-btn:hover,
+.checkout-page-section-btn:active,
+.checkout-page-section-btn:focus-visible {
+  color: #7373ff;
+  background-color: #dfdfdf;
+}
+
+.checkout-page-section-btn-change-msg {
+  font-weight: bold;
+  text-align: end;
+  margin-right: 4px;
+}
+
+.checkout-page-error-modal {
+  padding: 16px;
+  font-size: 1.6rem;
+}
+
+@media screen and (min-width: 960px) {
+  .checkout-page {
+    padding: 0 5%;
+  }
+}
+
+@media screen and (min-width: 1000px) {
+  .checkout-page > form {
+    grid-template-columns: 1fr auto;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .checkout-page {
+    padding: 0 10%;
+  }
+}

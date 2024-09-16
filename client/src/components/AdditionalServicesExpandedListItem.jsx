@@ -2,6 +2,7 @@ import "./styles/AdditionalServicesExpandedListItem.css";
 import { Link } from 'react-router-dom';
 import arrowOutward from "../assets/arrow_outward_5a5a5a.svg";
 import { forwardRef } from "react";
+import onRadioKeyDown from "../utils/onRadioKeyDown";
 
 const AdditionalServicesExpandedListItem = forwardRef(({ 
   additionalServiceOption, isChecked, onCheck,
@@ -12,37 +13,14 @@ const AdditionalServicesExpandedListItem = forwardRef(({
     radioClassName += " checked";
   }
 
-  function onKeyDown(e) {
-    // we can't use e.preventDefault() before switch because we couldn't check radio with enter / space then
-    switch (e.code) {
-      case "ArrowUp":
-        e.preventDefault();
-        checkPrev();
-        break;
-      case "ArrowDown":
-        e.preventDefault();
-        checkNext();
-        break;
-      case "ArrowLeft":
-        e.preventDefault();
-        checkPrev();
-        break;
-      case "ArrowRight":
-        e.preventDefault();
-        checkNext();
-        break;
-      default:
-        break;
-    }
-  }
-
   return (
     <div className="additional-services-expanded-list-item">
       <button
+        type="button"
         aria-checked={isChecked}
         role="radio"
         onClick={onCheck}
-        onKeyDown={onKeyDown}
+        onKeyDown={(e) => onRadioKeyDown(e, checkPrev, checkNext)}
         ref={ref}
       >
         <div className="add-service-radio-div-wrapper">

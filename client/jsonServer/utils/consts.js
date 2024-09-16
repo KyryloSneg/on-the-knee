@@ -192,7 +192,7 @@ const MOCK_USER = {
   "phoneNumber": "+380 82 0172 6701"
 };
 
-const POSSIBLE_DELIVERY_TYPES = { "courier": 5, "self-delivery": 0 };
+const POSSIBLE_DELIVERY_TYPES = { "self-delivery": 0, "courier": 5 };
 const POSSIBLE_SALE_TYPE_NAMES = [
   {"name": "discount", "bgColor": "#ff1212"},
   {"name": "freeDelivery", "logo": "https://loremflickr.com/40/40?lock=5239500858982400", "bgColor": "#ff1212"}
@@ -210,6 +210,20 @@ const POSSIBLE_SCHEDULE_TIME_RANGES = {
     {
       1: "9:00-15:00",
       2: "15:00-21:00",
+    }
+  ],
+  4: [
+    {
+      1: "05:00-11:00",
+      2: "11:00-17:00",
+      3: "17:00-23:00",
+      4: "23:00-05:00",
+    },
+    {
+      1: "00:00-06:00",
+      2: "06:00-12:00",
+      3: "12:00-18:00",
+      4: "18:00-00:00",
     }
   ]
 };

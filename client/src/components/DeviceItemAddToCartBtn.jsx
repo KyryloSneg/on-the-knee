@@ -8,6 +8,7 @@ import { createCartDeviceCombination } from "../http/CartAPI";
 import { observer } from "mobx-react-lite";
 import setCartModalVisibility from "../utils/setCartModalVisibility";
 import { getDevice } from "../http/DeviceApi";
+import { getOneDeviceSaleDevices } from "../http/SalesAPI";
 
 const DeviceItemAddToCartBtn = observer(({ combinations, combo, isWithText = false, isPreOrder = false }) => {
   const { app, user } = useContext(Context);
@@ -42,6 +43,7 @@ const DeviceItemAddToCartBtn = observer(({ combinations, combo, isWithText = fal
           await createCartDeviceCombination(cartDevCombo);
         } else {
           const device = await getDevice(combo.deviceId);
+          device["sale-devices"] = await getOneDeviceSaleDevices(device?.id);
           
           cartDevCombo["cartId"] = user.cart?.id;
           cartDevCombo["device"] = device;

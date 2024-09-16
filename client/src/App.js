@@ -1,5 +1,6 @@
-import Navbar from "./components/Navbar";
 import "./App.css";
+import "react-international-phone/style.css";
+import Navbar from "./components/Navbar";
 import MyFooter from "./components/MyFooter";
 import { useCallback, useContext, useEffect, useRef } from "react";
 import { Outlet, useLocation } from "react-router-dom";
@@ -37,6 +38,9 @@ import AnswerModal from "./components/AnswerModal";
 import CommentGalleryModal from "./components/CommentGalleryModal";
 import AskSellerModal from "./components/AskSellerModal";
 import CartModal from "./components/CartModal";
+import useDeliveriesFetching from "./hooks/useDeliveriesFetching";
+import ErrorModal from "./components/ErrorModal";
+import WrongCartComboAmountsModal from "./components/WrongCartComboAmountsModal";
  
 const App = observer(() => {
   const { app, deviceStore } = useContext(Context);
@@ -78,7 +82,7 @@ const App = observer(() => {
   }, [app, headerRef]);
 
   useInitialDataFetching();
-  useScrollingToPagesTop();
+  useDeliveriesFetching();
   useClosingAllWindows();
 
   useClosingFiltersSidebarWidth(windowWidth, app.isVisibleFiltersSidebar, closeFiltersSidebar);
@@ -90,6 +94,8 @@ const App = observer(() => {
   useClosingUsedFiltersBarValue(deviceStore.usedFilters, app.isVisibleUsedFiltersSidebar, closeUsedFiltersSidebar);
 
   useBlockingScroll(app.isBlockedScroll);
+  useScrollingToPagesTop();
+
   return (
     <div>
       {/* our gray bg on global loading */}
@@ -152,6 +158,8 @@ const App = observer(() => {
       {app.isVisibleAskSellerModal && <AskSellerModal />}
       {app.isVisibleCommentGalleryModal && <CommentGalleryModal />}
       {app.isVisibleCartModal && <CartModal />}
+      {app.isVisibleErrorModal && <ErrorModal />}
+      {app.isVisibleWrongCartComboAmountsModal && <WrongCartComboAmountsModal />}
       <header ref={headerRef}>
         <Navbar elemToFocus={pageElemToFocus} navCategoryBtnRef={navCategoryBtnRef} />
         {(app.isVisibleCategoriesMenu && !!Object.keys(deviceStore.categories).length) && 

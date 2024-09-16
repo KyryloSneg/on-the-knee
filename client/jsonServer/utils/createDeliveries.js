@@ -19,8 +19,6 @@ module.exports = (cities) => {
   }
 
   for (let city of cities) {
-    if (!city["isAccessible"]) continue;
-
     let cityDelTypeIds = [];
     let deliveryTypesCopy = [...deliveryTypes]; 
 
@@ -41,7 +39,7 @@ module.exports = (cities) => {
     }
 
     for (let typeId of cityDelTypeIds) {
-      const isPrice = deliveryTypes[typeId - 1].name !== "self-delivery" || faker.datatype.boolean(0.25);
+      const isPrice = deliveryTypes[typeId - 1].name !== "self-delivery";
       let price = isPrice ? faker.number.int({ min: 3, max: 10 }) : null;
 
       if (price) {

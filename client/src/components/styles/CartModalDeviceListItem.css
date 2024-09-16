@@ -91,6 +91,10 @@
   justify-content: flex-end;
 }
 
+.cart-modal-list-item-old-amount {
+  font-size: 1.7rem;
+}
+
 @media screen and (min-width: 680px) {
   .cart-modal-list-item-amount-wrap {
     margin: 0;

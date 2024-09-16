@@ -1,0 +1,35 @@
+.wrong-cart-combo-amounts-modal-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.wrong-cart-combo-amounts-modal-content h3 {
+  font-size: 1.8rem;
+  text-align: center;
+  margin: 0 0 22px 0;
+}
+
+.wrong-cart-combo-amounts-changes-section, .wrong-cart-combo-amounts-deletion-section {
+  padding: 16px 16px 0 16px;
+}
+
+.wrong-cart-combo-amounts-changes-section > .cart-modal-device-list {
+  padding: 0;
+}
+
+.wrong-cart-combo-amounts-btn-wrap {
+  display: grid;
+  position: sticky;
+  padding: 16px 0;
+  margin: 0 16px;
+  bottom: 0;
+  background-color: #f1f1f1;
+  z-index: 2;
+}
+
+.wrong-cart-combo-amounts-btn-wrap > button {
+  min-width: 65%;
+  max-width: 550px;
+  margin: 0 auto;
+}

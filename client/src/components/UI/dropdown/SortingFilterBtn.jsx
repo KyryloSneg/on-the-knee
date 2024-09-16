@@ -11,14 +11,15 @@ const SortingFilterBtn = forwardRef(({ value, onClick, visible, dropdownOptionsI
         <p>Sort by:</p>
       </div>
       <button 
+        type="button"
         onClick={onClick} 
         data-testid="dropdown-sorting-filter-btn" 
         aria-controls={dropdownOptionsId}
-        ref={ref} 
         className={visible ? "active" : ""}
+        ref={ref} 
       >
-        <span>{value || "none"}</span>
-        <img src={dropdownArrowIcon} className={visible ? "rotated" : ""} alt="" />
+        <span>{value || "..."}</span>
+        <img src={dropdownArrowIcon} className={visible ? "rotated" : ""} alt="" draggable="false" />
       </button>
     </section>
   );

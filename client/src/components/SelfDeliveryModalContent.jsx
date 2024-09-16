@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import "./styles/SelfDeliveryModalContent.css";
 import { Context } from "../Context";
 import { observer } from "mobx-react-lite";
@@ -12,18 +12,67 @@ import SelfDeliveryModalContentTabs from "./SelfDeliveryModalContentTabs";
 import SelfDeliveryModalPoint from "./SelfDeliveryModalPoint";
 import MarkerWithPopup from "./UI/myMap/MarkerWithPopup";
 import Loader from "./UI/loader/Loader";
+import _ from "lodash";
 
 const SelfDeliveryModalContent = observer(() => {
   const { app } = useContext(Context);
   const windowWidth = useWindowWidth();
 
   const [selectedTab, setSelectedTab] = useState("pointsList"); // or "map"
-  const [selectedId, setSelectedId] = useState(null);
+
+  // supports "default" and "checkout-page" modal types
+  const initialSelectedId = useMemo(() => {
+    if (app.selfDeliveryModalType === "default") {
+      return app.selfDeliveryModalDefaultSelectedPointId || null;
+    } else if (app.selfDeliveryModalType === "checkout-page") {
+      return app.selectedStorePickupPointIdValues?.[app.selfDeliveryModalSelectedPointValueId]?.value || null;
+    }
+    // eslint-disable-next-line
+  }, [app.selfDeliveryModalType, app.selfDeliveryModalSelectedPointValueId]);
+
+  const [selectedId, setSelectedId] = useState(initialSelectedId);
+  
   const [coords, setCoords] = useState(DEFAULT_INIT_MAP_COORDS);
   const mapRef = useRef(null);
 
+  useEffect(() => {
+    if (selectedId) {
+      // supports "default" and "checkout-page" modal types
+      if (app.selfDeliveryModalType === "default") {
+        app.setSelfDeliveryModalDefaultSelectedPointId(selectedId);
+      } else if (app.selfDeliveryModalType === "checkout-page" && app.selfDeliveryModalSelectedPointValueId) {
+        let nextValue = _.cloneDeep(app.selectedStorePickupPointIdValues); 
+        if (nextValue) {
+          let oldValue = nextValue?.[app.selfDeliveryModalSelectedPointValueId];
+          if (oldValue) {
+            oldValue.value = selectedId;
+            oldValue.setter?.(selectedId);
+          }
+        }
+    
+        if (!_.isEqual(app.selectedStorePickupPointIdValues, nextValue)) {
+          app.setSelectedStorePickupPointIdValues(nextValue);
+        }
+      }
+    }
+  }, [app, selectedId]);
+
   useGettingUserLocationCoords(setCoords);
+  useEffect(() => {
+    return () => {
+      if (app.isVisibleSelfDeliveryModal) return;
+
+      // clearing up our callback on the modal close
+      app.setSelfDeliveryModalOnSelectCb(null);
+    };
+  }, [app]);
+
   const storePickupPoints = app.storePickupPoints?.filter(point => point.cityId === app.userLocation.id);
+
+  function onSelect(id) {
+    setSelectedId(id);
+    app.selfDeliveryModalOnSelectCb?.();
+  }
 
   function getMapMarkers() {
     let markers = [];
@@ -38,7 +87,7 @@ const SelfDeliveryModalContent = observer(() => {
             lat={pickupPoint.lat}
             flyTo={mapRef.current?.flyTo}
             selectedMarkerId={selectedId}
-            setSelectedMarkerId={setSelectedId}
+            setSelectedMarkerId={onSelect}
             popupChildren={
               <SelfDeliveryModalPoint point={pickupPoint} isTelLink={true} className="popup-version" />
             }
@@ -77,7 +126,7 @@ const SelfDeliveryModalContent = observer(() => {
               {(isToShowBothChilds || selectedTab === "pointsList") &&
                 <SelfDeliveryModalPointsList
                   selectedId={selectedId}
-                  setSelectedId={setSelectedId}
+                  setSelectedId={onSelect}
                   storePickupPoints={storePickupPoints}
                 />
               }

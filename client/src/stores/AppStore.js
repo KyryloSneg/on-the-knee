@@ -1,4 +1,5 @@
 import { makeAutoObservable } from "mobx";
+import { ERROR_MODAL_INITIAL_INFO } from "../utils/consts";
 
 class AppStore {
   constructor() {
@@ -22,6 +23,8 @@ class AppStore {
     this._isVisibleAskSellerModal = false;
     this._isVisibleCommentGalleryModal = false;
     this._isVisibleCartModal = false;
+    this._isVisibleErrorModal = false;
+    this._isVisibleWrongCartComboAmountsModal = false;
     this._isFocusedSearchForm = false;
 
     // contains the last element's ref from which was opened a modal window, a sidebar etc.
@@ -55,6 +58,8 @@ class AppStore {
     this._questionCommentModalBtnRef = null;
     this._replyModalBtnRef = null;
     this._askSellerModalBtnRef = null;
+    this._errorModalBtnRef = null;
+    this._checkoutSubmitBtnRef = null;
 
     this._userLocation = null;
     this._allLocations = [];
@@ -66,6 +71,30 @@ class AppStore {
     this._commentGallerySelectedImageId = null;
 
     this._storePickupPoints = [];
+    this._selectedStorePickupPointIdValues = {};
+    this._deliveries = [];
+    this._selectedDeliveryIdValues = {};
+
+    this._isToShowDeliveryChangeMessageValues = {};
+    this._isToShowDeliverySectionRadiogroup = false;
+
+    // states that are used to handle multiple delivery sections in the checkout page
+    this._hasElevatorValues = {};
+    this._isToLiftOnTheFloorValues = {};
+    this._selectedCourierScheduleIdValues = {};
+    this._selectedCourierScheduleShiftValues = {};
+    this._receiventPhoneInputsValues = {};
+
+    // i think we should support non-checkout-page's self delivery modals, because we could possibly use them in the future 
+    this._selfDeliveryModalType = "default";
+    this._selfDeliveryModalDefaultSelectedPointId = null;
+    this._selfDeliveryModalSelectedPointValueId = null;
+    this._selfDeliveryModalOnSelectCb = null;
+
+    this._isToShowAsideDeliveryPrice = false;
+
+    this._errorModalInfo = ERROR_MODAL_INITIAL_INFO;
+
     makeAutoObservable(this);
   }
 
@@ -143,6 +172,14 @@ class AppStore {
 
   setIsVisibleCartModal(bool) {
     this._isVisibleCartModal = bool;
+  }
+
+  setIsVisibleErrorModal(bool) {
+    this._isVisibleErrorModal = bool;
+  }
+
+  setIsVisibleWrongCartComboAmountsModal(bool) {
+    this._isVisibleWrongCartComboAmountsModal = bool;
   }
 
   setIsFocusedSearchForm(bool) {
@@ -229,6 +266,14 @@ class AppStore {
     this._askSellerModalBtnRef = ref;
   }
 
+  setErrorModalBtnRef(ref) {
+    this._errorModalBtnRef = ref;
+  }
+
+  setCheckoutSubmitBtnRef(ref) {
+    this._checkoutSubmitBtnRef = ref;
+  }
+
   setHintSearchResults(results) {
     this._hintSearchResults = results;
   }
@@ -260,7 +305,71 @@ class AppStore {
   setStorePickupPoints(storePickupPoints) {
     this._storePickupPoints = storePickupPoints;
   }
+
+  setSelectedStorePickupPointIdValues(selectedStorePickupPointIdValues) {
+    this._selectedStorePickupPointIdValues = selectedStorePickupPointIdValues;
+  }
   
+  setDeliveries(deliveries) {
+    this._deliveries = deliveries;
+  }
+
+  setSelectedDeliveryIdValues(selectedDeliveryIdValues) {
+    this._selectedDeliveryIdValues = selectedDeliveryIdValues;
+  }
+
+  setIsToShowDeliveryChangeMessageValues(isToShowDeliveryChangeMessageValues) {
+    this._isToShowDeliveryChangeMessageValues = isToShowDeliveryChangeMessageValues;
+  }
+
+  setIsToShowDeliverySectionRadiogroup(isToShowDeliverySectionRadiogroup) {
+    this._isToShowDeliverySectionRadiogroup = isToShowDeliverySectionRadiogroup;
+  }
+
+  setHasElevatorValues(hasElevatorValues) {
+    this._hasElevatorValues = hasElevatorValues;
+  }
+
+  setIsToLiftOnTheFloorValues(isToLiftOnTheFloorValues) {
+    this._isToLiftOnTheFloorValues = isToLiftOnTheFloorValues;
+  }
+
+  setSelectedCourierScheduleIdValues(selectedCourierScheduleIdValues) {
+    this._selectedCourierScheduleIdValues = selectedCourierScheduleIdValues;
+  }
+
+  setSelectedCourierScheduleShiftValues(selectedCourierScheduleShiftValues) {
+    this._selectedCourierScheduleShiftValues = selectedCourierScheduleShiftValues;
+  }
+
+  setReceiventPhoneInputsValues(receiventPhoneInputsValues) {
+    this._receiventPhoneInputsValues = receiventPhoneInputsValues;
+  }
+
+  setSelfDeliveryModalType(selfDeliveryModalType) {
+    this._selfDeliveryModalType = selfDeliveryModalType;
+  }
+
+  setSelfDeliveryModalDefaultSelectedPointId(selfDeliveryModalDefaultSelectedPointId) {
+    this._selfDeliveryModalDefaultSelectedPointId = selfDeliveryModalDefaultSelectedPointId;
+  }
+
+  setSelfDeliveryModalSelectedPointValueId(selfDeliveryModalSelectedPointValueId) {
+    this._selfDeliveryModalSelectedPointValueId = selfDeliveryModalSelectedPointValueId;
+  }
+
+  setSelfDeliveryModalOnSelectCb(selfDeliveryModalOnSelectCb) {
+    this._selfDeliveryModalOnSelectCb = selfDeliveryModalOnSelectCb;
+  }
+  
+  setIsToShowAsideDeliveryPrice(isToShowAsideDeliveryPrice) {
+    this._isToShowAsideDeliveryPrice = isToShowAsideDeliveryPrice;
+  }
+
+  setErrorModalInfo(errorModalInfo) {
+    this._errorModalInfo = errorModalInfo;
+  }
+
   get darkBgVisible() {
     return this._darkBgVisible;
   }
@@ -335,6 +444,14 @@ class AppStore {
 
   get isVisibleCartModal() {
     return this._isVisibleCartModal;
+  }
+
+  get isVisibleErrorModal() {
+    return this._isVisibleErrorModal;
+  }
+
+  get isVisibleWrongCartComboAmountsModal() {
+    return this._isVisibleWrongCartComboAmountsModal;
   }
 
   get isFocusedSearchForm() {
@@ -421,6 +538,14 @@ class AppStore {
     return this._askSellerModalBtnRef;
   }
 
+  get errorModalBtnRef() {
+    return this._errorModalBtnRef;
+  }
+
+  get checkoutSubmitBtnRef() {
+    return this._checkoutSubmitBtnRef;
+  }
+
   get hintSearchResults() {
     return this._hintSearchResults;
   }
@@ -452,6 +577,71 @@ class AppStore {
   get storePickupPoints() {
     return this._storePickupPoints;
   }
+
+  get selectedStorePickupPointIdValues() {
+    return this._selectedStorePickupPointIdValues;
+  }
+
+  get deliveries() {
+    return this._deliveries;
+  }
+
+  get selectedDeliveryIdValues() {
+    return this._selectedDeliveryIdValues;
+  }
+
+  get isToShowDeliveryChangeMessageValues() {
+    return this._isToShowDeliveryChangeMessageValues;
+  }
+
+  get isToShowDeliverySectionRadiogroup() {
+    return this._isToShowDeliverySectionRadiogroup;
+  }
+
+  get hasElevatorValues() {
+    return this._hasElevatorValues;
+  }
+
+  get isToLiftOnTheFloorValues() {
+    return this._isToLiftOnTheFloorValues;
+  }
+
+  get selectedCourierScheduleIdValues() {
+    return this._selectedCourierScheduleIdValues;
+  }
+
+  get selectedCourierScheduleShiftValues() {
+    return this._selectedCourierScheduleShiftValues;
+  }
+
+  get receiventPhoneInputsValues() {
+    return this._receiventPhoneInputsValues;
+  }
+
+  get selfDeliveryModalType() {
+    return this._selfDeliveryModalType;
+  }
+
+  get selfDeliveryModalDefaultSelectedPointId() {
+    return this._selfDeliveryModalDefaultSelectedPointId;
+  }
+
+  get selfDeliveryModalSelectedPointValueId() {
+    return this._selfDeliveryModalSelectedPointValueId;
+  }
+
+  get selfDeliveryModalOnSelectCb() {
+    return this._selfDeliveryModalOnSelectCb;
+  }
+
+  get isToShowAsideDeliveryPrice() {
+    return this._isToShowAsideDeliveryPrice;
+  }
+
+  get errorModalInfo() {
+    return this._errorModalInfo;
+  }
+
 }
 
 export default AppStore;

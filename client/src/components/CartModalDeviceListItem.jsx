@@ -20,18 +20,20 @@ import useGettingAddServicesRelatedData from "../hooks/useGettingAddServicesRela
 
 // [] => [error] with 1200ms delay (using isPossibleToShowStockError state and debounce)
 // [error] => [] with 1200ms delay (adding to the above ones isEnoughDevices STATE, not variable)
-const CartModalDeviceListItem = observer(({ combination }) => {
+const CartModalDeviceListItem = observer(({ combination, type, oldCartComboAmounts, deletedCartCombos }) => {
   const { user, deviceStore } = useContext(Context);
   const [value, setValue] = useState(combination.amount);
   const initialAmount = useRef(combination.amount);
   const [isValid, setIsValid] = useState(true);
-  const [stateStock, setStateStock] = useState(deviceStore.stocks.find(stock => stock.id === combination["device-combination"].stockId));
+  const [stateStock, setStateStock] = useState(
+    deviceStore.stocks.find(stock => stock.id === combination["device-combination"].stockId)
+  );
   const [isPossibleToShowStockError, setIsPossibleToShowStockError] = useState(true);
   const [isEnoughDevices, setIsEnoughDevices] = useState(value <= (combination["device-combination"]?.maxPreOrderAmount || stateStock?.totalStock));
   const [additionalServicesObj, setAdditionalServicesObj] = useState([]);
 
   let initSelectedItems = [];
-  if (user.cartSelectedAdditionalServices["selected-additional-services"]) {
+  if (user.cartSelectedAdditionalServices["selected-additional-services"] && type === "cart") {
     initSelectedItems = user.cartSelectedAdditionalServices["selected-additional-services"][combination.id] || [];
   }
   const [selectedAddServices, setSelectedAddServices] = useState(initSelectedItems);
@@ -92,7 +94,14 @@ const CartModalDeviceListItem = observer(({ combination }) => {
     }
   }
 
-  useGettingAddServicesRelatedData(combination.device, setAdditionalServicesObj);
+  // updating our state stock etc. if we changed our combination's id
+  // by opening wrong cart combo amounts modal, for example
+  useEffect(() => {
+    updateStock();
+    // eslint-disable-next-line
+  }, [combination.id]);
+
+  useGettingAddServicesRelatedData(combination.device, setAdditionalServicesObj, type === "cart");
   useEffect(() => {
     // if we validated amount got from the localstorage and changed it,
     // change it in the device list item which amount was changed 
@@ -144,9 +153,9 @@ const CartModalDeviceListItem = observer(({ combination }) => {
           />
         </Link>
         <Link to={to} className="link-colors">
-          {combination.device.name}
+          {combination.device.name} ({combination["device-combination"].sku})
         </Link>
-        <CartModalItemOptions combination={combination} />
+        {type === "cart" && <CartModalItemOptions combination={combination} />}
       </div>
       {renderAmountErrorCondition &&
         <div className="cart-modal-item-stock-error">
@@ -154,6 +163,11 @@ const CartModalDeviceListItem = observer(({ combination }) => {
         </div>
       }
       <div className="cart-modal-list-item-price-row">
+        {type === "wrongCartComboAmounts" && 
+          <p className="cart-modal-list-item-old-amount">
+            Old amount: {oldCartComboAmounts?.[combination.id] || ""} {oldCartComboAmounts?.[combination.id] > 1 ? "pcs" : "pc"}.
+          </p>
+        }
         <div className="cart-modal-list-item-amount-wrap">
           <button onClick={decrement} className="link-colors">
             <img src={removeIcon} alt="Decrement" draggable="false" />
@@ -177,7 +191,7 @@ const CartModalDeviceListItem = observer(({ combination }) => {
           discountPercentage={discountPercentage}
         />
       </div>
-      {(additionalServicesObj || true) && 
+      {(!!additionalServicesObj?.length && type === "cart") && 
         <AdditionalServicesSection 
           additionalServices={additionalServicesObj} 
           selectedItems={selectedAddServices}
