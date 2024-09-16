@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import useSettingInitialSelectedScheduleId from '../hooks/useSettingInitialSelectedScheduleId';
 import CheckoutPageDeliverySection from './CheckoutPageDeliverySection';
-import { useContext, useMemo, useRef, useState } from 'react';
+import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import useUpdatingCheckoutDeliverySectionValues from '../hooks/useUpdatingCheckoutDeliverySectionValues';
 import { Context } from '../Context';
 import CheckoutPageAddressDataSection from './CheckoutPageAddressDataSection';
@@ -35,6 +35,12 @@ const CheckoutPageOrder = observer(({
   const ignore = useMemo(() => "ignore", [app.selectedDeliveryIdValues]);
   
   // NOTE: the order of the hooks below is important
+
+  // resetting selectedStorePickupPointId on app.storePickupPoints, app.userLocation changes (usually of the second one)
+  useEffect(() => {
+    setSelectedStorePickupPointId(null);
+  }, [app.storePickupPoints, app.userLocation]);
+
   useSettingInitialSelectedScheduleId(setSelectedCourierScheduleId, setSelectedCourierScheduleShift);
   useUpdatingCheckoutDeliverySectionValues(
     id, isToShowDeliveryChangeMessage, setIsToShowDeliveryChangeMessage,
