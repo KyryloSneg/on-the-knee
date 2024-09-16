@@ -22,7 +22,7 @@ const CheckoutPageDeliverySection = observer(({
   const inputsId = orderId;
 
   let selectedDelivery;
-  let areRequiredCourierInputsFilled = false;
+  let areRequiredOptionInputsFilled = false;
   // orderId is a string after prop passing somehow
   const isSelected = selectedDeliverySection === +orderId;
 
@@ -30,9 +30,9 @@ const CheckoutPageDeliverySection = observer(({
     selectedDelivery = app.deliveries?.find(delivery => delivery.id === selectedDeliveryId);
     
     if (selectedDelivery?.name === "self-delivery") {
-      areRequiredCourierInputsFilled = selectedCourierScheduleId !== null && selectedCourierScheduleId !== undefined;
+      areRequiredOptionInputsFilled = selectedStorePickupPointId !== null && selectedStorePickupPointId !== undefined;
     } else if (selectedDelivery?.name === "courier") {
-      areRequiredCourierInputsFilled = !!formValues["street-" + inputsId] && !!formValues["houseNumber-" + inputsId];
+      areRequiredOptionInputsFilled = !!formValues["street-" + inputsId] && !!formValues["houseNumber-" + inputsId];
     }
   }
   
@@ -41,10 +41,10 @@ const CheckoutPageDeliverySection = observer(({
   }
   
   // we use the class below that was initially created for inputs 
-  // for the button because it contains some general information (areRequiredCourierInputsFilled)
+  // for the button because it contains some general information (areRequiredOptionInputsFilled)
   // about inputs in the CheckoutPageDeliveryRadiogroup
   let btnClassName = `checkout-page-section-btn ${CHECKOUT_PAGE_INPUT_SERVICE_CLASS}`;
-  if (!areRequiredCourierInputsFilled) {
+  if (!areRequiredOptionInputsFilled) {
     btnClassName += " error-variant";
   }
 
@@ -83,11 +83,11 @@ const CheckoutPageDeliverySection = observer(({
             className={btnClassName}
             type="button"
             onClick={onSectionSelect}
-            data-isinvaliddeliverysectionbtn={!areRequiredCourierInputsFilled}
+            data-isinvaliddeliverysectionbtn={!areRequiredOptionInputsFilled}
           >
             <img src={deliveryIcon} alt="" draggable="false" />
             <span>{StringActions.capitalize(selectedDelivery?.name || "")}</span>
-            {!areRequiredCourierInputsFilled && 
+            {!areRequiredOptionInputsFilled && 
               <span className="checkout-page-section-btn-required-error-msg">
                 Required
               </span>

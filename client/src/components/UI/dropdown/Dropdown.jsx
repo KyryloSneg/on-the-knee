@@ -28,7 +28,7 @@ const Dropdown = forwardRef((
 ) => {
   const [value, setValue] = useState(
     hasDefaultValue
-      ? variant === "sorting-filter" ? options[0]?.title : placeHolder
+      ? options[propsSelectedId || 0]?.title || placeHolder
       : placeHolder
   );
 
