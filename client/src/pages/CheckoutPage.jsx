@@ -17,21 +17,19 @@ import CartComboActions from "../utils/CartComboActions";
 import { getOneDeviceSaleDevices } from "../http/SalesAPI";
 import StringActions from "../utils/StringActions";
 import { parsePhoneNumber } from "libphonenumber-js";
-import { createOrder, createOrderCourierDelivery, createOrderDeviceCombinations, createOrderSelectedAdditionalServices, createReceivent } from "../http/OrderAPI";
+import { createOrder, createOrderCourierDelivery, createOrderDeviceCombination, createOrderSelectedAdditionalServices, createReceivent } from "../http/OrderAPI";
 import useLodashDebounce from "../hooks/useLodashDebounce";
 import { deleteCartDeviceCombination, patchCartSelectedAdditionalServices } from "../http/CartAPI";
-import updateCartData from "../utils/updateCartData";
+import { getOneStock, patchStock } from "../http/StocksAPI";
+import { getDeviceCombination } from "../http/DeviceApi";
+import setCartModalVisibility from "../utils/setCartModalVisibility";
+import setWrongCartComboAmountsModalVisibility from "../utils/setWrongCartComboAmountsVisibility";
 
 const CheckoutPage = observer(() => {
-  // TODO: check are all devices available in such amount as user typed in or no,
-  // (if the last one show message or modal window that say 
-  // "Unfortunately, there's no such amount of the next devices you've tried to order now: 
-  // {list of { component with device img, device name, user amount, current available amount }}
-  // do you want to order ones in current available amounts?" or smth like that) 
-
   const { app, deviceStore, user } = useContext(Context);
   const navigate = useNavigateToEncodedURL();
   const senderPhoneNumberInputRef = useRef(null);
+  const isAlreadySubmittingRef = useRef(false);
 
   const [isSenderPhoneInputDirty, setIsSenderPhoneInputDirty] = useState(false);
   const [senderPhoneInputValue, setSenderPhoneInputValue] = useState("");
@@ -84,18 +82,37 @@ const CheckoutPage = observer(() => {
   ) || !Object.keys(user.cartSelectedAdditionalServices)?.length || !deviceStore.sales || !deviceStore.saleTypeNames;
 
 
-  // making it almost not possible to submit the same order a couple times in a row 
-  const debouncedSubmitCallback = useLodashDebounce(submitCallback, 2000);
+  // using isAlreadySubmittingRef and a small delay to make not possible to submit the same order a couple times in a row 
+  const debouncedSubmitCallback = useLodashDebounce(submitCallback, 500);
 
   async function submitCallback(value) {
     try {
-      //{ 
-      //  order: {...}, 
-      //  receivent: {...}, 
-      //  orderCourierDelivery: {...} || null, 
-      //  orderDeviceCombinations: [...] 
-      //  orderSelectedAdditionalServices: {...}
-      //}
+      if (isAlreadySubmittingRef.current) { isAlreadySubmittingRef.current = false; return };
+      isAlreadySubmittingRef.current = true;
+
+      for (let cartCombo of user.cartDeviceCombinations) {
+        const totalStockToUse = cartCombo.device.isPreOrder 
+          ? cartCombo["device-combination"].maxPreOrderAmount 
+          : await getOneStock(cartCombo["device-combination"].stockId);
+
+        if (cartCombo.amount > totalStockToUse.totalStock || totalStockToUse.totalStock === 0) {
+          // closing the cart modal because user can open it while submitting and 
+          // end up with the wrong cart combo amounts modal eventually
+          // (this can make the updateCartData function to not work properly) 
+          setCartModalVisibility(false, app);
+          setWrongCartComboAmountsModalVisibility(true, app);
+
+          return;
+        }
+      }
+
+      // { 
+      //   order: {...}, 
+      //   receivent: {...}, 
+      //   orderCourierDelivery: {...} || null, 
+      //   orderDeviceCombinations: [...] 
+      //   orderSelectedAdditionalServices: {...}
+      // }
       let ordersToPost = [];
 
       for (let [id, order] of Object.entries(orders)) {
@@ -185,15 +202,12 @@ const CheckoutPage = observer(() => {
             "orderId": orderResult.id,
             "deviceId": cartCombo.deviceId,
             "device-combinationId": cartCombo["device-combinationId"],
-            "amount": cartCombo.amount
+            "amount": cartCombo.amount,
+            "isPreOrder": cartCombo.device.isPreOrder
           };
 
           orderSelectedAdditionalServicesResult["selected-additional-services"][orderDeviceCombo.id] = 
             user.cartSelectedAdditionalServices["selected-additional-services"][cartCombo.id];
-
-          // TODO: check is the current amount is the available one and
-          // show a modal with message that states that there's no such an amount rn
-          // with selecting new amount component (like in the cart modal)
 
           orderDeviceCombinationsResult.push(orderDeviceCombo);
           saleDevices.push(await getOneDeviceSaleDevices(cartCombo.device.id));
@@ -217,7 +231,34 @@ const CheckoutPage = observer(() => {
         await createOrder(result.order);
         await createReceivent(result.receivent);
         await createOrderCourierDelivery(result.orderCourierDelivery);
-        await createOrderDeviceCombinations(result.orderDeviceCombinations);
+
+        for (let combo of result.orderDeviceCombinations) {
+          await createOrderDeviceCombination(combo);
+
+          if (!combo.isPreOrder) {
+            const deviceCombination = await getDeviceCombination(combo["device-combinationId"]);
+            const stock = deviceCombination.stock;
+
+            const newTotalStock = (stock.totalStock - combo.amount) || 0;
+            let stockStatus;
+  
+            if (newTotalStock === 0) {
+              stockStatus = "Out of stock";
+            } else if (newTotalStock <= 15) {
+              stockStatus = "Is running out";
+            } else {
+              stockStatus = "In stock";
+            }
+  
+            const newStockContent = {
+              totalStock: newTotalStock,
+              stockStatus,
+            };
+  
+            await patchStock(stock.id, newStockContent)
+          }
+        }
+
         await createOrderSelectedAdditionalServices(result.orderSelectedAdditionalServices);
       }
       
@@ -248,7 +289,7 @@ const CheckoutPage = observer(() => {
         }
 
         // do not forget to update userStore's states after changing data on the server / in localStorage
-        updateCartData(user, fetching);
+        await fetching(user.cart?.id, null, true);
       } catch (e) {
         console.log(e.message);
       }
@@ -263,7 +304,10 @@ const CheckoutPage = observer(() => {
         </p>
       );
       app.setErrorModalInfo({ children: errorModalInfoChildren, id: "checkout-page-submit-error", className: "" });
+      app.setErrorModalBtnRef(app.checkoutSubmitBtnRef);
       setErrorModalVisibility(true, app);
+    } finally {
+      isAlreadySubmittingRef.current = false;
     }
   }
 
@@ -274,13 +318,15 @@ const CheckoutPage = observer(() => {
     setTimeout(() => navigate("/", { replace: true }, 0));
   };
 
-  function checkArePhoneNumberInputsValidAndHandleInvalidInputFocus(isErrorHandler, errorsFromHandler = null) {
+  function checkInputsValidAndHandleInvalidInputFocus(isErrorHandler, errorsFromHandler = null) {
+    let areInputsValid = true;
     let arePhoneNumbersValid = true;
     let phoneNumberInputToFocus = null;
 
     setIsSenderPhoneInputDirty(true);
     if (!isPhoneValidFn(senderPhoneInputValue)) {
       arePhoneNumbersValid = false;
+      areInputsValid = false;
       phoneNumberInputToFocus = senderPhoneNumberInputRef.current;
     }
 
@@ -292,6 +338,7 @@ const CheckoutPage = observer(() => {
         const isValid = isPhoneValidFn(phoneInput?.value);
         if (!isValid) {
           arePhoneNumbersValid = false;
+          areInputsValid = false;
           if (!phoneNumberInputToFocus) phoneNumberInputToFocus = phoneInput?.ref?.current;
         }
       }
@@ -305,22 +352,25 @@ const CheckoutPage = observer(() => {
       // we can't store boolean values in element props (they're converted into the string type)
       if (input.dataset?.isinvaliddeliverysectionbtn === "true") {
         input?.focus();
+        areInputsValid = false;
         break;
       } else if (isErrorHandler && errorsFromHandler?.[input?.name]) {
         setFocus(input.name);
+        areInputsValid = false;
         break;
       } else if (phoneNumberInputToFocus?.isEqualNode(input)) {
         // focus the invalid phone input only if it's located before invalid registered inputs
         phoneNumberInputToFocus?.focus();
+        areInputsValid = false;
         break;
       }
     }
 
-    return arePhoneNumbersValid;
+    return areInputsValid;
   }
 
   async function onSubmit(value) {
-    if (!checkArePhoneNumberInputsValidAndHandleInvalidInputFocus(false)) return;
+    if (!checkInputsValidAndHandleInvalidInputFocus(false)) return;
 
     debouncedSubmitCallback(value);
   }
@@ -332,7 +382,7 @@ const CheckoutPage = observer(() => {
           <h2>Checkout order</h2>
         </header>
         <form onSubmit={handleSubmit(
-          onSubmit, (errors) => checkArePhoneNumberInputsValidAndHandleInvalidInputFocus(true, errors))
+          onSubmit, (errors) => checkInputsValidAndHandleInvalidInputFocus(true, errors))
         }>
           <CheckoutPageMainContent
             register={register}

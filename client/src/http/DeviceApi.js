@@ -11,3 +11,8 @@ export async function getDevice(id, stringQueryParams = "") {
   const res = await $mockApi.get(`${ONE_DEVICE_API_URL.replace("ID_TO_REPLACE", id)}&${stringQueryParams}`);
   return res.data;
 }
+
+export async function getDeviceCombination(id) {
+  const res = await $mockApi.get(`/device-combinations/${id}?_expand=stock`);
+  return res.data;
+}

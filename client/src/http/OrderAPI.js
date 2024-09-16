@@ -15,8 +15,8 @@ export async function createOrderCourierDelivery(orderCourierDelivery) {
   return data;
 }
 
-export async function createOrderDeviceCombinations(orderDeviceCombinations) {
-  const { data } = await $mockApi.post("/order-device-combinations", orderDeviceCombinations);
+export async function createOrderDeviceCombination(orderDeviceCombination) {
+  const { data } = await $mockApi.post("/order-device-combinations", orderDeviceCombination);
   return data;
 }
 

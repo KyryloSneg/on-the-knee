@@ -8,10 +8,15 @@ import CartComboActions from "../utils/CartComboActions";
 
 const CheckoutPageAside = observer(() => {
   const { app, deviceStore, user } = useContext(Context);
+  const checkoutSubmitBtnRef = useRef(null);
 
   const orders = useGettingOrders();
   const orderAmount = Object.keys(orders).length;
   const prevDeliveryPrice = useRef(0);
+
+  useEffect(() => {
+    app.setCheckoutSubmitBtnRef(checkoutSubmitBtnRef);
+  }, [app, checkoutSubmitBtnRef]);
 
   const { deviceAmount, devicePrice } = CartComboActions.getDeviceAmountAndTotalPrice(
     user.cartDeviceCombinations, deviceStore.sales, deviceStore.saleTypeNames
@@ -73,7 +78,11 @@ const CheckoutPageAside = observer(() => {
         </div>
       </dl>
       <p>To pay <strong>{totalPriceStr}</strong></p>
-      <UIButton className="checkout-page-submit-btn" type="submit">
+      <UIButton 
+        className="checkout-page-submit-btn" 
+        type="submit"
+        ref={checkoutSubmitBtnRef}
+      >
         Checkout {orderWord}
       </UIButton>
     </aside>

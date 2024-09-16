@@ -8,8 +8,9 @@ import LocalStorageActions from "../utils/LocalStorageActions";
 import { getOneDeviceSaleDevices } from "../http/SalesAPI";
 
 // haven't implemented setCartSelectedAdditionalServices 'cause i have no need in it rn
+// cartId is optional if isToFetch === false
 function useGettingCartData(
-  cartId, setCartDevCombos = null, isUserStore = false, 
+  cartId = null, setCartDevCombos = null, isUserStore = false, 
   isToFetch = true, isToSetGlobalLoading = false, propToInvokeEffect = null
 ) {
   const { user: userStore, app } = useContext(Context);

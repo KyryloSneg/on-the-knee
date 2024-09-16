@@ -1,4 +1,5 @@
 import { makeAutoObservable } from "mobx";
+import { ERROR_MODAL_INITIAL_INFO } from "../utils/consts";
 
 class AppStore {
   constructor() {
@@ -23,6 +24,7 @@ class AppStore {
     this._isVisibleCommentGalleryModal = false;
     this._isVisibleCartModal = false;
     this._isVisibleErrorModal = false;
+    this._isVisibleWrongCartComboAmountsModal = false;
     this._isFocusedSearchForm = false;
 
     // contains the last element's ref from which was opened a modal window, a sidebar etc.
@@ -57,6 +59,7 @@ class AppStore {
     this._replyModalBtnRef = null;
     this._askSellerModalBtnRef = null;
     this._errorModalBtnRef = null;
+    this._checkoutSubmitBtnRef = null;
 
     this._userLocation = null;
     this._allLocations = [];
@@ -90,7 +93,7 @@ class AppStore {
 
     this._isToShowAsideDeliveryPrice = false;
 
-    this._errorModalInfo = { children: "", id: "error-modal", className: "" };
+    this._errorModalInfo = ERROR_MODAL_INITIAL_INFO;
 
     makeAutoObservable(this);
   }
@@ -173,6 +176,10 @@ class AppStore {
 
   setIsVisibleErrorModal(bool) {
     this._isVisibleErrorModal = bool;
+  }
+
+  setIsVisibleWrongCartComboAmountsModal(bool) {
+    this._isVisibleWrongCartComboAmountsModal = bool;
   }
 
   setIsFocusedSearchForm(bool) {
@@ -261,6 +268,10 @@ class AppStore {
 
   setErrorModalBtnRef(ref) {
     this._errorModalBtnRef = ref;
+  }
+
+  setCheckoutSubmitBtnRef(ref) {
+    this._checkoutSubmitBtnRef = ref;
   }
 
   setHintSearchResults(results) {
@@ -439,6 +450,10 @@ class AppStore {
     return this._isVisibleErrorModal;
   }
 
+  get isVisibleWrongCartComboAmountsModal() {
+    return this._isVisibleWrongCartComboAmountsModal;
+  }
+
   get isFocusedSearchForm() {
     return this._isFocusedSearchForm;
   }
@@ -525,6 +540,10 @@ class AppStore {
 
   get errorModalBtnRef() {
     return this._errorModalBtnRef;
+  }
+
+  get checkoutSubmitBtnRef() {
+    return this._checkoutSubmitBtnRef;
   }
 
   get hintSearchResults() {
