@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Context } from "../Context";
 import MainDevicePage from "./MainDevicePage";
 import DeviceInfoPage from "./DeviceInfoPage";
@@ -21,6 +21,9 @@ const DevicePage = observer(({ type }) => {
 
   let [id, combinationString] = deviceIdCombo.split("--");
   id = +id;
+
+  // using prevId to evade bugs that could possibly happen on switching between two different devices in browser history
+  const prevId = useRef(id);
 
   useOneDeviceFetching(id, setDevice);
   useOneDeviceFeedbacksFetching(device?.id, null, null, deviceStore);
@@ -72,9 +75,13 @@ const DevicePage = observer(({ type }) => {
     },
   ];
 
+  useEffect(() => {
+    prevId.current = id;
+  }, [id]);
+  
   return (
     <main>
-      <TabsPageLayout tabsData={tabsData} pageContent={renderInnerPage()} />
+      {prevId.current === id && <TabsPageLayout tabsData={tabsData} pageContent={renderInnerPage()} />}
     </main>
   );
 });

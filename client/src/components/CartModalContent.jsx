@@ -17,7 +17,7 @@ const CartModalContent = observer(({ closeModal }) => {
   const areCombosAndValuesSynced = Object.keys(deviceStore.deviceListItemsValues || {})?.length !== user.cartDeviceCombinations?.length;
   const isLoadingContent = (
     (user.isAuth && !_.isEqual(user.user, {})) && _.isEqual(user.cart, {})
-  ) || !deviceStore.sales?.length || !deviceStore.saleTypeNames?.length || !deviceStore.deviceListItemsValues
+  ) || !deviceStore.sales || !deviceStore.saleTypeNames || !deviceStore.deviceListItemsValues
   || !Object.keys(user.cartSelectedAdditionalServices)?.length || areCombosAndValuesSynced;
 
   let totalPrice;
@@ -48,7 +48,7 @@ const CartModalContent = observer(({ closeModal }) => {
             {!!user.cartDeviceCombinations?.length
               ? (
                 <>
-                  <CartModalDeviceList />
+                  <CartModalDeviceList type="cart" />
                   <div className="cart-modal-total-price-wrap">
                     <span>Total:</span>
                     <DeviceItemPrice price={totalPrice} />

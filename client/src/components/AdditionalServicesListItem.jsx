@@ -1,16 +1,19 @@
 import "./styles/AdditionalServicesListItem.css";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import dropdownArrowIcon from "../assets/expand_more.svg";
 import AdditionalServicesExpandedList from './AdditionalServicesExpandedList';
 import _ from "lodash";
 
 const AdditionalServicesListItem = ({ additionalService, id, selectedItems, setSelectedItems }) => {
-  let initIsChecked = !!selectedItems?.find(item => item.parentId === id);
-  const [isChecked, setIsChecked] = useState(initIsChecked);
+  const isChecked = !!selectedItems?.find(item => item.parentId === id);
   const [isExpanded, setIsExpanded] = useState(false);
   // finding device-combinations of device in "additional-service" field
   const additionalServiceOptions = additionalService["additional-service"].device["device-combinations"];
   const addServiceImageSrc = additionalServiceOptions[0].images[0].src;
+
+  useEffect(() => {
+    setIsExpanded(isChecked);
+  }, [isChecked]);
 
   let checkboxDivClass = "checkbox-div";
   if (isChecked) {
@@ -19,6 +22,7 @@ const AdditionalServicesListItem = ({ additionalService, id, selectedItems, setS
 
   function onCheckboxClick() {
     const nextStatesValue = !isChecked;
+    if (isExpanded !== !isChecked) setIsExpanded(true);
 
     let nextSelectedItems;
     if (nextStatesValue) {
@@ -36,9 +40,6 @@ const AdditionalServicesListItem = ({ additionalService, id, selectedItems, setS
     }
 
     setSelectedItems(nextSelectedItems);
-    setIsChecked(nextStatesValue);
-
-    if (isExpanded !== nextStatesValue) setIsExpanded(true);
   }
 
   function onArrowClick() {
@@ -50,6 +51,7 @@ const AdditionalServicesListItem = ({ additionalService, id, selectedItems, setS
     <div className="additional-services-list-item">
       <div>
         <button
+          type="button"
           aria-checked={isChecked}
           role="checkbox"
           onClick={onCheckboxClick}
@@ -68,7 +70,7 @@ const AdditionalServicesListItem = ({ additionalService, id, selectedItems, setS
             {additionalService.name}
           </span>
         </button>
-        <button className="additional-services-item-arrow" onClick={onArrowClick}>
+        <button type="button" className="additional-services-item-arrow" onClick={onArrowClick}>
           <img
             src={dropdownArrowIcon}
             alt={isExpanded ? "Collapse" : "Expand"}
@@ -84,7 +86,6 @@ const AdditionalServicesListItem = ({ additionalService, id, selectedItems, setS
           additionalServiceOptions={additionalServiceOptions}
           labelledBy={spanId}
           parentId={id}
-          setParentIsChecked={setIsChecked}
           selectedItems={selectedItems}
           setSelectedItems={setSelectedItems}
         />

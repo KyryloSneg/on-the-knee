@@ -1,0 +1,39 @@
+.checkout-page-delivery-radio {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.checkout-page-delivery-radio.checked {
+  border: 1px solid #7373ff;
+}
+
+.checkout-page-delivery-radio > button {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  gap: 6px;
+  justify-content: flex-start;
+  align-items: center;
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.checkout-page-delivery-radio > button > strong {
+  justify-self: flex-end;
+}
+
+.checkout-page-delivery-radio > button > strong.free {
+  color: #00dd1d;
+}
+
+.checkout-page-delivery-radio > button:focus-visible > .radio-div {
+  outline: 1px solid #7373ff;
+}
+
+.checkout-page-delivery-radio > button + * {
+  padding: 0 4px 6px 26px;
+}

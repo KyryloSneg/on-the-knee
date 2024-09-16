@@ -61,7 +61,9 @@ module.exports = function createData () {
     "device-answers": [],
 
     "orders": [],
+    "order-courier-deliveries": [],
     "order-device-combinations": [],
+    "order-selected-additional-services": [],
 
     "deliveries": [],
     "delivery-types": [],
@@ -79,10 +81,10 @@ module.exports = function createData () {
     data["streets"] = result.streets;
     data["store-pickup-points"] = result.storePickupPoints;
 
-    const { deliveryTypes, deliveries, courierCities } = createDeliveries(result.cities);
+    const { deliveryTypes, deliveries } = createDeliveries(result.cities);
     data["delivery-types"] = deliveryTypes;
     data["deliveries"] = deliveries;
-    data["courier-schedules"] = createCourierSchedules(courierCities);
+    data["courier-schedules"] = createCourierSchedules(deliveries, deliveryTypes);
   });
 
   const devicesPromise = createDevices().then(result => {
@@ -135,6 +137,7 @@ module.exports = function createData () {
                                      data["store-pickup-points"], data["courier-schedules"],
                                      data["sale-devices"], data["sales"], data["sale-types"]);
     data["orders"] = orderResult.orders;
+    data["order-courier-deliveries"] = orderResult.orderCourierDeliveries;
     data["order-device-combinations"] = orderResult.orderDeviceCombinations;
     data["receivents"] = orderResult.receivents;
     console.log("finished");

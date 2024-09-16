@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import StarRating from "./UI/starRating/StarRating";
 import useWindowWidth from "../hooks/useWindowWidth";
 import FilePickerSection from "./UI/filePicker/FilePickerSection";
+import ReactHookFormInput from "./UI/reactHookFormInput/ReactHookFormInput";
 
 const CommentModalContentInputs = ({ 
   type, register, errors, areInputsBlocked, errorsBeforeBlock, isToShowErrors, setIsToShowErrors, clearErrors, setError,
@@ -10,6 +11,12 @@ const CommentModalContentInputs = ({
   files, setFiles
 }) => {
   const windowWidth = useWindowWidth();
+  const baseOptions = {
+    validate: {
+      isTooShort: value => value.trim().length >= 3 || "This field must contain more than or equal to 3 characters",
+      isTooLarge: value => value.trim().length <= 1000 || "This field must contain less than or equal to 1000 characters",
+    }
+  };
 
   let inputsGroupClass = "comment-modal-form-inputs";
   if (areInputsBlocked) {
@@ -70,66 +77,22 @@ const CommentModalContentInputs = ({
               </p>
             }
           </section>
-          <div>
-            <label>
-              Advantages (optional)
-              <input
-                autoComplete="off"
-                disabled={areInputsBlocked}
-                className={
-                  (!areInputsBlocked && errors?.advantages && isToShowErrors) ? "invalid" : ""
-                }
-                {...register("advantages", {
-                  minLength: {
-                    value: 3,
-                    message: "This field must contain more than or equal to 3 characters"
-                  },
-                  maxLength: {
-                    value: 1000,
-                    message: "This field must contain less than or equal to 1000 characters"
-                  },
-                  validate: (value) => {
-                    return value.trim().length >= 3 || "This field must contain more than or equal to 3 characters"
-                  }
-                })}
-              />
-            </label>
-            {(!areInputsBlocked && errors?.advantages && isToShowErrors) &&
-              <p className="comment-modal-form-error-msg" aria-live="polite">
-                {errors?.advantages?.message || "Error!"}
-              </p>
-            }
-          </div>
-          <div>
-            <label>
-              Disadvantages (optional)
-              <input
-                autoComplete="off"
-                disabled={areInputsBlocked}
-                className={
-                  (!areInputsBlocked && errors?.disadvantages && isToShowErrors) ? "invalid" : ""
-                }
-                {...register("disadvantages", {
-                  minLength: {
-                    value: 3,
-                    message: "This field must contain more than or equal to 3 characters"
-                  },
-                  maxLength: {
-                    value: 1000,
-                    message: "This field must contain less than or equal to 1000 characters"
-                  },
-                  validate: (value) => {
-                    return value.trim().length >= 3 || "This field must contain more than or equal to 3 characters"
-                  }
-                })}
-              />
-            </label>
-            {(!areInputsBlocked && errors?.disadvantages && isToShowErrors) &&
-              <p className="comment-modal-form-error-msg" aria-live="polite">
-                {errors?.disadvantages?.message || "Error!"}
-              </p>
-            }
-          </div>
+          <ReactHookFormInput
+            labelText="Advantages (optional)"
+            inputName="advantages"
+            errors={errors}
+            registerFnResult={register("advantages", baseOptions)}
+            isDisabled={areInputsBlocked}
+            isErrorCondition={!areInputsBlocked && errors?.advantages && isToShowErrors}
+          />
+          <ReactHookFormInput
+            labelText="Disadvantages (optional)"
+            inputName="disadvantages"
+            errors={errors}
+            registerFnResult={register("disadvantages", baseOptions)}
+            isDisabled={areInputsBlocked}
+            isErrorCondition={!areInputsBlocked && errors?.disadvantages && isToShowErrors}
+          />
         </>
       }
       <div>
@@ -141,17 +104,11 @@ const CommentModalContentInputs = ({
               (!areInputsBlocked && errors?.comment && isToShowErrors) ? "invalid" : ""
             }
             {...register("comment", {
-              required: "This field is required",
-              minLength: {
-                value: 3,
-                message: "This field must contain more than or equal to 3 characters"
-              },
-              maxLength: {
-                value: 3000,
-                message: "This field must contain less than or equal to 3000 characters"
-              },
-              validate: (value) => {
-                return value.trim().length >= 3 || "This field must contain more than or equal to 3 characters"
+              ...baseOptions,
+              validate: {
+                ...baseOptions.validate,
+                isRequired: value => !!value.trim().length || "Required field",
+                isTooLarge: value => value.trim().length <= 1000 || "This field must contain less than or equal to 1000 characters"
               }
             })}
           />

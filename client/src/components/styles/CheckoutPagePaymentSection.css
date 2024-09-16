@@ -1,0 +1,10 @@
+.checkout-page-payment-section > .checkout-page-section-btn {
+  cursor: auto;
+}
+
+.checkout-page-payment-section > .checkout-page-section-btn:active,
+.checkout-page-payment-section > .checkout-page-section-btn:hover,
+.checkout-page-payment-section > .checkout-page-section-btn:focus-visible {
+  color: black;
+  background: none;
+}

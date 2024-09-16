@@ -2,6 +2,7 @@
   width: 100%;
   height: 100%;
   max-width: 1000px;
+  max-height: 100%;
   border-radius: 0;
   padding: 0;
 }
@@ -14,6 +15,7 @@
 @media screen and (min-width: 800px) {
   #self-delivery-modal {
     width: calc(100% - 30px);
+    max-height: 95%;
     border-radius: 6px;
     height: auto;
     max-height: 95%;

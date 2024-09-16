@@ -61,7 +61,6 @@ module.exports = async () => {
           "regionId": currentRegion?.id,
           "districtId": currentDistrict?.id,
           "fullName": fullName,
-          "isAccessible": dbCityId === 1 || !faker.datatype.boolean(0.15), // we guarantee that there will be at least one accessible city
         }
         cities.push(dbCity);
 
@@ -170,7 +169,6 @@ module.exports = async () => {
       "regionId": region.id,
       "districtId": district?.id,
       "fullName": fullName,
-      "isAccessible": true
     }
 
     cities.push(city);

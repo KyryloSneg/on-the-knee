@@ -1,14 +1,22 @@
 export default class StringActions {
 
   static capitalize(str) {
-    const result = str[0].toUpperCase() + str.slice(1);
+    let result = "";
+    if (str?.length) result = str[0]?.toUpperCase() + str.slice(1);
+    
     return result;
   }
 
+  // "lorem  ipsum a    text " => "lorem ipsum a text"
   static removeRedundantSpaces(str) {
     let result = str.trim();
     result = result.split(" ").filter(word => word !== "").join(" ").trim();
 
+    return result
+  }
+
+  static removeAllSpaces(str) {
+    let result = str.split("").filter(char => char !== " ").join("");
     return result
   }
 

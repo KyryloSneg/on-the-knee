@@ -1,6 +1,6 @@
-import AppStore from "../stores/AppStore";
-import DeviceStore from "../stores/DeviceStore";
-import UserStore from "../stores/UserStore";
+// import AppStore from "../stores/AppStore";
+// import DeviceStore from "../stores/DeviceStore";
+// import UserStore from "../stores/UserStore";
 
 export const ROOT_ROUTE = "/";
 
@@ -133,7 +133,6 @@ export const mockSearchResults = {
   ],
   "history": []
 };
-
 // params that don't appear in used filters like a sort filter
 export const SPECIAL_QUERY_PARAMS = ["sort", "page", "pagesToFetch", "text", "categoryId"];
 
@@ -149,7 +148,7 @@ export const CATEGORY_SEARCH_RESULTS_MAX_AMOUNT = 3;
 export const HISTORY_SEARCH_RESULTS_MAX_AMOUNT = 6;
 
 // renavigate user to categories page if subcategories amount >= MIN_CATEGORIES_LENGTH_TO_RENAVIGATE
-// TODO: change to 12
+// TODO: change to 12 in the production build
 export const MIN_CATEGORIES_LENGTH_TO_RENAVIGATE = 8;
 
 // we use the const below on one of the columns overflow
@@ -176,29 +175,41 @@ export const DEFAULT_USER_LOCATION_NAME = "Kyiv";
 // coords of Kyiv
 export const DEFAULT_INIT_MAP_COORDS = { lng: 30.5241361, lat: 50.4500336 };
 
-// set up mock stores
-const deviceStoreInstance = new DeviceStore();
-const userStoreInstance = new UserStore();
+// in dollars
+export const TO_LIFT_ON_THE_FLOOR_PRICE = 6;
 
-deviceStoreInstance.setFilters({
-  "category": ["phones", "TV", "computers"],
-  "brand": ["Apple", "Asus", "LG", "Samsung"],
-  "hz": ["50", "60", "75", "120", "140", "144", "200", "240"],
-});
+export const FIRST_CHECKOUT_ORDER_ID = 1;
+export const CHECKOUT_PAGE_INPUT_SERVICE_CLASS = "dataset-checkout-page-input";
 
-deviceStoreInstance.setUsedFilters({});
+export const ERROR_MODAL_INITIAL_INFO = { children: "", id: "error-modal", className: "" };
 
-deviceStoreInstance.setInitialMinPrice(1300);
-deviceStoreInstance.setInitialMaxPrice(79900);
+// let it be commented below because i don't write any tests rn
+// (if you want to uncomment it, insert this code into a separate file
+// to avoid cyclical import error between AppStore.js and this file)
 
-// if i will be testing component that uses devices from store i should fill up the array with some of them
-deviceStoreInstance.setDevices([]);
-userStoreInstance.setIsAuth(true);
+// // set up mock stores
+// const deviceStoreInstance = new DeviceStore();
+// const userStoreInstance = new UserStore();
 
-// mock stores to use in tests
-export const mockContextValue = {
-  app: new AppStore(),
-  user: userStoreInstance,
-  deviceStore: deviceStoreInstance,
-  isTest: true,
-}
+// deviceStoreInstance.setFilters({
+//   "category": ["phones", "TV", "computers"],
+//   "brand": ["Apple", "Asus", "LG", "Samsung"],
+//   "hz": ["50", "60", "75", "120", "140", "144", "200", "240"],
+// });
+
+// deviceStoreInstance.setUsedFilters({});
+
+// deviceStoreInstance.setInitialMinPrice(1300);
+// deviceStoreInstance.setInitialMaxPrice(79900);
+
+// // if i will be testing component that uses devices from store i should fill up the array with some of them
+// deviceStoreInstance.setDevices([]);
+// userStoreInstance.setIsAuth(true);
+
+// // mock stores to use in tests
+// export const mockContextValue = {
+//   app: new AppStore(),
+//   user: userStoreInstance,
+//   deviceStore: deviceStoreInstance,
+//   isTest: true,
+// }

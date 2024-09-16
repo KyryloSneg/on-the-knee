@@ -1,0 +1,35 @@
+.wrong-cart-combo-amounts-deleted-list-item {
+  display: flex;
+  gap: 10px;
+}
+
+.cart-modal-list-item-main-row {
+  display: flex;
+  gap: 10px;
+}
+
+.wrong-cart-combo-amounts-deleted-list-img-wrap {
+  display: grid;
+}
+
+.wrong-cart-combo-amounts-deleted-list-img-wrap > img {
+  width: 90px;
+  max-height: 90px;
+  object-fit: contain;
+  align-self: center;
+  justify-content: center;
+}
+
+.wrong-cart-combo-amounts-deleted-list-item > a {
+  transition: color 0.2s, outline 0s;
+}
+
+.wrong-cart-combo-amounts-deleted-list-item > a {
+  height: max-content;
+  font-size: 1.5rem;
+  transition: color 0.2s, outline 0s;
+}
+
+.wrong-cart-combo-amounts-deleted-list-item > a.link-colors {
+  width: 100%;
+}

@@ -1,0 +1,61 @@
+.checkout-page-aside {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: max-content;
+  padding: 18px;
+  border: 1px solid #e9e9e9;
+  border-radius: 16px;
+  background-color: #f9f9f9;
+}
+
+.checkout-page-aside > header > h3 {
+  font-size: 2.5rem;
+  margin: 0;
+}
+
+.checkout-page-aside > dl {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 1.5rem;
+}
+
+.checkout-page-aside > dl > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 4px;
+}
+
+.checkout-page-aside > dl > div > dt {
+  color: rgb(90, 90, 90);
+}
+
+.checkout-page-aside > dl > div > dd {
+  font-weight: bold;
+}
+
+.checkout-page-aside > p {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 4px;
+}
+
+.checkout-page-submit-btn.ui-button {
+  background-color: #00ca1b;
+}
+
+.checkout-page-submit-btn.ui-button:hover,
+.checkout-page-submit-btn.ui-button:hover,
+.checkout-page-submit-btn.ui-button:focus-visible {
+  background-color: #00da1d;
+}
+
+@media screen and (min-width: 1000px) {
+  .checkout-page-aside {
+    position: sticky;
+    top: 90px;
+  }
+}

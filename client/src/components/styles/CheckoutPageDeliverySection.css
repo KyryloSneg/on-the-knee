@@ -1,0 +1,13 @@
+.checkout-page-section-btn.error-variant {
+  grid-template-columns: auto auto auto 1fr;
+}
+
+.checkout-page-section-btn-required-error-msg {
+  color: #a10e0e;
+}
+
+/* we can focus invalid delivery section btn on form submit programatically (it doesn't trigger :focus-visible pseudo-class) */
+.checkout-page-section-btn:focus {
+  color: #7373ff;
+  background-color: #dfdfdf;
+}

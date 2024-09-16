@@ -16,6 +16,7 @@ const CartModalBtnGroup = observer(({ closeModal }) => {
 
   function onSubmitClick(e) {
     if (isBlockedSubmit) e.preventDefault();
+    else closeModal();
   }
 
   return (

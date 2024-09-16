@@ -7,9 +7,9 @@ import DeviceItemAddToCartBtn from "./DeviceItemAddToCartBtn";
 import { observer } from "mobx-react-lite";
 import { Context } from "../Context";
 
-const PurchaseDeviceFooter = observer(({ device, selectedCombo }) => {
+const PurchaseDeviceFooter = observer(({ device, selectedCombo, selectedAddServices }) => {
   const { deviceStore } = useContext(Context); 
-  if (!deviceStore.sales?.length || !deviceStore.saleTypeNames?.length) return <div />;
+  if (!deviceStore.sales || !deviceStore.saleTypeNames) return <div />;
 
   const image = selectedCombo.images[0];
   const { discountPercentage } =
@@ -24,7 +24,11 @@ const PurchaseDeviceFooter = observer(({ device, selectedCombo }) => {
       </p>
       <DeviceItemPrice price={selectedCombo.price} discountPercentage={discountPercentage} />
       <AddToDesiredListBtn />
-      <DeviceItemAddToCartBtn combinations={device["device-combinations"]} combo={selectedCombo} />
+      <DeviceItemAddToCartBtn 
+        combinations={device["device-combinations"]} 
+        combo={selectedCombo} 
+        selectedAddServices={selectedAddServices} 
+      />
     </section>
   );
 });
