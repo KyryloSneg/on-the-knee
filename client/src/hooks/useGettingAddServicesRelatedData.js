@@ -4,7 +4,7 @@ import { getDevice } from "../http/DeviceApi";
 import _ from "lodash";
 import { getAdditionalService, getOneDevAdditionalServiceDevices } from "../http/AdditionalServicesAPI";
 
-function useGettingAddServicesRelatedData(device, setAdditionalServicesObj) {
+function useGettingAddServicesRelatedData(device, setAdditionalServicesObj, isToFetch = true) {
 
   async function fetchingFunc(dev) {
     let deviceClone = _.cloneDeep(dev);
@@ -34,8 +34,8 @@ function useGettingAddServicesRelatedData(device, setAdditionalServicesObj) {
   const [fetching] = useFetching(fetchingFunc);
 
   useEffect(() => {
-    if (!!device) fetching(device);
-  }, [device, fetching]);
+    if (!!device && isToFetch) fetching(device);
+  }, [device, fetching, isToFetch]);
 
 }
 

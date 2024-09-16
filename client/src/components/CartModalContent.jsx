@@ -48,7 +48,7 @@ const CartModalContent = observer(({ closeModal }) => {
             {!!user.cartDeviceCombinations?.length
               ? (
                 <>
-                  <CartModalDeviceList />
+                  <CartModalDeviceList type="cart" />
                   <div className="cart-modal-total-price-wrap">
                     <span>Total:</span>
                     <DeviceItemPrice price={totalPrice} />

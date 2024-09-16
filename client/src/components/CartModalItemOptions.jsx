@@ -13,7 +13,7 @@ const CartModalItemOptions = observer(({ combination }) => {
   const { user, app } = useContext(Context);
   const wrapperRef = useRef(null);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
-  const fetching = useGettingCartData(app.cart?.id, null, true, false);
+  const fetching = useGettingCartData(null, null, true, false);
 
   function onOpen() {
     setIsPopupVisible(true);
