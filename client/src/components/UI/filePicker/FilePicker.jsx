@@ -32,6 +32,7 @@ const FilePicker = ({ files, setFiles, isMultiple = true, propsHandleChange = nu
         onChange={handleChange}
         accept={accept}
         multiple={isMultiple}
+        tabIndex={-1}
         ref={inputFileRef}
       />
       <UIButton
