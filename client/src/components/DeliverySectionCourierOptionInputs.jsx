@@ -5,6 +5,7 @@ import ReactHookFormInput from "./UI/reactHookFormInput/ReactHookFormInput";
 import _ from "lodash";
 import { useWatch } from "react-hook-form";
 import { CHECKOUT_PAGE_INPUT_SERVICE_CLASS, TO_LIFT_ON_THE_FLOOR_PRICE } from "../utils/consts";
+import StringActions from "../utils/StringActions";
 
 const OPTIONS = Object.freeze([
   {
@@ -91,7 +92,9 @@ const DeliverySectionCourierOptionInputs = ({
               required: value => value.trim().length > 0 || "Required",
               isTooLong: value => value.trim().length <= 1000 || "Can't be more than 1000 characters",
               isEnglish: value => {
-                return (/^[a-zA-Z0-9]+$/.test(value.trim()) && isNaN(+value.trim())) || "English chars with digits (or without) only";
+                const valueWithoutSpaces = StringActions.removeAllSpaces(value);
+                return (/^[a-zA-Z0-9]+$/.test(valueWithoutSpaces) && isNaN(+valueWithoutSpaces)) 
+                  || "English chars with digits (or without) only";
               },
             }
           })}
