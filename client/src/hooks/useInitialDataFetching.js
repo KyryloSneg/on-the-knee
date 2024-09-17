@@ -66,15 +66,23 @@ function useInitialDataFetching() {
     }
 
     try {
-      const allLocations = await getLocations();
+      let allLocations = [];
+      
+      // wrapping up our getLocations fetch to not affect
+      // userLocation that can be stored in the localStorage
+      try {
+        allLocations = await getLocations() || [];
+      } catch(e) {
+        console.log(e.message);
+      }
 
       let userLocation = LocalStorageActions.getItem("location");
-      if (!userLocation) {
+      if (!userLocation && allLocations?.length) {
         try {
           // auto-getting user location
           // (using try ... catch because ipify crushes sometimes)
           const fetchedUserLocation = await getUserLocation();
-          userLocation = allLocations.find(location => location.name === fetchedUserLocation.city);
+          userLocation = allLocations.find(location => location.name === fetchedUserLocation.city) || null;
         } catch (e) {
           console.log(e.message);
         }
@@ -82,7 +90,7 @@ function useInitialDataFetching() {
         app.setIsUserLocationDeterminedCorrectly(!!userLocation);
         if (!userLocation) {
           // if we still haven't found user location, set default one (Kyiv)
-          userLocation = allLocations.find(location => location.name === DEFAULT_USER_LOCATION_NAME);
+          userLocation = allLocations.find(location => location.name === DEFAULT_USER_LOCATION_NAME) || null;
         }
 
         app.setIsToShowUserLocationNotification(true);
