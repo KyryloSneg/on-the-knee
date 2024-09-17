@@ -315,7 +315,7 @@ const CheckoutPage = observer(() => {
   if (!user.cartDeviceCombinations?.length) {
     // using timeout to prevent this error to appear:
     // https://stackoverflow.com/questions/62336340/cannot-update-a-component-while-rendering-a-different-component-warning
-    setTimeout(() => navigate("/", { replace: true }, 0));
+    setTimeout(() => navigate(ROOT_ROUTE, { replace: true }, 0));
   };
 
   function checkInputsValidAndHandleInvalidInputFocus(isErrorHandler, errorsFromHandler = null) {
