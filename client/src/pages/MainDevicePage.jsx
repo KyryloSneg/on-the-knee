@@ -170,6 +170,7 @@ const MainDevicePage = observer(({ device, combinationString, feedbacks }) => {
           additionalServicesObj={additionalServicesObj}
           selectedAddServices={selectedAddServices}
           setSelectedAddServices={setSelectedAddServices}
+          deviceSaleTypes={deviceSaleTypes}
           isInitialRenderRef={isInitialRender}
           ref={rightDescRef}
         />

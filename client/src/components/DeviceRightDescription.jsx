@@ -8,13 +8,14 @@ import DeviceRightDescHeading from "./DeviceRightDescHeading";
 import DeviceRightDescSales from "./DeviceRightDescSales";
 import DeviceSellerBlock from "./DeviceSellerBlock";
 import UserLocationBtn from "./UserLocationBtn";
-import SelfDeliveryBtn from "./SelfDeliveryBtn";
+import DeviceRightDescDeliveryList from "./DeviceRightDescDeliveryList";
 
 const DeviceRightDescription = forwardRef(({ 
   device, combinationString, selectedCombination, 
   defaultCombo, salesAndTypes, attributesList, 
   hrefObjects, seller, price, discountPercentage,
-  additionalServicesObj, selectedAddServices, setSelectedAddServices, isInitialRenderRef
+  additionalServicesObj, selectedAddServices, 
+  deviceSaleTypes, setSelectedAddServices, isInitialRenderRef
 }, ref) => {
   if (isInitialRenderRef.current) isInitialRenderRef.current = false;
 
@@ -66,8 +67,7 @@ const DeviceRightDescription = forwardRef(({
           selectedAddServices={selectedAddServices}
         />
       </div>
-      {/* TODO: create courier delivery item??? */}
-      <SelfDeliveryBtn variant="device-page" />
+      <DeviceRightDescDeliveryList deviceSaleTypes={deviceSaleTypes} />
       <UserLocationBtn additionalText="Deliver to" className="device-right-desc-location-btn" />
     </section>
   );
