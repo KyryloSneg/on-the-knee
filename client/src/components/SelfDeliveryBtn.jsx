@@ -1,6 +1,6 @@
 import "./styles/SelfDeliveryBtn.css";
-import deliveryIcon from "../assets/delivery_24x24_434343.svg";
-import whiteDeliveryIcon from "../assets/delivery_24x24_white.svg";
+import deliveryIcon from "../assets/store_24x24_434343.svg";
+import whiteDeliveryIcon from "../assets/store_24x24_white.svg";
 import setSelfDeliveryModalVisibility from "../utils/setSelfDeliveryModalVisibility";
 import { useContext, useRef } from "react";
 import { Context } from "../Context";

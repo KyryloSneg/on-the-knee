@@ -1,0 +1,5 @@
+.device-right-desc-delivery-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
