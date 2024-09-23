@@ -1,0 +1,16 @@
+.authentification-modal-variations-list {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.authentification-modal-variations-list > li {
+  display: flex;
+  justify-content: center;
+}
+
+.authentification-modal-variation {
+  width: 100%;
+  max-width: 400px;
+}

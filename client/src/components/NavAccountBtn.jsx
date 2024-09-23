@@ -3,14 +3,20 @@ import homeIcon from "../assets/home.svg";
 import NavIconBtn from "./UI/navIconBtn/NavIconBtn";
 import "./styles/NavAccountBtn.css";
 import { USER_ROUTE } from "../utils/consts";
-import { useContext } from "react";
+import { useContext, useRef } from "react";
 import { Context } from "../Context";
+import { observer } from "mobx-react-lite";
+import setAuthentificationModalVisibility from "../utils/setAuthentificationModalVisibility";
 
-const NavAccountBtn = () => {
-  const { user } = useContext(Context);
+const NavAccountBtn = observer(() => {
+  const { user, app } = useContext(Context);
+  const btnRef = useRef(null);
 
   function onClick() {
-    // open login-registration modal window or link to the user cabinet page
+    if (!user.isAuth) {
+      setAuthentificationModalVisibility(true, app);
+      app.setAuthentificationModalBtnRef(btnRef);
+    }
   }
 
   return (
@@ -18,12 +24,13 @@ const NavAccountBtn = () => {
       src={user.isAuth ? homeIcon : accBtnIcon}     
       alt="Account"
       className="acc-button"          
-      isLink="true"           
+      isLink={user.isAuth}         
       route={USER_ROUTE}      
       aria-label="Your account"         
       onClick={onClick} 
+      ref={btnRef}
     />
   );
-}
+});
 
 export default NavAccountBtn;

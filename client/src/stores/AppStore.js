@@ -25,6 +25,7 @@ class AppStore {
     this._isVisibleCartModal = false;
     this._isVisibleErrorModal = false;
     this._isVisibleWrongCartComboAmountsModal = false;
+    this._isVisibleAuthentificationModal = false;
     this._isFocusedSearchForm = false;
 
     // contains the last element's ref from which was opened a modal window, a sidebar etc.
@@ -59,6 +60,7 @@ class AppStore {
     this._replyModalBtnRef = null;
     this._askSellerModalBtnRef = null;
     this._errorModalBtnRef = null;
+    this._authentificationModalBtnRef = null;
     this._checkoutSubmitBtnRef = null;
 
     this._userLocation = null;
@@ -182,6 +184,10 @@ class AppStore {
     this._isVisibleWrongCartComboAmountsModal = bool;
   }
 
+  setIsVisibleAuthentificationModal(bool) {
+    this._isVisibleAuthentificationModal = bool;
+  }
+
   setIsFocusedSearchForm(bool) {
     this._isFocusedSearchForm = bool;
   }
@@ -268,6 +274,10 @@ class AppStore {
 
   setErrorModalBtnRef(ref) {
     this._errorModalBtnRef = ref;
+  }
+
+  setAuthentificationModalBtnRef(ref) {
+    this._authentificationModalBtnRef = ref;
   }
 
   setCheckoutSubmitBtnRef(ref) {
@@ -454,6 +464,10 @@ class AppStore {
     return this._isVisibleWrongCartComboAmountsModal;
   }
 
+  get isVisibleAuthentificationModal() {
+    return this._isVisibleAuthentificationModal;
+  }
+
   get isFocusedSearchForm() {
     return this._isFocusedSearchForm;
   }
@@ -540,6 +554,10 @@ class AppStore {
 
   get errorModalBtnRef() {
     return this._errorModalBtnRef;
+  }
+
+  get authentificationModalBtnRef() {
+    return this._authentificationModalBtnRef;
   }
 
   get checkoutSubmitBtnRef() {
