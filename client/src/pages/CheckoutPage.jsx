@@ -354,6 +354,8 @@ const CheckoutPage = observer(() => {
         input?.focus();
         areInputsValid = false;
         break;
+        // if the current input is a phone number one !!errorsFromHandler?.[input?.name] is false
+        // because errorsFromHandler includes only errors from the registered inputs
       } else if (isErrorHandler && errorsFromHandler?.[input?.name]) {
         setFocus(input.name);
         areInputsValid = false;

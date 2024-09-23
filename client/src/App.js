@@ -41,6 +41,7 @@ import CartModal from "./components/CartModal";
 import useDeliveriesFetching from "./hooks/useDeliveriesFetching";
 import ErrorModal from "./components/ErrorModal";
 import WrongCartComboAmountsModal from "./components/WrongCartComboAmountsModal";
+import AuthentificationModal from "./components/AuthenticationModal";
  
 const App = observer(() => {
   const { app, deviceStore } = useContext(Context);
@@ -160,6 +161,7 @@ const App = observer(() => {
       {app.isVisibleCartModal && <CartModal />}
       {app.isVisibleErrorModal && <ErrorModal />}
       {app.isVisibleWrongCartComboAmountsModal && <WrongCartComboAmountsModal />}
+      {app.isVisibleAuthentificationModal && <AuthentificationModal />}
       <header ref={headerRef}>
         <Navbar elemToFocus={pageElemToFocus} navCategoryBtnRef={navCategoryBtnRef} />
         {(app.isVisibleCategoriesMenu && !!Object.keys(deviceStore.categories).length) && 

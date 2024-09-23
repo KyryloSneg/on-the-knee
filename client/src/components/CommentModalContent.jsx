@@ -9,10 +9,11 @@ import { v4 } from "uuid";
 import { createDeviceFeedback, createDeviceFeedbackReply, getOneDeviceFeedbacks } from "../http/FeedbacksAPI";
 import { createDeviceAnswer, createDeviceQuestion, getOneDeviceQuestions } from "../http/DeviceQuestionsAPI";
 import { createSellerQuestion } from "../http/SellerQuestionsAPI";
+import setAuthentificationModalVisibility from "../utils/setAuthentificationModalVisibility";
 
 const POSSIBLE_TYPES = ["feedback", "reply", "question", "answer", "askSeller"];
 const CommentModalContent = observer(({ type, closeModal }) => {
-  const { deviceStore, user } = useContext(Context);
+  const { deviceStore, user, app } = useContext(Context);
   const [isToShowErrors, setIsToShowErrors] = useState(true);
   const [isAnonymously, setIsAnonymously] = useState(false);
   const [settedStarRating, setSettedStarRating] = useState(0);
@@ -32,9 +33,20 @@ const CommentModalContent = observer(({ type, closeModal }) => {
 
   if (!POSSIBLE_TYPES.includes(type)) throw Error("type of Comment Modal Content is not defined or incorrect");
 
+  // pass ref into arguments of the function instead of passing it as a prop below in the tree
+  // because it's preety weird to use set ref only for a small button in the big component
   function openLoginModal() {
     closeModal();
-    // TODO: open the modal
+
+    let ref = null;
+    if (type === "feedback") {
+      ref = app.deviceFeedbackModalBtnRef;
+    } else if (type === "question") {
+      ref = app.questionCommentModalBtnRef;
+    }
+
+    app.setAuthentificationModalBtnRef(ref);
+    setAuthentificationModalVisibility(true, app);
   }
 
   async function onSubmit(data) {
