@@ -1,18 +1,27 @@
 import "./styles/AuthentificationModalContent.css";
 import AuthentificationModalForm from "./AuthentificationModalForm";
 import AuthentificationModalVariationsList from "./AuthentificationModalVariationsList";
-import { useRef, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import useLodashDebounce from "../hooks/useLodashDebounce";
 import { useForm } from "react-hook-form";
 import isPhoneValidFn from "../utils/isPhoneValid";
-import { AUTHENTIFICATION_MODAL_INPUT_SERVICE_CLASS } from "../utils/consts";
+import { AUTHENTIFICATION_MODAL_INPUT_SERVICE_CLASS, AUTHENTIFICATION_MODAL_SUBMIT_BTN_SERVICE_CLASS } from "../utils/consts";
 import _ from "lodash";
+import { getUserIp } from "../http/UserLocationAPI";
+import { Context } from "../Context";
+import { observer } from "mobx-react-lite";
+import setErrorModalVisibility from "../utils/setErrorModalVisibility";
 
 const VARIANTS = Object.freeze(["registration", "authentificateWithPhone", "authentificateWithEmail"]);
+const MAX_AUTH_ATTEMPTS = 8;
 
-const AuthentificationModalContent = ({ closeModal }) => {
+const AuthentificationModalContent = observer(({ closeModal }) => {
+  const { app, user } = useContext(Context);
   const [selectedVariant, setSelectedVariant] = useState(VARIANTS[0]);
   const isAlreadySubmittingRef = useRef(false);
+  const hasAlreadyTriedToAuthRef = useRef(false);
+  const [authLeftAttempts, setAuthLeftAttempts] = useState(MAX_AUTH_ATTEMPTS);
+  const [possibleError, setPossibleError] = useState(null);
 
   const {
     register,
@@ -47,18 +56,77 @@ const AuthentificationModalContent = ({ closeModal }) => {
   const phoneInputRefs = useRef(initPhoneInputRefs);
   const debouncedSubmitCallback = useLodashDebounce(submitCallback, 500);
 
+  function openErrorModal() {
+    const errorModalInfoChildren = (
+      <p className="registration-error-modal">
+        Unfortunately, registration has failed. Try a bit later
+      </p>
+    );
+
+    app.setErrorModalInfo({ children: errorModalInfoChildren, id: "auth-modal-registration-submit-error", className: "" });
+    app.setErrorModalBtnRef({ current: document.querySelector(AUTHENTIFICATION_MODAL_SUBMIT_BTN_SERVICE_CLASS) || null });
+    setErrorModalVisibility(true, app);
+  }
+
   async function submitCallback(value) {
+    // we can change possible error state only if main logic has been invoked
+    let callbackPossibleError = null;
+    let hasBeenMainLogicInvoked = false;
+
     try {
       if (isAlreadySubmittingRef.current) { isAlreadySubmittingRef.current = false; return };
       isAlreadySubmittingRef.current = true;
 
-      // TODO: if an auth variant is selected and the server returns that the password is incorrect
-      // try again with a trimmed variant (spaces are allowed in passwords as i know)
+      const password = value[`${selectedVariant}-password`];
+      const ip = await getUserIp();
 
+      if (selectedVariant === "registration") {
+        const name = value[`${selectedVariant}-firstName`];
+        const surname = value[`${selectedVariant}-secondName`];
+        const email = value[`${selectedVariant}-email`];
+        const phoneNumber = phoneInputInfos[selectedVariant].value;
+
+        hasBeenMainLogicInvoked = true;
+        callbackPossibleError = await user.register(name, surname, password, email, phoneNumber, ip);
+      } else {
+        let address;
+        if (selectedVariant === "authentificateWithPhone") {
+          address = phoneInputInfos[selectedVariant].value;
+        } else if (selectedVariant === "authentificateWithEmail") {
+          address = value[`${selectedVariant}-email`];
+        }
+
+        // if the server informs that the password is incorrect
+        // try again with a trimmed variant if there are whitespaces aside
+        // (spaces are allowed in passwords as i know)
+        hasBeenMainLogicInvoked = true;
+        callbackPossibleError = await user.login(address, password, ip);
+        
+        if (callbackPossibleError instanceof Error) {
+          const trimmedPassword = password.trim();
+          if (trimmedPassword !== password) {
+            callbackPossibleError = await user.login(address, trimmedPassword, ip);
+          }
+        }
+
+        if (callbackPossibleError instanceof Error) {
+          setAuthLeftAttempts(value => value ? value - 1 : 0);
+          hasAlreadyTriedToAuthRef.current = true;
+        }
+      }
+      
+      if (!(callbackPossibleError instanceof Error) || callbackPossibleError === null) {
+        closeModal();
+      }
     } catch(e) {
-      console.log(e.message);
-      // TODO: open the error modal
+      openErrorModal();
     } finally {
+      if (hasBeenMainLogicInvoked) {
+        if (callbackPossibleError instanceof Error || callbackPossibleError === null) {
+          setPossibleError(callbackPossibleError);
+        };
+      };
+
       isAlreadySubmittingRef.current = false;
     }
   }
@@ -66,7 +134,7 @@ const AuthentificationModalContent = ({ closeModal }) => {
   function checkInputsValidAndHandleInvalidInputFocus(isErrorHandler, errorsFromHandler = null) {
     let areInputsValid = true;
 
-    if (!phoneInputInfos[selectedVariant].isPhoneInputDirty) {
+    if (phoneInputInfos[selectedVariant] && !phoneInputInfos[selectedVariant]?.isPhoneInputDirty) {
       let nextPhoneInputInfos = _.cloneDeep(phoneInputInfos);
       nextPhoneInputInfos[selectedVariant].isPhoneInputDirty = true;
       setPhoneInputInfos(nextPhoneInputInfos);
@@ -82,7 +150,8 @@ const AuthentificationModalContent = ({ closeModal }) => {
         // if the current input is a phone number one !!errorsFromHandler?.[input?.name] is false
         // because errorsFromHandler includes only errors from the registered inputs
       } else if (
-          !isPhoneValidFn(phoneInputInfos[selectedVariant].value) 
+          phoneInputInfos[selectedVariant]
+          && !isPhoneValidFn(phoneInputInfos[selectedVariant]?.value) 
           && phoneInputRefs.current[selectedVariant]?.current?.isEqualNode(input)
         ) {
         // focus the invalid phone input only if it's located before invalid registered inputs
@@ -98,7 +167,15 @@ const AuthentificationModalContent = ({ closeModal }) => {
   function onSubmit(value) {
     if (!checkInputsValidAndHandleInvalidInputFocus(false)) return;
 
-    debouncedSubmitCallback(value);
+    let areAuthAttemptsLeft = true;
+    if (
+      (selectedVariant === "authentificateWithPhone" || selectedVariant === "authentificateWithEmail")
+      && authLeftAttempts <= 0
+    ) {
+      areAuthAttemptsLeft = false;
+    };
+
+    if (areAuthAttemptsLeft) debouncedSubmitCallback(value);
   }
 
   return (
@@ -114,6 +191,9 @@ const AuthentificationModalContent = ({ closeModal }) => {
         phoneInputInfos={phoneInputInfos}
         setPhoneInputInfos={setPhoneInputInfos}
         phoneInputRefs={phoneInputRefs}
+        authLeftAttempts={authLeftAttempts}
+        hasAlreadyTriedToAuthRef={hasAlreadyTriedToAuthRef}
+        possibleError={possibleError}
       />
       <AuthentificationModalVariationsList 
         selectedVariation={selectedVariant} 
@@ -122,6 +202,6 @@ const AuthentificationModalContent = ({ closeModal }) => {
       />
     </div>
   );
-}
+});
 
 export default AuthentificationModalContent;
