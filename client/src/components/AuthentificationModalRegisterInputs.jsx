@@ -6,6 +6,7 @@ import { useEffect, useRef } from "react";
 import CustomPhoneInput from "./UI/customPhoneInput/CustomPhoneInput";
 import PasswordInputSection from "./UI/passwordInputSection/PasswordInputSection";
 import { AUTHENTIFICATION_MODAL_INPUT_SERVICE_CLASS } from "../utils/consts";
+import getPasswordInputFieldName from "../utils/getPasswordInputFieldName";
 
 const AuthentificationModalRegisterInputs = ({
   register, errors, control, trigger, getValues, 
@@ -13,6 +14,7 @@ const AuthentificationModalRegisterInputs = ({
 }) => {
   const phoneNumberInputRef = useRef(null);
   const isValidEmailRef = useRef(true);
+  const prevIsPasswordEqualToEmailRef = useRef(true);
 
   const phoneInputInfo = phoneInputInfos[selectedVariant];
   const isPhoneValid = isPhoneValidFn(phoneInputInfo.value);
@@ -37,10 +39,15 @@ const AuthentificationModalRegisterInputs = ({
 
   const phoneInputId = `${selectedVariant}-phone-input`;
 
+  const passwordInputFieldName = getPasswordInputFieldName(selectedVariant);
+
   const emailNameFieldName = `${selectedVariant}-email`;
   const emailNameRegisterResult = register(emailNameFieldName, {
     ...REQUIRED_EMAIL_INPUT_OPTIONS,
-    onChange: (e) => onEmailInputChange(e, isValidEmailRef, trigger, emailNameFieldName)
+    onChange: (e) => onEmailInputChange(
+      e, isValidEmailRef, trigger, emailNameFieldName, true, 
+      passwordInputFieldName, getValues, prevIsPasswordEqualToEmailRef
+    )
   });
 
   useEffect(() => {
@@ -98,6 +105,8 @@ const AuthentificationModalRegisterInputs = ({
         uniqueInputVariantName={selectedVariant}
         isWithPasswordConfirmation={true}
         getValues={getValues}
+        mustNotBeEqualToEmail={true}
+        emailFieldName={emailNameFieldName}
       />
     </>
   );

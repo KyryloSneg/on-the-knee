@@ -2,7 +2,8 @@ import axios from "axios"
 import LocalStorageActions from "../utils/LocalStorageActions";
 
 export const $api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL
+  baseURL: process.env.REACT_APP_API_URL,
+  withCredentials: true,
 });
 
 export const $mockApi = axios.create({
@@ -16,6 +17,6 @@ export const $authApi = axios.create({
 });
 
 $authApi.interceptors.request.use(config => {
-  config.headers.Authorization = `Bearer ${LocalStorageActions.getItem("token")}`;
+  config.headers.Authorization = `Bearer ${LocalStorageActions.getItem("token", true, false)}`;
   return config;
 });

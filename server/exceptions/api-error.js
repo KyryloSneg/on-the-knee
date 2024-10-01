@@ -1,11 +1,13 @@
 module.exports = class ApiError extends Error {
     status;
     errors;
+    shortErrorReason;
 
-    constructor(status, message, options = { errors: [] }) {
+    constructor(status, message, options = { errors: [], shortErrorReason: null }) {
         super(message);
         this.status = status;
         this.errors = options.errors || [];
+        this.shortErrorReason = options.shortErrorReason || null;
     }
 
     static UnauthorizedError() {
@@ -16,7 +18,7 @@ module.exports = class ApiError extends Error {
         return new ApiError(403, "User hasn't activated his account");
     }
 
-    static BadRequest(message, errors = []) {
-        return new ApiError(400, message, { errors: errors });
+    static BadRequest(message, errors = [], shortErrorReason = null) {
+        return new ApiError(400, message, { errors, shortErrorReason: shortErrorReason });
     }    
 }

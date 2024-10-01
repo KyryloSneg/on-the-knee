@@ -8,13 +8,17 @@ import { lazy, Suspense } from "react";
 
 const LazyImage = lazy(() => import("../lazyImage/LazyImage"));
 
-const PasswordInputValidityRules = ({ control, passwordFieldName }) => {
+// we must pass getValues, mustNotBeEqualToEmail and emailFieldName to show the corresponding validation
+const PasswordInputValidityRules = ({ 
+  control, passwordFieldName, mustNotBeEqualToEmail = false, 
+  getValues = null, emailFieldName = null 
+}) => {
   const formFields = useWatch({ control });
   
   const passwordValue = formFields?.[passwordFieldName];
   // we should show to user password requirements even before typing into the field
   // (the first render returns undefined, so return "" instead)
-  const { isValidDetails } = isPasswordValidFunction(passwordValue || "");
+  const { isValidDetails } = isPasswordValidFunction(passwordValue || "", mustNotBeEqualToEmail, getValues, emailFieldName);
 
   return (
     <ul className="password-input-validity-rules">

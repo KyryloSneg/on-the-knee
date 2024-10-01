@@ -13,3 +13,9 @@
   flex-direction: column;
   gap: 14px;
 }
+
+.auth-modal-left-auth-attempts-msg {
+  font-size: 1.8rem;
+  color: #a10e0e;
+  text-align: center;
+}

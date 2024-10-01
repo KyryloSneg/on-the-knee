@@ -42,3 +42,39 @@
 .react-hook-form-input-error-msg {
   color: #a10e0e;
 }
+
+.password-input-wrapper {
+  position: relative;
+}
+
+.password-input-wrapper > input {
+  padding-right: 44px;
+}
+
+.show-password-input-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  padding: 0 8px;
+  border-radius: 0 8px 8px 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.show-password-input-btn > svg {
+  fill: #7373ff;
+  transition: 0.25s;
+  width: 22px;
+  height: 22px;
+}
+
+.show-password-input-btn:hover > svg,
+.show-password-input-btn:active > svg,
+.show-password-input-btn:focus-visible > svg {
+  fill: #ff7e14;
+}

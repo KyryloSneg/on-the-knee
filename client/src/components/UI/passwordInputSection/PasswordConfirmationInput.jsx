@@ -3,33 +3,39 @@ import { AUTHENTIFICATION_MODAL_INPUT_SERVICE_CLASS } from "../../../utils/const
 import _ from "lodash";
 import { PASSWORD_VALIDATION_OBJ, REQUIRED_BASE_OPTIONS } from "../../../utils/inputOptionsConsts";
 import ReactHookFormInput from "../reactHookFormInput/ReactHookFormInput";
+import getPasswordInputFieldName from "../../../utils/getPasswordInputFieldName";
 
 const PasswordConfirmationInput = ({ 
   register, errors, trigger, getValues, 
-  uniqueInputVariantName 
+  uniqueInputVariantName, prevIsValidPasswordConfirmationRef
 }) => {
   const prevIsValid = useRef(null);
 
   const passwordConfirmationFieldName = `${uniqueInputVariantName}-password-confirmation`;
   const passwordOptions = useMemo(() => {
+    const passwordInputFieldName = getPasswordInputFieldName(uniqueInputVariantName);
+    
     let passwordOptionsCopy = _.cloneDeep(REQUIRED_BASE_OPTIONS);
     passwordOptionsCopy.validate.isAppropriateLength = PASSWORD_VALIDATION_OBJ.isAppropriateLength;
     passwordOptionsCopy.validate.isEqualToPassword = value => {
       // using get values instead of useWatch because the hook returns not up-to-date password input's value
-      return value === getValues(`${uniqueInputVariantName}-password`) || "The value is not equal to the password";
+      return value === getValues(passwordInputFieldName) || "The value is not equal to the password";
     }
 
     passwordOptionsCopy.onChange = (e) => {
-      const isValid = e.target.value === getValues(`${uniqueInputVariantName}-password`);
-
+      const isValid = e.target.value === getValues(passwordInputFieldName);
+      
       if (isValid !== prevIsValid.current) {
         trigger(passwordConfirmationFieldName);
         prevIsValid.current = isValid;
+
+        // this ref is used in registering the password input
+        prevIsValidPasswordConfirmationRef.current = isValid;
       }
     }
 
     return passwordOptionsCopy;
-  }, [passwordConfirmationFieldName, trigger, uniqueInputVariantName, getValues]);
+  }, [passwordConfirmationFieldName, trigger, uniqueInputVariantName, getValues, prevIsValidPasswordConfirmationRef]);
 
   const passwordConfirmationRegisterResult = register(
     passwordConfirmationFieldName,
@@ -38,6 +44,7 @@ const PasswordConfirmationInput = ({
 
   return (
     <ReactHookFormInput
+      type="password"
       labelText="Password confirmation"
       inputName={passwordConfirmationFieldName}
       errors={errors}

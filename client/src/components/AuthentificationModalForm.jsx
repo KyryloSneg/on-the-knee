@@ -3,11 +3,14 @@ import AuthentificationModalRegisterInputs from "./AuthentificationModalRegister
 import AuthentificationModalAuthPhoneInputs from "./AuthentificationModalAuthPhoneInputs";
 import AuthentificationModalAuthEmailInputs from "./AuthentificationModalAuthEmailInputs";
 import UIButton from "./UI/uiButton/UIButton";
+import { AUTHENTIFICATION_MODAL_SUBMIT_BTN_SERVICE_CLASS } from "../utils/consts";
+import AuthentificationModalErrorMsg from "./AuthentificationModalErrorMsg";
 
 const AuthentificationModalForm = ({
   onSubmit, register, errors, control, trigger, getValues,
   selectedVariant, phoneInputInfos, setPhoneInputInfos,
-  phoneInputRefs
+  phoneInputRefs, authLeftAttempts, hasAlreadyTriedToAuthRef, 
+  possibleError
 }) => {
   function renderInputs() {
     if (selectedVariant === "registration") {
@@ -45,15 +48,18 @@ const AuthentificationModalForm = ({
           control={control}
           trigger={trigger}
           selectedVariant={selectedVariant}
+          getValues={getValues}
         />
       );
     }
   }
 
+  const isSelectedAuth = selectedVariant === "authentificateWithPhone" || selectedVariant === "authentificateWithEmail"
+
   let btnText = "Submit";
   if (selectedVariant === "registration") {
     btnText = "Register";
-  } else if (selectedVariant === "authentificateWithPhone" || selectedVariant === "authentificateWithEmail") {
+  } else if (isSelectedAuth) {
     btnText = "Log in";
   }
 
@@ -65,7 +71,13 @@ const AuthentificationModalForm = ({
       <div className="authentification-modal-content-form-inputs-wrap">
         {renderInputs()}
       </div>
-      <UIButton variant="modal-submit" type="submit">
+      {possibleError && <AuthentificationModalErrorMsg error={possibleError} />}
+      {(isSelectedAuth && hasAlreadyTriedToAuthRef.current) &&
+        <p className="auth-modal-left-auth-attempts-msg">
+          {authLeftAttempts} attempt{(authLeftAttempts > 1 || !authLeftAttempts) ? "s to log in are" : " to log in is"} left
+        </p>
+      }
+      <UIButton variant="modal-submit" type="submit" className={AUTHENTIFICATION_MODAL_SUBMIT_BTN_SERVICE_CLASS}>
         {btnText}
       </UIButton>
     </form>

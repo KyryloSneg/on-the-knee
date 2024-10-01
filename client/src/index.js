@@ -6,6 +6,9 @@ import AppStore from './stores/AppStore';
 import { Context } from "./Context";
 import AppRouterProvider from './components/AppRouterProvider';
 import 'overlayscrollbars/overlayscrollbars.css';
+import withAuth from "./hocs/withAuth";
+
+const AppRouterProviderWithAuth = withAuth(AppRouterProvider);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -16,7 +19,8 @@ root.render(
       deviceStore: new DeviceStore(),
       isTest: false,
     }}>
-      <AppRouterProvider />
+      <AppRouterProviderWithAuth />
+      {/* <AppRouterProvider /> */}
     </Context.Provider>
   </React.StrictMode>
 );

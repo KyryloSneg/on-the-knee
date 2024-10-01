@@ -22,6 +22,7 @@ export const PASSWORD_VALIDATION_MESSAGES_OBJ = Object.freeze({
   doesContainASmallLetter: "The password must contain at least one small letter",
   doesContainAnUppercaseLetter: "The password must contain at least one uppercase letter",
   doesContainASpecialChar: "The password must contain at least one special character",
+  isNotEqualToEmail: "The password mustn't be your email",
 });
 
 // min 8 chars
@@ -52,13 +53,30 @@ export const PASSWORD_VALIDATION_OBJ = Object.freeze({
   ),
 });
 
-export function onEmailInputChange(e, isValidEmailRef, trigger, fieldName) {
+// if we want to trigger password input, pass isToTriggerPasswordInput, 
+// passwordInputFieldName, getValues and prevIsPasswordEqualToEmailRef args
+// (we may want this behavior to trigger non-equality of password to email validation on email change)
+export function onEmailInputChange(
+  e, isValidEmailRef, trigger, fieldName, 
+  isToTriggerPasswordInput = false, passwordInputFieldName = null,
+  getValues = null, prevIsPasswordEqualToEmailRef = null
+) {
   const isValid = isEmailValidFn(e.target.value.trim())
   if (isValid !== isValidEmailRef.current) {
     // manually triggering validation fn like it was with "onChange" mode
     // (with some optimization because it hits app's perfomance badly)
     trigger(fieldName);
     isValidEmailRef.current = isValid;
+  }
+
+  if (isToTriggerPasswordInput && passwordInputFieldName && getValues && prevIsPasswordEqualToEmailRef) {
+    const isPasswordEqualToEmail = e.target.value === getValues(passwordInputFieldName);
+
+    // the condition is used for optimization
+    if (isPasswordEqualToEmail !== prevIsPasswordEqualToEmailRef.current) {
+      trigger(passwordInputFieldName);
+      prevIsPasswordEqualToEmailRef.current = isPasswordEqualToEmail;
+    }
   }
 }
 
