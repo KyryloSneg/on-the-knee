@@ -66,6 +66,4 @@ describe('FilterCategoryBlocksList', () => {
     });
 
   });
-
-  // TODO: tests for the skip button at the start of aside
 });

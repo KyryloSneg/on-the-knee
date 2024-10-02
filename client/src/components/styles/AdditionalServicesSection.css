@@ -12,6 +12,7 @@
 .additional-services-section > h3 {
   display: flex;
   flex-direction: column;
+  flex-wrap: wrap;
   gap: 3px;
   font-size: 1.5rem;
   width: 100%;

@@ -192,7 +192,7 @@ module.exports = async () => {
   }
 
   const saleDevices = createSaleDevices(sales, devices);
-  createDeviceFeedbackRates(deviceFeedbacks, deviceFeedbackLikes, deviceFeedbackDislikes);
+  // createDeviceFeedbackRates(deviceFeedbacks, deviceFeedbackLikes, deviceFeedbackDislikes);
   createDeviceQuestionRates(deviceQuestions, deviceQuestionLikes, deviceQuestionDislikes);
 
   return {

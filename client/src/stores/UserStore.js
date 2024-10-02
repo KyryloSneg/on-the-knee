@@ -5,6 +5,7 @@ class UserStore {
   constructor() {
     this._isAuth = false;
     this._user = {};
+    this._userAddress = {};
     this._cart = {};
     this._cartDeviceCombinations = [];
     this._cartSelectedAdditionalServices = {};
@@ -21,6 +22,10 @@ class UserStore {
     this._user = user;
   }
 
+  setUserAddress(userAddress) {
+    this._userAddress = userAddress;
+  }
+
   async register(name, surname, password, email, phoneNumber, ip) {
     try {
       const data = await registerUser({ name, surname, password, email, phoneNumber, ip });
@@ -28,6 +33,7 @@ class UserStore {
 
       this.setIsAuth(true);
       this.setUser(data.user);
+      this.setUserAddress(data.address);
     } catch(e) {
       console.log(e.response?.data?.message);
       return e;
@@ -41,6 +47,7 @@ class UserStore {
 
       this.setIsAuth(true);
       this.setUser(data.user);
+      this.setUserAddress(data.address);
     } catch(e) {
       console.log(e.response?.data?.message);
       return e;
@@ -56,6 +63,7 @@ class UserStore {
 
       this.setIsAuth(true);
       this.setUser(data.user);
+      this.setUserAddress(data.address);
     } catch(e) {
       console.log(e.response);
       console.log(e.response?.data?.message);
@@ -84,6 +92,10 @@ class UserStore {
   
   get user() {
     return this._user;
+  }
+
+  get userAddress() {
+    return this._userAddress;
   }
 
   get cart() {

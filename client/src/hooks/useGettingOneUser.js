@@ -11,8 +11,8 @@ function useGettingOneUser(userId, setUser, isDto, additionalCondition = true) {
   const [fetching] = useFetching(fetchingFunc);
 
   useEffect(() => {
-    if (additionalCondition) fetching();
-  }, [setUser, isDto, additionalCondition, fetching]);
+    if (additionalCondition && (userId !== null && userId !== undefined)) fetching();
+  }, [userId, setUser, isDto, additionalCondition, fetching]);
 
 }
 

@@ -24,7 +24,8 @@ export default function useGettingOrders() {
       let isWithNonDiscountSale = false;
       let nonDiscountSaleName;
 
-      if (combo?.device?.["sale-devices"]) {
+
+      if (combo?.device?.["sale-devices"] && deviceStore.sales?.length && deviceStore.saleTypeNames?.length) {
         const { deviceSaleTypes } = DeviceSalesActions.getSaleTypesAndDiscount(
           combo?.device, deviceStore.sales, deviceStore.saleTypeNames
         );

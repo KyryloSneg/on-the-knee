@@ -83,7 +83,7 @@ const CommentModalContent = observer(({ type, closeModal }) => {
       const newFeedback = {
         "id": id,
         "deviceId": deviceStore.selectedDeviceId,
-        "userId": isAnonymously ? null : user.user?._id,
+        "userId": isAnonymously ? null : user.user?.id,
         "isAnonymously": isAnonymously,
         "images": filesToSend,
         "message": data.comment,
@@ -102,7 +102,7 @@ const CommentModalContent = observer(({ type, closeModal }) => {
       const newReply = {
         "id": id,
         "device-feedbackId": deviceStore.selectedDeviceFeedbackId,
-        "userId": user.user?._id || null,
+        "userId": user.user?.id || null,
         "message": data.comment,
         "date": date,
       };
@@ -115,7 +115,7 @@ const CommentModalContent = observer(({ type, closeModal }) => {
       const newQuestion = {
         "id": id,
         "deviceId": deviceStore.selectedDeviceId,
-        "userId": isAnonymously ? null : user.user?._id,
+        "userId": isAnonymously ? null : user.user?.id,
         "isAnonymously": isAnonymously,
         "images": filesToSend,
         "message": data.comment,
@@ -131,7 +131,7 @@ const CommentModalContent = observer(({ type, closeModal }) => {
       const newAnswer = {
         "id": id,
         "device-questionId": deviceStore.selectedDeviceQuestionId,
-        "userId": user.user?._id || null,
+        "userId": user.user?.id || null,
         "message": data.comment,
         "date": date,
       };
@@ -144,7 +144,7 @@ const CommentModalContent = observer(({ type, closeModal }) => {
       const newQuestion = {
         "id": id,
         "sellerId": deviceStore.selectedSellerId,
-        "userId": user.user?._id || null,
+        "userId": user.user?.id || null,
         "message": data.comment,
         "date": date,
       };

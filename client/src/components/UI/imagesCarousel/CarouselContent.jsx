@@ -14,7 +14,6 @@ const CarouselContent = ({ type, images, selectedId, setSelectedId, device = nul
     setSelectedId(selectedId + 1);
   }
 
-  // TODO: add device's sales icons upon the image
   return (
     <div className="carousel-content">
       {(type === "device" && device) && [

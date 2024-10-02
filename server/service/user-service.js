@@ -133,8 +133,10 @@ class UserService {
             );
         }
 
+        const addressDto = new UserAddressDto(userAddress);
+
         await tokenService.saveToken(userDevice._doc._id, tokens.refreshToken);
-        return {...tokens, user: userDto, activationInfo: activationInfoDto, userDevice: userDeviceDto};
+        return {...tokens, user: userDto, address: addressDto, activationInfo: activationInfoDto, userDevice: userDeviceDto};
     }
 
     async logout(refreshToken) {
@@ -227,10 +229,11 @@ class UserService {
         }
 
         const userDto = new UserDto(user);
+        const addressDto = new UserAddressDto(await UserAddressModel.findOne({ user: user._id }));
         const tokens = tokenService.generateTokens({...userDto});
 
         await tokenService.saveToken(userDevice._doc._id, tokens.refreshToken);
-        return {...tokens, user: userDto}
+        return {...tokens, user: userDto, address: addressDto}
     }
 
     async changeUserAddress(email, phoneNumber, userId) {
