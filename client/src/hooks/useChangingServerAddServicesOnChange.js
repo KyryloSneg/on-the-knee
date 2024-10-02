@@ -51,7 +51,6 @@ function useChangingServerAddServicesOnChange(selectedAddServices, combinationId
   const debouncedCallback = useLodashDebounce(callback, 500);
   useEffect(() => {
     if (!isInitialRenderRef.current && (combinationId !== undefined && combinationId !== null)) debouncedCallback();
-    // TODO: check is logging in / out breaks this effect or whole cart logic
     // eslint-disable-next-line
   }, [selectedAddServices, user.isAuth]);
 }

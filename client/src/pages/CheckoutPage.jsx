@@ -32,11 +32,11 @@ const CheckoutPage = observer(() => {
   const isAlreadySubmittingRef = useRef(false);
 
   const [isSenderPhoneInputDirty, setIsSenderPhoneInputDirty] = useState(false);
-  const [senderPhoneInputValue, setSenderPhoneInputValue] = useState("");
+  const [senderPhoneInputValue, setSenderPhoneInputValue] = useState(user.userAddress?.phoneNumber?.replaceAll(" ", "") || "");
 
   const orders = useGettingOrders();
 
-  // TODO: auto-fill sender data inputs with user data if he / she logged in
+  // auto-fill sender data inputs with user data if he / she logged in
   const {
     register,
     formState: { errors },
@@ -48,9 +48,9 @@ const CheckoutPage = observer(() => {
     mode: "onBlur",
     shouldFocusError: false,
     defaultValues: {
-      "senderFirstName": "",
-      "senderSecondName": "",
-      "senderEmail": "",
+      "senderFirstName": user.user?.name || "",
+      "senderSecondName": user.user?.surname || "",
+      "senderEmail": user.userAddress?.email || "",
       // the delivery-section-related fields have names that are randomly generated
       // (we can't include them here)
 

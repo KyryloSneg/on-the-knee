@@ -23,7 +23,7 @@ export default function useUpdatingCartDataOnModalClose(type) {
 
       // we have need in cleanup function on modal closing only
       if (isVisible) return;
-      await updateCartData(user, fetching, false);
+      await updateCartData(user, fetching, true);
     }
     // eslint-disable-next-line 
   }, [user.cart?.id]);

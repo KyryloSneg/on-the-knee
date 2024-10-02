@@ -1,5 +1,5 @@
 const { faker } = require("@faker-js/faker");
-const { MIN_FEEDBACK_IMAGE_WIDTH, MAX_FEEDBACK_IMAGE_WIDTH, MIN_FEEDBACK_IMAGE_HEIGHT, MAX_FEEDBACK_IMAGE_HEIGHT, MOCK_USER, REAL_USER } = require("./consts");
+const { MIN_FEEDBACK_IMAGE_WIDTH, MAX_FEEDBACK_IMAGE_WIDTH, MIN_FEEDBACK_IMAGE_HEIGHT, MAX_FEEDBACK_IMAGE_HEIGHT, MOCK_USER } = require("./consts");
 
 module.exports = (questions, answers, deviceId) => {
   for (let i = 0; i < 5; i++) {
@@ -19,8 +19,7 @@ module.exports = (questions, answers, deviceId) => {
     const isAnonymously = faker.datatype.boolean(0.6);
 
     if (!isAnonymously) {
-      const isRealUser = faker.datatype.boolean(0.4);
-      userId = isRealUser ? REAL_USER._id : MOCK_USER._id;
+      userId = MOCK_USER._id;
     }
 
     const question = {
@@ -34,8 +33,7 @@ module.exports = (questions, answers, deviceId) => {
     }
 
     for (let j = 0; j < faker.number.int({ min: 2, max: 5 }); j++) {
-      const isRealUser = faker.datatype.boolean(0.4);
-      const userId = isRealUser ? REAL_USER._id : MOCK_USER._id;
+      const userId = MOCK_USER._id;
 
       const answer = {
         "id": answers.length + 1,
