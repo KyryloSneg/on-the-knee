@@ -1,0 +1,21 @@
+.authentification-modal-content-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.authentification-modal-content-form div.react-international-phone-input-container .react-international-phone-input {
+  height: 32px;
+}
+
+.authentification-modal-content-form-inputs-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.auth-modal-left-auth-attempts-msg {
+  font-size: 1.8rem;
+  color: #a10e0e;
+  text-align: center;
+}

@@ -179,7 +179,10 @@ export const DEFAULT_INIT_MAP_COORDS = { lng: 30.5241361, lat: 50.4500336 };
 export const TO_LIFT_ON_THE_FLOOR_PRICE = 6;
 
 export const FIRST_CHECKOUT_ORDER_ID = 1;
+
 export const CHECKOUT_PAGE_INPUT_SERVICE_CLASS = "dataset-checkout-page-input";
+export const AUTHENTIFICATION_MODAL_INPUT_SERVICE_CLASS = "dataset-auth-modal-input";
+export const AUTHENTIFICATION_MODAL_SUBMIT_BTN_SERVICE_CLASS = "dataset-auth-modal-submit-btn";
 
 export const ERROR_MODAL_INITIAL_INFO = { children: "", id: "error-modal", className: "" };
 

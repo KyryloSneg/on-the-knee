@@ -1,8 +1,8 @@
-import { Link } from "react-router-dom";
 import "./MenuIconBtn.css";
+import { Link } from "react-router-dom";
 import { forwardRef } from "react";
 
-const MenuIconBtn = forwardRef(({ text, src, alt = "", isLink = false, route = null, ...params }, ref) => {
+const MenuIconBtn = forwardRef(({ children = "Test", src, alt = "", isLink = false, route = null, ...params }, ref) => {
   let className = "menu-icon-button";
 
   // i guess it's better idea to ADD new styles from params not OVERRIDE old ones
@@ -15,7 +15,10 @@ const MenuIconBtn = forwardRef(({ text, src, alt = "", isLink = false, route = n
     return (
       <Link to={route} className={className} {...params} ref={ref}>
         <img src={src} alt={alt} className="no-select" draggable="false"/>
-        {text && <span>{text}</span>}
+        {typeof children === "string"
+          ? <span>{children}</span>
+          : children
+        }
       </Link>
     );
   }
@@ -23,7 +26,10 @@ const MenuIconBtn = forwardRef(({ text, src, alt = "", isLink = false, route = n
   return (
     <button className={className} ref={ref} {...params} >
       <img src={src} alt={alt} className="no-select" draggable="false"/>
-      {text && <span>{text}</span>}
+      {typeof children === "string"
+        ? <span>{children}</span>
+        : children
+      }
     </button>
   );
 });

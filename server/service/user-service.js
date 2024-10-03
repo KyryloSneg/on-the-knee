@@ -13,6 +13,8 @@ const RoleModel = require('../models/role-model');
 const ActivationInfoDto = require('../dtos/activation-info-dto');
 const UserAddressDto = require('../dtos/user-address-dto');
 const { parsePhoneNumber } = require('libphonenumber-js');
+const { MAX_USER_DEVICES_AMOUNT } = require("../consts");
+const tokenModel = require("../models/token-model");
 
 class UserService {
     async registration(name, surname, password, email, phoneNumber, ip) {
@@ -21,9 +23,15 @@ class UserService {
 
         const emailCandidate = await UserAddressModel.findOne({email: email});
         const phoneNumberCandidate = await UserAddressModel.findOne({phoneNumber: internationalNumber});
-        if (emailCandidate || phoneNumberCandidate) {
-            throw ApiError.BadRequest(`User with such a email ${email} or phone number ${phoneNumber} already exists`);
+
+        if (emailCandidate) {
+            throw ApiError.BadRequest(`User with such a email ${email} already exists`);
         }
+
+        if (phoneNumberCandidate) {
+            throw ApiError.BadRequest(`User with such a phone number ${phoneNumber} already exists`);
+        }
+
         const hashPassword = await bcrypt.hash(password, 3);
         const activationLink = uuid.v4(); // v34fa-asfasf-142saf-sa-asf
 
@@ -59,10 +67,21 @@ class UserService {
     }
 
     async login(address, password, ip) {
-        const userAddress = await UserAddressModel.findOne({email: address}) 
-                     || await UserAddressModel.findOne({phoneNumber: address});
+        let userPhone;
+        const userEmail = await UserAddressModel.findOne({ email: address });
+
+        // checking is there such a phone number represented as a login only if the email check is failed
+        // to prevent errors caused by parsing possible email address as phone number and for a little optimization
+        if (!userEmail) {
+            const numberObj = parsePhoneNumber(address);
+            const internationalNumber = numberObj?.formatInternational();
+            
+            userPhone = await UserAddressModel.findOne({ phoneNumber: internationalNumber || address });
+        }
+        
+        const userAddress =  userEmail || userPhone;
         if (!userAddress) {
-            throw ApiError.BadRequest('User with such a email / phone number does not exist');
+            throw ApiError.BadRequest('User with such a login does not exist');
         }
 
         const user = await UserModel.findById(userAddress.user);
@@ -82,8 +101,21 @@ class UserService {
         }
 
         if (!userDevice) {
-            const hashedIp = await bcrypt.hash(ip, 3);
-            userDevice = await UserDeviceModel.create({ user: user._id, ip: hashedIp });
+            async function createNewUserDevice() {
+                const hashedIp = await bcrypt.hash(ip, 3);
+                userDevice = await UserDeviceModel.create({ user: user._id, ip: hashedIp });
+            }
+
+            if (userDevices.length >= MAX_USER_DEVICES_AMOUNT) {
+                // delete one user device before creating a new one
+                const toBeDeletedUserDevice = await UserDeviceModel.findOne({ user: user._id });
+
+                await UserDeviceModel.deleteOne({ user: user._id });
+                await tokenModel.deleteOne({ userDevice: toBeDeletedUserDevice._id });
+                await createNewUserDevice();
+            } else {
+                await createNewUserDevice();
+            }
         }
 
         const userDto = new UserDto(user);
@@ -101,8 +133,10 @@ class UserService {
             );
         }
 
+        const addressDto = new UserAddressDto(userAddress);
+
         await tokenService.saveToken(userDevice._doc._id, tokens.refreshToken);
-        return {...tokens, user: userDto, activationInfo: activationInfoDto, userDevice: userDeviceDto};
+        return {...tokens, user: userDto, address: addressDto, activationInfo: activationInfoDto, userDevice: userDeviceDto};
     }
 
     async logout(refreshToken) {
@@ -195,10 +229,11 @@ class UserService {
         }
 
         const userDto = new UserDto(user);
+        const addressDto = new UserAddressDto(await UserAddressModel.findOne({ user: user._id }));
         const tokens = tokenService.generateTokens({...userDto});
 
         await tokenService.saveToken(userDevice._doc._id, tokens.refreshToken);
-        return {...tokens, user: userDto}
+        return {...tokens, user: userDto, address: addressDto}
     }
 
     async changeUserAddress(email, phoneNumber, userId) {

@@ -1,0 +1,8 @@
+.message-to-user {
+  padding: 8px;
+  margin: 0;
+  border: 1px solid #7373ff;
+  border-radius: 5px;
+  background-color: #a7a7ff;
+  color: black;
+}

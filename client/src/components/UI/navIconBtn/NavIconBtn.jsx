@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
 import "./NavIconBtn.css";
+import { Link } from "react-router-dom";
 import { forwardRef } from "react";
 
 const NavIconBtn = forwardRef(({ src, alt = "", text = "", isLink = false, route = null, ...params }, ref) => {

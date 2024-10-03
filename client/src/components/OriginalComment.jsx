@@ -39,15 +39,15 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
   let likeFromUser;
   let dislikeFromUser;
 
-  likeFromUser = likes?.find(like => like.userId === userStore.user?._id);
-  dislikeFromUser = dislikes?.find(dislike => dislike.userId === userStore.user?._id);
+  likeFromUser = likes?.find(like => like.userId === userStore.user?.id);
+  dislikeFromUser = dislikes?.find(dislike => dislike.userId === userStore.user?.id);
 
   const [isAlreadyLiked, setIsAlreadyLiked] = useState(!!likeFromUser);
   const [isAlreadyDisliked, setIsAlreadyDisliked] = useState(!!dislikeFromUser);
   const [isChangingRate, setIsChangingRate] = useState(false);
   const [isCantRateYourCommentError, setIsCantRateYourCommentError] = useState(false)
 
-  const isYourComment = (userStore.user?._id === user?.id && !!user);
+  const isYourComment = (userStore.user?.id === user?.id && !!user);
 
   function reply() {
     deviceStore.setSelectedDeviceId(comment.deviceId);
@@ -131,7 +131,7 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
       await fetchingLikes();
       const updatedLikes = likesFetchResultRef.current;
 
-      const updatedIsAlreadyLiked = !!updatedLikes?.find(like => like.userId === userStore.user?._id);
+      const updatedIsAlreadyLiked = !!updatedLikes?.find(like => like.userId === userStore.user?.id);
       if (updatedIsAlreadyLiked !== isAlreadyLiked) {
         setIsAlreadyLiked(updatedIsAlreadyLiked);
         if (updatedIsAlreadyLiked && isAlreadyDisliked) {
@@ -148,7 +148,7 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
         let likeObject = {
           // some random id (implementation might be different from this one)
           "id": v4(),
-          "userId": userStore.user?._id,
+          "userId": userStore.user?.id,
         };
 
         if (type === "deviceFeedbacks") {
@@ -171,7 +171,7 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
       await fetchingDislikes();
       const updatedDislikes = dislikesFetchResultRef.current;
 
-      const updatedIsAlreadyDisliked = !!updatedDislikes?.find(dislike => dislike.userId === userStore.user?._id);
+      const updatedIsAlreadyDisliked = !!updatedDislikes?.find(dislike => dislike.userId === userStore.user?.id);
       if (updatedIsAlreadyDisliked !== isAlreadyDisliked) {
         setIsAlreadyDisliked(updatedIsAlreadyDisliked);
         if (updatedIsAlreadyDisliked && isAlreadyLiked) {
@@ -187,7 +187,7 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
       } else {
         let dislikeObject = {
           "id": v4(),
-          "userId": userStore.user?._id,
+          "userId": userStore.user?.id,
         };
 
         if (type === "deviceFeedbacks") {

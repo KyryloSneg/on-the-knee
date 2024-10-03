@@ -1,5 +1,5 @@
 const { faker } = require("@faker-js/faker");
-const { MOCK_USER, REAL_USER } = require("./consts");
+const { MOCK_USER } = require("./consts");
 const { parsePhoneNumber } = require("libphonenumber-js");
 
 module.exports = () => {
@@ -16,8 +16,7 @@ module.exports = () => {
     const isAuthUser = faker.datatype.boolean(0.5);
 
     if (isAuthUser) {
-      const isRealUser = faker.datatype.boolean(0.4);
-      userId = isRealUser ? REAL_USER._id : MOCK_USER._id;
+      userId = MOCK_USER._id;
     }
 
     const receivent = {

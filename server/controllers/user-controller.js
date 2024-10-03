@@ -22,6 +22,7 @@ class UserController {
         try {
             const {address, password, ip} = req.body; // address = email || phoneNumber
             const userData = await userService.login(address, password, ip);
+            
             res.cookie('refreshToken', userData.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
             return res.json(userData);
         } catch (e) {
@@ -83,7 +84,12 @@ class UserController {
     async refresh(req, res, next) {
         try {
             const { refreshToken } = req.cookies;
-            const { ip } = req.body;
+            const ip = req.params.ip;
+
+            if (!ip) {
+                return next(ApiError.BadRequest("ip param query is not setted"));
+            }
+
             const userData = await userService.refresh(refreshToken, ip);
             res.cookie('refreshToken', userData.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
             return res.json(userData);

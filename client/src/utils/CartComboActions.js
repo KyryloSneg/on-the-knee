@@ -13,6 +13,10 @@ export default class CartComboActions {
         deviceAmount += +cartCombo.amount;
 
         if (cartCombo?.["device-combination"]?.price) {
+          if (!sales?.length || !saleTypeNames?.length) {
+            return { deviceAmount: 0, devicePrice: 0 };
+          }
+
           let { discountPercentage } = DeviceSalesActions.getSaleTypesAndDiscount(
             cartCombo.device, sales, saleTypeNames
           );

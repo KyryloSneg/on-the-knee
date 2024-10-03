@@ -3,8 +3,9 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import routerConfig from '../router/index';
 import { Context } from '../Context';
 import { Outlet } from 'react-router-dom';
+import { observer } from "mobx-react-lite";
 
-const AppRouterProvider = () => {
+const AppRouterProvider = observer(() => {
   const { user } = useContext(Context);
 
   return (
@@ -12,6 +13,6 @@ const AppRouterProvider = () => {
       <Outlet />
     </RouterProvider>
   );
-}
+});
 
 export default AppRouterProvider;
