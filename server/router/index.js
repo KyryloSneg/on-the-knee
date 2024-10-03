@@ -19,7 +19,7 @@ router.post('/registration',
 );
 router.post('/login', userController.login);
 router.post('/logout', userController.logout);
-router.post('/refresh', userController.refresh);
+router.get('/refresh/:ip', userController.refresh);
 router.patch('/address', 
     authMiddleware,
     body('email').isEmail(),

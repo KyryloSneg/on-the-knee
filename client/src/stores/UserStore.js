@@ -1,11 +1,11 @@
 import { makeAutoObservable } from "mobx";
-import { MOCK_USER } from "../utils/mobxStoresConsts";
+import { isAuthFetch, login, registerUser } from "../http/UserAPI";
 
 class UserStore {
   constructor() {
-    this._isAuth = true;
-    // TODO: change it to {} when I'll implement user authentication logic
-    this._user = MOCK_USER;
+    this._isAuth = false;
+    this._user = {};
+    this._userAddress = {};
     this._cart = {};
     this._cartDeviceCombinations = [];
     this._cartSelectedAdditionalServices = {};
@@ -20,6 +20,54 @@ class UserStore {
 
   setUser(user) {
     this._user = user;
+  }
+
+  setUserAddress(userAddress) {
+    this._userAddress = userAddress;
+  }
+
+  async register(name, surname, password, email, phoneNumber, ip) {
+    try {
+      const data = await registerUser({ name, surname, password, email, phoneNumber, ip });
+      localStorage.setItem("token", data.accessToken);
+
+      this.setIsAuth(true);
+      this.setUser(data.user);
+      this.setUserAddress(data.address);
+    } catch(e) {
+      console.log(e.response?.data?.message);
+      return e;
+    }
+  }
+
+  async login(address, password, ip) {
+    try {
+      const data = await login({ address, password, ip });
+      localStorage.setItem("token", data.accessToken);
+
+      this.setIsAuth(true);
+      this.setUser(data.user);
+      this.setUserAddress(data.address);
+    } catch(e) {
+      console.log(e.response?.data?.message);
+      return e;
+    }
+  }
+
+  // logout will remove "token" item from the localStorage when the method will be created
+
+  async checkIsAuth() {
+    try {
+      const data = await isAuthFetch();
+      localStorage.setItem("token", data.accessToken);
+
+      this.setIsAuth(true);
+      this.setUser(data.user);
+      this.setUserAddress(data.address);
+    } catch(e) {
+      console.log(e.response);
+      console.log(e.response?.data?.message);
+    }
   }
 
   setCart(cart) {
@@ -44,6 +92,10 @@ class UserStore {
   
   get user() {
     return this._user;
+  }
+
+  get userAddress() {
+    return this._userAddress;
   }
 
   get cart() {

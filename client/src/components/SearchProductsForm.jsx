@@ -203,7 +203,6 @@ const SearchProductsForm = observer(({ navbarRef }) => {
           navigate(href);
         }
       } catch (error) {
-        // TODO: error handling?
         console.log(error.message)
       } finally {
         setBackupValue(value);

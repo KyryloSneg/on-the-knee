@@ -79,6 +79,7 @@
 }
 
 .original-comment-rate-btn-group {
+  justify-self: end;;
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
