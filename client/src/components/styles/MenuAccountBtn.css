@@ -1,0 +1,22 @@
+button.menu-account-btn, a.menu-account-btn {
+  border-top: 1px solid #dfdfdf;
+  border-bottom: 1px solid #dfdfdf;
+}
+
+.menu-account-btn-content-wrap {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.menu-account-btn-content-wrap > p {
+  text-align: start;
+  text-overflow: ellipsis;
+  white-space: pre;
+  overflow: hidden;
+}
+
+.menu-acc-btn-user-email {
+  font-size: 1.2rem;
+  color: rgb(100, 100, 100);
+}

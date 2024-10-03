@@ -6,18 +6,11 @@ import { USER_ROUTE } from "../utils/consts";
 import { useContext, useRef } from "react";
 import { Context } from "../Context";
 import { observer } from "mobx-react-lite";
-import setAuthentificationModalVisibility from "../utils/setAuthentificationModalVisibility";
+import onAccountBtnClick from "../utils/onAccountBtnClick";
 
 const NavAccountBtn = observer(() => {
   const { user, app } = useContext(Context);
   const btnRef = useRef(null);
-
-  function onClick() {
-    if (!user.isAuth) {
-      setAuthentificationModalVisibility(true, app);
-      app.setAuthentificationModalBtnRef(btnRef);
-    }
-  }
 
   return (
     <NavIconBtn 
@@ -27,7 +20,7 @@ const NavAccountBtn = observer(() => {
       isLink={user.isAuth}         
       route={USER_ROUTE}      
       aria-label="Your account"         
-      onClick={onClick} 
+      onClick={() => onAccountBtnClick(user.isAuth, app, btnRef)} 
       ref={btnRef}
     />
   );

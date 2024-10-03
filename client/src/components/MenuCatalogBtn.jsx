@@ -25,7 +25,7 @@ const MenuCatalogBtn = () => {
 
   return (
     <MenuIconBtn 
-      text="Catalog" 
+      children="Catalog" 
       src={categoryBtnIcon} 
       aria-controls="categories-modal"
       onClick={onClick}
