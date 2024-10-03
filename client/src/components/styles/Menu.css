@@ -1,3 +1,7 @@
 .menu-items {
   margin: 0;
 }
+
+.menu-items > li:first-of-type .menu-icon-button {
+  border-top: none;
+}

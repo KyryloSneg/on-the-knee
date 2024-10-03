@@ -1,5 +1,6 @@
-import MenuCatalogBtn from "./MenuCatalogBtn";
 import "./styles/Menu.css";
+import MenuAccountBtn from "./MenuAccountBtn";
+import MenuCatalogBtn from "./MenuCatalogBtn";
 
 const Menu = () => {
   return (
@@ -14,6 +15,9 @@ const Menu = () => {
             5. city selection
           */
         }
+        <li>
+          <MenuAccountBtn />
+        </li>
         <li>
           <MenuCatalogBtn />
         </li>
