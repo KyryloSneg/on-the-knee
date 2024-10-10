@@ -15,11 +15,6 @@ export default class StringActions {
     return result
   }
 
-  static removeAllSpaces(str) {
-    let result = str.split("").filter(char => char !== " ").join("");
-    return result
-  }
-
   // str is camelCase
   static splitByUpperCaseLetters(str) {
     let splittedString = "";

@@ -29,13 +29,13 @@ const CheckoutPageOrderDeviceListItem = observer(({ combination, cartDataFetchin
   
   useGettingAddServicesRelatedData(combination.device, setAdditionalServicesObj);
 
-  if (!deviceStore.sales?.length || !deviceStore.saleTypeNames?.length) return <div />;
+  if (!deviceStore.hasTriedToFetchSales) return <div />;
 
   const deviceRouteCombo = combination["device-combination"].combinationString || "default";
   const to = DEVICE_ROUTE + `${combination.device.id}--${deviceRouteCombo}`;
 
   let { discountPercentage } = DeviceSalesActions.getSaleTypesAndDiscount(
-    combination.device, deviceStore.sales, deviceStore.saleTypeNames
+    combination.device, deviceStore.sales, deviceStore.saleTypeNames, deviceStore.hasTriedToFetchSales
   );
 
   if (discountPercentage === undefined) {

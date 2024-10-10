@@ -17,14 +17,15 @@ const CartModalContent = observer(({ closeModal }) => {
   const areCombosAndValuesSynced = Object.keys(deviceStore.deviceListItemsValues || {})?.length !== user.cartDeviceCombinations?.length;
   const isLoadingContent = (
     (user.isAuth && !_.isEqual(user.user, {})) && _.isEqual(user.cart, {})
-  ) || !deviceStore.sales || !deviceStore.saleTypeNames || !deviceStore.deviceListItemsValues
+  ) || !deviceStore.hasTriedToFetchSales || !deviceStore.deviceListItemsValues
   || !Object.keys(user.cartSelectedAdditionalServices)?.length || areCombosAndValuesSynced;
 
   let totalPrice;
   if (!isLoadingContent) {
     totalPrice = user.cartDeviceCombinations?.reduce((acc, currValue) => {
       const comboPrice = getDiscountedPriceOrDefaultOne(
-        currValue["device-combination"], currValue.device, deviceStore.sales, deviceStore.saleTypeNames
+        currValue["device-combination"], currValue.device, 
+        deviceStore.sales, deviceStore.saleTypeNames, deviceStore.hasTriedToFetchSales
       );
 
       const itemValue = deviceStore.deviceListItemsValues[currValue.id];

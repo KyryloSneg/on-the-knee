@@ -1,13 +1,13 @@
 import "./styles/CheckoutPageAddressDataSection.css";
 import ReactHookFormInput from "./UI/reactHookFormInput/ReactHookFormInput";
 import isPhoneValidFn from "../utils/isPhoneValid";
-import isEmailValidFn from "../utils/isEmailValid";
 import CustomPhoneInput from "./UI/customPhoneInput/CustomPhoneInput";
 import UserLocationBtn from "./UserLocationBtn";
 import { v4 } from "uuid";
 import { useMemo, useRef } from "react";
 import { CHECKOUT_PAGE_INPUT_SERVICE_CLASS } from "../utils/consts";
-import StringActions from "../utils/StringActions";
+import MessageToUser from "./UI/messageToUser/MessageToUser";
+import { onEmailInputChange, REQUIRED_EMAIL_INPUT_OPTIONS, REQUIRED_TEXT_INPUT_OPTIONS } from "../utils/inputOptionsConsts";
 
 const POSSIBLE_TYPES = ["sender", "receivent"];
 
@@ -26,32 +26,6 @@ const CheckoutPageAddressDataSection = ({
   [orderId]);
 
   if (type === "receivent" && orderId === null && orderId !== undefined) return <div />;
-
-  const baseOptions = {
-    validate: {
-      isRequired: value => !!value.trim().length || "Required field",
-      isAppropriateLength: (
-        value => value.trim().length <= 1000 || "This field must contain less than or equal to 1000 characters"
-      )
-    }
-  };
-
-  const textInputOptions = {
-    ...baseOptions,
-    validate: {
-      isRequired: baseOptions.validate.isRequired,
-      isOnlyLetters: value => {
-        // do not forget that our regex doesn't detect whitespaces, so matches.length might be less than value.length.
-        // to prevent that, delete all whitespaces from the value
-        const valueWithoutSpaces = StringActions.removeAllSpaces(value);
-        const matches = valueWithoutSpaces.match(/\p{Letter}/gu);
-
-        const isOnlyLetters = matches?.length === valueWithoutSpaces.length;
-        return isOnlyLetters || "Letters only";
-      },
-      ...baseOptions.validate,
-    }
-  }
 
   function onPhoneInputChange(value) {
     setPhoneInputValue(value);
@@ -74,36 +48,26 @@ const CheckoutPageAddressDataSection = ({
   }
 
   // doing this to prevent focusing email (patronymic) input while there are first and second names' inputs' errors 
-  const firstNameRegisterResult = register(firstNameFieldName, textInputOptions);
-  const secondNameRegisterResult = register(secondNameFieldName, textInputOptions);
+  const firstNameRegisterResult = register(firstNameFieldName, REQUIRED_TEXT_INPUT_OPTIONS);
+  const secondNameRegisterResult = register(secondNameFieldName, REQUIRED_TEXT_INPUT_OPTIONS);
 
   const receiventPatronymicFieldName = "receiventPatronymic-" + ((orderId !== null && orderId !== undefined) ? orderId : v4());
 
   let emailInputRegisterResult;
+  let emailInputFieldName;
   let patronymicRegisterResult;
 
   if (type === "sender") {
     // { ref: registeredEmailRef, ...restEmailInfo }
-    emailInputRegisterResult = register("senderEmail", {
-      ...baseOptions,
-      validate: {
-        ...baseOptions.validate,
-        isValidEmail: value => isEmailValidFn(value.trim()) || "Incorrect email"
-      },
-      onChange: (e) => {
-        const isValid = isEmailValidFn(e.target.value.trim())
-        if (isValid !== isValidEmail.current) {
-          // manually triggering validation fn like it was with "onChange" mode
-          // (with some optimization because it hits app's perfomance badly)
-          trigger("senderEmail");
-          isValidEmail.current = isValid;
-        }
-      }
-    });
+    emailInputFieldName = "senderEmail";
 
+    emailInputRegisterResult = register(emailInputFieldName, {
+      ...REQUIRED_EMAIL_INPUT_OPTIONS,
+      onChange: (e) => onEmailInputChange(e, isValidEmail, trigger, emailInputFieldName)
+    });
   } else if (type === "receivent") {
     patronymicRegisterResult = register(
-      receiventPatronymicFieldName, textInputOptions
+      receiventPatronymicFieldName, REQUIRED_TEXT_INPUT_OPTIONS
     );
   }
 
@@ -138,7 +102,7 @@ const CheckoutPageAddressDataSection = ({
           {(type === "sender" && emailInputRegisterResult) &&
             <ReactHookFormInput
               labelText="Email"
-              inputName="senderEmail"
+              inputName={emailInputFieldName}
               errors={errors}
               autoComplete="on"
               registerFnResult={emailInputRegisterResult}
@@ -179,13 +143,13 @@ const CheckoutPageAddressDataSection = ({
           <UserLocationBtn className="sender-section-version" type="button" />
         }
         {type === "receivent" &&
-          <div className="checkout-page-receivent-data-warning">
-            <p>
+          <MessageToUser 
+            messageText="
               Please note that the order will be received by passport.
               Enter first name, second name, patronymic as indicated in the document and
-              the mobile phone number of the order receivent
-            </p>
-          </div>
+              the mobile phone number of the order receivent"
+            className="checkout-page-receivent-data-warning"
+          />
         }
       </div>
 

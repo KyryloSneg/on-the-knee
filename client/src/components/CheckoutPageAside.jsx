@@ -19,7 +19,7 @@ const CheckoutPageAside = observer(() => {
   }, [app, checkoutSubmitBtnRef]);
 
   const { deviceAmount, devicePrice } = CartComboActions.getDeviceAmountAndTotalPrice(
-    user.cartDeviceCombinations, deviceStore.sales, deviceStore.saleTypeNames
+    user.cartDeviceCombinations, deviceStore.sales, deviceStore.saleTypeNames, deviceStore.hasTriedToFetchSales
   );
 
   let devicePriceWord = "Device";

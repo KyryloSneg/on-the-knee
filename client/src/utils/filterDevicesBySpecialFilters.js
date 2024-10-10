@@ -16,10 +16,10 @@ export function filterDevicesByStock(devices, stocks, usedFilters) {
   return filteredDevices
 }
 
-export function filterDevicesByPrice(devices, sales, saleTypeNames, minQueryPrice, maxQueryPrice) {
+export function filterDevicesByPrice(devices, sales, saleTypeNames, hasTriedToFetchSales, minQueryPrice, maxQueryPrice) {
   const filteredDevices = filterDeviceCombosWithFilters(
     (item, dev) => {
-      const priceToCompare = getDiscountedPriceOrDefaultOne(item, dev, sales, saleTypeNames)
+      const priceToCompare = getDiscountedPriceOrDefaultOne(item, dev, sales, saleTypeNames, hasTriedToFetchSales)
       return (priceToCompare >= minQueryPrice && priceToCompare <= maxQueryPrice)
     },
     [...devices],

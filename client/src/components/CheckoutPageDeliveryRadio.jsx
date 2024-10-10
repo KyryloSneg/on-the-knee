@@ -8,9 +8,9 @@ import DeliverySectionCourierOption from "./DeliverySectionCourierOption";
 const CheckoutPageDeliveryRadio = forwardRef(({ 
   delivery, isChecked, onCheck, checkPrev, checkNext, setIsDirty, orderId = null, order = null, inputsId = null,
   selectedStorePickupPointId = null, setSelectedStorePickupPointId = null, selectedDeliveryId = null,
-  register = null, errors = null, control = null, hasElevator = null, setHasElevator = null, isToLiftOnTheFloor = null, 
-  setIsToLiftOnTheFloor = null, selectedCourierScheduleId = null, setSelectedCourierScheduleId = null,
-  selectedCourierScheduleShift = null, setSelectedCourierScheduleShift = null
+  register = null, errors = null, trigger = null, control = null, hasElevator = null, setHasElevator = null, 
+  isToLiftOnTheFloor = null,  setIsToLiftOnTheFloor = null, selectedCourierScheduleId = null, 
+  setSelectedCourierScheduleId = null, selectedCourierScheduleShift = null, setSelectedCourierScheduleShift = null
 }, ref) => {
   let radioClassName = "radio-div";
   let wrapperClassName = "checkout-page-delivery-radio";
@@ -38,6 +38,7 @@ const CheckoutPageDeliveryRadio = forwardRef(({
         setIsDirty={setIsDirty}
         register={register}
         errors={errors}
+        trigger={trigger}
         control={control}
         selectedDeliveryId={selectedDeliveryId}
         hasElevator={hasElevator}

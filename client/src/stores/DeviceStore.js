@@ -36,6 +36,7 @@ class DeviceStore {
 
     this._sales = [];
     this._saleTypeNames = [];
+    this._hasTriedToFetchSales = false;
 
     this._categories = [];
     this._brands = [];
@@ -157,6 +158,14 @@ class DeviceStore {
 
   get saleTypeNames() {
     return this._saleTypeNames;
+  }
+
+  setHasTriedToFetchSales(names) {
+    this._hasTriedToFetchSales = names;
+  }
+
+  get hasTriedToFetchSales() {
+    return this._hasTriedToFetchSales;
   }
 
   setCategories(categories) {

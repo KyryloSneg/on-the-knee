@@ -14,6 +14,7 @@ import addIcon from "../assets/add_24x24_7373FF.svg";
 import removeIcon from "../assets/remove-minus_24x24_7373FF.svg";
 import AdditionalServicesSection from "./AdditionalServicesSection";
 import useGettingAddServicesRelatedData from "../hooks/useGettingAddServicesRelatedData";
+import MessageToUser from "./UI/messageToUser/MessageToUser";
 
 // [] - no stock error
 // [error] - stock error is rendered
@@ -42,8 +43,9 @@ const CartModalDeviceListItem = observer(({ combination, type, oldCartComboAmoun
   const to = DEVICE_ROUTE + `${combination.device.id}--${deviceRouteCombo}`;
 
   const { discountPercentage } =
-    DeviceSalesActions.getSaleTypesAndDiscount(combination.device, deviceStore.sales, deviceStore.saleTypeNames)
-    || { discountPercentage: 0 };
+    DeviceSalesActions.getSaleTypesAndDiscount(
+      combination.device, deviceStore.sales, deviceStore.saleTypeNames, deviceStore.hasTriedToFetchSales
+    ) || { discountPercentage: 0 };
 
   const updateStock = async () => {
     try {
@@ -158,9 +160,10 @@ const CartModalDeviceListItem = observer(({ combination, type, oldCartComboAmoun
         {type === "cart" && <CartModalItemOptions combination={combination} />}
       </div>
       {renderAmountErrorCondition &&
-        <div className="cart-modal-item-stock-error">
-          <p>No such amount of devices</p>
-        </div>
+        <MessageToUser 
+          messageText="No such amount of devices"
+          className="cart-modal-item-stock-error"
+        />
       }
       <div className="cart-modal-list-item-price-row">
         {type === "wrongCartComboAmounts" && 

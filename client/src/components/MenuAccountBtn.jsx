@@ -30,6 +30,7 @@ const MenuAccountBtn = observer(() => {
       src={accBtnIcon}
       isLink={user.isAuth}
       route={USER_ROUTE}
+      aria-label="Your account"
       aria-controls="authentification-modal"
       onClick={() => onAccountBtnClick(user.isAuth, app, btnRef)}
       className="menu-account-btn"

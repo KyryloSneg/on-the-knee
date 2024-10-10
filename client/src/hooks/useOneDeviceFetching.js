@@ -2,9 +2,12 @@ import { useContext, useEffect } from "react";
 import useFetching from "./useFetching";
 import { getDevice } from "../http/DeviceApi";
 import { Context } from "../Context";
+import useNavigateToEncodedURL from "./useNavigateToEncodedURL";
+import { ROOT_ROUTE } from "../utils/consts";
 
-function useOneDeviceFetching(id, setDevice) {
+function useOneDeviceFetching(id, setDevice, isToRedirectToMainPageOnFail = false) {
   const { app } = useContext(Context);
+  const navigate = useNavigateToEncodedURL();
 
   async function fetchingCallback(propsId) {
     const fetchedDevice = await getDevice(propsId);
@@ -20,6 +23,10 @@ function useOneDeviceFetching(id, setDevice) {
   useEffect(() => {
     fetching();
   }, [fetching]);
+
+  useEffect(() => {
+    if (isToRedirectToMainPageOnFail && error) navigate(ROOT_ROUTE);
+  }, [error, isToRedirectToMainPageOnFail, navigate]);
 
   return [fetching, isLoading, error];
 }

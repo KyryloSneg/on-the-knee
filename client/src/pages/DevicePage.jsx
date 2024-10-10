@@ -25,7 +25,7 @@ const DevicePage = observer(({ type }) => {
   // using prevId to evade bugs that could possibly happen on switching between two different devices in browser history
   const prevId = useRef(id);
 
-  useOneDeviceFetching(id, setDevice);
+  useOneDeviceFetching(id, setDevice, true);
   useOneDeviceFeedbacksFetching(device?.id, null, null, deviceStore);
 
   function renderInnerPage() {

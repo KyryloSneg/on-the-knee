@@ -6,11 +6,12 @@ import { getOneStock } from "../http/StocksAPI";
 import _ from "lodash";
 import LocalStorageActions from "../utils/LocalStorageActions";
 import { getOneDeviceSaleDevices } from "../http/SalesAPI";
+import { getDevice, getDeviceCombination } from "../http/DeviceApi";
 
 // haven't implemented setCartSelectedAdditionalServices 'cause i have no need in it rn
 // cartId is optional if isToFetch === false
 function useGettingCartData(
-  cartId = null, setCartDevCombos = null, isUserStore = false, 
+  cartId = null, setCartDevCombos = null, isUserStore = false,
   isToFetch = true, isToSetGlobalLoading = false, propToInvokeEffect = null
 ) {
   const { user: userStore, app } = useContext(Context);
@@ -37,28 +38,14 @@ function useGettingCartData(
 
     // but getting only the first one (because we can't have more)
 
-    if (userStore.isAuth) {
-      cartDevCombos = await getOneCartDeviceCombinations(propsCartId);
-      if (cartDevCombos?.device?.id || cartDevCombos?.device?.id === 0) {
-        cartDevCombos.device["sale-devices"] = await getOneDeviceSaleDevices(cartDevCombos?.device?.id);
-      }
-
-      // setting sale-devices to devices to save info about possible discounted price (and other sales related to devices)
-      await Promise.all(cartDevCombos.map(async combo => {
-        if (combo?.device?.id || combo?.device?.id === 0) {
-          combo.device["sale-devices"] = await getOneDeviceSaleDevices(combo?.device?.id);
+    async function validateComboAmounts(cartCombos) {
+      const combosWithValidatedAmounts = await Promise.all(cartCombos?.map(async combo => {
+        let stock;
+        try {
+          stock = await getOneStock(combo?.["device-combination"]?.stockId);
+        } catch (e) {
+          console.log(e.message);
         }
-
-        return combo;
-      }));
-
-      initCartSelectedAdditionalServices =
-        (await getOneCartSelectedAdditionalServices(propsCartId))[0]
-        || cartSelectedAddServicesPlaceholder;
-    } else {
-      cartDevCombos = LocalStorageActions.getItem("cartDeviceCombinations") || [];
-      const combosWithValidatedAmounts = await Promise.all(cartDevCombos?.map(async combo => {
-        const stock = await getOneStock(combo["device-combination"].stockId);
 
         let validatedAmount;
         if (stock?.totalStock) {
@@ -76,13 +63,89 @@ function useGettingCartData(
         return { ...combo, amount: validatedAmount };
       }));
 
-      if (combosWithValidatedAmounts && !_.isEqual(cartDevCombos, combosWithValidatedAmounts)) {
-        cartDevCombos = combosWithValidatedAmounts;
-        localStorage.setItem("cartDeviceCombinations", JSON.stringify(combosWithValidatedAmounts));
+      const isNotEqualValidatedCombosToInitCombos = !_.isEqual(cartCombos, combosWithValidatedAmounts);
+      const isToUpdateCombosWithValidated = combosWithValidatedAmounts && isNotEqualValidatedCombosToInitCombos;
+
+      if (isToUpdateCombosWithValidated) {
+        cartCombos = combosWithValidatedAmounts;
+      };
+    }
+
+    async function updateDeviceAndDeviceComboFields(cartCombos) {
+      cartCombos = await Promise.all(cartCombos.map(async cartCombo => {
+        try {
+          cartCombo.device = await getDevice(cartCombo?.deviceId);
+          cartCombo["device-combination"] = await getDeviceCombination(cartCombo?.["device-combinationId"]);
+
+          return cartCombo;
+        } catch (e) {
+          // if device or a device combo doesn't exist, delete it
+          if (e.response.status === 404) {
+            return null;
+          } else {
+            return cartCombo;
+          }
+        }
+      }));
+
+      cartCombos = cartCombos.filter(cartCombo => !!cartCombo);
+
+      return cartCombos;
+    }
+
+    async function setCartDeviceSaleDevices(cartDevCombos) {
+      // setting sale-devices to devices to save info about possible discounted price (and other sales related to devices)
+      await Promise.all(cartDevCombos.map(async combo => {
+        if (combo?.device?.id || combo?.device?.id === 0) {
+          combo.device["sale-devices"] = await getOneDeviceSaleDevices(combo?.device?.id);
+        }
+
+        return combo;
+      }));
+    }
+
+    // we change our localStorage value at the end of the fetchingFunc if !userStore.isAuth
+    // we can delete some values on the server if the related device or device combo was deleted
+
+    if (userStore.isAuth) {
+      cartDevCombos = await getOneCartDeviceCombinations(propsCartId);
+      const initCartDevCombos = _.cloneDeep(cartDevCombos);
+
+      let deletedCombos = [];
+      
+      for (let initCombo of initCartDevCombos) {
+        const currComboInActualCombos = cartDevCombos.find(combo => combo.id === initCombo.id);
+        const isDeletedCombo = !currComboInActualCombos;
+        
+        if (isDeletedCombo) {
+          try {
+            deletedCombos.push(currComboInActualCombos);
+            await deleteCartDeviceCombination(initCombo.id);
+          } catch (e) {
+            if (e.response.status !== 500) console.log(e.message);
+          }
+        };
       };
 
-      initCartSelectedAdditionalServices = 
-        LocalStorageActions.getItem("cartSelectedAddServices") 
+      // filter combos from the deleted on the server ones
+      cartDevCombos = cartDevCombos?.filter(cartCombo => !deletedCombos.find(combo => combo.id === cartCombo.id));
+
+      await setCartDeviceSaleDevices(cartDevCombos);
+      await validateComboAmounts(cartDevCombos);
+
+      initCartSelectedAdditionalServices =
+        (await getOneCartSelectedAdditionalServices(propsCartId))[0]
+        || cartSelectedAddServicesPlaceholder;
+    } else {
+      cartDevCombos = LocalStorageActions.getItem("cartDeviceCombinations") || [];
+      
+      await updateDeviceAndDeviceComboFields(cartDevCombos);
+      await setCartDeviceSaleDevices(cartDevCombos);
+
+      await validateComboAmounts(cartDevCombos);
+
+      initCartSelectedAdditionalServices =
+        LocalStorageActions.getItem("cartSelectedAddServices")
         || cartSelectedAddServicesPlaceholder;
 
       if (_.isEqual(initCartSelectedAdditionalServices, {})) {
@@ -105,20 +168,35 @@ function useGettingCartData(
     let cartSelectedAdditionalServices = _.cloneDeep(initCartSelectedAdditionalServices);
     try {
       // deleting every cart combo that is out of stock
-      // and related to it selected additional services
+      // or (device / device combination) of which was deleted
+      // and deleting related to it selected additional services
       // (that could happen if user hasn't checked cart for a while)
       const filterResultsPromises = cartDevCombos.map(async combo => {
-        if (combo.device.isPreOrder) {
-          return true;
-        } else {
-          const stock = await getOneStock(combo["device-combination"].stockId);
-          let isInStock = stock?.totalStock !== 0;
+        try {
+          const fetchedDevice = await getDevice(combo?.device?.id);
+          const fetchedDeviceCombo = await getDeviceCombination(combo?.["device-combination"]?.id);
 
-          return isInStock;
+          if (fetchedDevice && fetchedDeviceCombo) {
+            if (combo.device.isPreOrder) {
+              return true;
+            } else {
+              const stock = await getOneStock(combo["device-combination"].stockId);
+              let isInStock = stock?.totalStock !== 0;
+
+              return isInStock;
+            }
+          } else return false;
+        } catch (e) {
+          // delete the combo if we haven't found device / device combo by their id
+          // (possibly we can do the thing if we couldn't find the combo stock)
+          console.log(e);
+
+          return e.response.status !== 404;
         }
       });
 
       const filterResults = await Promise.all(filterResultsPromises);
+
       for (let [index, result] of Object.entries(filterResults)) {
         if (!result) {
           const deletedComboId = cartDevCombos[index].id
@@ -162,7 +240,10 @@ function useGettingCartData(
     }
 
     if (!userStore.isAuth) {
-      if (_.isEqual(LocalStorageActions.getItem("cartDeviceCombinations"), {})) {
+      if (
+          _.isEqual(LocalStorageActions.getItem("cartDeviceCombinations"), {})
+          || !_.isEqual(LocalStorageActions.getItem("cartDeviceCombinations"), cartDevCombos)
+      ) {
         localStorage.setItem("cartDeviceCombinations", JSON.stringify(cartDevCombos));
       }
 
