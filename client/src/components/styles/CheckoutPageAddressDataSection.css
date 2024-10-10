@@ -10,13 +10,9 @@
   gap: 16px;
 }
 
-.checkout-page-receivent-data-warning {
+.message-to-user.checkout-page-receivent-data-warning {
   padding: 12px;
   margin: 14px 0 0 0;
-  border: 1px solid #7373ff;
-  border-radius: 5px;
-  background-color: #a7a7ff;
-  color: black;
 }
 
 @media screen and (min-width: 500px) {

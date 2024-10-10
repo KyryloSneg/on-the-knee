@@ -87,7 +87,7 @@ const MainDevicePage = observer(({ device, combinationString, feedbacks }) => {
   useSynchronizingAdditionalServices(setSelectedAddServices, combinationInCart?.id);
   useChangingServerAddServicesOnChange(selectedAddServices, combinationInCart?.id, cartDataFetching, isInitialRender);
 
-  if (!device || !deviceStore.sales || !deviceStore.stocks.length || !sellers.length || !selectedCombination) {
+  if (!device || !deviceStore.hasTriedToFetchSales || !deviceStore.stocks.length || !sellers.length || !selectedCombination) {
     return <div />
   }
 
@@ -95,9 +95,9 @@ const MainDevicePage = observer(({ device, combinationString, feedbacks }) => {
   let textSaleTypes = [];
   let logoSaleTypes = [];
 
-  if (deviceStore.sales?.length && deviceStore.saleTypeNames?.length) {
+  if (deviceStore.hasTriedToFetchSales) {
     deviceSaleTypes = (DeviceSalesActions.getSaleTypesAndDiscount(
-      device, deviceStore.sales, deviceStore.saleTypeNames
+      device, deviceStore.sales, deviceStore.saleTypeNames, deviceStore.hasTriedToFetchSales
     )).deviceSaleTypes;
 
     textSaleTypes = deviceSaleTypes.filter(type => !type.logo);
@@ -105,7 +105,7 @@ const MainDevicePage = observer(({ device, combinationString, feedbacks }) => {
   }
 
   const salesIds = device["sale-devices"].map(saleDev => saleDev.saleId);
-  const sales = deviceStore.sales.filter(sale => salesIds.includes(sale.id));
+  const sales = deviceStore.sales?.filter(sale => salesIds.includes(sale.id));
 
   let salesAndTypes = [];
   for (let sale of sales) {
@@ -144,7 +144,7 @@ const MainDevicePage = observer(({ device, combinationString, feedbacks }) => {
   const seller = sellers.find(sellerItem => sellerItem.id === device.sellerId);
   const price = selectedCombination.price;
   const { discountPercentage } =
-    DeviceSalesActions.getSaleTypesAndDiscount(device, sales, deviceStore.saleTypeNames)
+    DeviceSalesActions.getSaleTypesAndDiscount(device, sales, deviceStore.saleTypeNames, deviceStore.hasTriedToFetchSales)
     || { discountPercentage: 0 };
 
   return (

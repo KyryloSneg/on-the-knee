@@ -79,7 +79,7 @@ const CheckoutPage = observer(() => {
 
   const isLoadingContent = (
     (user.isAuth && !_.isEqual(user.user, {})) && _.isEqual(user.cart, {})
-  ) || !Object.keys(user.cartSelectedAdditionalServices)?.length || !deviceStore.sales || !deviceStore.saleTypeNames;
+  ) || !Object.keys(user.cartSelectedAdditionalServices)?.length || !deviceStore.hasTriedToFetchSales;
 
 
   // using isAlreadySubmittingRef and a small delay to make not possible to submit the same order a couple times in a row 
@@ -133,6 +133,7 @@ const CheckoutPage = observer(() => {
         if (user.isAuth && (user.user?.id !== null && user.user?.id !== undefined)) {
           orderResult.userId = user.user.id;
         } else {
+          orderResult.userId = null;
           orderResult.name = StringActions.removeRedundantSpaces(value.senderFirstName);
           orderResult.surname = StringActions.removeRedundantSpaces(value.senderSecondName);
           orderResult.email = StringActions.removeRedundantSpaces(value.senderEmail);
@@ -141,7 +142,7 @@ const CheckoutPage = observer(() => {
         }
 
         const { deviceAmount, devicePrice } = CartComboActions.getDeviceAmountAndTotalPrice(
-          order.value, deviceStore.sales, deviceStore.saleTypeNames
+          order.value, deviceStore.sales, deviceStore.saleTypeNames, deviceStore.hasTriedToFetchSales
         );
 
         const deliveryPrice = CartComboActions.getDeliveryTotalPrice(
@@ -181,8 +182,8 @@ const CheckoutPage = observer(() => {
           orderCourierDeliveryResult.street = StringActions.removeRedundantSpaces(value[`street-${id}`]);
           orderCourierDeliveryResult.houseNumber = StringActions.removeRedundantSpaces(value[`houseNumber-${id}`]);
 
-          const flatNumber = StringActions.removeAllSpaces(value[`flatNumber-${id}`]);
-          const floor = StringActions.removeAllSpaces(value[`floor-${id}`]);
+          const flatNumber = value[`flatNumber-${id}`].replaceAll(" ", "");
+          const floor = value[`floor-${id}`].replaceAll(" ", "");
 
           orderCourierDeliveryResult.flatNumber = !!flatNumber.length ? flatNumber : null;
           orderCourierDeliveryResult.floor = !!floor.length ? floor : null;
@@ -377,15 +378,27 @@ const CheckoutPage = observer(() => {
     debouncedSubmitCallback(value);
   }
 
+  // disabling enter key in the form
+  function onFormKeyDown(e) {
+    if (e.key !== "Enter" || e.target.tagName === "TEXTAREA" || e.target.tagName === "BUTTON") {
+      return;
+    }
+  
+    e.preventDefault()
+  }
+
   return (
     <>
       <div className="checkout-page">
         <header>
           <h2>Checkout order</h2>
         </header>
-        <form onSubmit={handleSubmit(
-          onSubmit, (errors) => checkInputsValidAndHandleInvalidInputFocus(true, errors))
-        }>
+        <form 
+          onSubmit={handleSubmit(
+            onSubmit, (errors) => checkInputsValidAndHandleInvalidInputFocus(true, errors))
+          }
+          onKeyDown={onFormKeyDown}
+        >
           <CheckoutPageMainContent
             register={register}
             // i fucking hate this (errors obj was changing but it didn't lead to child's re-renders),

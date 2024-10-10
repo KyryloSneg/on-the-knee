@@ -9,9 +9,9 @@ import { useWatch } from "react-hook-form";
 import { CHECKOUT_PAGE_INPUT_SERVICE_CLASS } from "../utils/consts";
 
 const CheckoutPageDeliverySection = observer(({
-  orderId, order, setIsDirty, register, errors, control, setIsToShowDeliveryChangeMessage,
-  selectedStorePickupPointId, setSelectedStorePickupPointId,
-  selectedDeliveryId, setSelectedDeliveryId,
+  orderId, order, setIsDirty, register, trigger, errors, control, 
+  setIsToShowDeliveryChangeMessage, selectedStorePickupPointId, 
+  setSelectedStorePickupPointId, selectedDeliveryId, setSelectedDeliveryId,
   hasElevator, setHasElevator, isToLiftOnTheFloor,
   setIsToLiftOnTheFloor, selectedCourierScheduleId, setSelectedCourierScheduleId,
   selectedCourierScheduleShift, setSelectedCourierScheduleShift,
@@ -32,7 +32,15 @@ const CheckoutPageDeliverySection = observer(({
     if (selectedDelivery?.name === "self-delivery") {
       areRequiredOptionInputsFilled = selectedStorePickupPointId !== null && selectedStorePickupPointId !== undefined;
     } else if (selectedDelivery?.name === "courier") {
-      areRequiredOptionInputsFilled = !!formValues["street-" + inputsId] && !!formValues["houseNumber-" + inputsId];
+      const areFilled = !!formValues["street-" + inputsId] && !!formValues["houseNumber-" + inputsId];
+      // calculations below are correct only if the corresponding input was touched
+      // and because of it isRequired inputs are valid here before user interaction,
+      // but it's fine because isRequired fields are not filled and areFilled var returns false
+      const isEveryInputValid = 
+        !errors["street-" + inputsId] && !errors["houseNumber-" + inputsId]
+        && !errors["flatNumber-" + inputsId] && !errors["floor-" + inputsId];
+
+      areRequiredOptionInputsFilled = areFilled && isEveryInputValid;
     }
   }
   
@@ -67,6 +75,7 @@ const CheckoutPageDeliverySection = observer(({
             setSelectedDeliveryId={setSelectedDeliveryId}
             register={register}
             errors={errors}
+            trigger={trigger}
             control={control}
             hasElevator={hasElevator}
             setHasElevator={setHasElevator}

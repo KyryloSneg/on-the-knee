@@ -4,21 +4,14 @@ import StarRating from "./UI/starRating/StarRating";
 import useWindowWidth from "../hooks/useWindowWidth";
 import FilePickerSection from "./UI/filePicker/FilePickerSection";
 import ReactHookFormInput from "./UI/reactHookFormInput/ReactHookFormInput";
+import { BASE_OPTIONS, REQUIRED_BASE_OPTIONS } from "../utils/inputOptionsConsts";
 
-const CommentModalContentInputs = ({ 
+const CommentModalContentInputs = ({
   type, register, errors, areInputsBlocked, errorsBeforeBlock, isToShowErrors, setIsToShowErrors, clearErrors, setError,
   settedStarRating, setSettedStarRating, isToShowStarError, setIsToShowStarError, openLoginModal,
   files, setFiles
 }) => {
   const windowWidth = useWindowWidth();
-  const baseOptions = {
-    validate: {
-      // validate by isTooShort field only if user have typed anything in an input
-      // (useful for optional inputs)
-      isTooShort: value => (value.trim().length === 0 || value.trim().length >= 3) || "This field must contain more than or equal to 3 characters",
-      isTooLarge: value => value.trim().length <= 1000 || "This field must contain less than or equal to 1000 characters",
-    }
-  };
 
   let inputsGroupClass = "comment-modal-form-inputs";
   if (areInputsBlocked) {
@@ -83,7 +76,7 @@ const CommentModalContentInputs = ({
             labelText="Advantages (optional)"
             inputName="advantages"
             errors={errors}
-            registerFnResult={register("advantages", baseOptions)}
+            registerFnResult={register("advantages", BASE_OPTIONS)}
             isDisabled={areInputsBlocked}
             isErrorCondition={!areInputsBlocked && errors?.advantages && isToShowErrors}
           />
@@ -91,7 +84,7 @@ const CommentModalContentInputs = ({
             labelText="Disadvantages (optional)"
             inputName="disadvantages"
             errors={errors}
-            registerFnResult={register("disadvantages", baseOptions)}
+            registerFnResult={register("disadvantages", BASE_OPTIONS)}
             isDisabled={areInputsBlocked}
             isErrorCondition={!areInputsBlocked && errors?.disadvantages && isToShowErrors}
           />
@@ -106,11 +99,12 @@ const CommentModalContentInputs = ({
               (!areInputsBlocked && errors?.comment && isToShowErrors) ? "invalid" : ""
             }
             {...register("comment", {
-              ...baseOptions,
+              ...REQUIRED_BASE_OPTIONS,
               validate: {
-                ...baseOptions.validate,
-                isRequired: value => !!value.trim().length || "Required field",
-                isTooLarge: value => value.trim().length <= 1000 || "This field must contain less than or equal to 1000 characters"
+                ...REQUIRED_BASE_OPTIONS.validate,
+                isNotTooShort: (
+                  value => value.trim().length >= 3 || "This field must contain more than or equal to 3 characters"
+                )
               }
             })}
           />
@@ -122,7 +116,7 @@ const CommentModalContentInputs = ({
         }
       </div>
       {(type === "feedback" || type === "question") &&
-        <FilePickerSection files={files} setFiles={setFiles} />
+        <FilePickerSection files={files} setFiles={setFiles} isDisabled={areInputsBlocked} />
       }
       {areInputsBlocked &&
         <div className="comment-modal-form-block">
@@ -133,6 +127,6 @@ const CommentModalContentInputs = ({
       }
     </div>
   );
-}
+};
 
 export default CommentModalContentInputs;

@@ -2,7 +2,6 @@ import { useMemo, useRef } from "react";
 import { PASSWORD_INPUT_OPTIONS, PASSWORD_VALIDATION_MESSAGES_OBJ, REQUIRED_PASSWORD_INPUT_OPTIONS } from "../utils/inputOptionsConsts";
 import _ from "lodash";
 import isPasswordValidFunction from "../utils/isPasswordValidFunction";
-import StringActions from "../utils/StringActions";
 import getPasswordInputFieldName from "../utils/getPasswordInputFieldName";
 
 // uniqueVariantName is the name that used in passwordFieldName (`${selectedVariant}-password`)
@@ -19,7 +18,7 @@ export default function useRegisteringPasswordInput(
     let passwordOptionsCopy = _.cloneDeep(isRequired ? REQUIRED_PASSWORD_INPUT_OPTIONS : PASSWORD_INPUT_OPTIONS);
     if (getValues && mustNotBeEqualToEmail && emailFieldName) {
       passwordOptionsCopy.validate.isNotEqualToEmail = value => 
-        StringActions.removeAllSpaces(value) !== StringActions.removeAllSpaces(getValues(`${uniqueVariantName}-email`)) 
+        value.replaceAll(" ", "") !== getValues(`${uniqueVariantName}-email`).replaceAll(" ", "") 
         || PASSWORD_VALIDATION_MESSAGES_OBJ.isNotEqualToEmail;
     }
 

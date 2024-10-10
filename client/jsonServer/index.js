@@ -132,10 +132,14 @@ module.exports = function createData () {
   });
   
   Promise.all([locationsPromise, devicesPromise]).then(() => {
-    const orderResult = createOrders(data["devices"], data["device-combinations"], data["deliveries"],
-                                     data["delivery-types"], data["cities"], data["streets"],
-                                     data["store-pickup-points"], data["courier-schedules"],
-                                     data["sale-devices"], data["sales"], data["sale-types"]);
+    const orderResult = createOrders(
+      data["devices"], data["device-combinations"], data["cart-device-combinations"], 
+      data["sellers"], data["deliveries"], 
+      data["delivery-types"], data["cities"], data["streets"],
+      data["store-pickup-points"], data["courier-schedules"],
+      data["sale-devices"], data["sales"], data["sale-types"], data["sale-type-names"]
+    );
+
     data["orders"] = orderResult.orders;
     data["order-courier-deliveries"] = orderResult.orderCourierDeliveries;
     data["order-device-combinations"] = orderResult.orderDeviceCombinations;

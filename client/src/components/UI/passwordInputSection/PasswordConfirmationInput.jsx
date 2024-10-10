@@ -16,7 +16,7 @@ const PasswordConfirmationInput = ({
     const passwordInputFieldName = getPasswordInputFieldName(uniqueInputVariantName);
     
     let passwordOptionsCopy = _.cloneDeep(REQUIRED_BASE_OPTIONS);
-    passwordOptionsCopy.validate.isAppropriateLength = PASSWORD_VALIDATION_OBJ.isAppropriateLength;
+    passwordOptionsCopy.validate.isNotTooLong = PASSWORD_VALIDATION_OBJ.isAppropriateLength;
     passwordOptionsCopy.validate.isEqualToPassword = value => {
       // using get values instead of useWatch because the hook returns not up-to-date password input's value
       return value === getValues(passwordInputFieldName) || "The value is not equal to the password";

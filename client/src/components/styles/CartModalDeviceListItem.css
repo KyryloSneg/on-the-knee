@@ -37,13 +37,8 @@
   width: 100%;
 }
 
-.cart-modal-item-stock-error {
-  padding: 8px;
+.message-to-user.cart-modal-item-stock-error {
   margin: 8px 2.5% 6px 2.5%;
-  border: 1px solid #7373ff;
-  border-radius: 5px;
-  background-color: #a7a7ff;
-  color: black;
 }
 
 .cart-modal-list-item-amount-wrap {

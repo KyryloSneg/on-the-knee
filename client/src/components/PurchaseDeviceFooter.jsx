@@ -9,12 +9,13 @@ import { Context } from "../Context";
 
 const PurchaseDeviceFooter = observer(({ device, selectedCombo, selectedAddServices }) => {
   const { deviceStore } = useContext(Context); 
-  if (!deviceStore.sales || !deviceStore.saleTypeNames) return <div />;
+  if (!deviceStore.hasTriedToFetchSales) return <div />;
 
   const image = selectedCombo.images[0];
   const { discountPercentage } =
-    DeviceSalesActions.getSaleTypesAndDiscount(device, deviceStore.sales, deviceStore.saleTypeNames)
-    || { discountPercentage: 0 };
+    DeviceSalesActions.getSaleTypesAndDiscount(
+      device, deviceStore.sales, deviceStore.saleTypeNames, deviceStore.hasTriedToFetchSales
+    ) || { discountPercentage: 0 };
 
   return (
     <section className="purchase-device-footer">

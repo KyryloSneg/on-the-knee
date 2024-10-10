@@ -1,10 +1,56 @@
 const { default: isEmailValidFn } = require("./isEmailValid");
-const { default: StringActions } = require("./StringActions");
+
+export function getNumberInputOptions({ 
+  isRequired = true, isNotNegative = false, isNotNegativeOrZero = false, 
+  isNotFloat = true, additionalNonValidateOptions = {}, 
+  minLength = 0, maxLength = Infinity
+}) {
+  let numberInputOptions = {
+    ...additionalNonValidateOptions,
+    validate: {}
+  }
+
+  // using both `${value}` and +value because we can provide the option in the register fn 
+  // that will make value in the validation functions to be a number, not string as options' default value does,
+  // so support both number and string representations of value in the validation
+  if (isRequired) {
+    numberInputOptions.validate.isRequired = value => !!`${value}`.trim().length || "Required field";
+  }
+
+  if (isNotNegative) {
+    numberInputOptions.validate.isNotNegative = value => (+value >= 0 || value === "") || "Only a positive number";
+  }
+
+  if (isNotNegativeOrZero) {
+    numberInputOptions.validate.isNotNegative = value => (+value > 0 || value === "") || "Only a positive number or 0";
+  }
+
+  if (isNotFloat) {
+    numberInputOptions.validate.isNotFloat = value => Number.isInteger(+value) || "Can't be a float number";
+  }
+
+  // there's no any good reason to put isNotTooShort / (...Long) validation if the (min / max) length is <= 0 
+  if (!!minLength && minLength > 0) {
+    numberInputOptions.validate.isNotTooShort = value => (
+      `${value}`.trim().length >= minLength 
+      || `Can't be less than ${minLength} digit${minLength > 1 ? "s" : ""}`
+    );
+  }
+
+  if (!!maxLength && maxLength > 0) {
+    numberInputOptions.validate.isNotTooLong = value => (
+      `${value}`.trim().length <= maxLength 
+      || `Can't be more than ${maxLength} digit${maxLength > 1 ? "s" : ""}`
+    );
+  }
+
+  return numberInputOptions;
+}
 
 export function isOnlyLetters(value) {
   // do not forget that our regex doesn't detect whitespaces, so matches.length might be less than value.length.
   // to prevent that, delete all whitespaces from the value
-  const valueWithoutSpaces = StringActions.removeAllSpaces(value);
+  const valueWithoutSpaces = value.replaceAll(" ", "");
   const matches = valueWithoutSpaces.match(/\p{Letter}/gu);
 
   const isOnlyLetters = matches?.length === valueWithoutSpaces.length;
@@ -83,7 +129,7 @@ export function onEmailInputChange(
 export const REQUIRED_BASE_OPTIONS = Object.freeze({
   validate: {
     isRequired: value => !!value.trim().length || "Required field",
-    isAppropriateLength: (
+    isNotTooLong: (
       value => value.trim().length <= 1000 || "This field must contain less than or equal to 1000 characters"
     )
   }

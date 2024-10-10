@@ -2,10 +2,9 @@ import "./styles/DeliverySectionCourierOptionInputs.css";
 import { useEffect } from "react";
 import Dropdown from "./UI/dropdown/Dropdown";
 import ReactHookFormInput from "./UI/reactHookFormInput/ReactHookFormInput";
-import _ from "lodash";
 import { useWatch } from "react-hook-form";
 import { CHECKOUT_PAGE_INPUT_SERVICE_CLASS, TO_LIFT_ON_THE_FLOOR_PRICE } from "../utils/consts";
-import StringActions from "../utils/StringActions";
+import { getNumberInputOptions } from "../utils/inputOptionsConsts";
 
 const OPTIONS = Object.freeze([
   {
@@ -22,31 +21,54 @@ const OPTIONS = Object.freeze([
 
 // we have no need in hasElevator state because it doesn't have any initial value (=== null by default)
 const DeliverySectionCourierOptionInputs = ({
-  inputsId, register, errors, control, hasElevator, setHasElevator, isToLiftOnTheFloor, setIsToLiftOnTheFloor,
+  inputsId, register, errors, trigger, control, hasElevator, setHasElevator, isToLiftOnTheFloor, setIsToLiftOnTheFloor,
 }) => {
-  const numberInputOptions = {
-    validate: {
-      isNotNegative: value => (+value >= 0 || value === "") || "Only a positive number or 0",
-      // if value === "", Number.isInteger(+value) will return "0"
-      isNotFloat: value => Number.isInteger(+value) || "Can't be a float number",
-      isAppropriateLength: value => value.trim().length <= 5 || "Can't be more than 5 digits",
-    }
-  }
+  const baseNumberInputOptions = getNumberInputOptions({ 
+    isRequired: false,
+    isNotNegative: true,
+    isNotFloat: true,
+    maxLength: 5
+  });
 
-  // doing this to make changed fields be on the same place among other validations in the validate field 
-  // (useful if we'll change the order at some point)
-  let floorInputOptions = _.cloneDeep(numberInputOptions);
-  let flatNumberInputOptions = _.cloneDeep(numberInputOptions);
-  
-  floorInputOptions.validate.isAppropriateLength = value => `${value}`.trim().length <= 2 || "Can't be more than 2 digits";
-  floorInputOptions.validate.isNotNegative = value => (+value > 0 || value === "") || "Only a positive number";
-  flatNumberInputOptions.validate.isNotNegative = value => (+value > 0 || value === "") || "Only a positive number";
+  const floorInputOptions = getNumberInputOptions({ 
+    isRequired: false,
+    isNotNegativeOrZero: true,
+    isNotFloat: true,
+    maxLength: 2
+  });
+
+  const flatNumberInputOptions = getNumberInputOptions({ 
+    isRequired: false,
+    isNotNegativeOrZero: true,
+    isNotFloat: true,
+    maxLength: 5
+  });
 
   // we must define the values below only once
   const streetInputName = "street-" + inputsId;
   const houseNumberInputName = "houseNumber-" + inputsId;
   const flatNumberInputName = "flatNumber-" + inputsId;
   const floorInputName = "floor-" + inputsId;
+
+  useEffect(() => {
+    // trigger validation to show errors on inputs appear only if there are ones
+    if (errors[streetInputName]) {
+      trigger(streetInputName);
+    }
+
+    if (errors[houseNumberInputName]) {
+      trigger(houseNumberInputName);
+    }
+
+    if (errors[flatNumberInputName]) {
+      trigger(flatNumberInputName);
+    }
+
+    if (errors[floorInputName]) {
+      trigger(floorInputName);
+    }
+    // eslint-disable-next-line
+  }, []);
 
   function onSelectCb(id) {
     const selectedOption = OPTIONS.find(option => option.id === id);
@@ -69,7 +91,11 @@ const DeliverySectionCourierOptionInputs = ({
     !!formValues[streetInputName] && !!formValues[houseNumberInputName] 
     && !!formValues[flatNumberInputName] && !!formValues[floorInputName];
 
-  const isDisabled = !areAllInputsFilled || Object.keys(errors)?.length !== 0 || !hasElevator;
+  const areThereTheInputsErrors = 
+    !!errors?.streetInputName || !!errors?.houseNumberInputName 
+    || !!errors?.flatNumberInputName || !!errors?.floorInputName;  
+
+  const isDisabled = !areAllInputsFilled || areThereTheInputsErrors || !hasElevator;
 
   let checkboxDivClassName = "checkbox-div";
   if (isToLiftOnTheFloor) {
@@ -92,7 +118,7 @@ const DeliverySectionCourierOptionInputs = ({
               required: value => value.trim().length > 0 || "Required",
               isTooLong: value => value.trim().length <= 1000 || "Can't be more than 1000 characters",
               isEnglish: value => {
-                const valueWithoutSpaces = StringActions.removeAllSpaces(value);
+                const valueWithoutSpaces = value.replaceAll(" ", "");
                 return (/^[a-zA-Z0-9]+$/.test(valueWithoutSpaces) && isNaN(+valueWithoutSpaces)) 
                   || "English chars with digits (or without) only";
               },
@@ -106,10 +132,10 @@ const DeliverySectionCourierOptionInputs = ({
           errors={errors}
           type="number"
           registerFnResult={register(houseNumberInputName, {
-            ...numberInputOptions,
+            ...baseNumberInputOptions,
             validate: {
-              required: value => value.trim().length > 0 || "Required",
-              ...numberInputOptions.validate,
+              isRequired: value => `${value}`.trim().length > 0 || "Required",
+              ...baseNumberInputOptions.validate,
             }
           })}
           className={CHECKOUT_PAGE_INPUT_SERVICE_CLASS}

@@ -8,7 +8,7 @@ import getWeekDay from "../utils/getWeekDay";
 import { observer } from "mobx-react-lite";
 
 const DeliverySectionCourierOption = observer(({
-  order, inputsId, setIsDirty, register, errors, control, selectedDeliveryId, hasElevator, setHasElevator, 
+  order, inputsId, setIsDirty, register, errors, trigger, control, selectedDeliveryId, hasElevator, setHasElevator, 
   isToLiftOnTheFloor, setIsToLiftOnTheFloor, selectedCourierScheduleId, setSelectedCourierScheduleId, 
   selectedCourierScheduleShift, setSelectedCourierScheduleShift
 }) => {
@@ -53,6 +53,7 @@ const DeliverySectionCourierOption = observer(({
         inputsId={inputsId}
         register={register}
         errors={errors}
+        trigger={trigger}
         control={control}
         hasElevator={hasElevator}
         setHasElevator={setHasElevator}

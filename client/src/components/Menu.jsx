@@ -4,7 +4,7 @@ import MenuCatalogBtn from "./MenuCatalogBtn";
 
 const Menu = () => {
   return (
-    <section id="menu">
+    <nav id="menu">
       <ul className="menu-items">
         {
           /* 
@@ -22,7 +22,7 @@ const Menu = () => {
           <MenuCatalogBtn />
         </li>
       </ul>
-    </section>
+    </nav>
   );
 }
 
