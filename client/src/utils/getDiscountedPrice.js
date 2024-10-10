@@ -7,8 +7,8 @@ export function getDiscountedPrice(price, discountPercentage) {
   return discountedPrice;
 }
 
-export function getDiscountedPriceOrDefaultOne(combination, device, sales, saleTypeNames) {
-  const { discountPercentage } = DeviceSalesActions.getSaleTypesAndDiscount(device, sales, saleTypeNames);
+export function getDiscountedPriceOrDefaultOne(combination, device, sales, saleTypeNames, hasTriedToFetchSales) {
+  const { discountPercentage } = DeviceSalesActions.getSaleTypesAndDiscount(device, sales, saleTypeNames, hasTriedToFetchSales);
 
   let discountedPrice;
   if (discountPercentage) {

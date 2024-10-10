@@ -19,7 +19,10 @@ import getDevicesBySearchQuery from "../utils/getDevicesBySearchQuery";
 import getPreparedForMockServerStr from "../utils/getPreparedForMockServerStr";
 
 // query params without pagination ones
-function useDeviceSectionFetching(deviceStore, app, originalType, setIsFoundDevicesByQuery = null, setSpellCheckedQuery = null, seller = null) {
+function useDeviceSectionFetching(
+  deviceStore, app, originalType, setIsFoundDevicesByQuery = null, 
+  setSpellCheckedQuery = null, seller = null
+) {
   const location = useLocation();
   const { categoryIdSlug } = useParams();
   const navigate = useNavigateToEncodedURL();
@@ -125,9 +128,12 @@ function useDeviceSectionFetching(deviceStore, app, originalType, setIsFoundDevi
       }
   
       // finding min / max prices before filtering by device's cost
-      const { minPrice, maxPrice } = DeviceComboActions.getDeviceMinMaxPrices(filteredDevices, sales, saleTypeNames);
+      const { minPrice, maxPrice } = DeviceComboActions.getDeviceMinMaxPrices(
+        filteredDevices, sales, saleTypeNames, true
+      );
+      
       if (toFilterByPrice) {
-        filteredDevices = filterDevicesByPrice(filteredDevices, sales, saleTypeNames, minQueryPrice, maxQueryPrice);
+        filteredDevices = filterDevicesByPrice(filteredDevices, sales, saleTypeNames, true, minQueryPrice, maxQueryPrice);
       }
   
       let deviceInfos = [];
@@ -152,7 +158,7 @@ function useDeviceSectionFetching(deviceStore, app, originalType, setIsFoundDevi
       }
   
       if (splittedSortFilter?.[1] === "price") {
-        sortDevicesByPrice(filteredDevices, stocks, sales, saleTypeNames, splittedSortFilter[0] === "desc");
+        sortDevicesByPrice(filteredDevices, stocks, sales, saleTypeNames, true, splittedSortFilter[0] === "desc");
       }
 
       // if (toFilterBySellers) {

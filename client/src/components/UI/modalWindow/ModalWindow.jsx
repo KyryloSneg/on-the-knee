@@ -53,6 +53,7 @@ const ModalWindow = observer(({ isVisible, setIsVisible, children, headerText, i
       className={className} 
       id={id} 
       role="dialog"
+      aria-modal="true"
       aria-labelledby={headingId}
       ref={modalRef}
       {...props}

@@ -1,5 +1,4 @@
 import { PASSWORD_VALIDATION_OBJ } from "./inputOptionsConsts";
-import StringActions from "./StringActions";
 
 // we must pass getValues, mustNotBeEqualToEmail and emailFieldName to do the corresponding validation
 export default function isPasswordValidFunction(
@@ -20,7 +19,7 @@ export default function isPasswordValidFunction(
 
   if (mustNotBeEqualToEmail && getValues && emailFieldName) {
     let validationResult = 
-      StringActions.removeAllSpaces(password || "") !== StringActions.removeAllSpaces(getValues(emailFieldName) || "");
+      (password || "").replaceAll(" ", "") !== (getValues(emailFieldName) || "").replaceAll(" ", "");
 
     isValidDetails.isNotEqualToEmail = validationResult;
     if (!validationResult && isValid) {

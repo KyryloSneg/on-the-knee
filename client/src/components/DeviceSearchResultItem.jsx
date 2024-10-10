@@ -8,11 +8,12 @@ import { Context } from '../Context';
 const DeviceSearchResultItem = observer(({ device, defaultCombo }) => {
   const { deviceStore } = useContext(Context);
   const { discountPercentage } = 
-    DeviceSalesActions.getSaleTypesAndDiscount(device, deviceStore.sales, deviceStore.saleTypeNames) 
-    || { discountPercentage: 0 };
+    DeviceSalesActions.getSaleTypesAndDiscount(
+      device, deviceStore.sales, deviceStore.saleTypeNames, deviceStore.hasTriedToFetchSales
+    ) || { discountPercentage: 0 };
 
   const image = defaultCombo.images[0];
-  if (!deviceStore.sales || !deviceStore.saleTypeNames) return <div />;
+  if (!deviceStore.hasTriedToFetchSales) return <div />;
 
   return (
     <section className="search-result-device">

@@ -9,7 +9,7 @@ import { getOneDelivery } from "../http/DeliveriesAPI";
 const CheckoutPageDeliveryRadiogroup = observer(({
   orderId, order, inputsId, setIsDirty, setIsToShowDeliveryChangeMessage,
   selectedStorePickupPointId, setSelectedStorePickupPointId, 
-  selectedDeliveryId, setSelectedDeliveryId, register, errors, control,
+  selectedDeliveryId, setSelectedDeliveryId, register, errors, trigger, control,
   hasElevator, setHasElevator, isToLiftOnTheFloor, setIsToLiftOnTheFloor, 
   selectedCourierScheduleId, setSelectedCourierScheduleId,
   selectedCourierScheduleShift, setSelectedCourierScheduleShift
@@ -160,6 +160,7 @@ const CheckoutPageDeliveryRadiogroup = observer(({
               selectedDeliveryId={selectedDeliveryId}
               register={register}
               errors={errors}
+              trigger={trigger}
               control={control}
               hasElevator={hasElevator}
               setHasElevator={setHasElevator}

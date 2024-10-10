@@ -7,6 +7,7 @@ import { Context } from '../Context';
 import CheckoutPageAddressDataSection from './CheckoutPageAddressDataSection';
 import useSettingNonFirstDeliverySectionValues from '../hooks/useSettingNonFirstDeliverySectionValues';
 import CheckoutPageOrderDeviceList from './CheckoutPageOrderDeviceList';
+import MessageToUser from "./UI/messageToUser/MessageToUser";
 
 const CheckoutPageOrder = observer(({ 
   order, id, isMultiple, register, errors, trigger, control,
@@ -66,9 +67,10 @@ const CheckoutPageOrder = observer(({
       </header>
       <CheckoutPageOrderDeviceList order={order} orderId={id} cartDataFetching={cartDataFetching} />
       {app.isToShowDeliveryChangeMessageValues?.[id]?.value &&
-        <div className="delivery-change-message">
-          <p>Delivery type has changed!</p>
-        </div>
+        <MessageToUser 
+          messageText="Delivery type has been changed!"
+          className="delivery-change-message"
+        />
       }
       {/* render delivery section radiogroup only with already (initial) selected option */}
       {app.isToShowDeliverySectionRadiogroup &&
@@ -78,6 +80,7 @@ const CheckoutPageOrder = observer(({
           setIsDirty={setIsRadiogroupDirty}
           register={register}
           errors={errors}
+          trigger={trigger}
           control={control}
           setIsToShowDeliveryChangeMessage={setIsToShowDeliveryChangeMessage}
           selectedStorePickupPointId={selectedStorePickupPointId}

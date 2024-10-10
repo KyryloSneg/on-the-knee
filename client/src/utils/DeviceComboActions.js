@@ -217,12 +217,12 @@ class DeviceComboActions {
     return { defaultCombinationInStock, isInStock, isPreOrder };
   }
 
-  static getDeviceMinMaxPrices(devices, sales = [], saleTypeNames = []) {
+  static getDeviceMinMaxPrices(devices, sales = [], saleTypeNames = [], hasTriedToFetchSales = false) {
     let prices = [];
   
     for (let dev of devices) {
       for (let combo of dev["device-combinations"]) {
-        const price = getDiscountedPriceOrDefaultOne(combo, dev, sales, saleTypeNames);
+        const price = getDiscountedPriceOrDefaultOne(combo, dev, sales, saleTypeNames, hasTriedToFetchSales);
         prices.push(price);
       }
     }

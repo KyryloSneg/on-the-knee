@@ -23,7 +23,11 @@ module.exports = (deviceCombos) => {
     // createCartDeviceCombos(cartDeviceCombos, cart.id, deviceCombos);
     carts.push(cart);
     cartSelectedAdditionalServicesArr.push(cartSelectedAdditionalServices);
-  } 
+  }
+  
+  for (let i = 0; i < faker.number.int({ min: 5, max: 10 }); i++) {
+    createCartDeviceCombos(cartDeviceCombos, faker.string.uuid(), deviceCombos);
+  }
 
   return {
     carts,
