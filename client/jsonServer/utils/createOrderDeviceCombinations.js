@@ -1,21 +1,21 @@
-const { faker } = require("@faker-js/faker");
 const findSale = require("./findSale");
 
-module.exports = (combinations, orderId, devices, deviceCombinations, saleDevices, sales, saleTypes) => {
+module.exports = (combinations, cartDeviceCombinations, orderId, devices, deviceCombinations, saleDevices, sales, saleTypes) => {
   let currOrderCombo = [];
   let additionalInfo = { sum: 0, names: [], amount: 0 };
 
-  const combinationAmount = faker.number.int({ min: 1, max: 8 });
-  for (let i = 0; i < combinationAmount; i++) {
-    const deviceCombo = deviceCombinations[faker.number.int({ min: 0, max: deviceCombinations.length - 1 })];
-    const device = devices[deviceCombo.deviceId - 1];
-    const amount = faker.number.int({ min: 1, max: 3 })
+  for (let cartDeviceCombo of cartDeviceCombinations) {
+    const deviceCombo = deviceCombinations.find(combo => combo.id === cartDeviceCombo["device-combinationId"]);
+    const device = devices.find(dev => dev.id === cartDeviceCombo.deviceId);
+    
+    const amount = cartDeviceCombo.amount;
 
     const saleInfo = findSale(device, saleDevices, sales, saleTypes);
     const saleId = saleInfo ? saleInfo.sale.id : null;
-    const discountPercentage = saleInfo ? saleInfo.type.discountPercentage : null;
+    const discountPercentage = saleInfo ? saleInfo.type?.discountPercentage || null : null;
     
     let price = deviceCombo.price;
+    
     if (discountPercentage) {
       price -= price * (discountPercentage / 100);
     }

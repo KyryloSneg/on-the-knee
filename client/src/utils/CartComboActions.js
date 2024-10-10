@@ -4,7 +4,7 @@ import { getDiscountedPrice } from "./getDiscountedPrice";
 
 export default class CartComboActions {
 
-  static getDeviceAmountAndTotalPrice(cartDeviceCombinations, sales, saleTypeNames) {
+  static getDeviceAmountAndTotalPrice(cartDeviceCombinations, sales, saleTypeNames, hasTriedToFetchSales) {
     let deviceAmount = 0;
     let devicePrice = 0;
 
@@ -13,12 +13,12 @@ export default class CartComboActions {
         deviceAmount += +cartCombo.amount;
 
         if (cartCombo?.["device-combination"]?.price) {
-          if (!sales?.length || !saleTypeNames?.length) {
+          if (!hasTriedToFetchSales) {
             return { deviceAmount: 0, devicePrice: 0 };
           }
 
           let { discountPercentage } = DeviceSalesActions.getSaleTypesAndDiscount(
-            cartCombo.device, sales, saleTypeNames
+            cartCombo.device, sales, saleTypeNames, hasTriedToFetchSales
           );
         
           if (discountPercentage === undefined) {

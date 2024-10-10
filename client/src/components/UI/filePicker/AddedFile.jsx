@@ -4,15 +4,19 @@ import fileIcon from "../../../assets/file_24x24_434343.svg";
 import trashCanIcon from "../../../assets/delete_24x24_434343.svg";
 import refreshIcon from "../../../assets/refresh_24x24_434343.svg";
 
-const AddedFile = ({ file, filesArray, setFiles, isImage }) => {
+const AddedFile = ({ file, filesArray, setFiles, isImage, isDisabled }) => {
   const fileIndex = filesArray.indexOf(file);
 
   function deleteFile() {
+    if (isDisabled) return;
+
     let nextFiles = filesArray.filter(fileItem => fileItem !== file);
     setFiles(nextFiles);
   }
 
   function rotateFile() {
+    if (isDisabled) return;
+
     let nextFiles = _.cloneDeep(filesArray);
     // 0 => 90 => 180 => 270 => 0 ...
     let nextRotateDegrees = 0;
@@ -43,11 +47,11 @@ const AddedFile = ({ file, filesArray, setFiles, isImage }) => {
         {!isImage && <p>{fileObj.name}</p>}
       </div>
       <div className="added-file-btn-group">
-        <button type="button" onClick={deleteFile} aria-label="Delete image">
+        <button type="button" onClick={deleteFile} aria-label="Delete image" disabled={isDisabled}>
           <img src={trashCanIcon} alt="" draggable="false" />
         </button>
         {isImage &&
-          <button type="button" onClick={rotateFile} aria-label="Rotate image">
+          <button type="button" onClick={rotateFile} aria-label="Rotate image" disabled={isDisabled}>
             <img src={refreshIcon} alt="" draggable="false" />
           </button>
         }

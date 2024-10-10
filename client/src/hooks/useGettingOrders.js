@@ -24,10 +24,9 @@ export default function useGettingOrders() {
       let isWithNonDiscountSale = false;
       let nonDiscountSaleName;
 
-
-      if (combo?.device?.["sale-devices"] && deviceStore.sales?.length && deviceStore.saleTypeNames?.length) {
+      if (combo?.device?.["sale-devices"] && deviceStore.hasTriedToFetchSales) {
         const { deviceSaleTypes } = DeviceSalesActions.getSaleTypesAndDiscount(
-          combo?.device, deviceStore.sales, deviceStore.saleTypeNames
+          combo?.device, deviceStore.sales, deviceStore.saleTypeNames, deviceStore.hasTriedToFetchSales
         );
 
         if (deviceSaleTypes) {
@@ -169,7 +168,7 @@ export default function useGettingOrders() {
     }
 
     return result;
-  }, [user.cartDeviceCombinations, deviceStore.sales, deviceStore.saleTypeNames]);
+  }, [user.cartDeviceCombinations, deviceStore.sales, deviceStore.saleTypeNames, deviceStore.hasTriedToFetchSales]);
 
   return orders;
 }

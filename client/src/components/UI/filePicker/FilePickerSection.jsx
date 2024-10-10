@@ -24,7 +24,10 @@ const MAX_FILE_SIZE_BYTES = 5000000;
 //   : [File];
 
 // files can be a single file, not an array
-const FilePickerSection = ({ files, setFiles, isMultiple = true, accept = ".png,.jpg,.gif", MIMEType = "image" }) => {
+const FilePickerSection = ({ 
+  files, setFiles, isMultiple = true, accept = ".png,.jpg,.gif", 
+  MIMEType = "image", isDisabled = false 
+}) => {
   const [isFileError, setFileError] = useState(false);
   const [isDragged, setIsDragged] = useState(false);
   const { onDragEnter, onDragLeave, onDragOver, onDrop } = useDragAndDrop(handleChange, isDragged, setIsDragged);
@@ -118,13 +121,14 @@ const FilePickerSection = ({ files, setFiles, isMultiple = true, accept = ".png,
       `;
   }
 
+  const sectionHandlers = isDisabled
+    ? {}
+    : {onDragEnter, onDragLeave, onDragOver, onDrop};
+
   return (
     <section 
       className={sectionClassName}
-      onDragEnter={onDragEnter}
-      onDragLeave={onDragLeave}
-      onDragOver={onDragOver}
-      onDrop={onDrop}
+      {...sectionHandlers}
     >
       <div className="file-picker-section-main">
         <div className="file-picker-icon-add-info-wrap">
@@ -143,6 +147,7 @@ const FilePickerSection = ({ files, setFiles, isMultiple = true, accept = ".png,
           propsHandleChange={handleChange}
           isMultiple={isMultiple}
           accept={accept}
+          isDisabled={isDisabled}
         />
       </div>
       {isMultiple

@@ -23,22 +23,24 @@ function useInitialDataFetching() {
     // because, for example, unsuccesful fetching of brands mustn't affect
     // getting user location and so on  
     try {
-      const brands = await getBrands();
-      const categories = await getCategories();
       const sales = await getSales();
       const saleTypeNames = await getSaleTypeNames();
+      const brands = await getBrands();
+      const categories = await getCategories();
       const stocks = await getStocks();
 
       // sorting categories by id
       const sortedCategories = ArrayActions.sortNumberObjectArray(categories, "id");
 
-      deviceStore.setBrands(brands);
-      deviceStore.setCategories(sortedCategories);
       deviceStore.setSales(sales);
       deviceStore.setSaleTypeNames(saleTypeNames);
+      deviceStore.setBrands(brands);
+      deviceStore.setCategories(sortedCategories);
       deviceStore.setStocks(stocks);
     } catch (e) {
       console.log(e.message);
+    } finally {
+      deviceStore.setHasTriedToFetchSales(true);
     }
 
     try {

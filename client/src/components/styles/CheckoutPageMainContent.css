@@ -6,11 +6,6 @@
   font-size: 1.8rem;
 }
 
-.delivery-change-message {
-  padding: 8px;
+.message-to-user.delivery-change-message {
   margin: 14px 0px 0px 0;
-  border: 1px solid #7373ff;
-  border-radius: 5px;
-  background-color: #a7a7ff;
-  color: black;
 }

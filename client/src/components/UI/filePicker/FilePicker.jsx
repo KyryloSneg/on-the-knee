@@ -4,7 +4,10 @@ import { useRef } from "react";
 
 // if we use our own handle change, don't pass setFiles
 // if we set isMultiple = false, do not pass files
-const FilePicker = ({ files, setFiles, isMultiple = true, propsHandleChange = null, accept = ".png,.jpg,.gif" }) => {
+const FilePicker = ({ 
+  files, setFiles, isMultiple = true, propsHandleChange = null, 
+  accept = ".png,.jpg,.gif", isDisabled = false, 
+}) => {
   const inputFileRef = useRef(null);
 
   function handleChange(e) {
@@ -33,6 +36,7 @@ const FilePicker = ({ files, setFiles, isMultiple = true, propsHandleChange = nu
         accept={accept}
         multiple={isMultiple}
         tabIndex={-1}
+        disabled={isDisabled}
         ref={inputFileRef}
       />
       <UIButton
@@ -40,6 +44,7 @@ const FilePicker = ({ files, setFiles, isMultiple = true, propsHandleChange = nu
         className="file-picker-btn"
         type="button"
         onClick={() => inputFileRef.current?.click()}
+        disabled={isDisabled}
       >
         Pick a file
       </UIButton>

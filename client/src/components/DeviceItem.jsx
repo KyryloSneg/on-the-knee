@@ -10,9 +10,13 @@ import DeviceItemHiddenContent from "./DeviceItemHiddenContent";
 import DeviceSalesActions from "../utils/DeviceSalesActions";
 import useWindowWidth from "../hooks/useWindowWidth";
 import { DEVICE_ROUTE, WIDTH_TO_SHOW_DEV_HID_CONTENT } from "../utils/consts";
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
+import { Context } from "../Context";
+import { observer } from "mobx-react-lite";
 
-const DeviceItem = ({ device, isInStock, isPreOrder, defaultCombination, stocks, sales, saleTypeNames }) => {
+const DeviceItem = observer(({ device, isInStock, isPreOrder, defaultCombination, stocks, sales, saleTypeNames }) => {
+  const { deviceStore } = useContext(Context);
+
   const screenWidth = useWindowWidth();
   const deviceRef = useRef(null); 
   const [isVisibleHidContent, setIsVisibleHidContent] = useState(false);
@@ -36,7 +40,7 @@ const DeviceItem = ({ device, isInStock, isPreOrder, defaultCombination, stocks,
   const {
     deviceSaleTypes,
     discountPercentage
-  } = DeviceSalesActions.getSaleTypesAndDiscount(device, sales, saleTypeNames);
+  } = DeviceSalesActions.getSaleTypesAndDiscount(device, sales, saleTypeNames, deviceStore.hasTriedToFetchSales);
 
   const textSaleTypes = deviceSaleTypes.filter(type => !type.logo);
   const logoSaleTypes = deviceSaleTypes.filter(type => type.logo);
@@ -133,6 +137,6 @@ const DeviceItem = ({ device, isInStock, isPreOrder, defaultCombination, stocks,
       }
     </section>
   );
-};
+});
 
 export default DeviceItem;
