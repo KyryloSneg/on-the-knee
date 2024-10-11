@@ -14,9 +14,13 @@ export const SELLER_FEEDBACKS_ROUTE = "/seller/:sellerIdSlug/feedbacks";
 export const SELLER_DEVICES_ROUTE = "/seller/:sellerIdSlug/devices";
 
 export const CHECKOUT_ROUTE = "/checkout";
-export const DESIRED_LIST_ROUTE = "/desired";
-export const USER_ROUTE = "/user";
-// TODO: routing for user cabinet
+
+// adding user route to open the user orders page as a fallback
+export const USER_ROUTE = "/user"
+export const USER_ORDERS_ROUTE = "/user/orders"
+export const USER_DESIRED_LIST_ROUTE = "/user/desired-list";
+export const USER_VIEWED_DEVICES_ROUTE = "/user/viewed-devices";
+export const USER_FEEDBACKS_ROUTE = "/user/my-feedbacks";
 
 export const CATEGORY_CATALOG_ROUTE = "/categories/"; // + ":categoryIdSlug" (1-smartphones for example)
 export const BRAND_CATALOG_ROUTE = "/brand/" // + ":brandIdSlug" (2-asus for example);

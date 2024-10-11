@@ -81,7 +81,9 @@ const DevicePage = observer(({ type }) => {
   
   return (
     <main>
-      {prevId.current === id && <TabsPageLayout tabsData={tabsData} pageContent={renderInnerPage()} />}
+      {prevId.current === id && 
+        <TabsPageLayout tabsData={tabsData} pageContent={renderInnerPage()} doesHaveDynamicParam={true} 
+      />}
     </main>
   );
 });

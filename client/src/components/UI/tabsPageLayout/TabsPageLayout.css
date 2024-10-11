@@ -1,9 +1,17 @@
 .tabs-page-layout {
   /* REMEMBER FOR FUTURE: we can use percentages here instead of endless amount of @media rules */
   padding: 0 10%;
+}
+
+.tabs-page-layout.vertical-layout {
   display: grid;
   grid-template-columns: 1fr;
   gap: 16px;
+}
+
+.tabs-page-layout.horizontal-layout {
+  display: flex;
+  gap: 36px;
 }
 
 .tabs-page-layout.no-page-padding {

@@ -1,20 +1,53 @@
 .tab {
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 10px 4px;
+  gap: 8px;
   font-size: 1.2rem;
   text-wrap: nowrap;
   outline: none;
+  transition: color 0.2s, background-color 0.2s, outline 0s;
 }
 
-.tab.active, .tab:hover, .tab:active, .tab:focus {
+.vertical-layout .tab {
+  justify-content: center;
+  padding: 10px 4px;
+}
+
+.horizontal-layout .tab {
+  justify-content: start;
+  padding: 12px 14px;
+}
+
+.vertical-layout .tab.active, 
+.vertical-layout .tab:hover, 
+.vertical-layout .tab:active, 
+.vertical-layout .tab:focus {
   border-bottom: 2px #7373ff solid;
   color: #7373ff;
 }
 
+.horizontal-layout .tab.active, 
+.horizontal-layout .tab:hover, 
+.horizontal-layout .tab:active, 
+.horizontal-layout .tab:focus {
+  color: #7373ff;
+}
+
 .tab.active:focus-visible {
-  background-color: #f1f1f1;
+  background-color: #e1e1e1;
+}
+
+.tab > svg {
+  width: 20px;
+  height: 20px;
+  transition: 0.2s;
+}
+
+.tab.active > svg, 
+.tab:hover > svg, 
+.tab:active > svg, 
+.tab:focus > svg {
+  fill: #7373ff;
 }
 
 @media screen and (min-width: 780px) {
