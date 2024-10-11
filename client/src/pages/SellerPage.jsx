@@ -69,6 +69,7 @@ const SellerPage = observer(({ type }) => {
       <TabsPageLayout
         tabsData={tabsData}
         pageContent={renderInnerPage()}
+        doesHaveDynamicParam={true}
         isToUsePaddingForPage={type !== "devices"}
       />
     </main>

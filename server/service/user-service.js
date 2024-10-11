@@ -219,11 +219,16 @@ class UserService {
         const user = await UserModel.findById(userData.id);
 
         const userDevices = await UserDeviceModel.find({user: user._id});
+        console.log(userDevices);
+        
         let userDevice = null;
 
+        console.log(ip);
         for (let dev of userDevices) { // kolxoz
             if (await bcrypt.compare(ip, dev.ip)) {
                 userDevice = {...dev};
+                console.log("setted", userDevice);
+                
                 break;
             }
         }
@@ -232,7 +237,9 @@ class UserService {
         const addressDto = new UserAddressDto(await UserAddressModel.findOne({ user: user._id }));
         const tokens = tokenService.generateTokens({...userDto});
 
-        await tokenService.saveToken(userDevice._doc._id, tokens.refreshToken);
+        console.log(userDevice);
+        
+        await tokenService.saveToken(userDevice._id, tokens.refreshToken);
         return {...tokens, user: userDto, address: addressDto}
     }
 
