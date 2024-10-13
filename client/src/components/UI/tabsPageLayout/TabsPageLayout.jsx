@@ -2,7 +2,7 @@ import "./TabsPageLayout.css";
 import TabsList from "./TabsList";
 import CustomScrollbar from "../customScrollbar/CustomScrollbar";
 
-// tabsData: [{ name: "...", to: "..." }, ...]
+// tabsData: [{ children: "...", to: "...", iconSrc: undefined, svgIcon: undefined }, ...]
 // pageContent: page component
 const TabsPageLayout = ({ 
   tabsData, pageContent, doesHaveDynamicParam, 

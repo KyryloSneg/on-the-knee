@@ -7,6 +7,7 @@
 }
 
 .vertical-layout .tabs-list {
+  align-items: stretch;
   gap: 28px;
   padding: 0 20px;
   /* with min-width: 100%; custom scrollbar appears instantly */

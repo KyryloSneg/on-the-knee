@@ -34,10 +34,10 @@ const Tab = ({ tabData, doesHaveDynamicParam }) => {
         ? (
           <>
             {icon}
-            {tabData.name}
+            {tabData.children}
           </>
         )
-        : tabData.name
+        : tabData.children
       }
     </Link>
   );

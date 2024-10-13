@@ -16,8 +16,9 @@ export const SELLER_DEVICES_ROUTE = "/seller/:sellerIdSlug/devices";
 export const CHECKOUT_ROUTE = "/checkout";
 
 // adding user route to open the user orders page as a fallback
-export const USER_ROUTE = "/user"
-export const USER_ORDERS_ROUTE = "/user/orders"
+export const USER_ROUTE = "/user";
+export const USER_PERSONAL_DATA_ROUTE = "/user/personal-data";
+export const USER_ORDERS_ROUTE = "/user/orders";
 export const USER_DESIRED_LIST_ROUTE = "/user/desired-list";
 export const USER_VIEWED_DEVICES_ROUTE = "/user/viewed-devices";
 export const USER_FEEDBACKS_ROUTE = "/user/my-feedbacks";
@@ -174,6 +175,7 @@ export const WIDTH_TO_SHOW_DEVICE_CAROUSEL_SIDEBAR = 870;
 export const WIDTH_TO_SHOW_BOTH_SELF_DELIVERY_MODAL_COLS = 800;
 export const WIDTH_TO_SHOW_DEVICE_INFO_DL_SEPARATOR = 640;
 export const WIDTH_TO_SHOW_PURCHASE_DEVICE_FOOTER = 340;
+export const WIDTH_TO_SHOW_USER_PAGE_DESKTOP_VERSION = 1280;
 
 export const DEFAULT_USER_LOCATION_NAME = "Kyiv";
 // coords of Kyiv

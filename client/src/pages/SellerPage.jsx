@@ -41,13 +41,13 @@ const SellerPage = observer(({ type }) => {
   }
 
   const tabsData = [
-    { name: "Everything about seller", to: SELLER_ROUTE + sellerIdSlug },
+    { children: "Everything about seller", to: SELLER_ROUTE + sellerIdSlug },
     {
-      name:
+      children:
         `Comments (${deviceStore.sellerFeedbacks?.length || 0})`,
       to: SELLER_FEEDBACKS_ROUTE.replace(":sellerIdSlug", sellerIdSlug)
     },
-    { name: "Devices", to: SELLER_DEVICES_ROUTE.replace(":sellerIdSlug", sellerIdSlug) },
+    { children: "Devices", to: SELLER_DEVICES_ROUTE.replace(":sellerIdSlug", sellerIdSlug) },
   ];
 
   return (

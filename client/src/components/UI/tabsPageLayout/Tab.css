@@ -10,6 +10,8 @@
 
 .vertical-layout .tab {
   justify-content: center;
+  height: 100%;
+  box-sizing: border-box;
   padding: 10px 4px;
 }
 
@@ -23,6 +25,8 @@
 .vertical-layout .tab:active, 
 .vertical-layout .tab:focus {
   border-bottom: 2px #7373ff solid;
+  /* removing 2px of the height of tab for the border-bottom */
+  padding-bottom: 8px;
   color: #7373ff;
 }
 
@@ -38,9 +42,11 @@
 }
 
 .tab > svg {
+  /* using align-self alongside with align-items above to actually make svg to be centered within text */
+  align-self: center;
   width: 20px;
   height: 20px;
-  transition: 0.2s;
+  transition: fill 0.2s;
 }
 
 .tab.active > svg, 
@@ -51,7 +57,14 @@
 }
 
 @media screen and (min-width: 780px) {
-  .tab {
+  .seller-page .tab, .device-page .tab {
+    padding: 10px 12px;
+    font-size: 1.5rem;
+  }
+}
+
+@media screen and (min-width: 1180px) {
+  .user-page .tab {
     padding: 10px 12px;
     font-size: 1.5rem;
   }
