@@ -63,14 +63,14 @@ const DevicePage = observer(({ type }) => {
   }
 
   const tabsData = [
-    { name: "Everything about device", to: DEVICE_ROUTE + deviceIdCombo },
-    { name: "Info", to: DEVICE_INFO_ROUTE.replace(":deviceIdCombo", deviceIdCombo) },
-    { name: 
+    { children: "Everything about device", to: DEVICE_ROUTE + deviceIdCombo },
+    { children: "Info", to: DEVICE_INFO_ROUTE.replace(":deviceIdCombo", deviceIdCombo) },
+    { children: 
       `Comments (${deviceStore.deviceFeedbacks?.length || 0})`, 
       to: DEVICE_COMMENTS_ROUTE.replace(":deviceIdCombo", deviceIdCombo) 
     },
     { 
-      name: `Questions (${deviceStore.deviceQuestions?.length || 0})`, 
+      children: `Questions (${deviceStore.deviceQuestions?.length || 0})`, 
       to: DEVICE_QUESTIONS_ROUTE.replace(":deviceIdCombo", deviceIdCombo) 
     },
   ];
@@ -80,7 +80,7 @@ const DevicePage = observer(({ type }) => {
   }, [id]);
   
   return (
-    <main>
+    <main className="device-page">
       {prevId.current === id && 
         <TabsPageLayout tabsData={tabsData} pageContent={renderInnerPage()} doesHaveDynamicParam={true} 
       />}
