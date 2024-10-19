@@ -1,0 +1,7 @@
+.user-page-order-list-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 1px solid #dfdfdf;
+  border-radius: 8px;
+}

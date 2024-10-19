@@ -1,0 +1,15 @@
+.user-page-order-expanded-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  flex-direction: column;
+  gap: 18px;
+  padding: 14px;
+  padding-top: 0;
+  box-sizing: border-box;
+}
+
+@media screen and (min-width: 820px) {
+  .user-page-order-expanded-content {
+    grid-template-columns: 1fr 2fr;
+  }
+}

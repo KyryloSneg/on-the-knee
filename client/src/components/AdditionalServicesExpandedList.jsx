@@ -7,7 +7,7 @@ import { useRef } from "react";
 const AdditionalServicesExpandedList = ({ 
   names, deviceId, additionalServiceOptions, 
   labelledBy, parentId, 
-  selectedItems, setSelectedItems 
+  selectedItems, setSelectedItems, isReadOnly
 }) => {
   const optionRefs = useRef([]);
 
@@ -35,6 +35,7 @@ const AdditionalServicesExpandedList = ({
         const to = DEVICE_ROUTE + `${deviceId}--${deviceRouteCombo}`;
 
         function checkItem(optionItem, optionIndex) {
+          if (isReadOnly) return;
           const selectedItemsCopy = _.cloneDeep(selectedItems);
 
           let selectedItemIndex;
@@ -69,10 +70,12 @@ const AdditionalServicesExpandedList = ({
         }
 
         function onCheck() {
+          if (isReadOnly) return;
           checkItem(option, index);
         }
 
         function checkNext() {
+          if (isReadOnly) return;
           if (additionalServiceOptions.length === 1) return;
 
           let id;
@@ -88,6 +91,7 @@ const AdditionalServicesExpandedList = ({
         }
 
         function checkPrev() {
+          if (isReadOnly) return;
           if (additionalServiceOptions.length === 1) return;
 
           let id;
@@ -116,6 +120,7 @@ const AdditionalServicesExpandedList = ({
                 optionRefs.current.push(ref)
               }}
               to={to}
+              isReadOnly={isReadOnly}
             />
           </li>
         );

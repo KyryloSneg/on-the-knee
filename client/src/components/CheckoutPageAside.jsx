@@ -27,6 +27,23 @@ const CheckoutPageAside = observer(() => {
     devicePriceWord = "Devices";
   }
 
+  let additionalServicesPrice = 0;
+  let additionalServicesAmount = 0;
+
+  const selectedAddServicesObj = user.cartSelectedAdditionalServices["selected-additional-services"];
+  for (let [, services] of Object.entries(selectedAddServicesObj)) {
+    additionalServicesAmount += services.length;
+
+    for (let addService of services) {
+      additionalServicesPrice += +addService.price;
+    }
+  }
+
+  let addServicesPriceWord = "Service";
+  if (additionalServicesAmount > 1) {
+    addServicesPriceWord = "Services";
+  }
+
   let deliveryPrice = 0;
   if (app.isToShowAsideDeliveryPrice) {
     deliveryPrice = CartComboActions.getDeliveryTotalPrice(
@@ -34,7 +51,7 @@ const CheckoutPageAside = observer(() => {
     );
   }
 
-  const totalPrice = devicePrice + deliveryPrice;
+  const totalPrice = devicePrice + additionalServicesPrice + deliveryPrice;
 
   let orderWord = "order";
   if (orderAmount > 1) {
@@ -42,6 +59,7 @@ const CheckoutPageAside = observer(() => {
   }
 
   const devicePriceStr = (devicePrice?.toFixed(2) || `${devicePrice}`) + "$";
+  const additionalServicesPriceStr = (additionalServicesPrice?.toFixed(2) || `${additionalServicesPrice}`) + "$";
   const deliveryPriceStr = (deliveryPrice?.toFixed(2) || `${deliveryPrice}`) + "$";
   const totalPriceStr = (totalPrice?.toFixed(2) || `${totalPrice}`) + "$";
 
@@ -63,6 +81,16 @@ const CheckoutPageAside = observer(() => {
             {devicePriceStr}
           </dd>
         </div>
+        {!!additionalServicesAmount && (
+          <div>
+            <dt>
+              {additionalServicesAmount} {addServicesPriceWord} price
+            </dt>
+            <dd>
+              {additionalServicesPriceStr}
+            </dd>
+          </div>
+        )}
         <div>
           <dt>
             Delivery price

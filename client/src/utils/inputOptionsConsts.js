@@ -18,11 +18,11 @@ export function getNumberInputOptions({
   }
 
   if (isNotNegative) {
-    numberInputOptions.validate.isNotNegative = value => (+value >= 0 || value === "") || "Only a positive number";
+    numberInputOptions.validate.isNotNegative = value => (+value >= 0 || value === "") || "Only a positive number or 0";
   }
 
   if (isNotNegativeOrZero) {
-    numberInputOptions.validate.isNotNegative = value => (+value > 0 || value === "") || "Only a positive number or 0";
+    numberInputOptions.validate.isNotNegative = value => (+value > 0 || value === "") || "Only a positive number";
   }
 
   if (isNotFloat) {

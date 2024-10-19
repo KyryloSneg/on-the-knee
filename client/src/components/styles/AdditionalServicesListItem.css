@@ -24,6 +24,11 @@
   outline: none;
 }
 
+.additional-services-checkbox-btn:disabled {
+  color: black;
+  cursor: auto;
+}
+
 .additional-services-checkbox-btn:focus-visible > div > .checkbox-div {
   outline: 2px #7373ff solid;
 }

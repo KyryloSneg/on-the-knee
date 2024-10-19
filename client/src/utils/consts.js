@@ -11,6 +11,7 @@ export const DEVICE_QUESTIONS_ROUTE = "/device/:deviceIdCombo/questions";
 
 export const SELLER_ROUTE = "/seller/"; // + :sellerIdSlug
 export const SELLER_FEEDBACKS_ROUTE = "/seller/:sellerIdSlug/feedbacks";
+export const SELLER_WRITE_A_FEEDBACK_ROUTE = "/seller/:sellerIdSlug/write-feedback";
 export const SELLER_DEVICES_ROUTE = "/seller/:sellerIdSlug/devices";
 
 export const CHECKOUT_ROUTE = "/checkout";
@@ -176,6 +177,7 @@ export const WIDTH_TO_SHOW_BOTH_SELF_DELIVERY_MODAL_COLS = 800;
 export const WIDTH_TO_SHOW_DEVICE_INFO_DL_SEPARATOR = 640;
 export const WIDTH_TO_SHOW_PURCHASE_DEVICE_FOOTER = 340;
 export const WIDTH_TO_SHOW_USER_PAGE_DESKTOP_VERSION = 1280;
+export const WIDTH_TO_SHOW_USER_ORDERS_SEARCH_DESKTOP_VERSION = 420;
 
 export const DEFAULT_USER_LOCATION_NAME = "Kyiv";
 // coords of Kyiv
@@ -191,6 +193,15 @@ export const AUTHENTIFICATION_MODAL_INPUT_SERVICE_CLASS = "dataset-auth-modal-in
 export const AUTHENTIFICATION_MODAL_SUBMIT_BTN_SERVICE_CLASS = "dataset-auth-modal-submit-btn";
 
 export const ERROR_MODAL_INITIAL_INFO = { children: "", id: "error-modal", className: "" };
+
+export const ORDER_STATUS_COLOR_OBJ = {
+  "Canceled": "#a10e0e",
+  "Cancelled": "#a10e0e",
+  "Pending": "#bd5e10",
+  "Paid": "#ffa300",
+  "Confirmed": "#00ed1f",
+  "Done": "#00cd1c",
+};
 
 // let it be commented below because i don't write any tests rn
 // (if you want to uncomment it, insert this code into a separate file

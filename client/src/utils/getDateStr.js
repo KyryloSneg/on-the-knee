@@ -4,6 +4,7 @@ import moment from "moment";
 function getDateStr(date, format = "MMM Do YYYY", isDayMonthYear = true) {
   function getFormattedDateString(date) {
     function switchDayAndMonth(dateStr) {
+      // it might not work with other formats
       const day = dateStr.slice(0, 2);
       const month = dateStr.slice(3, 5);
       const year = dateStr.slice(6, 10);

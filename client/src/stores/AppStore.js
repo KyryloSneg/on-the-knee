@@ -26,6 +26,8 @@ class AppStore {
     this._isVisibleErrorModal = false;
     this._isVisibleWrongCartComboAmountsModal = false;
     this._isVisibleAuthentificationModal = false;
+    this._isVisibleReportOrderProblemModal = false;
+    this._isVisibleRemainSellerDeviceFeedbackModal = false;
     this._isFocusedSearchForm = false;
 
     // contains the last element's ref from which was opened a modal window, a sidebar etc.
@@ -62,6 +64,8 @@ class AppStore {
     this._errorModalBtnRef = null;
     this._authentificationModalBtnRef = null;
     this._checkoutSubmitBtnRef = null;
+    this._reportOrderProblemBtnRef = null;
+    this._remainSellerDeviceFeedbackBtnRef = null;
 
     this._userLocation = null;
     this._allLocations = [];
@@ -71,6 +75,9 @@ class AppStore {
     // we use these states in modals that are related to the info below
     this._commentGalleryModalType = "deviceFeedbacks";
     this._commentGallerySelectedImageId = null;
+    this._reportOrderProblemOrderId = null;
+    this._remainSellerDeviceFeedbackSeller = null;
+    this._remainSellerDeviceFeedbackDevCombos = null;
 
     this._storePickupPoints = [];
     this._selectedStorePickupPointIdValues = {};
@@ -188,6 +195,14 @@ class AppStore {
     this._isVisibleAuthentificationModal = bool;
   }
 
+  setIsVisibleReportOrderProblemModal(bool) {
+    this._isVisibleReportOrderProblemModal = bool;
+  }
+
+  setIsVisibleRemainSellerDeviceFeedbackModal(bool) {
+    this._isVisibleRemainSellerDeviceFeedbackModal = bool;
+  }
+
   setIsFocusedSearchForm(bool) {
     this._isFocusedSearchForm = bool;
   }
@@ -284,6 +299,14 @@ class AppStore {
     this._checkoutSubmitBtnRef = ref;
   }
 
+  setReportOrderProblemBtnRef(ref) {
+    this._reportOrderProblemBtnRef = ref;
+  }
+
+  setRemainSellerDeviceFeedbackBtnRef(ref) {
+    this._remainSellerDeviceFeedbackBtnRef = ref;
+  }
+
   setHintSearchResults(results) {
     this._hintSearchResults = results;
   }
@@ -310,6 +333,18 @@ class AppStore {
 
   setCommentGallerySelectedImageId(commentGallerySelectedImageId) {
     this._commentGallerySelectedImageId = commentGallerySelectedImageId;
+  }
+
+  setReportOrderProblemOrderId(reportOrderProblemOrderId) {
+    this._reportOrderProblemOrderId = reportOrderProblemOrderId;
+  }
+
+  setRemainSellerDeviceFeedbackSeller(remainSellerDeviceFeedbackSeller) {
+    this._remainSellerDeviceFeedbackSeller = remainSellerDeviceFeedbackSeller;
+  }
+
+  setRemainSellerDeviceFeedbackDevCombos(remainSellerDeviceFeedbackDevCombos) {
+    this._remainSellerDeviceFeedbackDevCombos = remainSellerDeviceFeedbackDevCombos;
   }
 
   setStorePickupPoints(storePickupPoints) {
@@ -468,6 +503,14 @@ class AppStore {
     return this._isVisibleAuthentificationModal;
   }
 
+  get isVisibleReportOrderProblemModal() {
+    return this._isVisibleReportOrderProblemModal;
+  }
+
+  get isVisibleRemainSellerDeviceFeedbackModal() {
+    return this._isVisibleRemainSellerDeviceFeedbackModal;
+  }
+
   get isFocusedSearchForm() {
     return this._isFocusedSearchForm;
   }
@@ -564,6 +607,14 @@ class AppStore {
     return this._checkoutSubmitBtnRef;
   }
 
+  get reportOrderProblemBtnRef() {
+    return this._reportOrderProblemBtnRef;
+  }
+
+  get remainSellerDeviceFeedbackBtnRef() {
+    return this._remainSellerDeviceFeedbackBtnRef;
+  }
+
   get hintSearchResults() {
     return this._hintSearchResults;
   }
@@ -590,6 +641,18 @@ class AppStore {
 
   get commentGallerySelectedImageId() {
     return this._commentGallerySelectedImageId;
+  }
+
+  get reportOrderProblemOrderId() {
+    return this._reportOrderProblemOrderId;
+  }
+
+  get remainSellerDeviceFeedbackSeller() {
+    return this._remainSellerDeviceFeedbackSeller;
+  }
+
+  get remainSellerDeviceFeedbackDevCombos() {
+    return this._remainSellerDeviceFeedbackDevCombos;
   }
 
   get storePickupPoints() {

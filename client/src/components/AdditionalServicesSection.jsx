@@ -76,7 +76,7 @@ import AdditionalServicesList from "./AdditionalServicesList";
 //   ...
 // ];
 
-const AdditionalServicesSection = ({ additionalServices, selectedItems, setSelectedItems }) => {
+const AdditionalServicesSection = ({ additionalServices, selectedItems, setSelectedItems, isReadOnly = false }) => {
   let isDataLoaded = false;
   if (additionalServices?.length) {
     // checking this condition because in some point our data loses its "additional-service" field
@@ -108,6 +108,7 @@ const AdditionalServicesSection = ({ additionalServices, selectedItems, setSelec
         additionalServices={additionalServices}
         selectedItems={selectedItems}
         setSelectedItems={setSelectedItems}
+        isReadOnly={isReadOnly}
       />
     </section>
   );

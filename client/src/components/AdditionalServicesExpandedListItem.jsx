@@ -6,7 +6,7 @@ import onRadioKeyDown from "../utils/onRadioKeyDown";
 
 const AdditionalServicesExpandedListItem = forwardRef(({ 
   additionalServiceOption, isChecked, onCheck,
-  checkNext, checkPrev, name, to 
+  checkNext, checkPrev, name, to, isReadOnly 
 }, ref) => {
   let radioClassName = "radio-div";
   if (isChecked) {
@@ -21,6 +21,7 @@ const AdditionalServicesExpandedListItem = forwardRef(({
         role="radio"
         onClick={onCheck}
         onKeyDown={(e) => onRadioKeyDown(e, checkPrev, checkNext)}
+        disabled={isReadOnly}
         ref={ref}
       >
         <div className="add-service-radio-div-wrapper">

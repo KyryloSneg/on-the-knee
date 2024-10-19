@@ -10,6 +10,7 @@ import { createDeviceFeedback, createDeviceFeedbackReply, getOneDeviceFeedbacks 
 import { createDeviceAnswer, createDeviceQuestion, getOneDeviceQuestions } from "../http/DeviceQuestionsAPI";
 import { createSellerQuestion } from "../http/SellerQuestionsAPI";
 import setAuthentificationModalVisibility from "../utils/setAuthentificationModalVisibility";
+import FileActions from "../utils/FileActions";
 
 const POSSIBLE_TYPES = ["feedback", "reply", "question", "answer", "askSeller"];
 const CommentModalContent = observer(({ type, closeModal }) => {
@@ -61,21 +62,10 @@ const CommentModalContent = observer(({ type, closeModal }) => {
     const id = v4();
     const date = new Date().toISOString();
 
-    function getBase64(file) {
-      const reader = new FileReader();
-
-      return new Promise(resolve => {
-        reader.onload = e => {
-          resolve(e.target.result);
-        }
-        reader.readAsDataURL(file);
-      })
-    }
-
     // unfortunately we can't post data into json-server like FormData, 
     // so we base64 encode our files to send them in the request with json body
     const transformedFiles = await Promise.all(
-      files.map(file => getBase64(file.fileObj))
+      files.map(file => FileActions.getBase64(file.fileObj))
     );
 
     const filesToSend = files.map((file, index) => ({ ...file, fileObj: transformedFiles[index] }));

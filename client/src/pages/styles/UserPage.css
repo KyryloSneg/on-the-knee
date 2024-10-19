@@ -10,9 +10,21 @@
   text-overflow: ellipsis;
   white-space: pre;
   overflow: hidden;
+  font-size: 1.3rem;
 }
 
-.personal-data-acc-user-email {
-  font-size: 1.2rem;
+.personal-data-acc-content-wrap .personal-data-acc-user-email {
+  font-size: 1rem;
   color: rgb(100, 100, 100);
+}
+
+@media screen and (min-width: 1180px) {
+  .personal-data-acc-content-wrap > p {
+    font-size: 1.5rem;
+  }
+
+  .personal-data-acc-content-wrap .personal-data-acc-user-email {
+    font-size: 1.2rem;
+    color: rgb(100, 100, 100);
+  }
 }
