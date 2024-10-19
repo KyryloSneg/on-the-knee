@@ -1,0 +1,74 @@
+.report-order-problem-modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 22px;
+}
+
+.report-order-problem-modal-content-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.report-order-problem-modal-content-inputs > div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.report-order-problem-modal-content-inputs label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: rgb(90, 90, 90);
+}
+
+.report-order-problem-modal-content-inputs textarea {
+  box-sizing: border-box;
+  width: 100%;
+  height: 112px;
+  padding: 6px;
+  border: 1px solid rgb(130, 130, 130);
+  border-radius: 8px;
+  background-color: #e9e9e9;
+  font-size: 1.3rem;
+  font-family: 'Montserrat', sans-serif;
+  transition: border-color 0.2s, background-color 0.2s;
+  outline: none;
+}
+
+.report-order-problem-modal-content-inputs textarea.invalid {
+  border: 1px solid #a10e0e;
+}
+
+.report-order-problem-modal-content-inputs textarea:focus {
+  background-color: #fff;
+}
+
+.report-order-problem-modal-content-inputs label, 
+.report-order-problem-error-msg {
+  font-size: 1.3rem;
+}
+
+.report-order-problem-error-msg {
+  color: #a10e0e;
+}
+
+.report-order-problem-modal-btn-group {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.report-order-problem-submit-error-modal {
+  padding: 16px;
+  font-size: 1.6rem;
+}
+
+@media screen and (min-width: 200px) {
+  .report-order-problem-modal-btn-group {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+}

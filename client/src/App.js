@@ -42,9 +42,11 @@ import useDeliveriesFetching from "./hooks/useDeliveriesFetching";
 import ErrorModal from "./components/ErrorModal";
 import WrongCartComboAmountsModal from "./components/WrongCartComboAmountsModal";
 import AuthentificationModal from "./components/AuthenticationModal";
+import ReportOrderProblemModal from "./components/ReportOrderProblemModal";
+import RemainASellerOrDeviceFeedbackModal from "./components/RemainASellerOrDeviceFeedbackModal";
  
 const App = observer(() => {
-  const { app, deviceStore } = useContext(Context);
+  const { app, deviceStore, user } = useContext(Context);
   // ref for the "skip to next page content" btn
   const headerRef = useRef(null);
   const pageRef = useRef(null);
@@ -162,6 +164,8 @@ const App = observer(() => {
       {app.isVisibleErrorModal && <ErrorModal />}
       {app.isVisibleWrongCartComboAmountsModal && <WrongCartComboAmountsModal />}
       {app.isVisibleAuthentificationModal && <AuthentificationModal />}
+      {(app.isVisibleReportOrderProblemModal && user.isAuth) && <ReportOrderProblemModal />}
+      {(app.isVisibleRemainSellerDeviceFeedbackModal && user.isAuth) && <RemainASellerOrDeviceFeedbackModal />}
       <header ref={headerRef}>
         <Navbar elemToFocus={pageElemToFocus} navCategoryBtnRef={navCategoryBtnRef} />
         {(app.isVisibleCategoriesMenu && !!Object.keys(deviceStore.categories).length) && 

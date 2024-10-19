@@ -1,0 +1,55 @@
+.remain-seller-dev-feedback {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: 22px;
+}
+
+.remain-seller-dev-feedback h3 {
+  font-size: 1.6rem;
+  margin: 0;
+  margin-bottom: 14px;
+}
+
+.modal-remain-seller-feedback-wrap, .modal-remain-seller-feedback-wrap > div {
+  display: grid;
+  align-items: center;
+  gap: 12px;
+}
+
+.modal-remain-seller-feedback-wrap {
+  grid-template-columns: 1fr;
+}
+
+.modal-remain-seller-feedback-wrap > div {
+  grid-template-columns: auto 1fr;
+}
+
+.modal-remain-seller-feedback-wrap > div > img {
+  width: 95px;
+  max-height: 80px;
+  object-fit: contain;
+  align-self: center;
+  justify-self: center;
+}
+
+.modal-remain-seller-feedback-wrap > div > p > strong {
+  color: #bd5e10;
+}
+
+@media screen and (min-width: 660px) {
+  .remain-seller-dev-feedback h3 {
+    font-size: 1.7rem;
+  }
+
+  .modal-remain-seller-feedback-wrap {
+    grid-template-columns: 1fr auto;
+    justify-content: space-between;
+  }
+}
+
+@media screen and (min-width: 880px) {
+  .remain-seller-dev-feedback h3 {
+    font-size: 1.7rem;
+  }
+}

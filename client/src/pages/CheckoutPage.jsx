@@ -91,8 +91,8 @@ const CheckoutPage = observer(() => {
       isAlreadySubmittingRef.current = true;
 
       for (let cartCombo of user.cartDeviceCombinations) {
-        const totalStockToUse = cartCombo.device.isPreOrder 
-          ? cartCombo["device-combination"].maxPreOrderAmount 
+        const totalStockToUse = cartCombo.device.isPreOrder
+          ? cartCombo["device-combination"].maxPreOrderAmount
           : await getOneStock(cartCombo["device-combination"].stockId);
 
         if (cartCombo.amount > totalStockToUse.totalStock || totalStockToUse.totalStock === 0) {
@@ -120,14 +120,14 @@ const CheckoutPage = observer(() => {
         let receiventResult = {};
         let orderCourierDeliveryResult = null;
         let orderDeviceCombinationsResult = [];
-        
+
         orderResult.id = v4();
         orderResult.orderTypes = order.types;
-        
-        let orderSelectedAdditionalServicesResult = { 
-          "id": v4(), 
-          "orderId": orderResult.id, 
-          "selected-additional-services": {} 
+
+        let orderSelectedAdditionalServicesResult = {
+          "id": v4(),
+          "orderId": orderResult.id,
+          "selected-additional-services": {}
         };
 
         if (user.isAuth && (user.user?.id !== null && user.user?.id !== undefined)) {
@@ -141,6 +141,34 @@ const CheckoutPage = observer(() => {
           orderResult.phoneNumber = parsePhoneNumber(senderPhoneInputValue).formatInternational();
         }
 
+        // saving current saleDevices to save sales atm of submitting the form by user
+        let saleDevices = [];
+        let additionalServicesPrice = 0;
+
+        for (let cartCombo of order.value) {
+          const orderDeviceCombo = {
+            "id": v4(),
+            "orderId": orderResult.id,
+            "deviceId": cartCombo.deviceId,
+            "device-combinationId": cartCombo["device-combinationId"],
+            "amount": cartCombo.amount,
+            "isPreOrder": cartCombo.device.isPreOrder
+          };
+
+          const orderComboSelectedAddServices = 
+            user.cartSelectedAdditionalServices["selected-additional-services"][cartCombo.id];
+
+          orderSelectedAdditionalServicesResult["selected-additional-services"][orderDeviceCombo.id] = 
+            orderComboSelectedAddServices;
+
+          for (let addService of orderComboSelectedAddServices) {
+            additionalServicesPrice += +addService.price;
+          }
+
+          orderDeviceCombinationsResult.push(orderDeviceCombo);
+          saleDevices.push(await getOneDeviceSaleDevices(cartCombo.device.id));
+        }
+
         const { deviceAmount, devicePrice } = CartComboActions.getDeviceAmountAndTotalPrice(
           order.value, deviceStore.sales, deviceStore.saleTypeNames, deviceStore.hasTriedToFetchSales
         );
@@ -150,16 +178,23 @@ const CheckoutPage = observer(() => {
         );
 
         orderResult.devicePrice = devicePrice.toFixed(2);
+        orderResult.additionalServicesPrice = additionalServicesPrice.toFixed(2);
         orderResult.deliveryPrice = deliveryPrice.toFixed(2);
-        orderResult.totalPrice = (devicePrice + deliveryPrice).toFixed(2);
+        orderResult.totalPrice = (devicePrice + deliveryPrice + additionalServicesPrice).toFixed(2);
 
         orderResult.totalDeviceAmount = deviceAmount;
         orderResult.status = "Pending";
         // order's name is just a random number as i understood
-        orderResult.orderName = +Math.random().toString().slice(2);
+        let orderName = Math.random().toString().slice(2, 12);
+        orderName = `${orderName.slice(0, 3)} ${orderName.slice(3, 6)} ${orderName.slice(6)}`;
+
+        orderResult.orderName = orderName;
         orderResult.date = new Date().toISOString();
         // BOL number, the same as before
-        orderResult.info = +Math.random().toString().slice(2);
+        let info = Math.random().toString().slice(2, 12);
+        info = `${info.slice(0, 3)} ${info.slice(3, 6)} ${info.slice(6)}`;
+
+        orderResult.info = info;
 
         receiventResult.id = v4();
         receiventResult.name = StringActions.removeRedundantSpaces(value[`receiventFirstName-${id}`]);
@@ -169,13 +204,13 @@ const CheckoutPage = observer(() => {
 
         const selectedDeliveryIdValue = app.selectedDeliveryIdValues[id].value;
         const selectedDelivery = app.deliveries.find(delivery => delivery.id === selectedDeliveryIdValue);
-        
+
         if (selectedDelivery.name === "courier") {
           orderCourierDeliveryResult = {};
           orderCourierDeliveryResult.id = v4();
           orderCourierDeliveryResult.orderId = orderResult.id;
           orderCourierDeliveryResult.deliveryId = selectedDelivery.id;
-          
+
           orderCourierDeliveryResult["courier-scheduleId"] = app.selectedCourierScheduleIdValues[id].value;
           orderCourierDeliveryResult.courierShift = app.selectedCourierScheduleShiftValues[id].value;
 
@@ -195,29 +230,10 @@ const CheckoutPage = observer(() => {
         orderResult["store-pickup-pointId"] = app.selectedStorePickupPointIdValues[id].value;
         orderResult["order-courier-deliveryId"] = orderCourierDeliveryResult?.id || null;
 
-        // saving current saleDevices to save sales atm of submitting the form by user
-        let saleDevices = [];
-        for (let cartCombo of order.value) {
-          const orderDeviceCombo = {
-            "id": v4(),
-            "orderId": orderResult.id,
-            "deviceId": cartCombo.deviceId,
-            "device-combinationId": cartCombo["device-combinationId"],
-            "amount": cartCombo.amount,
-            "isPreOrder": cartCombo.device.isPreOrder
-          };
-
-          orderSelectedAdditionalServicesResult["selected-additional-services"][orderDeviceCombo.id] = 
-            user.cartSelectedAdditionalServices["selected-additional-services"][cartCombo.id];
-
-          orderDeviceCombinationsResult.push(orderDeviceCombo);
-          saleDevices.push(await getOneDeviceSaleDevices(cartCombo.device.id));
-        }
-
         orderResult.saleDevices = saleDevices;
 
-        const result = { 
-          order: orderResult, 
+        const result = {
+          order: orderResult,
           receivent: receiventResult,
           orderCourierDelivery: orderCourierDeliveryResult,
           orderDeviceCombinations: orderDeviceCombinationsResult,
@@ -242,7 +258,7 @@ const CheckoutPage = observer(() => {
 
             const newTotalStock = (stock.totalStock - combo.amount) || 0;
             let stockStatus;
-  
+
             if (newTotalStock === 0) {
               stockStatus = "Out of stock";
             } else if (newTotalStock <= 15) {
@@ -250,19 +266,19 @@ const CheckoutPage = observer(() => {
             } else {
               stockStatus = "In stock";
             }
-  
+
             const newStockContent = {
               totalStock: newTotalStock,
               stockStatus,
             };
-  
+
             await patchStock(stock.id, newStockContent)
           }
         }
 
         await createOrderSelectedAdditionalServices(result.orderSelectedAdditionalServices);
       }
-      
+
       // clear the cart (this logic should NOT prevent navigating to the main page logic)
       try {
         if (user.isAuth) {
@@ -270,8 +286,8 @@ const CheckoutPage = observer(() => {
             user.cartSelectedAdditionalServices.id,
             { "selected-additional-services": {} }
           );
-  
-          for (let cartCombo of user.cartDeviceCombinations) {  
+
+          for (let cartCombo of user.cartDeviceCombinations) {
             try {
               await deleteCartDeviceCombination(cartCombo.id);
             } catch (e) {
@@ -383,7 +399,7 @@ const CheckoutPage = observer(() => {
     if (e.key !== "Enter" || e.target.tagName === "TEXTAREA" || e.target.tagName === "BUTTON") {
       return;
     }
-  
+
     e.preventDefault()
   }
 
@@ -393,7 +409,7 @@ const CheckoutPage = observer(() => {
         <header>
           <h2>Checkout order</h2>
         </header>
-        <form 
+        <form
           onSubmit={handleSubmit(
             onSubmit, (errors) => checkInputsValidAndHandleInvalidInputFocus(true, errors))
           }

@@ -1,0 +1,31 @@
+.user-page-order-expanded-content-left {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  gap: 20px;
+}
+
+.user-page-order-expanded-seller-info-list {
+  margin: 0;
+  border-top: 1px solid #e9e9e9;
+  border-bottom: 1px solid #e9e9e9;
+  padding: 8px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.user-page-order-expanded-seller-info-list > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 1.3rem;
+}
+
+.user-page-order-expanded-seller-info-list > div > dd {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

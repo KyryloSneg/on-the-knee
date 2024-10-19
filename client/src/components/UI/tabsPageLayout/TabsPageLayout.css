@@ -10,7 +10,8 @@
 }
 
 .tabs-page-layout.horizontal-layout {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr;
   gap: 36px;
 }
 

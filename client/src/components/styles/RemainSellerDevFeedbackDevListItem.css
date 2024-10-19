@@ -1,0 +1,41 @@
+.remain-seller-dev-feedback-dev-li {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 1fr;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.remain-seller-dev-feedback-dev-li-img-wrap {
+  display: grid;
+}
+
+.remain-seller-dev-feedback-dev-li-img-wrap > img {
+  width: 95px;
+  max-height: 95px;
+  object-fit: contain;
+  align-self: center;
+  justify-self: center;
+}
+
+.remain-seller-dev-feedback-dev-name-img {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.remain-seller-dev-feedback-dev-name-img > span {
+  font-size: 1.5rem;
+  transition: color 0.2s, outline 0s;
+  word-break: break-word;
+}
+
+.remain-seller-dev-feedback-dev-li > .ui-button {
+  height: max-content;
+}
+
+@media screen and (min-width: 660px) {
+  .remain-seller-dev-feedback-dev-li {
+    grid-template-columns: 1fr auto;
+  }
+}

@@ -10,11 +10,8 @@ html, button {
 }
 
 html * {
-  transition: outline 0s;
-}
-
-html *:focus, html *:focus-visible {
   outline-color: #7373ff;
+  transition: outline 0s;
 }
 
 body {

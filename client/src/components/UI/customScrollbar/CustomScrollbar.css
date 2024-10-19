@@ -67,6 +67,10 @@
   border-radius: 14px;
 }
 
+.horizontal-layout .tabs-page-scroll {
+  height: max-content;
+}
+
 .tabs-page-layout.no-page-padding .tabs-page-scroll {
   margin: 0 10%;
 }

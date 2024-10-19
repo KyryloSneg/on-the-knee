@@ -7,9 +7,12 @@ import UserOrdersPage from "./UserOrdersPage";
 import UserViewedDevicesPage from "./UserViewedDevicesPage";
 import UserPersonalDataPage from "./UserPersonalDataPage";
 import { observer } from "mobx-react-lite";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Context } from "../Context";
 import useWindowWidth from "../hooks/useWindowWidth";
+import useGettingOneUserOrders from "../hooks/useGettingOneUserOrders";
+import useGettingSortedUserPageOrders from "../hooks/useGettingSortedUserPageOrders";
+import _ from "lodash";
 
 // icon from the assets doesn't scale properly with changing width / height through css
 const accountIcon = (
@@ -44,6 +47,14 @@ const POSSIBLE_TYPES = ["personal-data", "orders", "desired-list", "viewed-devic
 const UserPage = observer(({ type }) => {
   const { user } = useContext(Context);
   const windowWidth = useWindowWidth();
+  const [orders, setOrders] = useState([]);
+
+  const areOrdersLoading = useGettingOneUserOrders(user.user?.id, setOrders);
+
+  // from new orders to old ones
+  let sortedByDateOrders = _.cloneDeep(orders);
+  sortedByDateOrders.sort((a, b) => b.date.localeCompare(a.date));
+  const sortedByQueryOrders = useGettingSortedUserPageOrders(sortedByDateOrders);
 
   if (!POSSIBLE_TYPES.includes(type)) throw Error("type of UserPage is not defined or incorrect");
 
@@ -51,7 +62,7 @@ const UserPage = observer(({ type }) => {
     if (type === "personal-data") {
       return <UserPersonalDataPage />;
     } else if (type === "orders") {
-      return <UserOrdersPage />;
+      return <UserOrdersPage orders={sortedByQueryOrders} initialOrders={sortedByDateOrders} isLoading={areOrdersLoading} />;
     } else if (type === "desired-list") {
       return <DesiredListPage />;
     } else if (type === "viewed-devices") {

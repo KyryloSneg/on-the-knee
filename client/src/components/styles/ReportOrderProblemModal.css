@@ -1,0 +1,32 @@
+#report-an-order-problem-modal {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  border-radius: 0;
+  padding: 0;
+}
+
+#report-an-order-problem-modal .my-scrollbar.os-scrollbar-vertical .os-scrollbar-track,
+#report-an-order-problem-modal .my-scrollbar.os-scrollbar-vertical .os-scrollbar-handle {
+  border-radius: 0;
+}
+
+/* +30px */
+@media screen and (min-width: 680px) {
+  #report-an-order-problem-modal {
+    width: 650px;
+    height: auto;
+    max-height: 95%;
+    border-radius: 6px;
+    padding: 0 0 1px 0;
+  }
+
+  #report-an-order-problem-modal > header > h2 {
+    font-size: 2.5rem;
+  }
+
+  #report-an-order-problem-modal .my-scrollbar.os-scrollbar-vertical .os-scrollbar-track,
+  #report-an-order-problem-modal .my-scrollbar.os-scrollbar-vertical .os-scrollbar-handle {
+    border-radius: 0 0 6px 0;
+  }
+}
