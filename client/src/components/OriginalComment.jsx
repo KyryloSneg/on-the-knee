@@ -17,10 +17,14 @@ import setAnswerModalVisibility from "../utils/setAnswerModalVisibility";
 import SellerFeedbackStarRatings from "./SellerFeedbackStarRatings";
 import UIButton from "./UI/uiButton/UIButton";
 import getDateStr from "../utils/getDateStr";
+import setAuthentificationModalVisibility from "../utils/setAuthentificationModalVisibility";
 
 const OriginalComment = observer(({ comment, user, type, singularCommentWord = "comment", isWithImages, closeGalleryModal }) => {
   const { user: userStore, app, deviceStore } = useContext(Context);
+  
   const replyBtnRef = useRef(null);
+  const likeBtnRef = useRef(null);
+  const dislikeBtnRef = useRef(null);
 
   // we must update likes and dislikes after user clicking on one of them
   const [likes, setLikes] = useState(comment["device-feedback-likes"] || comment["device-question-likes"]);
@@ -68,8 +72,12 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
   }
 
   async function removeLike() {
+    // adding this condition just in case
+    // (rateComment fn is already doing this)
     if (!userStore.isAuth) {
       // open user login modal
+      app.setAuthentificationModalBtnRef(likeBtnRef);
+      setAuthentificationModalVisibility(true, app);
       return;
     };
 
@@ -86,8 +94,12 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
   }
 
   async function removeDislike() {
+    // once more adding this condition just in case
+    // (rateComment fn is already doing this)
     if (!userStore.isAuth) {
       // open user login modal
+      app.setAuthentificationModalBtnRef(dislikeBtnRef);
+      setAuthentificationModalVisibility(true, app);
       return;
     };
 
@@ -105,6 +117,8 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
   async function rateComment(isLike) {
     if (!userStore.isAuth) {
       // open user login modal
+      app.setAuthentificationModalBtnRef(isLike ? likeBtnRef : dislikeBtnRef);
+      setAuthentificationModalVisibility(true, app);
       return;
     };
 
@@ -291,6 +305,7 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
                     ? `Remove your like from the ${singularCommentWord}`
                     : `Like the ${singularCommentWord}`
                 }
+                ref={likeBtnRef}
               >
                 {isAlreadyLiked
                   ? <img src={filledLikeIcon} alt="Remove like" draggable="false" />
@@ -305,6 +320,7 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
                     ? `Remove your dislike from the ${singularCommentWord}`
                     : `Dislike the ${singularCommentWord}`
                 }
+                ref={dislikeBtnRef}
               >
                 {isAlreadyDisliked
                   ? <img src={filledDislikeIcon} alt="Remove dislike" draggable="false" />

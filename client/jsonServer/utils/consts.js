@@ -164,9 +164,9 @@ const STORE_LOCATIONS = {
 
 const USERS = [
   {
-    "_id": "64e367f69f8167945dcb4a1b",
-    "name": "user",
-    "surname": "user",
+    "_id": "66fc214b3087117caf04ebb8",
+    "name": "Someone",
+    "surname": "Forgot",
     "roles": ["PUBLIC", "ORDER-MANAGER", "CONTENT-MANAGER", "SELLER", "OWNER"],
     "email": "onthekneeauth@gmail.com",
     "phoneNumber": "+380 95 532 9384"

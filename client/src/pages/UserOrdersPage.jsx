@@ -2,21 +2,20 @@ import "./styles/UserOrdersPage.css";
 import Loader from "../components/UI/loader/Loader";
 import UserOrdersSearchInput from "../components/UserOrdersSearchInput";
 import UserPageOrderList from "../components/UserPageOrderList";
-import { useEffect, useState } from "react";
 import URLActions from "../utils/URLActions";
 import UIButton from "../components/UI/uiButton/UIButton";
 
-const UserOrdersPage = ({ orders, initialOrders, isLoading }) => {
-  // using state instead of a ref, because sometimes 
-  // the page starts infinitely loading, and with the setter 
-  // we re-render the component
-  const [isInitialRender, setIsInitialRender] = useState(true);
-
-  useEffect(() => {
-    setIsInitialRender(false);
-  }, []);
-
-  if (isLoading || isInitialRender) return <Loader className="user-orders-page-loader" />;
+const UserOrdersPage = ({ orders, initialOrders, isLoading, isInitialRender }) => {
+  if (isLoading || isInitialRender) return (
+    <section className="user-orders-page">
+      <header>
+        <h2>
+          Your orders
+        </h2>
+      </header>
+      <Loader className="user-page-loader" />
+    </section>
+  );
 
   function getChildren() {
     if (orders?.length) {
@@ -50,16 +49,16 @@ const UserOrdersPage = ({ orders, initialOrders, isLoading }) => {
       }
     }
   }
-  
+
   return (
-    <div className="user-orders-page">
+    <section className="user-orders-page">
       <header>
         <h2>
           Your orders
         </h2>
       </header>
       {getChildren()}
-    </div>
+    </section>
   );
 }
 

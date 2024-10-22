@@ -15,7 +15,9 @@ const RemainSellerDevFeedbackModalContent = observer(() => {
   return (
     <div className="remain-seller-dev-feedback">
       <section>
-        <h3>Rate a seller</h3>
+        <header>
+          <h3>Rate a seller</h3>
+        </header>
         <div className="modal-remain-seller-feedback-wrap">
           <div>
             <img src={seller.logo} alt="" draggable="false" />
@@ -27,7 +29,9 @@ const RemainSellerDevFeedbackModalContent = observer(() => {
         </div>
       </section>
       <section>
-        <h3>Leave a device feedback</h3>
+        <header>
+          <h3>Leave a device feedback</h3>
+        </header>
         <RemainSellerDevFeedbackDevList />
       </section>
     </div>

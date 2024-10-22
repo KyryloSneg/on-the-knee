@@ -6,9 +6,13 @@ class UserStore {
     this._isAuth = false;
     this._user = {};
     this._userAddress = {};
+
     this._cart = {};
     this._cartDeviceCombinations = [];
     this._cartSelectedAdditionalServices = {};
+
+    this._desiredList = {};
+    this._desiredListDevices = [];
 
     this._cartDataFetching = null;
     makeAutoObservable(this);
@@ -82,6 +86,14 @@ class UserStore {
     this._cartSelectedAdditionalServices = cartSelectedAdditionalServices;
   }
 
+  setDesiredList(desiredList) {
+    this._desiredList = desiredList;
+  }
+
+  setDesiredListDevices(desiredListDevices) {
+    this._desiredListDevices = desiredListDevices;
+  }
+
   setCartDataFetching(fn) {
     this._cartDataFetching = fn;
   }
@@ -108,6 +120,14 @@ class UserStore {
 
   get cartSelectedAdditionalServices() {
     return this._cartSelectedAdditionalServices;
+  }
+
+  get desiredList() {
+    return this._desiredList;
+  }
+
+  get desiredListDevices() {
+    return this._desiredListDevices;
   }
 
   get cartDataFetching() {

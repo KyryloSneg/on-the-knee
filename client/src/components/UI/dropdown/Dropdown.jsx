@@ -19,10 +19,12 @@ import useInitialDropdownValue from "../../../hooks/useInitialDropdownValue";
 
 // hasDefaultValue prop defines will dropdown initially has a value and selectedId 
 // (doesn't really matter if user has already selected an option)
+
+// isWithFilterIcon is used with "default-select" type
 const Dropdown = forwardRef((
   { 
     variant = "default-select", options, propsSelectedId = null, paramKey = null,
-    hasDefaultValue = true, placeHolder = "", onSelectCb = null, ...props 
+    hasDefaultValue = true, placeHolder = "", onSelectCb = null, isWithFilterIcon = false, ...props 
   },
   ref
 ) => {
@@ -67,6 +69,7 @@ const Dropdown = forwardRef((
         onClick={onClick}
         visible={visible}
         dropdownOptionsId={dropdownOptionsId}
+        isWithFilterIcon={isWithFilterIcon}
         ref={ref}
         {...props}
       />

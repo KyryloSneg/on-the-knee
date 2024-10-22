@@ -1,0 +1,46 @@
+.desired-list-page {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 16px;
+  border-radius: 14px;
+  background-color: #fff;
+  margin-bottom: 24px;
+}
+
+.desired-list-page > header h2 {
+  text-align: start;
+  margin: 8px 0;
+}
+
+.desired-list-no-devices-msg-section {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.desired-list-no-devices-msg-section h3 {
+  font-size: 2rem;
+  margin: 0;
+  margin-bottom: 0;
+}
+
+.desired-list-no-devices-msg, 
+.desired-list-no-devices-msg-section > .ui-button {
+  font-size: 1.6rem;
+}
+
+.desired-list-no-devices-msg {
+  color: rgb(90, 90, 90);
+}
+
+.desired-list-no-devices-msg-section > .ui-button {
+  width: max-content;
+}
+
+.desired-list-page .main-device-list {
+  margin: 0;
+}

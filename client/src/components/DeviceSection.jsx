@@ -34,14 +34,7 @@ const DeviceSection = observer(({ isLoading, retryDevicesFetch, error }) => {
     <main className="device-section-main" ref={deviceSectionRef}>
       {/* <DevicePageList /> */}
       {deviceStore.devices.length
-        ? (
-          <DeviceList
-            devices={deviceStore.devices}
-            stocks={deviceStore.stocks}
-            sales={deviceStore.sales}
-            saleTypeNames={deviceStore.saleTypeNames}
-          />
-        )
+        ? <DeviceList devices={deviceStore.devices} />
         : (!error && !!Object.keys(deviceStore.usedFilters).length && !isLoading) && (
           <p className="no-devices-message">
             We haven't found devices with such filters {":("}

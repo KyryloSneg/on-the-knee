@@ -127,7 +127,7 @@ module.exports = function createData () {
     data["cart-device-combinations"] = cartDeviceCombos;
     data["cart-selected-additional-services"] = cartSelectedAdditionalServices;
 
-    const { desiredLists, desiredListDevices } = createDesiredList(result.devices);
+    const { desiredLists, desiredListDevices } = createDesiredList(result.devices, result.deviceCombinations);
     data["desired-lists"] = desiredLists;
     data["desired-list-devices"] = desiredListDevices;
   });
