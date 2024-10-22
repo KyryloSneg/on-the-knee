@@ -7,7 +7,7 @@ import UserOrdersPage from "./UserOrdersPage";
 import UserViewedDevicesPage from "./UserViewedDevicesPage";
 import UserPersonalDataPage from "./UserPersonalDataPage";
 import { observer } from "mobx-react-lite";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Context } from "../Context";
 import useWindowWidth from "../hooks/useWindowWidth";
 import useGettingOneUserOrders from "../hooks/useGettingOneUserOrders";
@@ -49,7 +49,15 @@ const UserPage = observer(({ type }) => {
   const windowWidth = useWindowWidth();
   const [orders, setOrders] = useState([]);
 
+  // using state instead of a ref, because sometimes 
+  // the user orders page starts infinitely loading, and with the setter 
+  // we re-render the component
+  const [isInitialRender, setIsInitialRender] = useState(true);
   const areOrdersLoading = useGettingOneUserOrders(user.user?.id, setOrders);
+
+  useEffect(() => {
+    setIsInitialRender(false);
+  }, []);
 
   // from new orders to old ones
   let sortedByDateOrders = _.cloneDeep(orders);
@@ -62,7 +70,14 @@ const UserPage = observer(({ type }) => {
     if (type === "personal-data") {
       return <UserPersonalDataPage />;
     } else if (type === "orders") {
-      return <UserOrdersPage orders={sortedByQueryOrders} initialOrders={sortedByDateOrders} isLoading={areOrdersLoading} />;
+      return (
+        <UserOrdersPage 
+          orders={sortedByQueryOrders} 
+          initialOrders={sortedByDateOrders} 
+          isLoading={areOrdersLoading} 
+          isInitialRender={isInitialRender} 
+        />
+      );
     } else if (type === "desired-list") {
       return <DesiredListPage />;
     } else if (type === "viewed-devices") {

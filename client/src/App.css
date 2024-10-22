@@ -288,7 +288,7 @@ ul {
   padding: 10px 5px;
   display: grid;
   align-items: center;
-  z-index: 15;
+  z-index: 20;
   margin-bottom: 30px;
   position: sticky;
   top: 0;

@@ -30,7 +30,7 @@ const DeviceRightDescHeading = ({ device, selectedCombination, defaultCombo }) =
         <p className="device-right-desc-stock">
           {stock.stockStatus}
         </p>
-        <AddToDesiredListBtn />
+        <AddToDesiredListBtn deviceId={device.id} deviceCombinationId={selectedCombination.id} />
       </div>
     </section>
   );

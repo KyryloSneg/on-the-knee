@@ -49,7 +49,7 @@ export const ONE_CART_API_URL = "/carts?userId=USER_ID_TO_REPLACE";
 export const ONE_CART_DEVICE_COMBINATIONS_API_URL = "/cart-device-combinations?_expand=device&_expand=device-combination&cartId=CART_ID_TO_REPLACE";
 
 // value: (asc / desc),(rating / price)
-export const sortingOptions = [
+export const sortingOptions = Object.freeze([
   {
     id: 0,
     title: "best rating",
@@ -71,7 +71,25 @@ export const sortingOptions = [
     title: "decreasing price",
     value: "desc,price",
   },
-];
+]);
+
+export const DESIRED_LIST_PAGE_OPTIONS = Object.freeze([
+  {
+    id: 0,
+    title: "By date added",
+    value: "desc,date",
+  },
+  {
+    id: 1,
+    title: "increasing price",
+    value: "asc,price",
+  },
+  {
+    id: 2,
+    title: "decreasing price",
+    value: "desc,price",
+  },
+]);
 
 // export const mockSearchResults = {
 //   "default": [

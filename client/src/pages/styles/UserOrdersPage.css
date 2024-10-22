@@ -29,8 +29,3 @@
 .user-orders-show-all-wrap > a {
   width: max-content;
 }
-
-.user-orders-page-loader {
-  justify-self: center;
-  align-self: center;
-}

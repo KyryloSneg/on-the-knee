@@ -2,10 +2,27 @@ import DeviceComboActions from "./DeviceComboActions";
 import compareNumbers from "./compareNumbers";
 import { getDiscountedPriceOrDefaultOne } from "./getDiscountedPrice";
 
-function sortDevicesByPrice(devices, stocks, sales, saleTypeNames, hasTriedToFetchSales, toReverse) {
+
+// using (areDevsWithCertainDevComboId === true) requires devices to have the "deviceCombinationId" field
+function sortDevicesByPrice(
+  devices, stocks, sales, saleTypeNames, hasTriedToFetchSales, 
+  toReverse = false, areDevsWithCertainDevComboId = false
+) {
   devices.sort((firstDev, secondDev) => {
-    const { defaultCombinationInStock: firstDefaultCombo } = DeviceComboActions.findDefaultCombination(firstDev, stocks); 
-    const { defaultCombinationInStock: secondDefaultCombo } = DeviceComboActions.findDefaultCombination(secondDev, stocks); 
+    let firstDefaultCombo;
+    let secondDefaultCombo;
+
+    if (areDevsWithCertainDevComboId) {
+      firstDefaultCombo = firstDev["device-combinations"].find(combo => combo.id === firstDev.deviceCombinationId);
+      secondDefaultCombo = secondDev["device-combinations"].find(combo => combo.id === secondDev.deviceCombinationId);
+    } else {
+      // defaultCombinationInStock
+      const firstResult = DeviceComboActions.findDefaultCombination(firstDev, stocks); 
+      const secondResult = DeviceComboActions.findDefaultCombination(secondDev, stocks); 
+
+      firstDefaultCombo = firstResult.defaultCombinationInStock;
+      secondDefaultCombo = secondResult.defaultCombinationInStock;
+    }
 
     const firstComboPrice = +getDiscountedPriceOrDefaultOne(
       firstDefaultCombo, firstDev, sales, saleTypeNames, hasTriedToFetchSales

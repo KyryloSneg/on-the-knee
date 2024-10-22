@@ -6,6 +6,7 @@ class AppStore {
     this._darkBgVisible = false;
     this._isBlockedScroll = false;
     this._isGlobalLoading = false;
+    this._hasTriedToFetchInitialData = false;
     this._isCartModalLoading = false;
     this._modalVisible = false;
 
@@ -117,6 +118,10 @@ class AppStore {
 
   setIsGlobalLoading(bool) {
     this._isGlobalLoading = bool;
+  }
+
+  setHasTriedToFetchInitialData(bool) {
+    this._hasTriedToFetchInitialData = bool;
   }
 
   setIsCartModalLoading(bool) {
@@ -425,6 +430,10 @@ class AppStore {
 
   get isGlobalLoading() {
     return this._isGlobalLoading;
+  }
+
+  get hasTriedToFetchInitialData() {
+    return this._hasTriedToFetchInitialData;
   }
 
   get isCartModalLoading() {

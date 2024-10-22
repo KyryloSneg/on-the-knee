@@ -14,6 +14,7 @@ import { getStorePickupPoints } from "../http/StorePickupPointsAPI";
 import { getOneCart, getOneCartDeviceCombinations } from "../http/CartAPI";
 import useGettingCartData from "./useGettingCartData";
 import LocalStorageActions from "../utils/LocalStorageActions";
+import { getOneDesiredList, getOneDesiredListDevices } from "../http/DesiredListAPI";
 
 function useInitialDataFetching() {
   const { app, deviceStore, user } = useContext(Context);
@@ -127,6 +128,23 @@ function useInitialDataFetching() {
     } catch (e) {
       console.log(e.message);
     }
+
+    try {
+      let desiredList = {};
+      let desiredListDevices = [];
+  
+      if (user.isAuth) {
+        desiredList = await getOneDesiredList(user.user?.id);
+        desiredListDevices = await getOneDesiredListDevices(desiredList?.id);
+      }
+      
+      if (desiredList) user.setDesiredList(desiredList);
+      if (desiredListDevices) user.setDesiredListDevices(desiredListDevices);
+    } catch (e) {
+      console.log(e.message);
+    }
+
+    app.setHasTriedToFetchInitialData(true);
   }
 
   const [fetching, isLoading, error] = useFetching(fetchData);
