@@ -1,6 +1,6 @@
 import "./styles/UserPage.css";
 import TabsPageLayout from "../components/UI/tabsPageLayout/TabsPageLayout";
-import { USER_DESIRED_LIST_ROUTE, USER_FEEDBACKS_ROUTE, USER_ORDERS_ROUTE, USER_PERSONAL_DATA_ROUTE, USER_VIEWED_DEVICES_ROUTE, WIDTH_TO_SHOW_USER_PAGE_DESKTOP_VERSION } from "../utils/consts";
+import { DESIRED_LIST_PAGE_OPTIONS, USER_DESIRED_LIST_ROUTE, USER_FEEDBACKS_ROUTE, USER_ORDERS_ROUTE, USER_PERSONAL_DATA_ROUTE, USER_VIEWED_DEVICES_ROUTE, WIDTH_TO_SHOW_USER_PAGE_DESKTOP_VERSION } from "../utils/consts";
 import DesiredListPage from "./DesiredListPage";
 import UserFeedbacksPage from "./UserFeedbacksPage";
 import UserOrdersPage from "./UserOrdersPage";
@@ -55,6 +55,8 @@ const UserPage = observer(({ type }) => {
   const [isInitialRender, setIsInitialRender] = useState(true);
   const areOrdersLoading = useGettingOneUserOrders(user.user?.id, setOrders);
 
+  const [selectedOptionId, setSelectedOptionId] = useState(DESIRED_LIST_PAGE_OPTIONS[0].id);
+
   useEffect(() => {
     setIsInitialRender(false);
   }, []);
@@ -79,7 +81,7 @@ const UserPage = observer(({ type }) => {
         />
       );
     } else if (type === "desired-list") {
-      return <DesiredListPage />;
+      return <DesiredListPage selectedOptionId={selectedOptionId} setSelectedOptionId={setSelectedOptionId} />;
     } else if (type === "viewed-devices") {
       return <UserViewedDevicesPage />;
     } else if (type === "feedbacks") {
