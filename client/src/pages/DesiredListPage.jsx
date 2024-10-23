@@ -1,6 +1,6 @@
 import "./styles/DesiredListPage.css";
 import { observer } from "mobx-react-lite";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { Context } from "../Context";
 import DeviceList from "../components/DeviceList";
 import UIButton from "../components/UI/uiButton/UIButton";
@@ -11,9 +11,8 @@ import sortDevicesByPrice from "../utils/sortDevicesByPrice";
 import compareNumbers from "../utils/compareNumbers";
 import Loader from "../components/UI/loader/Loader";
 
-const DesiredListPage = observer(() => {
+const DesiredListPage = observer(({ selectedOptionId, setSelectedOptionId }) => {
   const { app, user, deviceStore } = useContext(Context);
-  const [selectedOptionId, setSelectedOptionId] = useState(DESIRED_LIST_PAGE_OPTIONS[0].id);
 
   if (!app.hasTriedToFetchInitialData) return (
     <section className="desired-list-page">
