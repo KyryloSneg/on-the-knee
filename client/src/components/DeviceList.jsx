@@ -14,7 +14,7 @@ import { Context } from "../Context";
 // areDevsWithCertainDevComboId is used to show a certain combination
 // if (areDevsWithCertainDevComboId === true), each device must contain field "deviceCombinationId"
 
-const DeviceList = observer(({ devices, areDevsWithCertainDevComboId = false }) => {
+const DeviceList = observer(({ devices, areDevsWithCertainDevComboId = false, withHistoryDeletionBtn = false }) => {
   const { deviceStore } = useContext(Context);
 
   let className = "main-device-list";
@@ -48,6 +48,7 @@ const DeviceList = observer(({ devices, areDevsWithCertainDevComboId = false }) 
               isInStock={isInStock} 
               isPreOrder={isPreOrder}
               defaultCombination={defaultCombination}
+              withHistoryDeletionBtn={withHistoryDeletionBtn}
             />
           </li>
         );

@@ -4,10 +4,11 @@ import UserOrdersSearchInput from "../components/UserOrdersSearchInput";
 import UserPageOrderList from "../components/UserPageOrderList";
 import URLActions from "../utils/URLActions";
 import UIButton from "../components/UI/uiButton/UIButton";
+import { ROOT_ROUTE } from "../utils/consts";
 
 const UserOrdersPage = ({ orders, initialOrders, isLoading, isInitialRender }) => {
   if (isLoading || isInitialRender) return (
-    <section className="user-orders-page">
+    <section className="user-page-section">
       <header>
         <h2>
           Your orders
@@ -45,13 +46,27 @@ const UserOrdersPage = ({ orders, initialOrders, isLoading, isInitialRender }) =
           </>
         );
       } else {
-        return <p className="no-user-orders">You haven't ordered anything yet</p>;
+        return (
+          <section className="user-page-no-data-msg-section">
+            <header>
+              <h3>
+                You have not ordered anything yet
+              </h3>
+            </header>
+            <p className="user-page-no-data-msg">
+              There could be some beautiful couples of them
+            </p>
+            <UIButton isLink={true} to={ROOT_ROUTE}>
+              Add them
+            </UIButton>
+          </section>
+        );
       }
     }
   }
 
   return (
-    <section className="user-orders-page">
+    <section className="user-page-section">
       <header>
         <h2>
           Your orders

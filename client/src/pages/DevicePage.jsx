@@ -24,6 +24,7 @@ const DevicePage = observer(({ type }) => {
 
   // using prevId to evade bugs that could possibly happen on switching between two different devices in browser history
   const prevId = useRef(id);
+  const prevViewedDeviceComboIdRef = useRef(null);
 
   useOneDeviceFetching(id, setDevice, true);
   useOneDeviceFeedbacksFetching(device?.id, null, null, deviceStore);
@@ -41,6 +42,7 @@ const DevicePage = observer(({ type }) => {
           device={device} 
           combinationString={combinationString} 
           feedbacks={sortedByDateFeedbacks}
+          prevViewedDeviceComboIdRef={prevViewedDeviceComboIdRef}
         />
       );
     } else if (type === "info") {

@@ -1,29 +1,9 @@
-.user-orders-page {
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  gap: 22px;
-  padding: 16px;
-  border-radius: 14px;
-  background-color: #fff;
-}
-
-.user-orders-page > header h2 {
-  text-align: start;
-  margin: 8px 0;
-}
-
 .user-orders-show-all-wrap {
   align-self: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 12px;
-}
-
-.no-user-orders, .user-orders-show-all-wrap > p {
-  font-size: 1.8rem;
-  color: rgb(90, 90, 90);
 }
 
 .user-orders-show-all-wrap > a {

@@ -23,6 +23,48 @@
   align-self: center;
 }
 
+.user-page-section {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 16px;
+  border-radius: 14px;
+  background-color: #fff;
+}
+
+.user-page-section > header h2 {
+  text-align: start;
+  margin: 8px 0;
+}
+
+.user-page-no-data-msg-section {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-page-no-data-msg-section h3 {
+  font-size: 2rem;
+  margin: 0;
+  margin-bottom: 0;
+}
+
+.user-page-no-data-msg, 
+.user-page-no-data-msg-section > .ui-button {
+  font-size: 1.6rem;
+}
+
+.user-page-no-data-msg {
+  color: rgb(90, 90, 90);
+}
+
+.user-page-no-data-msg-section > .ui-button {
+  width: max-content;
+}
+
 @media screen and (min-width: 1180px) {
   .personal-data-acc-content-wrap > p {
     font-size: 1.5rem;
