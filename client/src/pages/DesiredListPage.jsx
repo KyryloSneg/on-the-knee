@@ -41,7 +41,7 @@ const DesiredListPage = observer(({ selectedOptionId, setSelectedOptionId }) => 
     }
   }
 
-  let sortedDevices;
+  let sortedDevices = [];
   if (devices.length) {
     // ["desc", "price"]
     const splittedSortFilter = selectedOption?.value.split(",");
@@ -70,7 +70,7 @@ const DesiredListPage = observer(({ selectedOptionId, setSelectedOptionId }) => 
   };
 
   return (
-    <section className="desired-list-page">
+    <section className="user-page-section desired-list-page">
       <header>
         <h2>
           Desired list

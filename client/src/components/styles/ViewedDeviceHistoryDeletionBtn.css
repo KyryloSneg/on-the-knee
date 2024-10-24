@@ -1,0 +1,37 @@
+.viewed-device-history-deletion-btn {
+  border: none;
+  border-radius: 3px;
+  padding: 4px;
+  background: #f9f9f9;
+  transition: 0.3s;
+  cursor: pointer;
+  display: grid;
+  align-items: center;
+  justify-content: center;
+}
+
+.viewed-device-history-deletion-btn:hover,
+.viewed-device-history-deletion-btn:active {
+  background: #eeeeee;
+}
+
+.viewed-device-history-deletion-btn > img {
+  font-size: 1rem;
+  color: #fff;
+}
+
+.main-device-item.out-of-stock .viewed-device-history-deletion-btn {
+  background-color: #cdcdcd;
+}
+
+.main-device-item.out-of-stock .viewed-device-history-deletion-btn:hover,
+.main-device-item.out-of-stock .viewed-device-history-deletion-btn:active {
+  background-color: #bdbdbd;
+}
+
+.viewed-device-history-deletion-btn .viewed-device-history-deletion-btn-loader {
+  width: 14px;
+  height: 14px;
+  border: 0.5rem solid rgb(12, 101, 235);
+  border-right: 0.5rem solid #0000;
+}

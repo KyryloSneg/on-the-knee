@@ -14,6 +14,9 @@ class UserStore {
     this._desiredList = {};
     this._desiredListDevices = [];
 
+    this._viewedDevicesList = {};
+    this._viewedDevices = [];
+
     this._cartDataFetching = null;
     makeAutoObservable(this);
   }
@@ -94,6 +97,14 @@ class UserStore {
     this._desiredListDevices = desiredListDevices;
   }
 
+  setViewedDevicesList(viewedDevicesList) {
+    this._viewedDevicesList = viewedDevicesList;
+  }
+
+  setViewedDevices(viewedDevices) {
+    this._viewedDevices = viewedDevices;
+  }
+
   setCartDataFetching(fn) {
     this._cartDataFetching = fn;
   }
@@ -128,6 +139,14 @@ class UserStore {
 
   get desiredListDevices() {
     return this._desiredListDevices;
+  }
+
+  get viewedDevicesList() {
+    return this._viewedDevicesList;
+  }
+
+  get viewedDevices() {
+    return this._viewedDevices;
   }
 
   get cartDataFetching() {

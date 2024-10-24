@@ -15,6 +15,8 @@ import { getOneCart, getOneCartDeviceCombinations } from "../http/CartAPI";
 import useGettingCartData from "./useGettingCartData";
 import LocalStorageActions from "../utils/LocalStorageActions";
 import { getOneDesiredList, getOneDesiredListDevices } from "../http/DesiredListAPI";
+import { getOneViewedDevicesList, getOneViewedDevicesListDevs } from "../http/ViewedDevicesAPI";
+import setViewedDevicesAdditionalFields from "../utils/setViewedDevicesAdditionalFields";
 
 function useInitialDataFetching() {
   const { app, deviceStore, user } = useContext(Context);
@@ -140,6 +142,26 @@ function useInitialDataFetching() {
       
       if (desiredList) user.setDesiredList(desiredList);
       if (desiredListDevices) user.setDesiredListDevices(desiredListDevices);
+    } catch (e) {
+      console.log(e.message);
+    }
+
+    try {
+      let viewedDevicesList = {};
+      let viewedDevices = [];
+  
+      if (user.isAuth) {
+        viewedDevicesList = await getOneViewedDevicesList(user.user?.id);
+        viewedDevices = await getOneViewedDevicesListDevs(viewedDevicesList?.id);
+      } else {
+        viewedDevices = LocalStorageActions.getItem("viewedDevices") || [];
+        viewedDevices.sort((a, b) => b.date.localeCompare(a.date));
+
+        await setViewedDevicesAdditionalFields(viewedDevices);
+      }
+      
+      if (viewedDevicesList) user.setViewedDevicesList(viewedDevicesList);
+      if (viewedDevices) user.setViewedDevices(viewedDevices);
     } catch (e) {
       console.log(e.message);
     }

@@ -14,7 +14,7 @@ import { useContext, useRef, useState } from "react";
 import { Context } from "../Context";
 import { observer } from "mobx-react-lite";
 
-const DeviceItem = observer(({ device, isInStock, isPreOrder, defaultCombination }) => {
+const DeviceItem = observer(({ device, isInStock, isPreOrder, defaultCombination, withHistoryDeletionBtn }) => {
   const { deviceStore } = useContext(Context);
 
   const screenWidth = useWindowWidth();
@@ -99,6 +99,7 @@ const DeviceItem = observer(({ device, isInStock, isPreOrder, defaultCombination
         deviceId={device.id}
         combinationId={defaultCombination.id}
         textSaleTypes={textSaleTypes}
+        withHistoryDeletionBtn={withHistoryDeletionBtn}
       />
       {defaultComboColorHrefs
         ? <DeviceColorOptions hrefObjects={defaultComboColorHrefObjects} deviceId={device.id} />

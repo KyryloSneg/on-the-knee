@@ -17,8 +17,9 @@ import { WIDTH_TO_SHOW_PURCHASE_DEVICE_FOOTER } from "../utils/consts";
 import useGettingCartData from "../hooks/useGettingCartData";
 import useSynchronizingAdditionalServices from "../hooks/useSynchronizingAdditionalServices";
 import useChangingServerAddServicesOnChange from "../hooks/useChangingServerAddServicesOnChange";
+import useAddingViewedDeviceOnVisit from "../hooks/useAddingViewedDeviceOnVisit";
 
-const MainDevicePage = observer(({ device, combinationString, feedbacks }) => {
+const MainDevicePage = observer(({ device, combinationString, feedbacks, prevViewedDeviceComboIdRef }) => {
   const { deviceStore, user } = useContext(Context);
   const windowWidth = useWindowWidth();
 
@@ -84,6 +85,7 @@ const MainDevicePage = observer(({ device, combinationString, feedbacks }) => {
     cartCombo?.["device-combination"]?.id === selectedCombination?.id
   );
 
+  useAddingViewedDeviceOnVisit(device?.id, selectedCombination?.id, prevViewedDeviceComboIdRef)
   useSynchronizingAdditionalServices(setSelectedAddServices, combinationInCart?.id);
   useChangingServerAddServicesOnChange(selectedAddServices, combinationInCart?.id, cartDataFetching, isInitialRender);
 

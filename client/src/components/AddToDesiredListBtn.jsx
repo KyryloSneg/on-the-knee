@@ -41,7 +41,7 @@ const AddToDesiredListBtn = observer(({ deviceId, deviceCombinationId }) => {
           await deleteDesiredListDevice(existingDesiredListDev.id);
         } catch (e) {
           if (e.response.status !== 500) {
-            throw new Error(e.message)
+            throw e
           }
         }
       } else {
@@ -56,7 +56,6 @@ const AddToDesiredListBtn = observer(({ deviceId, deviceCombinationId }) => {
         await createDesiredListDevice(desiredListCombo);
       }
 
-      
       const updatedListDevices = await getOneDesiredListDevices(user.desiredList?.id);
       user.setDesiredListDevices(updatedListDevices);
     } catch (e) {

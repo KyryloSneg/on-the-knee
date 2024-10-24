@@ -5,6 +5,7 @@ const createDesiredList = require("./utils/createDesiredList");
 const createDevices = require("./utils/createDevices");
 const createLocations = require("./utils/createLocations");
 const createOrders = require("./utils/createOrders");
+const createViewedDevicesList = require("./utils/createViewedDevicesList");
 const initializeEnvVars = require("./utils/initializeJsonServerEnvVars");
 
 module.exports = function createData () {
@@ -39,6 +40,9 @@ module.exports = function createData () {
 
     "desired-lists": [],
     "desired-list-devices": [],
+
+    "viewed-devices-lists": [],
+    "viewed-devices": [],
 
     "countries": [],
     "regions": [],
@@ -130,6 +134,10 @@ module.exports = function createData () {
     const { desiredLists, desiredListDevices } = createDesiredList(result.devices, result.deviceCombinations);
     data["desired-lists"] = desiredLists;
     data["desired-list-devices"] = desiredListDevices;
+
+    const { viewedDevicesLists, viewedDevices } = createViewedDevicesList(result.devices, result.deviceCombinations);
+    data["viewed-devices-lists"] = viewedDevicesLists;
+    data["viewed-devices"] = viewedDevices;
   });
   
   Promise.all([locationsPromise, devicesPromise]).then(() => {

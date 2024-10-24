@@ -5,13 +5,9 @@
   background: #f9f9f9;
   transition: 0.3s;
   cursor: pointer;
-  position: absolute;
-  right: 12px;
-  top: 12px;
   display: grid;
   align-items: center;
   justify-content: center;
-  z-index: 2;
 }
 
 .add-to-desired-list:hover,
@@ -20,7 +16,6 @@
 }
 
 .purchase-device-footer > .add-to-desired-list {
-  position: static;
   display: none;
 }
 
@@ -47,7 +42,6 @@
 
 @media screen and (min-width: 400px) {
   .purchase-device-footer > .add-to-desired-list {
-    position: static;
     display: grid;
   }
 }
