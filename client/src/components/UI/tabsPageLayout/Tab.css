@@ -8,32 +8,32 @@
   transition: color 0.2s, background-color 0.2s, outline 0s;
 }
 
-.vertical-layout .tab {
+.vertical-layout > div .tab {
   justify-content: center;
   height: 100%;
   box-sizing: border-box;
   padding: 10px 4px;
 }
 
-.horizontal-layout .tab {
+.horizontal-layout > div .tab {
   justify-content: start;
   padding: 12px 14px;
 }
 
-.vertical-layout .tab.active, 
-.vertical-layout .tab:hover, 
-.vertical-layout .tab:active, 
-.vertical-layout .tab:focus {
+.vertical-layout > div .tab.active, 
+.vertical-layout > div .tab:hover, 
+.vertical-layout > div .tab:active, 
+.vertical-layout > div .tab:focus {
   border-bottom: 2px #7373ff solid;
   /* removing 2px of the height of tab for the border-bottom */
   padding-bottom: 8px;
   color: #7373ff;
 }
 
-.horizontal-layout .tab.active, 
-.horizontal-layout .tab:hover, 
-.horizontal-layout .tab:active, 
-.horizontal-layout .tab:focus {
+.horizontal-layout > div .tab.active, 
+.horizontal-layout > div .tab:hover, 
+.horizontal-layout > div .tab:active, 
+.horizontal-layout > div .tab:focus {
   color: #7373ff;
 }
 
@@ -64,7 +64,8 @@
 }
 
 @media screen and (min-width: 1180px) {
-  .user-page .tab {
+  /* div is our scrollbar root element */
+  .user-page > section > div .tab {
     padding: 10px 12px;
     font-size: 1.5rem;
   }

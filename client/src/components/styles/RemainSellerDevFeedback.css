@@ -1,0 +1,179 @@
+.remain-seller-dev-feedback {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.remain-seller-dev-feedback.default-version {
+  padding: 0;
+}
+
+.remain-seller-dev-feedback.modal-version {
+  padding: 22px;
+}
+
+.remain-seller-dev-feedback h3 {
+  font-size: 1.7rem;
+  margin: 0;
+}
+
+.remain-seller-dev-feedback.default-version h3 {
+  font-size: 1.3rem;
+}
+
+.remain-seller-dev-feedback.modal-version h3 {
+  margin-bottom: 14px;
+}
+
+.remain-seller-dev-feedback.default-version .remain-dev-feedback-section {
+  border: 1px #dfdfdf solid;
+  border-radius: 18px;
+}
+
+.remain-seller-dev-feedback.default-version .remain-dev-feedback-section > * {
+  padding: 16px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.remain-seller-dev-feedback.default-version .remain-dev-feedback-section > header {
+  border-bottom: 1px #dfdfdf solid;
+  border-radius: 18px 18px 0 0;
+}
+
+.remain-seller-dev-feedback.default-version .remain-dev-feedback-section > h3 {
+  border-bottom: 1px #dfdfdf solid;
+  border-radius: 18px 18px 0 0;
+}
+
+.remain-seller-dev-feedback-list {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.remain-seller-dev-feedback-li-with-comments {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border: 1px solid #c9c9c9;
+  border-radius: 8px;
+}
+
+.remain-seller-dev-feedback-li-with-comments > button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.remain-seller-dev-feedback-li-with-comments > .comments-list {
+  padding: 10px 12px;
+}
+
+.remain-seller-dev-feedback-li-with-comments > button > img {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s;
+}
+
+.remain-seller-dev-feedback-li-empty {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 1fr;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.remain-seller-dev-feedback-li-img-wrap {
+  display: grid;
+}
+
+.remain-seller-dev-feedback-li-img-wrap > img {
+  width: 32px;
+  height: 60px;
+  object-fit: contain;
+  align-self: center;
+  justify-self: center;
+}
+
+.remain-seller-dev-feedback-li-name-img {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.remain-seller-dev-feedback-li-name-img > span {
+  font-size: 1rem;
+  transition: color 0.2s, outline 0s;
+  word-break: break-word;
+  text-align: start;
+}
+
+.remain-seller-dev-feedback-li-empty > .ui-button {
+  height: max-content;
+  font-size: 1.2rem;
+}
+
+@media screen and (min-width: 320px) {
+  .remain-seller-dev-feedback.default-version h3 {
+    font-size: 1.5rem;
+  }
+
+  .remain-seller-dev-feedback-li-name-img > span {
+    font-size: 1.2rem;
+  }
+
+  .remain-seller-dev-feedback-li-empty > .ui-button {
+    font-size: 1.5rem;
+  }
+}
+
+@media screen and (min-width: 360px) {
+  .remain-seller-dev-feedback-li-img-wrap > img {
+    width: 40px;
+  }
+}
+
+@media screen and (min-width: 380px) {
+  .remain-seller-dev-feedback.default-version h3 {
+    font-size: 1.7rem;
+  }
+}
+
+@media screen and (min-width: 400px) {
+  .remain-seller-dev-feedback-li-img-wrap > img {
+    width: 80px;
+  }
+}
+
+@media screen and (min-width: 480px) {
+  .remain-seller-dev-feedback-li-name-img > span {
+    font-size: 1.5rem;
+  }
+}
+
+@media screen and (min-width: 660px) {
+  .remain-seller-dev-feedback.modal-version .remain-seller-dev-feedback-li-empty {
+    grid-template-columns: 1fr auto;
+    justify-content: space-between;
+  }
+}
+
+@media screen and (min-width: 780px) {
+  .remain-seller-dev-feedback.default-version .remain-seller-dev-feedback-li-empty {
+    grid-template-columns: 1fr auto;
+    justify-content: space-between;
+  }
+}
+
+@media screen and (min-width: 800px) {
+  .remain-seller-dev-feedback.default-version {
+    padding: 22px;
+  }
+}

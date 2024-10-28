@@ -4,7 +4,7 @@ import { useContext } from 'react';
 import { Context } from "../Context";
 import ModalWindow from "./UI/modalWindow/ModalWindow";
 import setRemainSellerDevFeedbackModalVisibility from "../utils/setRemainSellerDevFeedbackModalVisibility";
-import RemainSellerDevFeedbackModalContent from "./RemainSellerDevFeedbackModalContent";
+import RemainSellerDevFeedback from "./RemainSellerDevFeedback";
 
 // app.remainSellerDeviceFeedbackDevCombos items must include "device" field
 const RemainASellerOrDeviceFeedbackModal = observer(() => {
@@ -18,7 +18,7 @@ const RemainASellerOrDeviceFeedbackModal = observer(() => {
     <ModalWindow
       isVisible={app.isVisibleRemainSellerDeviceFeedbackModal}
       setIsVisible={setIsRemainSellerDevFeedbackModalVisible}
-      children={<RemainSellerDevFeedbackModalContent />}
+      children={<RemainSellerDevFeedback type="modal" />}
       headerText="Remain a feedback"
       id="remain-seller-dev-feedback-modal"
       triggerElemRef={app.remainSellerDeviceFeedbackBtnRef}

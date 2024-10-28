@@ -124,6 +124,7 @@
 @media screen and (min-width: 452px) {
   .original-comment-rate-group-error-wrap {
     margin: 0;
+    margin-left: auto;
     justify-content: end;
   }
 }

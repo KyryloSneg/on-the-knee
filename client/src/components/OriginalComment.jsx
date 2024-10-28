@@ -231,14 +231,15 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
     images: comment.images
   }];
 
+  const isWithName = user?.name && user?.surname;
+
   return (
     <section className="original-comment">
       <div className="comment-username-date-wrap">
         <p className="comment-username">
-          {/* TODO: delete (user?.name || "Mock") etc. in production build maybe */}
           {comment?.isAnonymously
             ? "Anonym"
-            : `${user?.name || "Mock"} ${user?.surname || "User"}`
+            : isWithName ? `${user.name} ${user.surname}` : "..."
           }
         </p>
         <p className="comment-date">

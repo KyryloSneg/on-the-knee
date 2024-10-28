@@ -14,7 +14,8 @@ const Tab = ({ tabData, doesHaveDynamicParam }) => {
     tabDataRoute = splittedTabDataTo.join("/");
   }
   
-  const active = currentPath === tabDataRoute;
+  // routes can include "subroutes"
+  const active = currentPath === tabDataRoute || currentPath.startsWith(tabData?.baseRoute);
 
   let className = "tab";
   if (active) {

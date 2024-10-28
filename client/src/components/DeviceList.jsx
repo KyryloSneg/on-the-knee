@@ -42,7 +42,7 @@ const DeviceList = observer(({ devices, areDevsWithCertainDevComboId = false, wi
         }
         
         return (
-          <li key={`deviceItem: ${dev.id}`}>
+          <li key={`deviceItem: ${dev.id}-${defaultCombination.combinationString}`}>
             <DeviceItem 
               device={dev} 
               isInStock={isInStock} 

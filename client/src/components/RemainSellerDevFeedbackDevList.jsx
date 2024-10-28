@@ -1,21 +1,15 @@
-import "./styles/RemainSellerDevFeedbackDevList.css";
-import { useContext } from 'react';
-import { Context } from "../Context";
-import { observer } from "mobx-react-lite";
 import RemainSellerDevFeedbackDevListItem from "./RemainSellerDevFeedbackDevListItem";
 
-const RemainSellerDevFeedbackDevList = observer(() => {
-  const { app } = useContext(Context);
-
+const RemainSellerDevFeedbackDevList = ({ devCombosFeedbacksObjArray }) => {
   return (
-    <ul className="remain-seller-dev-feedback-dev-list">
-      {app.remainSellerDeviceFeedbackDevCombos?.map(combo => 
-        <li key={combo.id}>
-          <RemainSellerDevFeedbackDevListItem combination={combo} />
+    <ul className="remain-seller-dev-feedback-list">
+      {devCombosFeedbacksObjArray?.map(comboFeedbackObj => 
+        <li key={comboFeedbackObj.deviceCombination.id}>
+          <RemainSellerDevFeedbackDevListItem comboFeedbackObj={comboFeedbackObj} />
         </li>
       )}
     </ul>
   );
-});
+};
 
 export default RemainSellerDevFeedbackDevList;

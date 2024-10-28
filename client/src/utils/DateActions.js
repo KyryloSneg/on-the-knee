@@ -1,8 +1,10 @@
 export default class DateActions {
     /**
      * adding zero placeholders to a date part (from 967 to 0967, if datePart === 967 && requiredStrLength === 4)
+     * 
      * @param {number | string} datePart - date part (1990, for example).
      * @param {number} requiredStrLength - date part length to match with (for example, 4 while datePart length is 3).
+     * @return {string} - datePart with possibly additional zero placeholders
      */
   static getDatePartWithPossibleZeros(datePart, requiredStrLength) {
     let result = datePart;

@@ -12,7 +12,7 @@ function useOneSellerFeedbacksFetching(sellerId, setFeedbacks = null) {
     if (setFeedbacks) {
       setFeedbacks(feedbacks);
     } else {
-      deviceStore.setSellerFeedbacks(feedbacks);
+      deviceStore.setSellersFeedbacks(feedbacks);
     }
   }
 

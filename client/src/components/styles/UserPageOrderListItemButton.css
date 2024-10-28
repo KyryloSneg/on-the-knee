@@ -12,6 +12,8 @@
 }
 
 .user-page-order-list-item-btn > img {
+  width: 20px;
+  height: 20px;
   transition: 0.3s;
 }
 

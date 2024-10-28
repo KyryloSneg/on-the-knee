@@ -23,6 +23,7 @@ export const USER_ORDERS_ROUTE = "/user/orders";
 export const USER_DESIRED_LIST_ROUTE = "/user/desired-list";
 export const USER_VIEWED_DEVICES_ROUTE = "/user/viewed-devices";
 export const USER_FEEDBACKS_ROUTE = "/user/my-feedbacks";
+export const USER_SELLERS_FEEDBACKS_ROUTE = "/user/my-feedbacks/sellers";
 
 export const CATEGORY_CATALOG_ROUTE = "/categories/"; // + ":categoryIdSlug" (1-smartphones for example)
 export const BRAND_CATALOG_ROUTE = "/brand/" // + ":brandIdSlug" (2-asus for example);

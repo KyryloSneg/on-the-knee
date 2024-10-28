@@ -42,10 +42,10 @@ class DeviceStore {
     this._brands = [];
 
     // we moved states below from DevicePage to reload them on creating a feedback or a question
-    this._deviceFeedbacks = [];
+    this._devicesFeedbacks = [];
     this._deviceQuestions = [];
 
-    this._sellerFeedbacks = [];
+    this._sellersFeedbacks = [];
 
     // we use these states in modals that are related to the info below
     this._selectedDeviceId = null;
@@ -184,12 +184,12 @@ class DeviceStore {
     return this._brands;
   }
 
-  setDeviceFeedbacks(deviceFeedbacks) {
-    this._deviceFeedbacks = deviceFeedbacks;
+  setDevicesFeedbacks(deviceFeedbacks) {
+    this._devicesFeedbacks = deviceFeedbacks;
   }
 
-  get deviceFeedbacks() {
-    return this._deviceFeedbacks;
+  get devicesFeedbacks() {
+    return this._devicesFeedbacks;
   }
 
   setDeviceQuestions(deviceQuestions) {
@@ -200,12 +200,12 @@ class DeviceStore {
     return this._deviceQuestions;
   }
 
-  setSellerFeedbacks(sellerFeedbacks) {
-    this._sellerFeedbacks = sellerFeedbacks;
+  setSellersFeedbacks(sellersFeedbacks) {
+    this._sellersFeedbacks = sellersFeedbacks;
   }
 
-  get sellerFeedbacks() {
-    return this._sellerFeedbacks;
+  get sellersFeedbacks() {
+    return this._sellersFeedbacks;
   }
 
   setSelectedDeviceId(selectedDeviceId) {
