@@ -62,6 +62,11 @@
   border-radius: 20px;
 }
 
+.user-page-feedbacks > .tabs-page-scroll {
+  background: none;
+  border-radius: 0;
+}
+
 .tabs-page-scroll {
   background-color: #fff;
   border-radius: 14px;

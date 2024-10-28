@@ -21,7 +21,7 @@ const DropdownBtn = forwardRef(({ variant, value, onClick, visible, dropdownOpti
         className={className}
         ref={ref}
       >
-        <img src={sortIcon} alt="" draggable="false" />
+        {isWithFilterIcon && <img src={sortIcon} alt="" draggable="false" />}
         <span>{value || "..."}</span>
         <img src={dropdownArrowIcon} alt="" draggable="false" className={visible ? "rotated" : ""} />
       </UIButton>

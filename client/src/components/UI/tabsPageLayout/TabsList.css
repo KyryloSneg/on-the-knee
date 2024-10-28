@@ -6,7 +6,15 @@
   width: max-content;
 }
 
-.vertical-layout .tabs-list {
+section.user-page-feedbacks > div .tabs-list {
+  padding: 0;
+  border-bottom: 1px solid #e9e9e9;
+  border-radius: 0;
+  background: none;
+  min-width: 100%;
+}
+
+.vertical-layout > div .tabs-list {
   align-items: stretch;
   gap: 28px;
   padding: 0 20px;
@@ -14,7 +22,7 @@
   min-width: 90%;
 }
 
-.horizontal-layout .tabs-list {
+.horizontal-layout > div .tabs-list {
   flex-direction: column;
   gap: 4px;
   padding: 0;

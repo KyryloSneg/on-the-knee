@@ -2,11 +2,12 @@ import "./TabsPageLayout.css";
 import TabsList from "./TabsList";
 import CustomScrollbar from "../customScrollbar/CustomScrollbar";
 
-// tabsData: [{ children: "...", to: "...", iconSrc: undefined, svgIcon: undefined }, ...]
+// tabsData: [{ children: "...", to: "...", baseRoute: undefined, iconSrc: undefined, svgIcon: undefined }, ...]
 // pageContent: page component
 const TabsPageLayout = ({ 
   tabsData, pageContent, doesHaveDynamicParam, 
-  isToUsePaddingForPage = true, isVerticalLayout = true 
+  isToUsePaddingForPage = true, isVerticalLayout = true,
+  propsClassName = "", 
 }) => {
   let className = "tabs-page-layout";
   if (!isToUsePaddingForPage) {
@@ -17,6 +18,10 @@ const TabsPageLayout = ({
     className += " vertical-layout";
   } else {
     className += " horizontal-layout";
+  }
+
+  if (propsClassName) {
+    className += ` ${propsClassName}`;
   }
 
   return (

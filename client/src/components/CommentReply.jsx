@@ -4,8 +4,8 @@ import useGettingOneUser from "../hooks/useGettingOneUser";
 import getDateStr from "../utils/getDateStr";
 
 const CommentReply = ({ reply, type }) => {
-  const [user, setUser] = useState(null);
-  useGettingOneUser(reply.userId, setUser, true, !reply.isAnonymously && !user);
+  const [user, setUser] = useState(reply?.user || null);
+  useGettingOneUser(reply?.userId, setUser, true, !reply.isAnonymously && !user);
 
   const createdAtDate = new Date(reply.date);
   const createdAtDateStr = getDateStr(createdAtDate);
@@ -15,6 +15,7 @@ const CommentReply = ({ reply, type }) => {
     commentReplyLabelWord = "Answer";
   }
 
+  const isWithName = user?.name && user?.surname;
   return (
     <section className="comment-reply">
       <div className="comment-username-date-wrap">
@@ -23,7 +24,7 @@ const CommentReply = ({ reply, type }) => {
             {commentReplyLabelWord}
           </p>
           <p className="comment-username">
-            {user?.name || "Mock"} {user?.surname || "User"}
+            {isWithName ? `${user.name} ${user.surname}` : "..."}
           </p>
         </div>
         <p className="comment-date">

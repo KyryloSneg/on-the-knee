@@ -1,0 +1,60 @@
+/* .remain-seller-feedback-wrap, .remain-seller-feedback-wrap > div {
+  display: grid;
+  align-items: center;
+  gap: 12px;
+}
+
+.remain-seller-feedback-wrap {
+  grid-template-columns: 1fr;
+}
+
+.remain-seller-feedback-wrap > div {
+  grid-template-columns: auto 1fr;
+}
+
+.remain-seller-feedback-wrap > div > img {
+  width: 80px;
+  height: 60px;
+  object-fit: contain;
+  align-self: center;
+  justify-self: center;
+}
+
+.remain-seller-feedback-wrap > div > p > strong {
+  color: #bd5e10;
+}
+
+.remain-seller-dev-feedback.default-version .remain-dev-feedback-section {
+  border: 1px #dfdfdf solid;
+  border-radius: 18px;
+}
+
+.remain-seller-dev-feedback.default-version .remain-dev-feedback-section > * {
+  padding: 16px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.remain-seller-dev-feedback.default-version .remain-dev-feedback-section > header {
+  border-bottom: 1px #dfdfdf solid;
+  border-radius: 18px 18px 0 0;
+}
+
+.remain-seller-dev-feedback.default-version .remain-dev-feedback-section > h3 {
+  border-bottom: 1px #dfdfdf solid;
+  border-radius: 18px 18px 0 0;
+}
+
+@media screen and (min-width: 660px) {
+  .remain-seller-dev-feedback.modal-version .remain-seller-feedback-wrap {
+    grid-template-columns: 1fr auto;
+    justify-content: space-between;
+  }
+}
+
+@media screen and (min-width: 780px) {
+  .remain-seller-dev-feedback.default-version .remain-seller-feedback-wrap {
+    grid-template-columns: 1fr auto;
+    justify-content: space-between;
+  }
+} */

@@ -2,6 +2,7 @@ class LocalStorageActions {
 
   /**
    * Getting localStorage item with fallback value on error.
+   * 
    * @param {string} name - The name of the item.
    * @param {boolean} isToDeleteOnSyntaxError - is to delete item if json syntax error has been throwed.
    */

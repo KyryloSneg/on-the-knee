@@ -86,8 +86,8 @@ const CommentModalContent = observer(({ type, closeModal }) => {
       await createDeviceFeedback(newFeedback);
 
       // updating device's feedbacks
-      const feedbacks = await getOneDeviceFeedbacks(deviceStore.selectedDeviceId);
-      deviceStore.setDeviceFeedbacks(feedbacks);
+      const feedbacks = await getOneDeviceFeedbacks(deviceStore.selectedDeviceId, app.commentModalGetCommentsQueryParamsStr);
+      deviceStore.setDevicesFeedbacks(feedbacks);
     } else if (type === "reply") {
       const newReply = {
         "id": id,
@@ -99,8 +99,8 @@ const CommentModalContent = observer(({ type, closeModal }) => {
 
       await createDeviceFeedbackReply(newReply);
 
-      const feedbacks = await getOneDeviceFeedbacks(deviceStore.selectedDeviceId);
-      deviceStore.setDeviceFeedbacks(feedbacks);
+      const feedbacks = await getOneDeviceFeedbacks(deviceStore.selectedDeviceId, app.commentModalGetCommentsQueryParamsStr);
+      deviceStore.setDevicesFeedbacks(feedbacks);
     } else if (type === "question") {
       const newQuestion = {
         "id": id,
@@ -115,7 +115,7 @@ const CommentModalContent = observer(({ type, closeModal }) => {
       await createDeviceQuestion(newQuestion);
 
       // updating device's questions
-      const questions = await getOneDeviceQuestions(deviceStore.selectedDeviceId);
+      const questions = await getOneDeviceQuestions(deviceStore.selectedDeviceId, app.commentModalGetCommentsQueryParamsStr);
       deviceStore.setDeviceQuestions(questions);
     } else if (type === "answer") {
       const newAnswer = {
@@ -128,7 +128,7 @@ const CommentModalContent = observer(({ type, closeModal }) => {
 
       await createDeviceAnswer(newAnswer);
 
-      const questions = await getOneDeviceQuestions(deviceStore.selectedDeviceId);
+      const questions = await getOneDeviceQuestions(deviceStore.selectedDeviceId, app.commentModalGetCommentsQueryParamsStr);
       deviceStore.setDeviceQuestions(questions);
     } else if (type === "askSeller") {
       const newQuestion = {

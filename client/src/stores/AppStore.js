@@ -74,6 +74,7 @@ class AppStore {
     this._isUserLocationDeterminedCorrectly = true;
 
     // we use these states in modals that are related to the info below
+    this._commentModalGetCommentsQueryParamsStr = "";
     this._commentGalleryModalType = "deviceFeedbacks";
     this._commentGallerySelectedImageId = null;
     this._reportOrderProblemOrderId = null;
@@ -330,6 +331,10 @@ class AppStore {
 
   setIsUserLocationDeterminedCorrectly(isUserLocationDeterminedCorrectly) {
     this._isUserLocationDeterminedCorrectly = isUserLocationDeterminedCorrectly;
+  }
+
+  setCommentModalGetCommentsQueryParamsStr(commentModalGetCommentsQueryParamsStr) {
+    this._commentModalGetCommentsQueryParamsStr = commentModalGetCommentsQueryParamsStr;
   }
 
   setCommentGalleryModalType(commentGalleryModalType) {
@@ -642,6 +647,10 @@ class AppStore {
 
   get isUserLocationDeterminedCorrectly() {
     return this._isUserLocationDeterminedCorrectly;
+  }
+
+  get commentModalGetCommentsQueryParamsStr() {
+    return this._commentModalGetCommentsQueryParamsStr;
   }
 
   get commentGalleryModalType() {

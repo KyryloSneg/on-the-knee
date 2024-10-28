@@ -15,7 +15,7 @@ const DesiredListPage = observer(({ selectedOptionId, setSelectedOptionId }) => 
   const { app, user, deviceStore } = useContext(Context);
 
   if (!app.hasTriedToFetchInitialData) return (
-    <section className="desired-list-page">
+    <section className="user-page-section desired-list-page">
       <header>
         <h2>
           Desired list
@@ -45,23 +45,23 @@ const DesiredListPage = observer(({ selectedOptionId, setSelectedOptionId }) => 
   if (devices.length) {
     // ["desc", "price"]
     const splittedSortFilter = selectedOption?.value.split(",");
-  
+
     sortedDevices = _.cloneDeep(devices);
     let isToReverse = splittedSortFilter?.[0] === "desc";
-  
+
     if (splittedSortFilter?.[1] === "price") {
       sortDevicesByPrice(
         sortedDevices, deviceStore.stocks, deviceStore.sales, deviceStore.saleTypeNames, deviceStore.hasTriedToFetchSales,
         splittedSortFilter[0] === "desc", true
       );
-  
+
       isToReverse = false;
     } else if (splittedSortFilter?.[1] === "rating") {
       sortedDevices.sort((a, b) => compareNumbers(+a.rating, +b.rating));
     } else if (splittedSortFilter?.[1] === "date") {
       sortedDevices.sort((a, b) => a.addedToDesiredListDate.localeCompare(b.addedToDesiredListDate));
     }
-  
+
     // we can do reverse sorting in the sorting functions above but it's less readable
     // than reversing it in the end of the hook (it won't hurt optimization much)
     if (isToReverse) {
@@ -76,22 +76,26 @@ const DesiredListPage = observer(({ selectedOptionId, setSelectedOptionId }) => 
           Desired list
         </h2>
       </header>
-      <Dropdown
-        options={DESIRED_LIST_PAGE_OPTIONS}
-        placeHolder="Sort devices"
-        propsSelectedId={selectedOptionId}
-        onSelectCb={id => setSelectedOptionId(id)}
-      />
       {sortedDevices?.length
-        ? <DeviceList devices={sortedDevices} areDevsWithCertainDevComboId={true} />
+        ? (
+          <>
+            <Dropdown
+              options={DESIRED_LIST_PAGE_OPTIONS}
+              placeHolder="Sort devices"
+              propsSelectedId={selectedOptionId}
+              onSelectCb={id => setSelectedOptionId(id)}
+            />
+            <DeviceList devices={sortedDevices} areDevsWithCertainDevComboId={true} />
+          </>
+        )
         : (
-          <section className="desired-list-no-devices-msg-section">
+          <section className="user-page-no-data-msg-section">
             <header>
               <h3>
                 The list is empty
               </h3>
             </header>
-            <p className="desired-list-no-devices-msg">
+            <p className="user-page-no-data-msg">
               Add here some lovely devices
             </p>
             <UIButton isLink={true} to={ROOT_ROUTE}>

@@ -30,9 +30,9 @@ const SellerPage = observer(({ type }) => {
     let innerPage;
 
     if (type === "main") {
-      innerPage = <MainSellerPage seller={seller} feedbacks={deviceStore.sellerFeedbacks} />;
+      innerPage = <MainSellerPage seller={seller} feedbacks={deviceStore.sellersFeedbacks} />;
     } else if (type === "feedbacks") {
-      innerPage = <SellerFeedbacksPage seller={seller} feedbacks={deviceStore.sellerFeedbacks} />;
+      innerPage = <SellerFeedbacksPage seller={seller} feedbacks={deviceStore.sellersFeedbacks} />;
     } else if (type === "devices") {
       innerPage = <SellerDevicesPage seller={seller} />;
     }
@@ -44,7 +44,7 @@ const SellerPage = observer(({ type }) => {
     { children: "Everything about seller", to: SELLER_ROUTE + sellerIdSlug },
     {
       children:
-        `Comments (${deviceStore.sellerFeedbacks?.length || 0})`,
+        `Comments (${deviceStore.sellersFeedbacks?.length || 0})`,
       to: SELLER_FEEDBACKS_ROUTE.replace(":sellerIdSlug", sellerIdSlug)
     },
     { children: "Devices", to: SELLER_DEVICES_ROUTE.replace(":sellerIdSlug", sellerIdSlug) },

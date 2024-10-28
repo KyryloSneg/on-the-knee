@@ -33,7 +33,7 @@ const DevicePage = observer(({ type }) => {
     let innerPage;
 
     if (type === "main") {
-      const sortedByDateFeedbacks = [...deviceStore.deviceFeedbacks].sort(
+      const sortedByDateFeedbacks = [...deviceStore.devicesFeedbacks].sort(
         (a, b) => b.date.localeCompare(a.date)
       );
 
@@ -48,7 +48,7 @@ const DevicePage = observer(({ type }) => {
     } else if (type === "info") {
       innerPage = <DeviceInfoPage device={device} />;
     } else if (type === "comments") {
-      const sortedByDateFeedbacks = [...deviceStore.deviceFeedbacks].sort(
+      const sortedByDateFeedbacks = [...deviceStore.devicesFeedbacks].sort(
         (a, b) => b.date.localeCompare(a.date)
       );
 
@@ -68,7 +68,7 @@ const DevicePage = observer(({ type }) => {
     { children: "Everything about device", to: DEVICE_ROUTE + deviceIdCombo },
     { children: "Info", to: DEVICE_INFO_ROUTE.replace(":deviceIdCombo", deviceIdCombo) },
     { children: 
-      `Comments (${deviceStore.deviceFeedbacks?.length || 0})`, 
+      `Comments (${deviceStore.devicesFeedbacks?.length || 0})`, 
       to: DEVICE_COMMENTS_ROUTE.replace(":deviceIdCombo", deviceIdCombo) 
     },
     { 

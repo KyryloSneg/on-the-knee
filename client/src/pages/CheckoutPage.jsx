@@ -156,7 +156,7 @@ const CheckoutPage = observer(() => {
           };
 
           const orderComboSelectedAddServices = 
-            user.cartSelectedAdditionalServices["selected-additional-services"][cartCombo.id];
+            user.cartSelectedAdditionalServices["selected-additional-services"][cartCombo.id] || [];
 
           orderSelectedAdditionalServicesResult["selected-additional-services"][orderDeviceCombo.id] = 
             orderComboSelectedAddServices;

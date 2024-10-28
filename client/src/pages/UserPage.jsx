@@ -7,12 +7,14 @@ import UserOrdersPage from "./UserOrdersPage";
 import UserViewedDevicesPage from "./UserViewedDevicesPage";
 import UserPersonalDataPage from "./UserPersonalDataPage";
 import { observer } from "mobx-react-lite";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { Context } from "../Context";
 import useWindowWidth from "../hooks/useWindowWidth";
 import useGettingOneUserOrders from "../hooks/useGettingOneUserOrders";
 import useGettingSortedUserPageOrders from "../hooks/useGettingSortedUserPageOrders";
 import _ from "lodash";
+import useOrdersListSellersFetching from "../hooks/useOrdersListSellersFetching";
+import useUserDevicesFeedbacksFetching from "hooks/useUserDevicesFeedbacksFetching";
 
 // icon from the assets doesn't scale properly with changing width / height through css
 const accountIcon = (
@@ -43,19 +45,57 @@ const feedbacksIcon = (
   </svg>
 );
 
-const POSSIBLE_TYPES = ["personal-data", "orders", "desired-list", "viewed-devices", "feedbacks"];
+const POSSIBLE_TYPES = ["personal-data", "orders", "desired-list", "viewed-devices", "devicesFeedbacks", "sellersFeedbacks"];
 const UserPage = observer(({ type }) => {
-  const { user } = useContext(Context);
+  const { user, deviceStore } = useContext(Context);
   const windowWidth = useWindowWidth();
   const [orders, setOrders] = useState([]);
+  const [ordersSellerFeedbacksObjArray, setOrdersSellerFeedbacksObjArray] = useState([]);
 
   // using state instead of a ref, because sometimes 
   // the user orders page starts infinitely loading, and with the setter 
   // we re-render the component
   const [isInitialRender, setIsInitialRender] = useState(true);
   const areOrdersLoading = useGettingOneUserOrders(user.user?.id, setOrders);
+  const [, areOrdersListSellersLoading] = useOrdersListSellersFetching(orders, setOrdersSellerFeedbacksObjArray, deviceStore);
+  
+  const orderDeviceCombinations = useMemo(() => {
+    let result = [];
 
-  const [selectedOptionId, setSelectedOptionId] = useState(DESIRED_LIST_PAGE_OPTIONS[0].id);
+    for (let order of orders) {
+      const oneOrderDevCombos = order?.["order-device-combinations"]?.map(orderCombo => {
+        return orderCombo?.["device-combination"];
+      }) || [];
+
+      if (Array.isArray(oneOrderDevCombos)) result = result.concat(oneOrderDevCombos);
+    };
+
+    return result;
+  }, [orders]);
+
+  useUserDevicesFeedbacksFetching(orderDeviceCombinations, null, deviceStore);
+  const userDeviceFeedbacksObjArray = useMemo(() => {
+    let result = [];
+
+    if (Array.isArray(deviceStore.devicesFeedbacks)) {
+      for (let combination of orderDeviceCombinations) {
+        const correspondingUserFeedbacks = deviceStore.devicesFeedbacks.filter(feedback => {
+          return feedback.deviceId === combination.deviceId
+        });
+        
+        const userFeedbackObj = {
+          deviceCombination: combination,
+          feedbacks: correspondingUserFeedbacks 
+        };
+
+        result.push(userFeedbackObj);
+      };
+    };
+
+    return result;
+  }, [deviceStore.devicesFeedbacks, orderDeviceCombinations]);
+
+  const [desiredSelectedOptionId, setDesiredSelectedOptionId] = useState(DESIRED_LIST_PAGE_OPTIONS[0].id);
 
   useEffect(() => {
     setIsInitialRender(false);
@@ -81,11 +121,21 @@ const UserPage = observer(({ type }) => {
         />
       );
     } else if (type === "desired-list") {
-      return <DesiredListPage selectedOptionId={selectedOptionId} setSelectedOptionId={setSelectedOptionId} />;
+      return <DesiredListPage selectedOptionId={desiredSelectedOptionId} setSelectedOptionId={setDesiredSelectedOptionId} />;
     } else if (type === "viewed-devices") {
       return <UserViewedDevicesPage />;
-    } else if (type === "feedbacks") {
-      return <UserFeedbacksPage />;
+    } else if (type === "devicesFeedbacks" || type === "sellersFeedbacks") {
+      return (
+        <UserFeedbacksPage 
+          type={type}
+          orders={orders}
+          ordersSellerFeedbacksObjArray={ordersSellerFeedbacksObjArray}
+          isInitialRender={isInitialRender} 
+          areOrdersLoading={areOrdersLoading} 
+          areOrdersListSellersLoading={areOrdersListSellersLoading}
+          userDeviceFeedbacksObjArray={userDeviceFeedbacksObjArray}
+        />
+      );
     };
   };
 
@@ -105,10 +155,9 @@ const UserPage = observer(({ type }) => {
     { children: "Orders", to: USER_ORDERS_ROUTE, svgIcon: ordersIcon },
     { children: "Desired list", to: USER_DESIRED_LIST_ROUTE, svgIcon: desiredListIcon },
     { children: "Viewed devices", to: USER_VIEWED_DEVICES_ROUTE, svgIcon: viewedDevicesIcon },
-    { children: "Feedbacks", to: USER_FEEDBACKS_ROUTE, svgIcon: feedbacksIcon },
+    { children: "Feedbacks", to: USER_FEEDBACKS_ROUTE, baseRoute: USER_FEEDBACKS_ROUTE, svgIcon: feedbacksIcon },
   ];
 
-  // TODO: change isVerticalLayout to true for mobile resolutions
   return (
     <main className="user-page">
       <TabsPageLayout
