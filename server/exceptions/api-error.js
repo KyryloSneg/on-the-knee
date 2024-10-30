@@ -15,7 +15,7 @@ module.exports = class ApiError extends Error {
     }
 
     static ActivationError() {
-        return new ApiError(403, "User hasn't activated his account");
+        return new ApiError(403, "User hasn't activated his email");
     }
 
     static BadRequest(message, errors = [], shortErrorReason = null) {
