@@ -1,6 +1,7 @@
 const userService = require('../service/user-service');
 const {validationResult} = require('express-validator');
 const ApiError = require('../exceptions/api-error');
+const userAddressService = require("../service/user-address-service");
 
 class UserController {
     async registration(req, res, next) {
@@ -74,7 +75,9 @@ class UserController {
     async activate(req, res, next) {
         try {
             const activationLink = req.params.link;
-            await userService.activate(activationLink);
+            const isChangingEmail = !!req.query.isChangingEmail;
+
+            await userService.activate(activationLink, isChangingEmail);
             return res.redirect(process.env.CLIENT_URL);
         } catch (e) {
             next(e);
@@ -99,17 +102,35 @@ class UserController {
         }
     }
 
-    async changeAddress(req, res, next) {
+    async changeEmail(req, res, next) {
         try {
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
                 return next(ApiError.BadRequest('Validation error', errors.array()));
             }
             
-            const { email, phoneNumber } = req.body;
+            const { email } = req.body;
             const user = req.user;
 
-            const address = await userService.changeUserAddress(email, phoneNumber, user.id);
+            await userAddressService.changeEmail(email, user.id);
+            next();
+        } catch(e) {
+            console.log(e);
+            next(e);
+        }
+    }
+
+    async changePhoneNumber(req, res, next) {
+        try {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return next(ApiError.BadRequest('Validation error', errors.array()));
+            }
+            
+            const { phoneNumber } = req.body;
+            const user = req.user;
+
+            const address = await userAddressService.changePhoneNumber(phoneNumber, user.id);
             return res.json(address);
         } catch(e) {
             console.log(e);
