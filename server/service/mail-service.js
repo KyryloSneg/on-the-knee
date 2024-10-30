@@ -14,7 +14,7 @@ class MailService {
         })
     }
 
-    async sendActivationMail(to, link) {
+    async sendActivationMail(to, link, expireDurationString = null) {
         await this.transporter.sendMail({
             from: process.env.SMTP_USER,
             to,
@@ -25,6 +25,7 @@ class MailService {
                     <div>
                         <h1>To activate the account click on the link below:</h1>
                         <a href="${link}">${link}</a>
+                        ${expireDurationString ? `<p>The mail expires after ${expireDurationString}</p>` : ""}
                     </div>
                 `
         })
