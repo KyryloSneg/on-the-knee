@@ -15,6 +15,8 @@ const UserAddressDto = require('../dtos/user-address-dto');
 const { parsePhoneNumber } = require('libphonenumber-js');
 const { MAX_USER_DEVICES_AMOUNT } = require("../consts");
 const tokenModel = require("../models/token-model");
+const EmailToConfirmModel = require("../models/email-to-confirm-model");
+const DocumentNotFoundError = require("mongoose/lib/error/notFound");
 
 class UserService {
     async registration(name, surname, password, email, phoneNumber, ip) {
@@ -57,13 +59,61 @@ class UserService {
         return {...tokens, user: userDto, address: addressDto, activationInfo: infoDto, device: userDeviceDto};
     }
 
-    async activate(activationLink) {
-        const info = await ActivationInfoModel.findOne({activationLink})
+    async activate(activationLink, isChangingEmail = false) {
+        let info;
+        if (isChangingEmail) {
+            info = await EmailToConfirmModel.findOne({confirmationLink: activationLink});
+        } else {
+            info = await ActivationInfoModel.findOne({activationLink});
+        }
+
         if (!info) {
             throw ApiError.BadRequest('Incorrect activation link')
         }
-        info.isActivated = true;
-        await info.save();
+
+        if (isChangingEmail) {
+            info.isConfirmed = true;
+
+            const address = await UserAddressModel.findOne({user: info.user})
+            const emailsToConfirm = await EmailToConfirmModel.find({user: info.user});
+
+            if (Array.isArray(emailsToConfirm)) {
+                let newEmail;
+                let areAllEmailsToConfirmConfirmed = false;
+
+                for (let emailToConfirm of emailsToConfirm) {
+                    const otherEmailToConfirm = emailsToConfirm.find(email => email.id !== emailToConfirm.id);
+                    
+                    if (otherEmailToConfirm.isConfirmed) areAllEmailsToConfirmConfirmed = true;
+                    if (emailToConfirm.email !== address.email) newEmail = emailToConfirm.email
+                }
+
+                if (areAllEmailsToConfirmConfirmed && newEmail !== address.email) {
+                    // changing the address' email
+                    address.email = newEmail;
+                    await address.save();
+
+                    const activationInfo = ActivationInfoModel.findOne({user: info.user});
+                    if (!activationInfo.isActivated) {
+                        activationInfo.isActivated = true;
+                        await activationInfo.save();
+                    }
+
+                    await EmailToConfirmModel.deleteMany({user: info.user});
+                }
+            }
+        } else {
+            info.isActivated = true;
+        }
+
+        try {
+            // idk why this error is throwed even if everything is saved
+            await info.save();
+        } catch (e) {
+            if (!(e instanceof DocumentNotFoundError)) {
+                throw e;
+            }
+        }
     }
 
     async login(address, password, ip) {

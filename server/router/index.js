@@ -20,11 +20,17 @@ router.post('/registration',
 router.post('/login', userController.login);
 router.post('/logout', userController.logout);
 router.get('/refresh/:ip', userController.refresh);
-router.patch('/address', 
+// we can change the user email only if he / she has activated the current one
+router.post('/change-email', 
     authMiddleware,
+    activationMiddleware,
     body('email').isEmail(),
+    userController.changeEmail
+);
+router.post('/change-phone-number', 
+    authMiddleware,
     body("phoneNumber").custom(phoneNumberValidator),
-    userController.changeAddress
+    userController.changePhoneNumber
 );
 router.get('/activate/:link', userController.activate);
 
