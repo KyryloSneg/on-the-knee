@@ -19,8 +19,8 @@ const RemainSellerDevFeedback = observer(({
   let devCombosFeedbacksObjArray = propsDevCombosFeedbacksObjArray;
 
   if (type === "modal") {
-    sellersFeedbacksObjArray = [app.remainSellerDeviceFeedbackSeller];
-    devCombosFeedbacksObjArray = app.remainSellerDeviceFeedbackDevCombos;
+    sellersFeedbacksObjArray = [app.modalRemainSellerFeedbacksObj];
+    devCombosFeedbacksObjArray = app.modalRemainDevCombosFeedbacksObj;
   };
 
   let className = "remain-seller-dev-feedback";

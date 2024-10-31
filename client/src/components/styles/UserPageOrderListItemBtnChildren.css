@@ -1,22 +1,3 @@
-.user-page-order-list-item-btn {
-  width: 100%;
-  padding: 10px 12px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  background: none;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.user-page-order-list-item-btn > img {
-  width: 20px;
-  height: 20px;
-  transition: 0.3s;
-}
-
 .user-page-order-li-btn-main {
   width: 100%;
   display: grid;

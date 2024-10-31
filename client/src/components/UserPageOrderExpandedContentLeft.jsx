@@ -8,24 +8,29 @@ import { Context } from "../Context";
 import { observer } from "mobx-react-lite";
 import setRemainSellerDevFeedbackModalVisibility from "../utils/setRemainSellerDevFeedbackModalVisibility";
 
-const UserPageOrderExpandedContentLeft = observer(({ order, seller }) => {
+const UserPageOrderExpandedContentLeft = observer(({ order, sellerFeedbacksObj, userDeviceFeedbacksObjArray }) => {
   const { app } = useContext(Context);
   const btnRef = useRef(null);
   // we can have only one seller in one order
-  const sellerPageTo = SELLER_ROUTE + `${seller?.id}--${seller?.slug}`;
+  const sellerPageTo = SELLER_ROUTE + `${sellerFeedbacksObj?.seller?.id}--${sellerFeedbacksObj?.seller?.slug}`;
   const deviceCombos = order["order-device-combinations"]?.map(orderCombo => orderCombo?.["device-combination"]);
+  const devComboIds = deviceCombos?.map(combo => combo.id) || [];
+
+  const orderDevCombosFeedbacksObjArray = userDeviceFeedbacksObjArray?.filter(
+    item => devComboIds.includes(item.deviceCombination.id)
+  );
 
   function onClick() {
     setRemainSellerDevFeedbackModalVisibility(true, app);
 
-    app.setRemainSellerDeviceFeedbackSeller(seller);
-    app.setRemainSellerDeviceFeedbackDevCombos(deviceCombos);
+    app.setModalRemainSellerFeedbacksObj(sellerFeedbacksObj);
+    app.setModalRemainDevCombosFeedbacksObj(orderDevCombosFeedbacksObjArray);
     app.setRemainSellerDeviceFeedbackBtnRef(btnRef);
   }
 
   return (
     <div className="user-page-order-expanded-content-left">
-      {seller && 
+      {sellerFeedbacksObj?.seller && 
         <>
           <UIButton onClick={onClick} ref={btnRef}>
             Remain a feedback
@@ -35,7 +40,7 @@ const UserPageOrderExpandedContentLeft = observer(({ order, seller }) => {
               <dt>Seller:</dt>
               <dd>
                 <Link to={sellerPageTo} className="link-colors">
-                  {seller?.name}
+                  {sellerFeedbacksObj?.seller?.name}
                 </Link>
               </dd>
             </div>
@@ -43,10 +48,10 @@ const UserPageOrderExpandedContentLeft = observer(({ order, seller }) => {
               <dt>Phone number:</dt>
               <dd>
                 <a 
-                  href={`tel:${seller?.phoneNumber?.replaceAll(" ", "")}`}
+                  href={`tel:${sellerFeedbacksObj?.seller?.phoneNumber?.replaceAll(" ", "")}`}
                   className="link-colors"
                 >
-                  {seller?.phoneNumber}
+                  {sellerFeedbacksObj?.seller?.phoneNumber}
                 </a>
               </dd>
             </div>

@@ -2,13 +2,10 @@ import { Link } from "react-router-dom";
 import { DEVICE_COMMENTS_ROUTE, DEVICE_ROUTE } from "../utils/consts";
 import UIButton from "./UI/uiButton/UIButton";
 import CommentsList from "./CommentsList";
-import { useState } from "react";
-import dropdownArrowIcon from "../assets/expand_more.svg";
 import { v4 } from "uuid";
+import UIDetails from "./UI/uiDetails/UIDetails";
 
 const RemainSellerDevFeedbackDevListItem = ({ comboFeedbackObj }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-
   const deviceRouteCombo = comboFeedbackObj.deviceCombination.combinationString || "default";
 
   const deviceTo = DEVICE_ROUTE + `${comboFeedbackObj.deviceCombination.deviceId}--${deviceRouteCombo}`;
@@ -22,47 +19,36 @@ const RemainSellerDevFeedbackDevListItem = ({ comboFeedbackObj }) => {
       <div className="remain-seller-dev-feedback-li-img-wrap">
         <img src={comboFeedbackObj.deviceCombination.images[0].src} alt="" draggable="false" />
       </div>
-      <span>{comboFeedbackObj.deviceCombination.device.name} ({comboFeedbackObj.deviceCombination.sku})</span>
+      <h4>{comboFeedbackObj.deviceCombination.device.name} ({comboFeedbackObj.deviceCombination.sku})</h4>
     </Link>
   );
 
   if (hasAnyFeedbackRemained) {
     const commentsListId = v4();
     return (
-      <div className="remain-seller-dev-feedback-li-with-comments">
-        <button 
-          aria-expanded={isExpanded}
-          aria-controls={commentsListId}
-          aria-label={`${isExpanded ? "Hide" : "Show"} your feedbacks of the device`}
-          onClick={() => setIsExpanded(!isExpanded)} 
-        >
-          {linkWithDevNameImg}
-          <img
-            src={dropdownArrowIcon}
-            alt={isExpanded ? "Collapse" : "Expand"}
-            className={isExpanded ? "rotated" : ""}
-            draggable="false"
-          />
-        </button>
-        {isExpanded && (
+      <UIDetails 
+        btnChildren={linkWithDevNameImg}
+        contentChildren={
           <CommentsList 
             type="deviceFeedbacks" 
             comments={comboFeedbackObj.feedbacks} 
             singularCommentWord="feedback" 
             id={commentsListId}
           />
-        )}
-      </div>
+        }
+        contentId={commentsListId}
+        propsClassName="remain-seller-dev-feedback-li-with-comments"
+      />
     );
   };
 
   return (
-    <div className="remain-seller-dev-feedback-li-empty">
+    <section className="remain-seller-dev-feedback-li-empty">
       {linkWithDevNameImg}
       <UIButton variant="primary2" isLink={true} to={feedbackPageTo}>
         Rate this device
       </UIButton>
-    </div>
+    </section>
   );
 };
 

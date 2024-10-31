@@ -1,0 +1,32 @@
+.ui-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 1px solid #dfdfdf;
+  border-radius: 8px;
+}
+
+.ui-details-btn {
+  width: 100%;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.ui-details-btn > img {
+  width: 20px;
+  height: 20px;
+  transition: 0.3s;
+}
+
+.ui-details > header + * {
+  padding: 14px;
+  padding-top: 0;
+  box-sizing: border-box;
+}

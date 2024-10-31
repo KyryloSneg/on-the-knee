@@ -1,17 +1,15 @@
 import "./styles/UserPageOrderListItem.css"
 import { useState } from "react";
-import UserPageOrderListItemButton from "./UserPageOrderListItemButton";
+import UserPageOrderListItemBtnChildren from "./UserPageOrderListItemBtnChildren";
 import UserPageOrderExpandedContent from "./UserPageOrderExpandedContent";
-import useOneSellerFetching from "../hooks/useOneSellerFetching";
 import useGettingAddServicesRelatedData from "../hooks/useGettingAddServicesRelatedData";
+import UIDetails from "./UI/uiDetails/UIDetails";
 
-const UserPageOrderListItem = ({ order }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [seller, setSeller] = useState(null);
+const UserPageOrderListItem = ({ order, ordersSellerFeedbacksObjArray, userDeviceFeedbacksObjArray }) => {
   const [additionalServicesObjArray, setAdditionalServicesObjArray] = useState([]);
 
-  const sellerToFetchId = order?.["order-device-combinations"]?.[0]?.["device-combination"]?.device?.sellerId;
-  useOneSellerFetching(sellerToFetchId, setSeller, false);
+  const sellerToFindId = order?.["order-device-combinations"]?.[0]?.["device-combination"]?.device?.sellerId;
+  const sellerFeedbacksObj = ordersSellerFeedbacksObjArray?.find(item => item.seller.id === sellerToFindId) || {};
 
   const devices = order?.["order-device-combinations"]?.map(orderCombo => {
     return orderCombo?.["device-combination"]?.device;
@@ -20,31 +18,25 @@ const UserPageOrderListItem = ({ order }) => {
   useGettingAddServicesRelatedData(null, setAdditionalServicesObjArray, true, true, devices);
   const expandedContentId = `${order?.orderName.replaceAll(" ", "")}-expanded-content`;
 
-  let className = "user-page-order-list-item";
-  if (isExpanded) {
-    className += " expanded";
-  }
+  const btnChildren = <UserPageOrderListItemBtnChildren order={order} />;
+  const contentChildren = (
+    <UserPageOrderExpandedContent 
+      order={order} 
+      sellerFeedbacksObj={sellerFeedbacksObj} 
+      userDeviceFeedbacksObjArray={userDeviceFeedbacksObjArray}
+      additionalServicesObjArray={additionalServicesObjArray}
+      expandedContentId={expandedContentId}
+    />
+  );
 
   return (
-    <section className={className}>
-      <header>
-        <UserPageOrderListItemButton 
-          order={order} 
-          isExpanded={isExpanded} 
-          setIsExpanded={setIsExpanded} 
-          expandedContentId={expandedContentId}
-        />
-      </header>
-      {isExpanded && (
-        <UserPageOrderExpandedContent 
-          order={order} 
-          seller={seller} 
-          additionalServicesObjArray={additionalServicesObjArray}
-          expandedContentId={expandedContentId}
-        />
-      )}
-    </section>
+    <UIDetails 
+      btnChildren={btnChildren}
+      contentChildren={contentChildren} 
+      contentId={expandedContentId}
+      isToPassBtnChildIsExpandedProp={true}
+    />
   );
-}
+};
 
 export default UserPageOrderListItem;

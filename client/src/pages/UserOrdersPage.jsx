@@ -6,7 +6,10 @@ import URLActions from "../utils/URLActions";
 import UIButton from "../components/UI/uiButton/UIButton";
 import { ROOT_ROUTE } from "../utils/consts";
 
-const UserOrdersPage = ({ orders, initialOrders, isLoading, isInitialRender }) => {
+const UserOrdersPage = ({ 
+  orders, initialOrders, ordersSellerFeedbacksObjArray, 
+  userDeviceFeedbacksObjArray, isLoading, isInitialRender 
+}) => {
   if (isLoading || isInitialRender) return (
     <section className="user-page-section">
       <header>
@@ -23,7 +26,11 @@ const UserOrdersPage = ({ orders, initialOrders, isLoading, isInitialRender }) =
       return (
         <>
           <UserOrdersSearchInput sortedOrders={orders} initialOrders={initialOrders} />
-          <UserPageOrderList orders={orders} />
+          <UserPageOrderList 
+            orders={orders} 
+            ordersSellerFeedbacksObjArray={ordersSellerFeedbacksObjArray} 
+            userDeviceFeedbacksObjArray={userDeviceFeedbacksObjArray}
+          />
         </>
       );
     } else {

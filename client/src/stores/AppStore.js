@@ -78,8 +78,8 @@ class AppStore {
     this._commentGalleryModalType = "deviceFeedbacks";
     this._commentGallerySelectedImageId = null;
     this._reportOrderProblemOrderId = null;
-    this._remainSellerDeviceFeedbackSeller = null;
-    this._remainSellerDeviceFeedbackDevCombos = null;
+    this._modalRemainSellerFeedbacksObj = null;
+    this._modalRemainDevCombosFeedbacksObj = null;
 
     this._storePickupPoints = [];
     this._selectedStorePickupPointIdValues = {};
@@ -349,12 +349,12 @@ class AppStore {
     this._reportOrderProblemOrderId = reportOrderProblemOrderId;
   }
 
-  setRemainSellerDeviceFeedbackSeller(remainSellerDeviceFeedbackSeller) {
-    this._remainSellerDeviceFeedbackSeller = remainSellerDeviceFeedbackSeller;
+  setModalRemainSellerFeedbacksObj(modalRemainSellerFeedbacksObj) {
+    this._modalRemainSellerFeedbacksObj = modalRemainSellerFeedbacksObj;
   }
 
-  setRemainSellerDeviceFeedbackDevCombos(remainSellerDeviceFeedbackDevCombos) {
-    this._remainSellerDeviceFeedbackDevCombos = remainSellerDeviceFeedbackDevCombos;
+  setModalRemainDevCombosFeedbacksObj(modalRemainDevCombosFeedbacksObj) {
+    this._modalRemainDevCombosFeedbacksObj = modalRemainDevCombosFeedbacksObj;
   }
 
   setStorePickupPoints(storePickupPoints) {
@@ -665,12 +665,12 @@ class AppStore {
     return this._reportOrderProblemOrderId;
   }
 
-  get remainSellerDeviceFeedbackSeller() {
-    return this._remainSellerDeviceFeedbackSeller;
+  get modalRemainSellerFeedbacksObj() {
+    return this._modalRemainSellerFeedbacksObj;
   }
 
-  get remainSellerDeviceFeedbackDevCombos() {
-    return this._remainSellerDeviceFeedbackDevCombos;
+  get modalRemainDevCombosFeedbacksObj() {
+    return this._modalRemainDevCombosFeedbacksObj;
   }
 
   get storePickupPoints() {

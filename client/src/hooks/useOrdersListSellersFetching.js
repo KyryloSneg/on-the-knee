@@ -18,28 +18,31 @@ function useOrdersListSellersFetching(orders, setSellerFeedbacksObjArray = null,
     let sellerFeedbacksObjArray = [];
     let sellersFeedbacks = [];
 
-    let isFirst = true;
     for (let order of ordersRef.current) {
       const sellerId = order?.["order-device-combinations"]?.[0]?.["device-combination"]?.device?.sellerId;
-      const seller = await getOneSeller(sellerId);
+      const isAlreadyAddedSeller = sellerFeedbacksObjArray.find(item => item.seller.id === sellerId);
 
-      if (seller) {
-        const userFeedbacks = await getOneSellerFeedbacks(seller.id, isFirst ? "" : `&userId=${user.user?.id}`);
-
-        if (Array.isArray(userFeedbacks)) {
-          await CommentsActions.setCommentsUsers(
-            userFeedbacks, "seller-feedbacks", 
-            { isToFetchFeedbacksUsers: true, isToFetchResponsesUsers: false }
-          );
-
-          sellersFeedbacks = sellersFeedbacks.concat(userFeedbacks);
-          isFirst = false;
-
+      // adding only unique sellers
+      if (!isAlreadyAddedSeller) {
+        const seller = await getOneSeller(sellerId);
+  
+        if (seller) {
+          const userFeedbacks = await getOneSellerFeedbacks(seller.id, `&userId=${user.user?.id}`);
+  
+          if (Array.isArray(userFeedbacks)) {
+            await CommentsActions.setCommentsUsers(
+              userFeedbacks, "seller-feedbacks", 
+              { isToFetchFeedbacksUsers: true, isToFetchResponsesUsers: false }
+            );
+  
+            sellersFeedbacks = sellersFeedbacks.concat(userFeedbacks);
+          };
+  
           const sellerFeedbacksObj = {
             seller,
-            feedbacks: userFeedbacks
+            feedbacks: userFeedbacks || []
           };
-
+  
           sellerFeedbacksObjArray.push(sellerFeedbacksObj);
         };
       };
