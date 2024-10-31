@@ -111,7 +111,7 @@ module.exports = function createData () {
     data["categories"] = result.categories;
     
     data["sellers"] = result.sellers;
-    data["seller-feedbacks"] = result.sellersFeedbacks;
+    data["seller-feedbacks"] = result.sellerFeedbacks;
     data["seller-questions"] = result.sellerQuestions;
     
     data["attributes"] = result.attributes;

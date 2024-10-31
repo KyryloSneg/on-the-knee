@@ -116,6 +116,8 @@ const UserPage = observer(({ type }) => {
         <UserOrdersPage 
           orders={sortedByQueryOrders} 
           initialOrders={sortedByDateOrders} 
+          ordersSellerFeedbacksObjArray={ordersSellerFeedbacksObjArray}
+          userDeviceFeedbacksObjArray={userDeviceFeedbacksObjArray}
           isLoading={areOrdersLoading} 
           isInitialRender={isInitialRender} 
         />

@@ -1,13 +1,11 @@
-import { useState } from 'react';
 import UIButton from "./UI/uiButton/UIButton";
 import { SELLER_ROUTE, SELLER_WRITE_A_FEEDBACK_ROUTE } from "utils/consts";
 import CommentsList from "./CommentsList";
-import dropdownArrowIcon from "../assets/expand_more.svg";
 import { v4 } from "uuid";
 import { Link } from "react-router-dom";
+import UIDetails from "./UI/uiDetails/UIDetails";
 
 const RemainSellerFeedbackSectionItem = ({ sellerFeedbacksObj }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
   const sellerIdSlug = `${sellerFeedbacksObj.seller.id}--${sellerFeedbacksObj.seller.slug}`;
   const sellerRoute = SELLER_ROUTE + sellerIdSlug;
 
@@ -18,45 +16,33 @@ const RemainSellerFeedbackSectionItem = ({ sellerFeedbacksObj }) => {
       <div className="remain-seller-dev-feedback-li-img-wrap">
         <img src={sellerFeedbacksObj.seller.logo} alt="" draggable="false" />
       </div>
-      <span>{sellerFeedbacksObj.seller.name}</span>
+      <h4>{sellerFeedbacksObj.seller.name}</h4>
     </Link>
   );
 
   if (hasAnyFeedbackRemained) {
     const commentsListId = v4();
-    
     return (
-      <div className="remain-seller-dev-feedback-li-with-comments">
-        <button 
-          aria-expanded={isExpanded}
-          aria-controls={commentsListId}
-          aria-label={`${isExpanded ? "Hide" : "Show"} your feedbacks of the seller`}
-          onClick={() => setIsExpanded(!isExpanded)} 
-        >
-          {linkWithSellerNameImg}
-          <img
-            src={dropdownArrowIcon}
-            alt={isExpanded ? "Collapse" : "Expand"}
-            className={isExpanded ? "rotated" : ""}
-            draggable="false"
-          />
-        </button>
-        {isExpanded && (
+      <UIDetails 
+        btnChildren={linkWithSellerNameImg}
+        contentChildren={
           <CommentsList
             type="sellerFeedbacks" 
             comments={sellerFeedbacksObj.feedbacks} 
             singularCommentWord="feedback" 
             id={commentsListId}
           />
-        )}
-      </div>
+        }
+        contentId={commentsListId}
+        propsClassName="remain-seller-dev-feedback-li-with-comments"
+      />
     );
   };
 
   const sellerFeedbacksRoute = SELLER_WRITE_A_FEEDBACK_ROUTE.replace(":sellerIdSlug", sellerIdSlug);
 
   return (
-    <div className="remain-seller-dev-feedback-li-empty">
+    <section className="remain-seller-dev-feedback-li-empty">
       {linkWithSellerNameImg}
       <UIButton
         isLink={true}
@@ -64,7 +50,7 @@ const RemainSellerFeedbackSectionItem = ({ sellerFeedbacksObj }) => {
       >
         Write a feedback
       </UIButton>
-    </div>
+    </section>
   );
 }
 

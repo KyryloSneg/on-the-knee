@@ -6,7 +6,7 @@ import ModalWindow from "./UI/modalWindow/ModalWindow";
 import setRemainSellerDevFeedbackModalVisibility from "../utils/setRemainSellerDevFeedbackModalVisibility";
 import RemainSellerDevFeedback from "./RemainSellerDevFeedback";
 
-// app.remainSellerDeviceFeedbackDevCombos items must include "device" field
+// app.modalRemainDevCombosFeedbacksObj items must include "device" field
 const RemainASellerOrDeviceFeedbackModal = observer(() => {
   const { app } = useContext(Context);
 
@@ -22,6 +22,7 @@ const RemainASellerOrDeviceFeedbackModal = observer(() => {
       headerText="Remain a feedback"
       id="remain-seller-dev-feedback-modal"
       triggerElemRef={app.remainSellerDeviceFeedbackBtnRef}
+      isCloserThanDarkBg={!app.isVisibleCommentGalleryModal}
     />
   );
 });

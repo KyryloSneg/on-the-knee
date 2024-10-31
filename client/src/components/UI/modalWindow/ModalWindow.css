@@ -16,6 +16,10 @@
   grid-template-rows: auto auto 1fr auto;
 }
 
+.modal-window:not(.closer-than-darkbg) {
+  z-index: 7999;
+}
+
 .modal-window.not-visible-modal {
   display: none;
 }

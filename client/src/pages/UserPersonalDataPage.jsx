@@ -1,8 +1,8 @@
 const UserPersonalDataPage = () => {
   return (
-    <div className="user-page-personal-data">
+    <section className="user-page-section">
       UserPersonalDataPage
-    </div>
+    </section>
   );
 }
 
