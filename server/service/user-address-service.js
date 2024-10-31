@@ -53,8 +53,8 @@ class UserAddressService {
       const expireDurationString = `${expiresAfterHours} hour${expiresAfterHours > 1 ? "s" : ""}`;
 
       // sending the activation mails
-      await mailService.sendActivationMail(address.email, linkForCurrEmailMail, expireDurationString);
-      await mailService.sendActivationMail(newEmail, linkForNewEmailMail, expireDurationString);
+      await mailService.sendEmailConfirmationMail(address.email, linkForCurrEmailMail, expireDurationString);
+      await mailService.sendEmailConfirmationMail(newEmail, linkForNewEmailMail, expireDurationString);
   }
 
   async changePhoneNumber(newPhoneNumber, userId) {
