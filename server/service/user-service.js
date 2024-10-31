@@ -177,12 +177,6 @@ class UserService {
         const activationInfo = await ActivationInfoModel.findOne({ user: user._id }); 
         const activationInfoDto = new ActivationInfoDto(activationInfo);
 
-        if (!activationInfo.isActivated) {
-            await mailService.sendActivationMail(
-                userAddress.email, `${process.env.API_URL}/api/activate/${activationInfo.activationLink}`
-            );
-        }
-
         const addressDto = new UserAddressDto(userAddress);
 
         await tokenService.saveToken(userDevice._doc._id, tokens.refreshToken);
@@ -291,30 +285,6 @@ class UserService {
         
         await tokenService.saveToken(userDevice._id, tokens.refreshToken);
         return {...tokens, user: userDto, address: addressDto}
-    }
-
-    async changeUserAddress(email, phoneNumber, userId) {
-        const address = await UserAddressModel.findOne({user: userId});
-        let info = null;
-
-        if (address.email !== email) {
-            info = await ActivationInfoModel.findOne({user: userId});
-            const activationLink = uuid.v4();
-
-            info.isActivated = false;
-            info.activationLink = activationLink;
-            await info.save();
-        }
-        const numberObj = parsePhoneNumber(phoneNumber);
-        const internationalNumber = numberObj.formatInternational();
-
-        address.email = email;
-        address.phoneNumber = internationalNumber;
-        await address.save();
-
-        const addressDto = new UserAddressDto(address);
-        const infoDto = info ? new ActivationInfoDto(info) : null;
-        return { ...addressDto, activationInfo: infoDto };
     }
 
     async getAllUsers() {
