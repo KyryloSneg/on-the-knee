@@ -30,9 +30,9 @@ const SellerPage = observer(({ type }) => {
     let innerPage;
 
     if (type === "main") {
-      innerPage = <MainSellerPage seller={seller} feedbacks={deviceStore.sellerFeedbacks} />;
+      innerPage = <MainSellerPage seller={seller} feedbacks={deviceStore.sellersFeedbacks} />;
     } else if (type === "feedbacks") {
-      innerPage = <SellerFeedbacksPage seller={seller} feedbacks={deviceStore.sellerFeedbacks} />;
+      innerPage = <SellerFeedbacksPage seller={seller} feedbacks={deviceStore.sellersFeedbacks} />;
     } else if (type === "devices") {
       innerPage = <SellerDevicesPage seller={seller} />;
     }
@@ -41,13 +41,13 @@ const SellerPage = observer(({ type }) => {
   }
 
   const tabsData = [
-    { name: "Everything about seller", to: SELLER_ROUTE + sellerIdSlug },
+    { children: "Everything about seller", to: SELLER_ROUTE + sellerIdSlug },
     {
-      name:
-        `Comments (${deviceStore.sellerFeedbacks?.length || 0})`,
+      children:
+        `Comments (${deviceStore.sellersFeedbacks?.length || 0})`,
       to: SELLER_FEEDBACKS_ROUTE.replace(":sellerIdSlug", sellerIdSlug)
     },
-    { name: "Devices", to: SELLER_DEVICES_ROUTE.replace(":sellerIdSlug", sellerIdSlug) },
+    { children: "Devices", to: SELLER_DEVICES_ROUTE.replace(":sellerIdSlug", sellerIdSlug) },
   ];
 
   return (
@@ -69,6 +69,7 @@ const SellerPage = observer(({ type }) => {
       <TabsPageLayout
         tabsData={tabsData}
         pageContent={renderInnerPage()}
+        doesHaveDynamicParam={true}
         isToUsePaddingForPage={type !== "devices"}
       />
     </main>

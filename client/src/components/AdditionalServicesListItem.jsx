@@ -4,9 +4,9 @@ import dropdownArrowIcon from "../assets/expand_more.svg";
 import AdditionalServicesExpandedList from './AdditionalServicesExpandedList';
 import _ from "lodash";
 
-const AdditionalServicesListItem = ({ additionalService, id, selectedItems, setSelectedItems }) => {
+const AdditionalServicesListItem = ({ additionalService, id, selectedItems, setSelectedItems, isReadOnly }) => {
   const isChecked = !!selectedItems?.find(item => item.parentId === id);
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(isChecked);
   // finding device-combinations of device in "additional-service" field
   const additionalServiceOptions = additionalService["additional-service"].device["device-combinations"];
   const addServiceImageSrc = additionalServiceOptions[0].images[0].src;
@@ -23,6 +23,8 @@ const AdditionalServicesListItem = ({ additionalService, id, selectedItems, setS
   function onCheckboxClick() {
     const nextStatesValue = !isChecked;
     if (isExpanded !== !isChecked) setIsExpanded(true);
+    
+    if (isReadOnly) return;
 
     let nextSelectedItems;
     if (nextStatesValue) {
@@ -56,6 +58,7 @@ const AdditionalServicesListItem = ({ additionalService, id, selectedItems, setS
           role="checkbox"
           onClick={onCheckboxClick}
           className="additional-services-checkbox-btn"
+          disabled={isReadOnly}
         >
           <div>
             <div className={checkboxDivClass} />
@@ -88,6 +91,7 @@ const AdditionalServicesListItem = ({ additionalService, id, selectedItems, setS
           parentId={id}
           selectedItems={selectedItems}
           setSelectedItems={setSelectedItems}
+          isReadOnly={isReadOnly}
         />
       }
     </div>

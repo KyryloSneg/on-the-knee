@@ -6,6 +6,7 @@ class AppStore {
     this._darkBgVisible = false;
     this._isBlockedScroll = false;
     this._isGlobalLoading = false;
+    this._hasTriedToFetchInitialData = false;
     this._isCartModalLoading = false;
     this._modalVisible = false;
 
@@ -26,6 +27,9 @@ class AppStore {
     this._isVisibleErrorModal = false;
     this._isVisibleWrongCartComboAmountsModal = false;
     this._isVisibleAuthentificationModal = false;
+    this._isVisibleReportOrderProblemModal = false;
+    this._isVisibleRemainSellerDeviceFeedbackModal = false;
+    this._isVisibleUserChangePasswordModal = false;
     this._isFocusedSearchForm = false;
 
     // contains the last element's ref from which was opened a modal window, a sidebar etc.
@@ -62,6 +66,13 @@ class AppStore {
     this._errorModalBtnRef = null;
     this._authentificationModalBtnRef = null;
     this._checkoutSubmitBtnRef = null;
+    this._reportOrderProblemBtnRef = null;
+    this._remainSellerDeviceFeedbackBtnRef = null;
+    this._userChangePasswordModalBtnRef = null;
+
+    // use this state to keep trigger elem ref of prev modal
+    // without focusing one on the error modal close
+    this._isToFocusErrorModalPrevModalTriggerElem = true;
 
     this._userLocation = null;
     this._allLocations = [];
@@ -69,8 +80,12 @@ class AppStore {
     this._isUserLocationDeterminedCorrectly = true;
 
     // we use these states in modals that are related to the info below
+    this._commentModalGetCommentsQueryParamsStr = "";
     this._commentGalleryModalType = "deviceFeedbacks";
     this._commentGallerySelectedImageId = null;
+    this._reportOrderProblemOrderId = null;
+    this._modalRemainSellerFeedbacksObj = null;
+    this._modalRemainDevCombosFeedbacksObj = null;
 
     this._storePickupPoints = [];
     this._selectedStorePickupPointIdValues = {};
@@ -110,6 +125,10 @@ class AppStore {
 
   setIsGlobalLoading(bool) {
     this._isGlobalLoading = bool;
+  }
+
+  setHasTriedToFetchInitialData(bool) {
+    this._hasTriedToFetchInitialData = bool;
   }
 
   setIsCartModalLoading(bool) {
@@ -186,6 +205,18 @@ class AppStore {
 
   setIsVisibleAuthentificationModal(bool) {
     this._isVisibleAuthentificationModal = bool;
+  }
+
+  setIsVisibleReportOrderProblemModal(bool) {
+    this._isVisibleReportOrderProblemModal = bool;
+  }
+
+  setIsVisibleRemainSellerDeviceFeedbackModal(bool) {
+    this._isVisibleRemainSellerDeviceFeedbackModal = bool;
+  }
+
+  setIsVisibleUserChangePasswordModal(bool) {
+    this._isVisibleUserChangePasswordModal = bool;
   }
 
   setIsFocusedSearchForm(bool) {
@@ -284,6 +315,22 @@ class AppStore {
     this._checkoutSubmitBtnRef = ref;
   }
 
+  setReportOrderProblemBtnRef(ref) {
+    this._reportOrderProblemBtnRef = ref;
+  }
+
+  setRemainSellerDeviceFeedbackBtnRef(ref) {
+    this._remainSellerDeviceFeedbackBtnRef = ref;
+  }
+
+  setUserChangePasswordModalBtnRef(ref) {
+    this._userChangePasswordModalBtnRef = ref;
+  }
+
+  setIsToFocusErrorModalPrevModalTriggerElem(ref) {
+    this._isToFocusErrorModalPrevModalTriggerElem = ref;
+  }
+
   setHintSearchResults(results) {
     this._hintSearchResults = results;
   }
@@ -304,12 +351,28 @@ class AppStore {
     this._isUserLocationDeterminedCorrectly = isUserLocationDeterminedCorrectly;
   }
 
+  setCommentModalGetCommentsQueryParamsStr(commentModalGetCommentsQueryParamsStr) {
+    this._commentModalGetCommentsQueryParamsStr = commentModalGetCommentsQueryParamsStr;
+  }
+
   setCommentGalleryModalType(commentGalleryModalType) {
     this._commentGalleryModalType = commentGalleryModalType;
   }
 
   setCommentGallerySelectedImageId(commentGallerySelectedImageId) {
     this._commentGallerySelectedImageId = commentGallerySelectedImageId;
+  }
+
+  setReportOrderProblemOrderId(reportOrderProblemOrderId) {
+    this._reportOrderProblemOrderId = reportOrderProblemOrderId;
+  }
+
+  setModalRemainSellerFeedbacksObj(modalRemainSellerFeedbacksObj) {
+    this._modalRemainSellerFeedbacksObj = modalRemainSellerFeedbacksObj;
+  }
+
+  setModalRemainDevCombosFeedbacksObj(modalRemainDevCombosFeedbacksObj) {
+    this._modalRemainDevCombosFeedbacksObj = modalRemainDevCombosFeedbacksObj;
   }
 
   setStorePickupPoints(storePickupPoints) {
@@ -392,6 +455,10 @@ class AppStore {
     return this._isGlobalLoading;
   }
 
+  get hasTriedToFetchInitialData() {
+    return this._hasTriedToFetchInitialData;
+  }
+
   get isCartModalLoading() {
     return this._isCartModalLoading;
   }
@@ -466,6 +533,18 @@ class AppStore {
 
   get isVisibleAuthentificationModal() {
     return this._isVisibleAuthentificationModal;
+  }
+
+  get isVisibleReportOrderProblemModal() {
+    return this._isVisibleReportOrderProblemModal;
+  }
+
+  get isVisibleRemainSellerDeviceFeedbackModal() {
+    return this._isVisibleRemainSellerDeviceFeedbackModal;
+  }
+
+  get isVisibleUserChangePasswordModal() {
+    return this._isVisibleUserChangePasswordModal;
   }
 
   get isFocusedSearchForm() {
@@ -564,6 +643,22 @@ class AppStore {
     return this._checkoutSubmitBtnRef;
   }
 
+  get reportOrderProblemBtnRef() {
+    return this._reportOrderProblemBtnRef;
+  }
+
+  get remainSellerDeviceFeedbackBtnRef() {
+    return this._remainSellerDeviceFeedbackBtnRef;
+  }
+
+  get userChangePasswordModalBtnRef() {
+    return this._userChangePasswordModalBtnRef;
+  }
+
+  get isToFocusErrorModalPrevModalTriggerElem() {
+    return this._isToFocusErrorModalPrevModalTriggerElem;
+  }
+
   get hintSearchResults() {
     return this._hintSearchResults;
   }
@@ -584,12 +679,28 @@ class AppStore {
     return this._isUserLocationDeterminedCorrectly;
   }
 
+  get commentModalGetCommentsQueryParamsStr() {
+    return this._commentModalGetCommentsQueryParamsStr;
+  }
+
   get commentGalleryModalType() {
     return this._commentGalleryModalType;
   }
 
   get commentGallerySelectedImageId() {
     return this._commentGallerySelectedImageId;
+  }
+
+  get reportOrderProblemOrderId() {
+    return this._reportOrderProblemOrderId;
+  }
+
+  get modalRemainSellerFeedbacksObj() {
+    return this._modalRemainSellerFeedbacksObj;
+  }
+
+  get modalRemainDevCombosFeedbacksObj() {
+    return this._modalRemainDevCombosFeedbacksObj;
   }
 
   get storePickupPoints() {

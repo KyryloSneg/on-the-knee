@@ -21,7 +21,7 @@ const CategoriesModalContent = observer(() => {
             )}
           </ul>
         )
-        : <Loader />
+        : <Loader className="modal-window-loader" />
       }
     </section>
   );

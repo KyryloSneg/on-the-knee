@@ -8,6 +8,15 @@
   justify-content: flex-end;
 }
 
+.categories-menu-main-brand {
+  display: grid;
+}
+
 .categories-menu-main-brand > img {
   display: block;
+  width: 34px;
+  max-height: 34px;
+  object-fit: contain;
+  align-self: center;
+  justify-self: center;
 }

@@ -5,7 +5,7 @@ import { useContext, useRef } from "react";
 import onAccountBtnClick from "../utils/onAccountBtnClick";
 import { Context } from "../Context";
 import { observer } from "mobx-react-lite";
-import { USER_ROUTE } from "../utils/consts";
+import { USER_ORDERS_ROUTE } from "../utils/consts";
 
 const MenuAccountBtn = observer(() => {
   const { user, app } = useContext(Context);
@@ -29,7 +29,7 @@ const MenuAccountBtn = observer(() => {
       }
       src={accBtnIcon}
       isLink={user.isAuth}
-      route={USER_ROUTE}
+      route={USER_ORDERS_ROUTE}
       aria-label="Your account"
       aria-controls="authentification-modal"
       onClick={() => onAccountBtnClick(user.isAuth, app, btnRef)}

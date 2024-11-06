@@ -1,5 +1,5 @@
-import SearchProductsForm from "./SearchProductsForm";
 import "./styles/Navbar.css";
+import SearchProductsForm from "./SearchProductsForm";
 import StoreTitle from "./UI/storeTitle/StoreTitle";
 import NavMenuBtn from "./NavMenuBtn";
 import NavCategoryBtn from "./NavCategoryBtn";
@@ -9,9 +9,10 @@ import SkipToNextPageContent from "./UI/skipToNextPageContent/SkipToNextPageCont
 import NavDesiredListBtn from "./NavDesiredListBtn";
 import { useContext, useEffect, useRef } from "react";
 import { Context } from "../Context";
+import { observer } from "mobx-react-lite";
 
-const Navbar = ({ elemToFocus, navCategoryBtnRef }) => {
-  const { app } = useContext(Context);
+const Navbar = observer(({ elemToFocus, navCategoryBtnRef }) => {
+  const { app, user } = useContext(Context);
   
   const btnGroupRef = useRef(null);
   const navbarRef = useRef(null);
@@ -29,11 +30,11 @@ const Navbar = ({ elemToFocus, navCategoryBtnRef }) => {
         <NavCategoryBtn ref={navCategoryBtnRef} />
         <SearchProductsForm navbarRef={navbarRef} />
         <NavAccountBtn />
-        <NavDesiredListBtn />
+        {user.isAuth && <NavDesiredListBtn />}
         <NavCartBtn />
       </div>
     </nav>
   );
-}
+});
 
 export default Navbar;

@@ -8,7 +8,11 @@ import useWindowInvisibleFocus from "../../../hooks/useWindowInvisibleFocus";
 import CustomScrollbar from "../customScrollbar/CustomScrollbar";
 import useWindowTriggerElemHandle from "../../../hooks/useWindowTriggerElemHandle";
 
-const ModalWindow = observer(({ isVisible, setIsVisible, children, headerText, id, triggerElemRef, propsClassName = "", ...props }) => {
+const ModalWindow = observer(({ 
+  isVisible, setIsVisible, children, headerText, id, 
+  triggerElemRef, propsClassName = "", isToFocusTriggerElem = true,
+  isCloserThanDarkBg = true, ...props 
+}) => {
   const { app } = useContext(Context)
 
   const modalRef = useRef(null);
@@ -22,7 +26,11 @@ const ModalWindow = observer(({ isVisible, setIsVisible, children, headerText, i
     setIsVisible(false);
   }
 
-  let className = "modal-window closer-than-darkbg";
+  let className = "modal-window";
+  if (isCloserThanDarkBg) {
+    className += " closer-than-darkbg";
+  }
+
   if (propsClassName) {
     className += ` ${propsClassName}`;
   }
@@ -46,7 +54,7 @@ const ModalWindow = observer(({ isVisible, setIsVisible, children, headerText, i
   useWindowInvisibleFocus(closeModalBtnRef, isVisible);
   useFocusTraps(firstFocusTrapRef, lastFocusTrapRef, modalRef);
   useClickOnTheDarkBg(closeModalWindow, app.darkBgVisible);
-  useWindowTriggerElemHandle(triggerElemRef, id);
+  useWindowTriggerElemHandle(triggerElemRef, id, isToFocusTriggerElem);
 
   return (
     <section 

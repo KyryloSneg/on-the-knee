@@ -10,7 +10,8 @@
   justify-content: center;
   position: absolute;
   top: 56px;
-  z-index: 10;
+  /* higher than the footer and main-device-item with the js-focused class */
+  z-index: 17;
   box-sizing: border-box;
 }
 

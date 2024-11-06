@@ -15,6 +15,11 @@
   gap: 10px;
 }
 
+.additional-services-expanded-list-item > button:disabled {
+  color: black;
+  cursor: auto;
+}
+
 .add-service-radio-div-wrapper {
   display: flex;
   align-items: center;

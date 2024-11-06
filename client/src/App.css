@@ -10,11 +10,8 @@ html, button {
 }
 
 html * {
-  transition: outline 0s;
-}
-
-html *:focus, html *:focus-visible {
   outline-color: #7373ff;
+  transition: outline 0s;
 }
 
 body {
@@ -175,6 +172,10 @@ ul {
   z-index: 8000;
 }
 
+#app-dark-bg.error-modal-shown {
+  z-index: 9001;
+}
+
 /* General classes */
 
 .w-100 {
@@ -291,7 +292,7 @@ ul {
   padding: 10px 5px;
   display: grid;
   align-items: center;
-  z-index: 15;
+  z-index: 20;
   margin-bottom: 30px;
   position: sticky;
   top: 0;
@@ -367,6 +368,7 @@ ul {
   fill: white;
 }
 
+/* closer than dark bg only if the error modal is not shown */
 .closer-than-darkbg {
   z-index: 9000;
 }

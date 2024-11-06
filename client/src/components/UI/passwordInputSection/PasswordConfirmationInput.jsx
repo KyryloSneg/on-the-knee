@@ -6,7 +6,7 @@ import ReactHookFormInput from "../reactHookFormInput/ReactHookFormInput";
 import getPasswordInputFieldName from "../../../utils/getPasswordInputFieldName";
 
 const PasswordConfirmationInput = ({ 
-  register, errors, trigger, getValues, 
+  register, errors, trigger, getValues, passwordLabelText, 
   uniqueInputVariantName, prevIsValidPasswordConfirmationRef
 }) => {
   const prevIsValid = useRef(null);
@@ -45,7 +45,7 @@ const PasswordConfirmationInput = ({
   return (
     <ReactHookFormInput
       type="password"
-      labelText="Password confirmation"
+      labelText={`${passwordLabelText} confirmation`}
       inputName={passwordConfirmationFieldName}
       errors={errors}
       registerFnResult={passwordConfirmationRegisterResult}

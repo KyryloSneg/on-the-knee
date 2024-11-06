@@ -1,12 +1,12 @@
 import "./TabsList.css";
 import Tab from "./Tab";
 
-const TabsList = ({ tabsData }) => {
+const TabsList = ({ tabsData, doesHaveDynamicParam }) => {
   return (
     <ul className="tabs-list">
       {tabsData.map(tab => 
         <li key={tab.to}>
-          <Tab tabData={tab} />
+          <Tab tabData={tab} doesHaveDynamicParam={doesHaveDynamicParam} />
         </li>
       )}
     </ul>

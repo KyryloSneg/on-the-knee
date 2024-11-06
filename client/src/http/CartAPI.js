@@ -3,7 +3,7 @@ import { $mockApi } from "./index";
 
 export async function getOneCart(userId) {
   const { data } = await $mockApi.get(ONE_CART_API_URL.replace("USER_ID_TO_REPLACE", userId));
-  return data?.length ? data[0] : data;
+  return Array.isArray(data) ? data?.[0] : data;
 }
 
 export async function getOneCartDeviceCombinations(cartId) {

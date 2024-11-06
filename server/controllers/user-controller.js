@@ -112,8 +112,8 @@ class UserController {
             const { email } = req.body;
             const user = req.user;
 
-            await userAddressService.changeEmail(email, user.id);
-            next();
+            const emailsToConfirm = await userAddressService.changeEmail(email, user.id);
+            return res.json(emailsToConfirm);
         } catch(e) {
             console.log(e);
             next(e);
@@ -134,6 +134,56 @@ class UserController {
             return res.json(address);
         } catch(e) {
             console.log(e);
+            next(e);
+        }
+    }
+
+    async changeNameSurname(req, res, next) {
+        try {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return next(ApiError.BadRequest('Validation error', errors.array()));
+            }
+            
+            const { name, surname } = req.body;
+            const user = req.user;
+
+            const userWithNewNames = await userService.changeNameSurname(name, surname, user.id);
+            return res.json(userWithNewNames);
+        } catch(e) {
+            console.log(e);
+            next(e);
+        }
+    }
+
+    async changePassword(req, res, next) {
+        try {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return next(ApiError.BadRequest('Validation error', errors.array()));
+            }
+            
+            const { currentPassword, newPassword } = req.body;
+            const user = req.user;
+
+            await userService.changePassword(currentPassword, newPassword, user.id);
+            next();
+
+            // returning null in order to not get 404 on the client side
+            return res.json(null);
+        } catch(e) {
+            console.log(e);
+            next(e);
+        }
+    }
+
+    async getUserEmailsToConfirm(req, res, next) {
+        try {
+            const user = req.user;
+            const emailsToConfirm = await userAddressService.getUserEmailsToConfirm(user.id);
+            
+            return res.json(emailsToConfirm);
+        } catch (e) {
             next(e);
         }
     }

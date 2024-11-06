@@ -10,11 +10,11 @@ const CommentGalleryModalContent = observer(({ type, singularCommentWord, closeM
 
   let comment;
   if (type === "deviceFeedbacks") {
-    comment = deviceStore.deviceFeedbacks?.find(feedback => feedback.id === deviceStore.selectedDeviceFeedbackId);
+    comment = deviceStore.devicesFeedbacks?.find(feedback => feedback.id === deviceStore.selectedDeviceFeedbackId);
   } else if (type === "deviceQuestions") {
     comment = deviceStore.deviceQuestions?.find(question => question.id === deviceStore.selectedDeviceQuestionId);
   } else if (type === "sellerFeedbacks") {
-    comment = deviceStore.sellerFeedbacks?.find(feedback => feedback.id === deviceStore.selectedSellerFeedbackId);
+    comment = deviceStore.sellersFeedbacks?.find(feedback => feedback.id === deviceStore.selectedSellerFeedbackId);
   }
 
   let carouselImages = [];

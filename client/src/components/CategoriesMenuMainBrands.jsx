@@ -1,8 +1,8 @@
+import "./styles/CategoriesMenuMainBrands.css";
 import { useContext } from "react";
 import { Context } from "../Context";
 import { Link } from "react-router-dom";
 import { BRAND_CATALOG_ROUTE } from "../utils/consts";
-import "./styles/CategoriesMenuMainBrands.css";
 
 const CategoriesMenuMainBrands = ({ selectedId }) => {
   const { deviceStore } = useContext(Context);

@@ -24,6 +24,7 @@ const DevicePage = observer(({ type }) => {
 
   // using prevId to evade bugs that could possibly happen on switching between two different devices in browser history
   const prevId = useRef(id);
+  const prevViewedDeviceComboIdRef = useRef(null);
 
   useOneDeviceFetching(id, setDevice, true);
   useOneDeviceFeedbacksFetching(device?.id, null, null, deviceStore);
@@ -32,7 +33,7 @@ const DevicePage = observer(({ type }) => {
     let innerPage;
 
     if (type === "main") {
-      const sortedByDateFeedbacks = [...deviceStore.deviceFeedbacks].sort(
+      const sortedByDateFeedbacks = [...deviceStore.devicesFeedbacks].sort(
         (a, b) => b.date.localeCompare(a.date)
       );
 
@@ -41,12 +42,13 @@ const DevicePage = observer(({ type }) => {
           device={device} 
           combinationString={combinationString} 
           feedbacks={sortedByDateFeedbacks}
+          prevViewedDeviceComboIdRef={prevViewedDeviceComboIdRef}
         />
       );
     } else if (type === "info") {
       innerPage = <DeviceInfoPage device={device} />;
     } else if (type === "comments") {
-      const sortedByDateFeedbacks = [...deviceStore.deviceFeedbacks].sort(
+      const sortedByDateFeedbacks = [...deviceStore.devicesFeedbacks].sort(
         (a, b) => b.date.localeCompare(a.date)
       );
 
@@ -63,14 +65,14 @@ const DevicePage = observer(({ type }) => {
   }
 
   const tabsData = [
-    { name: "Everything about device", to: DEVICE_ROUTE + deviceIdCombo },
-    { name: "Info", to: DEVICE_INFO_ROUTE.replace(":deviceIdCombo", deviceIdCombo) },
-    { name: 
-      `Comments (${deviceStore.deviceFeedbacks?.length || 0})`, 
+    { children: "Everything about device", to: DEVICE_ROUTE + deviceIdCombo },
+    { children: "Info", to: DEVICE_INFO_ROUTE.replace(":deviceIdCombo", deviceIdCombo) },
+    { children: 
+      `Comments (${deviceStore.devicesFeedbacks?.length || 0})`, 
       to: DEVICE_COMMENTS_ROUTE.replace(":deviceIdCombo", deviceIdCombo) 
     },
     { 
-      name: `Questions (${deviceStore.deviceQuestions?.length || 0})`, 
+      children: `Questions (${deviceStore.deviceQuestions?.length || 0})`, 
       to: DEVICE_QUESTIONS_ROUTE.replace(":deviceIdCombo", deviceIdCombo) 
     },
   ];
@@ -80,8 +82,10 @@ const DevicePage = observer(({ type }) => {
   }, [id]);
   
   return (
-    <main>
-      {prevId.current === id && <TabsPageLayout tabsData={tabsData} pageContent={renderInnerPage()} />}
+    <main className="device-page">
+      {prevId.current === id && 
+        <TabsPageLayout tabsData={tabsData} pageContent={renderInnerPage()} doesHaveDynamicParam={true} 
+      />}
     </main>
   );
 });

@@ -3,9 +3,28 @@
   background-color: #fff;
   border-radius: 14px;
   display: flex;
+  width: max-content;
+}
+
+section.user-page-feedbacks > div .tabs-list {
+  padding: 0;
+  border-bottom: 1px solid #e9e9e9;
+  border-radius: 0;
+  background: none;
+  min-width: 100%;
+}
+
+.vertical-layout > div .tabs-list {
+  align-items: stretch;
   gap: 28px;
   padding: 0 20px;
   /* with min-width: 100%; custom scrollbar appears instantly */
   min-width: 90%;
-  width: max-content;
+}
+
+.horizontal-layout > div .tabs-list {
+  flex-direction: column;
+  gap: 4px;
+  padding: 0;
+  min-width: auto;
 }

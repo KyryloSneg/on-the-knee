@@ -2,7 +2,7 @@ const { faker } = require("@faker-js/faker");
 const { USERS } = require("./consts");
 const createDesiredListDevices = require("./createDesiredListDevices");
 
-module.exports = (devices) => {
+module.exports = (devices, deviceCombinations) => {
   let desiredLists = [];
   let desiredListDevices = [];
 
@@ -12,7 +12,7 @@ module.exports = (devices) => {
       "userId": user._id,
     };
 
-    createDesiredListDevices(desiredListDevices, desiredList.id, devices);
+    createDesiredListDevices(desiredListDevices, desiredList.id, devices, deviceCombinations);
     desiredLists.push(desiredList);
   } 
 

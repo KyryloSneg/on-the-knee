@@ -1,11 +1,36 @@
+.tabs-page-layout.user-page-feedbacks {
+  padding: 0;
+}
+
 .tabs-page-layout {
   /* REMEMBER FOR FUTURE: we can use percentages here instead of endless amount of @media rules */
-  padding: 0 10%;
+  padding: 0 5%;
+}
+
+.tabs-page-layout.vertical-layout {
   display: grid;
   grid-template-columns: 1fr;
   gap: 16px;
 }
 
+.tabs-page-layout.horizontal-layout {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 36px;
+}
+
 .tabs-page-layout.no-page-padding {
   padding: 0;
+}
+
+@media screen and (min-width: 380px) {
+  .tabs-page-layout {
+    padding: 0 10%;
+  }
+}
+
+@media screen and (min-width: 800px) {
+  .tabs-page-layout.user-page-feedbacks {
+    padding: 0 24px;
+  }
 }

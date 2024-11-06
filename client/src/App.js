@@ -42,9 +42,12 @@ import useDeliveriesFetching from "./hooks/useDeliveriesFetching";
 import ErrorModal from "./components/ErrorModal";
 import WrongCartComboAmountsModal from "./components/WrongCartComboAmountsModal";
 import AuthentificationModal from "./components/AuthenticationModal";
+import ReportOrderProblemModal from "./components/ReportOrderProblemModal";
+import RemainASellerOrDeviceFeedbackModal from "./components/RemainASellerOrDeviceFeedbackModal";
+import UserChangePasswordModal from "components/UserChangePasswordModal";
  
 const App = observer(() => {
-  const { app, deviceStore } = useContext(Context);
+  const { app, deviceStore, user } = useContext(Context);
   // ref for the "skip to next page content" btn
   const headerRef = useRef(null);
   const pageRef = useRef(null);
@@ -112,7 +115,16 @@ const App = observer(() => {
         </div>
       }
       {/* dark bg that shows up on certain events (like opening a modal window) */}
-      {app.darkBgVisible && <div id="app-dark-bg" className="visible" tabIndex={0} data-testid="app-dark-bg" />}
+      {app.darkBgVisible && (
+        <div 
+          id="app-dark-bg" 
+          className={app.isVisibleErrorModal ? 
+            "error-modal-shown visible" : "visible"
+          } 
+          tabIndex={0} 
+          data-testid="app-dark-bg" 
+        /> 
+      )}
       {app.isVisibleMenu &&
         <Sidebar
           children={<Menu />}
@@ -162,6 +174,9 @@ const App = observer(() => {
       {app.isVisibleErrorModal && <ErrorModal />}
       {app.isVisibleWrongCartComboAmountsModal && <WrongCartComboAmountsModal />}
       {app.isVisibleAuthentificationModal && <AuthentificationModal />}
+      {(app.isVisibleReportOrderProblemModal && user.isAuth) && <ReportOrderProblemModal />}
+      {(app.isVisibleRemainSellerDeviceFeedbackModal && user.isAuth) && <RemainASellerOrDeviceFeedbackModal />}
+      {(app.isVisibleUserChangePasswordModal && user.isAuth) && <UserChangePasswordModal />}
       <header ref={headerRef}>
         <Navbar elemToFocus={pageElemToFocus} navCategoryBtnRef={navCategoryBtnRef} />
         {(app.isVisibleCategoriesMenu && !!Object.keys(deviceStore.categories).length) && 

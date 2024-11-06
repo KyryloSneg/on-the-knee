@@ -14,7 +14,7 @@ import { useContext, useRef, useState } from "react";
 import { Context } from "../Context";
 import { observer } from "mobx-react-lite";
 
-const DeviceItem = observer(({ device, isInStock, isPreOrder, defaultCombination, stocks, sales, saleTypeNames }) => {
+const DeviceItem = observer(({ device, isInStock, isPreOrder, defaultCombination, withHistoryDeletionBtn }) => {
   const { deviceStore } = useContext(Context);
 
   const screenWidth = useWindowWidth();
@@ -27,7 +27,7 @@ const DeviceItem = observer(({ device, isInStock, isPreOrder, defaultCombination
       defaultCombination,
       device["device-combinations"],
       device.id,
-      stocks,
+      deviceStore.stocks,
       ["color"],
       false,
     )
@@ -35,12 +35,12 @@ const DeviceItem = observer(({ device, isInStock, isPreOrder, defaultCombination
 
 
   const defaultComboColorHrefObjects =
-    DeviceComboActions.getComboColorHrefObjects(defaultComboColorHrefs, device, stocks);
+    DeviceComboActions.getComboColorHrefObjects(defaultComboColorHrefs, device, deviceStore.stocks);
 
   const {
     deviceSaleTypes,
     discountPercentage
-  } = DeviceSalesActions.getSaleTypesAndDiscount(device, sales, saleTypeNames, deviceStore.hasTriedToFetchSales);
+  } = DeviceSalesActions.getSaleTypesAndDiscount(device, deviceStore.sales, deviceStore.saleTypeNames, deviceStore.hasTriedToFetchSales);
 
   const textSaleTypes = deviceSaleTypes.filter(type => !type.logo);
   const logoSaleTypes = deviceSaleTypes.filter(type => type.logo);
@@ -50,7 +50,7 @@ const DeviceItem = observer(({ device, isInStock, isPreOrder, defaultCombination
     if (defaultCombination.combinationString) {
       attributesList = DeviceComboActions.getAttributesList(
         defaultCombination,
-        stocks,
+        deviceStore.stocks,
         device
       );
     }
@@ -97,7 +97,9 @@ const DeviceItem = observer(({ device, isInStock, isPreOrder, defaultCombination
         thumbnail={thumbnail}
         to={to}
         deviceId={device.id}
+        combinationId={defaultCombination.id}
         textSaleTypes={textSaleTypes}
+        withHistoryDeletionBtn={withHistoryDeletionBtn}
       />
       {defaultComboColorHrefs
         ? <DeviceColorOptions hrefObjects={defaultComboColorHrefObjects} deviceId={device.id} />

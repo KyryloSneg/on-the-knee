@@ -17,26 +17,45 @@ router.post('/registration',
     body("phoneNumber").custom(phoneNumberValidator), 
     userController.registration
 );
+
 router.post('/login', userController.login);
 router.post('/logout', userController.logout);
+
 router.get('/refresh/:ip', userController.refresh);
+router.get('/activate/:link', userController.activate);
+
 // we can change the user email only if he / she has activated the current one
-router.post('/change-email', 
+router.patch('/change-email', 
     authMiddleware,
     activationMiddleware,
     body('email').isEmail(),
     userController.changeEmail
 );
-router.post('/change-phone-number', 
+
+router.patch('/change-phone-number', 
     authMiddleware,
     body("phoneNumber").custom(phoneNumberValidator),
     userController.changePhoneNumber
 );
-router.get('/activate/:link', userController.activate);
+
+router.patch('/change-name-surname', 
+    authMiddleware,
+    body("name").isString(),
+    body("surname").isString(),
+    userController.changeNameSurname
+);
+router.patch('/change-password', 
+    authMiddleware,
+    activationMiddleware,
+    body("currentPassword").custom(passwordValidator),
+    body("newPassword").custom(passwordValidator),
+    userController.changePassword
+);
 
 // an example of using function that requires both authorization and email activation
 // router.get('/users', authMiddleware, activationMiddleware, userController.getUsers);
 
+router.get('/user-emails-to-confirm', authMiddleware, userController.getUserEmailsToConfirm);
 router.get('/users', userController.getUsers);
 router.get('/users/:id', userController.getUser);
 

@@ -3,5 +3,9 @@
     "include": [
       "jest"
     ]
+  },
+  "compilerOptions": {
+    "jsx": "react",
+    "baseUrl": "src"
   }
 }

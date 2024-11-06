@@ -14,6 +14,9 @@ import { getStorePickupPoints } from "../http/StorePickupPointsAPI";
 import { getOneCart, getOneCartDeviceCombinations } from "../http/CartAPI";
 import useGettingCartData from "./useGettingCartData";
 import LocalStorageActions from "../utils/LocalStorageActions";
+import { getOneDesiredList, getOneDesiredListDevices } from "../http/DesiredListAPI";
+import { getOneViewedDevicesList, getOneViewedDevicesListDevs } from "../http/ViewedDevicesAPI";
+import setViewedDevicesAdditionalFields from "../utils/setViewedDevicesAdditionalFields";
 
 function useInitialDataFetching() {
   const { app, deviceStore, user } = useContext(Context);
@@ -127,6 +130,43 @@ function useInitialDataFetching() {
     } catch (e) {
       console.log(e.message);
     }
+
+    try {
+      let desiredList = {};
+      let desiredListDevices = [];
+  
+      if (user.isAuth) {
+        desiredList = await getOneDesiredList(user.user?.id);
+        desiredListDevices = await getOneDesiredListDevices(desiredList?.id);
+      }
+      
+      if (desiredList) user.setDesiredList(desiredList);
+      if (desiredListDevices) user.setDesiredListDevices(desiredListDevices);
+    } catch (e) {
+      console.log(e.message);
+    }
+
+    try {
+      let viewedDevicesList = {};
+      let viewedDevices = [];
+  
+      if (user.isAuth) {
+        viewedDevicesList = await getOneViewedDevicesList(user.user?.id);
+        viewedDevices = await getOneViewedDevicesListDevs(viewedDevicesList?.id);
+      } else {
+        viewedDevices = LocalStorageActions.getItem("viewedDevices") || [];
+        viewedDevices.sort((a, b) => b.date.localeCompare(a.date));
+
+        await setViewedDevicesAdditionalFields(viewedDevices);
+      }
+      
+      if (viewedDevicesList) user.setViewedDevicesList(viewedDevicesList);
+      if (viewedDevices) user.setViewedDevices(viewedDevices);
+    } catch (e) {
+      console.log(e.message);
+    }
+
+    app.setHasTriedToFetchInitialData(true);
   }
 
   const [fetching, isLoading, error] = useFetching(fetchData);
