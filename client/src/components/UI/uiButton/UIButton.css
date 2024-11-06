@@ -111,3 +111,15 @@ a.ui-button {
 .modal-deny.active {
   background-color: #e0e0e0;
 }
+
+.ui-button > .custom-loader {
+  width: 15px;
+  height: 15px;
+  border: 0.3rem solid #7373ff;
+  border-right: 0.3rem solid #0000;
+}
+
+.ui-button.primary1 > .custom-loader {
+  border: 0.3rem solid rgb(255, 255, 255);
+  border-right: 0.3rem solid #0000;
+}

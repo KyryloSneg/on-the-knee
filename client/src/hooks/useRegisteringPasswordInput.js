@@ -5,25 +5,32 @@ import isPasswordValidFunction from "../utils/isPasswordValidFunction";
 import getPasswordInputFieldName from "../utils/getPasswordInputFieldName";
 
 // uniqueVariantName is the name that used in passwordFieldName (`${selectedVariant}-password`)
-// we pass getValues, mustNotBeEqualToEmail and emailFieldName if we want to not pass password that equals to email
+// we pass getValues and mustNotBeEqualToValuesObj if we want to prevent equality of password to the obj's values email
 // we pass getValues, isWithPasswordConfirmation and prevIsValidPasswordConfirmation if we use password confirmation input
+// onChangeCb can have inputValue as its argument
 export default function useRegisteringPasswordInput(
-  register, trigger, uniqueVariantName, isWithPasswordConfirmation = false, prevIsValidPasswordConfirmation = null,
-  getValues = null, mustNotBeEqualToEmail = false, emailFieldName = null, isRequired = true,
+  register, trigger, uniqueVariantName, isWithPasswordConfirmation = false, 
+  prevIsValidPasswordConfirmation = null, mustNotBeEqualToValuesObj = {}, 
+  getValues = null, onChangeCb = null, isRequired = true,
 ) {
   const prevIsValidDetails = useRef(null);
 
   const passwordFieldName = getPasswordInputFieldName(uniqueVariantName);
   const passwordOptions = useMemo(() => {
     let passwordOptionsCopy = _.cloneDeep(isRequired ? REQUIRED_PASSWORD_INPUT_OPTIONS : PASSWORD_INPUT_OPTIONS);
-    if (getValues && mustNotBeEqualToEmail && emailFieldName) {
-      passwordOptionsCopy.validate.isNotEqualToEmail = value => 
-        value.replaceAll(" ", "") !== getValues(`${uniqueVariantName}-email`).replaceAll(" ", "") 
-        || PASSWORD_VALIDATION_MESSAGES_OBJ.isNotEqualToEmail;
+
+    for (let [key, objValue] of Object.entries(mustNotBeEqualToValuesObj)) {
+      passwordOptionsCopy.validate[objValue.validationFieldName] = value => {
+        // getting the value inside the validation function to get the up-to-date one
+        const valueToNotBeEqualTo = getValues?.(key) || key;
+        
+        return value.replaceAll(" ", "") !== valueToNotBeEqualTo.replaceAll(" ", "") || 
+          PASSWORD_VALIDATION_MESSAGES_OBJ[objValue.errorMsgKey];
+      }
     }
 
     passwordOptionsCopy.onChange = (e) => {
-      const { isValidDetails } = isPasswordValidFunction(e.target.value);
+      const { isValidDetails } = isPasswordValidFunction(e.target.value, mustNotBeEqualToValuesObj, getValues);
       
       if (!_.isEqual(isValidDetails, prevIsValidDetails.current)) {
         trigger(passwordFieldName);
@@ -40,12 +47,14 @@ export default function useRegisteringPasswordInput(
           prevIsValidPasswordConfirmation.current = isValidPasswordConfirmation;
         };
       }
+
+      onChangeCb?.(e.target.value);
     }
 
     return passwordOptionsCopy;
   }, [
     passwordFieldName, trigger, isWithPasswordConfirmation, prevIsValidPasswordConfirmation,
-    getValues, uniqueVariantName, mustNotBeEqualToEmail, emailFieldName, isRequired
+    getValues, uniqueVariantName, mustNotBeEqualToValuesObj, onChangeCb, isRequired
   ]);
 
   const passwordRegisterResult = register(

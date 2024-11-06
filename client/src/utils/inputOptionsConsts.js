@@ -69,6 +69,7 @@ export const PASSWORD_VALIDATION_MESSAGES_OBJ = Object.freeze({
   doesContainAnUppercaseLetter: "The password must contain at least one uppercase letter",
   doesContainASpecialChar: "The password must contain at least one special character",
   isNotEqualToEmail: "The password mustn't be your email",
+  isNotEqualToCurrentPassword: "The new password mustn't be your current password",
 });
 
 // min 8 chars

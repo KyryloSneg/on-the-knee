@@ -1,0 +1,86 @@
+.user-personal-page-details-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0;
+}
+
+.user-personal-details-btn-child {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  /* adding this one pixel because h3 elem moves up and down on btn clicks */
+  padding-bottom: 1px;
+}
+
+.user-personal-details-btn-child > h3 {
+  text-align: start;
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.user-personal-details-btn-child > p {
+  font-size: 1.2rem;
+  text-align: start;
+}
+
+.user-personal-content-child {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.user-personal-details-inputs, .user-personal-details-values {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.user-personal-details-values {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.user-personal-details-values > div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow: hidden;
+}
+
+.user-personal-details-values > div > dt, 
+.user-personal-content-child label {
+  color: rgb(90, 90, 90);
+  font-size: 1.2rem;
+}
+
+.user-personal-details-values > div > dd {
+  margin: 0;
+  overflow: hidden;
+  font-size: 1.4rem;
+  text-overflow: ellipsis;
+}
+
+.user-personal-data-edit-btns {
+  display: flex;
+  gap: 12px;
+}
+
+.user-personal-content-child .ui-button {
+  width: max-content;
+}
+
+.user-personal-content-child .ui-button.modal-submit {
+  min-width: 76px;
+}
+
+.changing-personal-data-error-modal {
+  padding: 16px;
+  font-size: 1.6rem;
+}
+
+@media screen and (min-width: 620px) {
+  .user-personal-details-inputs, .user-personal-details-values {
+    grid-template-columns: 1fr 1fr;
+  }
+}

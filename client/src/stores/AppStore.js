@@ -29,6 +29,7 @@ class AppStore {
     this._isVisibleAuthentificationModal = false;
     this._isVisibleReportOrderProblemModal = false;
     this._isVisibleRemainSellerDeviceFeedbackModal = false;
+    this._isVisibleUserChangePasswordModal = false;
     this._isFocusedSearchForm = false;
 
     // contains the last element's ref from which was opened a modal window, a sidebar etc.
@@ -67,6 +68,11 @@ class AppStore {
     this._checkoutSubmitBtnRef = null;
     this._reportOrderProblemBtnRef = null;
     this._remainSellerDeviceFeedbackBtnRef = null;
+    this._userChangePasswordModalBtnRef = null;
+
+    // use this state to keep trigger elem ref of prev modal
+    // without focusing one on the error modal close
+    this._isToFocusErrorModalPrevModalTriggerElem = true;
 
     this._userLocation = null;
     this._allLocations = [];
@@ -209,6 +215,10 @@ class AppStore {
     this._isVisibleRemainSellerDeviceFeedbackModal = bool;
   }
 
+  setIsVisibleUserChangePasswordModal(bool) {
+    this._isVisibleUserChangePasswordModal = bool;
+  }
+
   setIsFocusedSearchForm(bool) {
     this._isFocusedSearchForm = bool;
   }
@@ -311,6 +321,14 @@ class AppStore {
 
   setRemainSellerDeviceFeedbackBtnRef(ref) {
     this._remainSellerDeviceFeedbackBtnRef = ref;
+  }
+
+  setUserChangePasswordModalBtnRef(ref) {
+    this._userChangePasswordModalBtnRef = ref;
+  }
+
+  setIsToFocusErrorModalPrevModalTriggerElem(ref) {
+    this._isToFocusErrorModalPrevModalTriggerElem = ref;
   }
 
   setHintSearchResults(results) {
@@ -525,6 +543,10 @@ class AppStore {
     return this._isVisibleRemainSellerDeviceFeedbackModal;
   }
 
+  get isVisibleUserChangePasswordModal() {
+    return this._isVisibleUserChangePasswordModal;
+  }
+
   get isFocusedSearchForm() {
     return this._isFocusedSearchForm;
   }
@@ -627,6 +649,14 @@ class AppStore {
 
   get remainSellerDeviceFeedbackBtnRef() {
     return this._remainSellerDeviceFeedbackBtnRef;
+  }
+
+  get userChangePasswordModalBtnRef() {
+    return this._userChangePasswordModalBtnRef;
+  }
+
+  get isToFocusErrorModalPrevModalTriggerElem() {
+    return this._isToFocusErrorModalPrevModalTriggerElem;
   }
 
   get hintSearchResults() {

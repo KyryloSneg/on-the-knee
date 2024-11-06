@@ -1,6 +1,6 @@
 import { onEmailInputChange, REQUIRED_EMAIL_INPUT_OPTIONS } from "../utils/inputOptionsConsts";
 import ReactHookFormInput from "./UI/reactHookFormInput/ReactHookFormInput";
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 import PasswordInputSection from "./UI/passwordInputSection/PasswordInputSection";
 import { AUTHENTIFICATION_MODAL_INPUT_SERVICE_CLASS } from "../utils/consts";
 import getPasswordInputFieldName from "../utils/getPasswordInputFieldName";
@@ -22,6 +22,16 @@ const AuthentificationModalAuthEmailInputs = ({
     )
   });
 
+  const passwordMustNotBeEqualToValuesObj = useMemo(() => {
+    let result = {};
+    result[emailNameFieldName] = {
+      errorMsgKey: "isNotEqualToEmail",
+      validationFieldName: "isNotEqualToEmail",
+    };
+
+    return result;
+  }, [emailNameFieldName]);
+
   return (
     <>
       <ReactHookFormInput
@@ -37,9 +47,8 @@ const AuthentificationModalAuthEmailInputs = ({
         control={control}
         trigger={trigger}
         uniqueInputVariantName={selectedVariant}
+        mustNotBeEqualToValuesObj={passwordMustNotBeEqualToValuesObj}
         getValues={getValues}
-        mustNotBeEqualToEmail={true}
-        emailFieldName={emailNameFieldName}
       />
     </>
   );

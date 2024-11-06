@@ -1,0 +1,32 @@
+.user-personal-page-btn-group {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.user-personal-page-btn-group > .ui-button {
+  width: 100%;
+}
+
+.user-personal-page-btn-group > .ui-button:nth-child(2n) {
+  justify-self: end;
+}
+
+.user-personal-page-btn-group > .ui-button:nth-child(2n - 1) {
+  justify-self: start;
+}
+
+.logout-error-modal {
+  padding: 16px;
+  font-size: 1.6rem;
+}
+
+@media screen and (min-width: 320px) {
+  .user-personal-page-btn-group {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .user-personal-page-btn-group > .ui-button {
+    width: max-content;
+  }
+}

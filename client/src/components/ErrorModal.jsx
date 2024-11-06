@@ -1,4 +1,5 @@
-import { useContext } from "react";
+import "./styles/ErrorModal.css";
+import { useContext, useRef } from "react";
 import { Context } from "../Context";
 import ModalWindow from "./UI/modalWindow/ModalWindow";
 import { observer } from "mobx-react-lite";
@@ -6,9 +7,16 @@ import setErrorModalVisibility from "../utils/setErrorModalVisibility";
 
 const ErrorModal = observer(() => {
   const { app } = useContext(Context);
+  const prevBtnRef = useRef(app.lastWindowBtnRef)
 
   function setIsErrorModalVisible(isVisible) {
-    setErrorModalVisibility(isVisible, app);
+    if (!isVisible && prevBtnRef.current) app.setLastWindowBtnRef(prevBtnRef.current);
+    setErrorModalVisibility(isVisible, app, app.errorModalBtnRef);
+  }
+
+  let className = "error-modal";
+  if (app.errorModalInfo.className) {
+    className += ` ${app.errorModalInfo.className}`;
   }
 
   return (
@@ -17,9 +25,10 @@ const ErrorModal = observer(() => {
       setIsVisible={setIsErrorModalVisible}
       children={app.errorModalInfo.children}
       headerText="Error has occured"
-      propsClassName={app.errorModalInfo.className || ""}
+      propsClassName={className}
       id={app.errorModalInfo.id}
       triggerElemRef={app.errorModalBtnRef}
+      isToFocusTriggerElem={app.isToFocusErrorModalPrevModalTriggerElem}
     />
   );
 });
