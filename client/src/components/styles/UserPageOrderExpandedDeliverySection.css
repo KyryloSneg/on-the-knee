@@ -1,0 +1,45 @@
+.user-page-order-expanded-delivery-section,
+.user-page-order-expanded-delivery-info-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-page-order-expanded-delivery-section {
+  gap: 8px;
+}
+
+.user-page-order-expanded-delivery-info-list {
+  gap: 12px;
+}
+
+.user-page-order-expanded-delivery-section > header > h4 {
+  margin: 0;
+  font-size: 1.6rem;
+  text-align: center;
+}
+
+.user-page-order-expanded-delivery-info-list {
+  margin: 0;
+}
+
+.user-page-order-expanded-delivery-info-list > div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.user-page-order-expanded-delivery-info-list > div > dt {
+  color: rgb(90, 90, 90);
+  font-size: 1.2rem;
+}
+
+.user-page-order-expanded-delivery-info-list > div > dd,
+.user-page-order-expanded-delivery-info-list > div > dd > p {
+  font-size: 1.4rem;
+}
+
+.user-page-order-expanded-delivery-info-list > div > dd {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

@@ -1,0 +1,9 @@
+.user-viewed-devices-page {
+  /* preventing the margin consuming height effect */
+  min-height: 100%;
+  margin-bottom: 24px;
+}
+
+.user-viewed-devices-page .main-device-list {
+  margin: 0;
+}

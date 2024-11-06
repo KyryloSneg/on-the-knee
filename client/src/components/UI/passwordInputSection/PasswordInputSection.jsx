@@ -6,12 +6,34 @@ import { AUTHENTIFICATION_MODAL_INPUT_SERVICE_CLASS } from "../../../utils/const
 import PasswordConfirmationInput from "./PasswordConfirmationInput";
 import { useRef } from "react";
 
-// we must pass getValues fn if isWithPasswordConfirmation is equals to true
-// we must pass getValues, mustNotBeEqualToEmail and emailFieldName to do the corresponding validation
+// IMPORTANT: use memoization alongstead this object to prevent infinite re-renders
+// if mustNotBeEqualToValuesObj contains a value as its key, pass getValues prop
+
+// mustNotBeEqualToValuesObj = {
+//   formFieldNameOrValue: {
+//     errorMsgKey: "...",
+//     validationFieldName: "...",
+//   },
+//   // we can use either a field name or the value itself
+//   "modal-email": {
+//     // errorMsgKey is a key of PASSWORD_VALIDATION_MESSAGES_OBJ
+//     errorMsgKey: "isNotEqualToEmail",
+//     // validationFieldName is an unique field name to use in the useRegisteringPasswordInput hook
+//     validationFieldName: "isNotEqualToEmail",
+//   },
+//   "example@gmail.com": {
+//     errorMsgKey: "isNotEqualToEmail",
+//     validationFieldName: "isNotEqualToEmail",
+//   },
+// }
+
+// onChangeCb must be wrapped with the useCallback() hook
+const defaultMustNotBeEqualToValuesObj = {};
 const PasswordInputSection = ({ 
-  register, errors, control, trigger, uniqueInputVariantName, 
-  isWithPasswordConfirmation = false, mustNotBeEqualToEmail = false, 
-  getValues = null, emailFieldName = null
+  register, errors, control, trigger, uniqueInputVariantName, labelText = "Password",
+  isWithPasswordConfirmation = false, isWithValidityRules = true, 
+  mustNotBeEqualToValuesObj = defaultMustNotBeEqualToValuesObj, 
+  getValues = null, onChangeCb = null
 }) => {
   // empty password input === empty password confirmation input
   const prevIsValidPasswordConfirmation = useRef(true);
@@ -20,34 +42,36 @@ const PasswordInputSection = ({
     passwordFieldName, 
     passwordRegisterResult 
   } = useRegisteringPasswordInput(
-    register, trigger, uniqueInputVariantName, isWithPasswordConfirmation, 
-    prevIsValidPasswordConfirmation, getValues, mustNotBeEqualToEmail, emailFieldName, true
+    register, trigger, uniqueInputVariantName, isWithPasswordConfirmation, prevIsValidPasswordConfirmation, 
+    mustNotBeEqualToValuesObj, getValues, onChangeCb, true
   );
 
   return (
     <div className="password-input-section">
       <ReactHookFormInput
         type="password"
-        labelText="Password"
+        labelText={labelText}
         inputName={passwordFieldName}
         errors={errors}
         registerFnResult={passwordRegisterResult}
         isToRenderErrorMsg={false}
         className={AUTHENTIFICATION_MODAL_INPUT_SERVICE_CLASS}
       />
-      <PasswordInputValidityRules 
-        control={control} 
-        passwordFieldName={passwordFieldName} 
-        mustNotBeEqualToEmail={mustNotBeEqualToEmail}
-        getValues={getValues}
-        emailFieldName={emailFieldName}
-      />
+      {isWithValidityRules && 
+        <PasswordInputValidityRules 
+          control={control}
+          passwordFieldName={passwordFieldName}
+          mustNotBeEqualToValuesObj={mustNotBeEqualToValuesObj}
+          getValues={getValues}
+        />
+      }
       {isWithPasswordConfirmation &&
         <PasswordConfirmationInput 
           register={register} 
           errors={errors} 
           trigger={trigger} 
           getValues={getValues}
+          passwordLabelText={labelText}
           uniqueInputVariantName={uniqueInputVariantName}
           prevIsValidPasswordConfirmationRef={prevIsValidPasswordConfirmation}
         />

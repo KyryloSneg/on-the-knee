@@ -1,0 +1,49 @@
+.user-personal-email-confirmation-msg {
+  font-size: 0.8rem;
+}
+
+.user-personal-email-confirmation-msg > span {
+  font-weight: 600;
+}
+
+.user-personal-details-email-input-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.user-personal-details-email-input-wrap > p {
+  color: #a10e0e;
+  font-size: 1.3rem;
+}
+
+@media screen and (min-width: 440px) {
+  .user-personal-email-confirmation-msg {
+    font-size: 0.9rem;
+  }
+}
+
+/* paragraph's text word-breaks literally on one supported resolution where it shouldn't happen */
+@media screen and (min-width: 620px) {
+  .user-personal-details-email-input-wrap > p {
+    font-size: 1.2rem;
+  }
+}
+
+@media screen and (min-width: 621px) {
+  .user-personal-details-email-input-wrap > p {
+    font-size: 1.3rem;
+  }
+}
+
+@media screen and (min-width: 660px) {
+  .user-personal-email-confirmation-msg {
+    font-size: 1rem;
+  }
+}
+
+@media screen and (min-width: 830px) {
+  .user-personal-email-confirmation-msg {
+    font-size: 1.3rem;
+  }
+}

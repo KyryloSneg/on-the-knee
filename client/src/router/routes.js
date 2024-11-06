@@ -1,5 +1,4 @@
 import CheckoutPage from "../pages/CheckoutPage";
-import DesiredListPage from "../pages/DesiredListPage";
 import DevicePage from "../pages/DevicePage";
 import MainPage from "../pages/MainPage";
 import RenavigatingCatalogPage from "../pages/RenavigatingCatalogPage";
@@ -7,7 +6,8 @@ import SalePage from "../pages/SalePage";
 import SalesPage from "../pages/SalesPage";
 import SellerPage from "../pages/SellerPage";
 import UserPage from "../pages/UserPage";
-import { BRAND_CATALOG_ROUTE, CATEGORY_CATALOG_ROUTE, CHECKOUT_ROUTE, DESIRED_LIST_ROUTE, DEVICE_COMMENTS_ROUTE, DEVICE_INFO_ROUTE, DEVICE_QUESTIONS_ROUTE, DEVICE_ROUTE, SALES_ROUTE, SEARCH_CATALOG_ROUTE, SELLER_DEVICES_ROUTE, SELLER_FEEDBACKS_ROUTE, SELLER_ROUTE, USER_ROUTE } from "../utils/consts";
+import WriteSellerFeedbackPage from "../pages/WriteSellerFeedbackPage";
+import { BRAND_CATALOG_ROUTE, CATEGORY_CATALOG_ROUTE, CHECKOUT_ROUTE, DEVICE_COMMENTS_ROUTE, DEVICE_INFO_ROUTE, DEVICE_QUESTIONS_ROUTE, DEVICE_ROUTE, SALES_ROUTE, SEARCH_CATALOG_ROUTE, SELLER_DEVICES_ROUTE, SELLER_FEEDBACKS_ROUTE, SELLER_ROUTE, SELLER_WRITE_A_FEEDBACK_ROUTE, USER_DESIRED_LIST_ROUTE, USER_FEEDBACKS_ROUTE, USER_ORDERS_ROUTE, USER_PERSONAL_DATA_ROUTE, USER_ROUTE, USER_SELLERS_FEEDBACKS_ROUTE, USER_VIEWED_DEVICES_ROUTE } from "../utils/consts";
 
 export const PUBLIC_ROUTES = [
   {
@@ -49,6 +49,10 @@ export const PUBLIC_ROUTES = [
     element: <SellerPage type="feedbacks" />,
   },
   {
+    path: SELLER_WRITE_A_FEEDBACK_ROUTE,
+    element: <WriteSellerFeedbackPage />,
+  },
+  {
     path: SELLER_DEVICES_ROUTE,
     element: <SellerPage type="devices" />,
   },
@@ -73,10 +77,30 @@ export const PUBLIC_ROUTES = [
 export const PRIVATE_ROUTES = [
   {
     path: USER_ROUTE,
-    element: <UserPage />
+    element: <UserPage type="orders" />
   },
   {
-    path: DESIRED_LIST_ROUTE,
-    element: <DesiredListPage />
-  }
+    path: USER_PERSONAL_DATA_ROUTE,
+    element: <UserPage type="personal-data" />
+  },
+  {
+    path: USER_ORDERS_ROUTE,
+    element: <UserPage type="orders" />
+  },
+  {
+    path: USER_DESIRED_LIST_ROUTE,
+    element: <UserPage type="desired-list" />
+  },
+  {
+    path: USER_VIEWED_DEVICES_ROUTE,
+    element: <UserPage type="viewed-devices" />
+  },
+  {
+    path: USER_FEEDBACKS_ROUTE,
+    element: <UserPage type="devicesFeedbacks" />
+  },
+  {
+    path: USER_SELLERS_FEEDBACKS_ROUTE,
+    element: <UserPage type="sellersFeedbacks" />
+  },
 ];

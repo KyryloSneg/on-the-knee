@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import routerConfig from '../router/index';
 import { Context } from '../Context';

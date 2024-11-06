@@ -1,3 +1,5 @@
+import { getOneStorePickupPoint } from "./StorePickupPointsAPI";
+
 const { $mockApi } = require(".");
 
 export async function createOrder(order) {
@@ -22,5 +24,43 @@ export async function createOrderDeviceCombination(orderDeviceCombination) {
 
 export async function createOrderSelectedAdditionalServices(orderSelectedAdditionalServicesResult) {
   const { data } = await $mockApi.post("/order-selected-additional-services", orderSelectedAdditionalServicesResult);
+  return data;
+}
+
+export async function getOneUserOrders(userId) {
+  let { data } = await $mockApi.get(`/orders?_expand=receivent&_embed=order-selected-additional-services&userId=${userId}`);
+
+  // json-server unfortunately can't fix the bug that make _expand param break
+  // if the id value is null, so handle it by ourselves
+  if (Array.isArray(data)) {
+    for (let order of data) {
+      const storePickupPointId = order["store-pickup-pointId"];
+      const orderCourierDeliveryId = order["order-courier-deliveryId"];
+
+      if (storePickupPointId !== null && storePickupPointId !== undefined) {
+        order["store-pickup-point"] = await getOneStorePickupPoint(storePickupPointId);
+      };
+
+      if (orderCourierDeliveryId !== null && orderCourierDeliveryId !== undefined) {
+        order["order-courier-delivery"] = await getOneOrderCourierDelivery(orderCourierDeliveryId)
+      };
+
+      if (order["order-selected-additional-services"]?.length) {
+        // creating from array an object with additional services
+        order["order-selected-additional-services"] = order["order-selected-additional-services"][0]
+      }
+    }
+  }
+
+  return data;
+}
+
+export async function getOrderDeviceCombosOfOneOrder(orderId) {
+  let { data } = await $mockApi.get(`/order-device-combinations?orderId=${orderId}&_expand=device-combination`);
+  return data;
+}
+
+export async function getOneOrderCourierDelivery(id) {
+  const { data } = await $mockApi.get("/order-courier-deliveries/" + id);
   return data;
 }

@@ -1,8 +1,8 @@
 import { PASSWORD_VALIDATION_OBJ } from "./inputOptionsConsts";
 
-// we must pass getValues, mustNotBeEqualToEmail and emailFieldName to do the corresponding validation
+// if mustNotBeEqualToValuesObj has form field names as its keys, pass getValues 
 export default function isPasswordValidFunction(
-  password, mustNotBeEqualToEmail = false, getValues = null, emailFieldName = null
+  password, mustNotBeEqualToValuesObj = {}, getValues = null
 ) {
   let isValid = true;
   let isValidDetails = {};
@@ -17,11 +17,20 @@ export default function isPasswordValidFunction(
     }
   }
 
-  if (mustNotBeEqualToEmail && getValues && emailFieldName) {
-    let validationResult = 
-      (password || "").replaceAll(" ", "") !== (getValues(emailFieldName) || "").replaceAll(" ", "");
+  for (let [key, value] of Object.entries(mustNotBeEqualToValuesObj)) {
+    let valueToNotBeEqualTo;
 
-    isValidDetails.isNotEqualToEmail = validationResult;
+    // key could be either a field name or the value itself
+    if (getValues) {
+      valueToNotBeEqualTo = getValues(key) || key;
+    } else {
+      valueToNotBeEqualTo = key;
+    }
+
+    let validationResult =
+      (password || "").replaceAll(" ", "") !== valueToNotBeEqualTo.replaceAll(" ", "");
+
+    isValidDetails[value.errorMsgKey] = validationResult;
     if (!validationResult && isValid) {
       isValid = false;
     }

@@ -36,7 +36,7 @@ const WrongCartComboAmountsModalContent = observer(({ closeModal, isLoadedCombos
               </section>
             )}
           </>
-        ) : <Loader />
+        ) : <Loader className="modal-window-loader" />
       }
       <div className="wrong-cart-combo-amounts-btn-wrap">
         <UIButton

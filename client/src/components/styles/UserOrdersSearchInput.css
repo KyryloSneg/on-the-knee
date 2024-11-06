@@ -1,0 +1,39 @@
+.user-orders-search-input-form {
+  display: flex;
+  width: 100%;
+  height: 38px;
+}
+
+.user-orders-search-input-wrapper {
+  position: relative;
+}
+
+.user-orders-search-input-wrapper > input {
+  width: 100%;
+  height: 100%;
+  padding: 0 28px 0 6px;
+  border: 1px solid #b2b2b2;
+  border-radius: 10px;
+  background: white url("../../assets/search.svg") no-repeat 6px center;
+  background-color: #e9e9e9;
+  padding-left: 32px;
+}
+
+.user-orders-search-input-wrapper > input:focus {
+  border: 1px solid #7373ff;
+}
+
+.user-orders-search-input-form > button[type="submit"] {
+  border-radius: 0 10px 10px 0;
+}
+
+@media screen and (min-width: 420px) {
+  .user-orders-search-input-form {
+    width: auto;
+  }
+
+  .user-orders-search-input-wrapper > input {
+    width: auto;
+    border-radius: 10px 0 0 10px;
+  }
+}

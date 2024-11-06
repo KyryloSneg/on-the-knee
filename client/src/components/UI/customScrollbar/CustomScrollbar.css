@@ -62,9 +62,18 @@
   border-radius: 20px;
 }
 
+.user-page-feedbacks > .tabs-page-scroll {
+  background: none;
+  border-radius: 0;
+}
+
 .tabs-page-scroll {
   background-color: #fff;
   border-radius: 14px;
+}
+
+.horizontal-layout .tabs-page-scroll {
+  height: max-content;
 }
 
 .tabs-page-layout.no-page-padding .tabs-page-scroll {

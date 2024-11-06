@@ -1,0 +1,5 @@
+.user-page-order-expanded-content-right {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}

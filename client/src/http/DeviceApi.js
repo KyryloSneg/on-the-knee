@@ -16,3 +16,8 @@ export async function getDeviceCombination(id) {
   const res = await $mockApi.get(`/device-combinations/${id}?_expand=stock`);
   return res.data;
 }
+
+export async function getOneDeviceCombinations(deviceId) {
+  const res = await $mockApi.get(`/device-combinations?deviceId=${deviceId}&_expand=stock`);
+  return res.data;
+}

@@ -164,9 +164,9 @@ const STORE_LOCATIONS = {
 
 const USERS = [
   {
-    "_id": "64e367f69f8167945dcb4a1b",
-    "name": "user",
-    "surname": "user",
+    "_id": "66fc214b3087117caf04ebb8",
+    "name": "Someone",
+    "surname": "Forgot",
     "roles": ["PUBLIC", "ORDER-MANAGER", "CONTENT-MANAGER", "SELLER", "OWNER"],
     "email": "onthekneeauth@gmail.com",
     "phoneNumber": "+380 95 532 9384"
@@ -265,12 +265,12 @@ const POSSIBLE_SELLER_WORK_SCHEDULES = [
   }
 ];
 
-const POSSIBLE_ORDER_STATUSES = ["Cancelled", "Pending", "Paid", "Confirmed", "Done"];
+const POSSIBLE_ORDER_STATUSES = ["Canceled", "Pending", "Paid", "Confirmed", "Done"];
 const MAIN_CATEGORIES_AMOUNT = 2;
 const START_CATEGORIES_NEST_3_AMOUNT = 10;
 
-const LOGO_HEIGHT = 34;
-const LOGO_WIDTH = 34;
+const LOGO_HEIGHT = 90;
+const LOGO_WIDTH = 90;
 
 const MIN_SALE_IMAGE_HEIGHT = 300;
 const MIN_SALE_IMAGE_WIDTH = 300;

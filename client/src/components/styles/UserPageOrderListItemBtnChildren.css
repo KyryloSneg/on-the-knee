@@ -1,0 +1,85 @@
+.user-page-order-li-btn-main {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+  gap: 18px;
+}
+
+.expanded .user-page-order-li-btn-main {
+  grid-template-columns: auto;
+}
+
+.user-page-order-imgs-price-wrap {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 18px;
+}
+
+.user-page-order-status {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.user-page-order-name-date {
+  margin: 0;
+  text-align: start;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.user-page-order-name-date > span {
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.user-page-order-name-date > time {
+  font-size: 1.2rem;
+}
+
+.user-page-order-status-msg {
+  font-size: 1.6rem;
+  font-weight: 600;
+  text-align: start;
+}
+
+.user-page-order-total-price {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-page-order-dev-imgs-list {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.user-page-order-dev-imgs-list > li > img {
+  display: block;
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+}
+
+.user-page-order-total-price {
+  min-width: 100px;
+}
+
+.user-page-order-total-price > span, .user-page-order-total-price > strong {
+  text-align: start;
+}
+
+@media screen and (min-width: 830px) {
+  .user-page-order-li-btn-main {
+    grid-template-columns: auto 1fr;
+  }
+
+  .user-page-order-dev-imgs-list {
+    justify-self: center;
+  }
+}

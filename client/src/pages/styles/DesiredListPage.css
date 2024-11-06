@@ -1,0 +1,9 @@
+.desired-list-page {
+  /* preventing the margin consuming height effect */
+  min-height: 100%;
+  margin-bottom: 24px;
+}
+
+.desired-list-page .main-device-list {
+  margin: 0;
+}

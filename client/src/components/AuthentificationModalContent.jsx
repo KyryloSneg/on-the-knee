@@ -11,6 +11,7 @@ import { getUserIp } from "../http/UserLocationAPI";
 import { Context } from "../Context";
 import { observer } from "mobx-react-lite";
 import setErrorModalVisibility from "../utils/setErrorModalVisibility";
+import { AxiosError } from "axios";
 
 const VARIANTS = Object.freeze(["registration", "authentificateWithPhone", "authentificateWithEmail"]);
 const MAX_AUTH_ATTEMPTS = 8;
@@ -64,7 +65,9 @@ const AuthentificationModalContent = observer(({ closeModal }) => {
     );
 
     app.setErrorModalInfo({ children: errorModalInfoChildren, id: "auth-modal-registration-submit-error", className: "" });
-    app.setErrorModalBtnRef({ current: document.querySelector(AUTHENTIFICATION_MODAL_SUBMIT_BTN_SERVICE_CLASS) || null });
+    app.setErrorModalBtnRef({ current: document.querySelector(`.${AUTHENTIFICATION_MODAL_SUBMIT_BTN_SERVICE_CLASS}`) || null });
+    app.setIsToFocusErrorModalPrevModalTriggerElem(false);
+
     setErrorModalVisibility(true, app);
   }
 
@@ -102,27 +105,33 @@ const AuthentificationModalContent = observer(({ closeModal }) => {
         hasBeenMainLogicInvoked = true;
         callbackPossibleError = await user.login(address, password, ip);
         
-        if (callbackPossibleError instanceof Error) {
+        if (callbackPossibleError?.response && callbackPossibleError?.code !== AxiosError.ERR_NETWORK) {
           const trimmedPassword = password.trim();
           if (trimmedPassword !== password) {
             callbackPossibleError = await user.login(address, trimmedPassword, ip);
           }
         }
-
-        if (callbackPossibleError instanceof Error) {
+        
+        if (callbackPossibleError?.response && callbackPossibleError?.code !== AxiosError.ERR_NETWORK) {
           setAuthLeftAttempts(value => value ? value - 1 : 0);
           hasAlreadyTriedToAuthRef.current = true;
         }
       }
       
-      if (!(callbackPossibleError instanceof Error) || callbackPossibleError === null) {
+      // if we get ERR_NETWORK from the server (it has crashed for example), open the error modal
+      if (!callbackPossibleError?.response && callbackPossibleError?.code === AxiosError.ERR_NETWORK) {
+        openErrorModal();
+      } else {
         closeModal();
       }
     } catch(e) {
       openErrorModal();
     } finally {
       if (hasBeenMainLogicInvoked) {
-        if (callbackPossibleError instanceof Error || callbackPossibleError === null) {
+        if (
+          (callbackPossibleError?.response && callbackPossibleError?.code !== AxiosError.ERR_NETWORK) 
+          || callbackPossibleError === null
+        ) {
           setPossibleError(callbackPossibleError);
         };
       };

@@ -2,7 +2,7 @@ import _ from "lodash";
 import isPhoneValidFn from "../utils/isPhoneValid";
 import { onEmailInputChange, REQUIRED_EMAIL_INPUT_OPTIONS, REQUIRED_TEXT_INPUT_OPTIONS } from "../utils/inputOptionsConsts";
 import ReactHookFormInput from "./UI/reactHookFormInput/ReactHookFormInput";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import CustomPhoneInput from "./UI/customPhoneInput/CustomPhoneInput";
 import PasswordInputSection from "./UI/passwordInputSection/PasswordInputSection";
 import { AUTHENTIFICATION_MODAL_INPUT_SERVICE_CLASS } from "../utils/consts";
@@ -54,6 +54,16 @@ const AuthentificationModalRegisterInputs = ({
     phoneInputRefs.current[selectedVariant] = phoneNumberInputRef;
   }, [phoneInputRefs, selectedVariant, phoneNumberInputRef]);
 
+  const passwordMustNotBeEqualToValuesObj = useMemo(() => {
+    let result = {};
+    result[emailNameFieldName] = {
+      errorMsgKey: "isNotEqualToEmail",
+      validationFieldName: "isNotEqualToEmail",
+    };
+
+    return result;
+  }, [emailNameFieldName]);
+
   return (
     <>
       <ReactHookFormInput
@@ -104,9 +114,8 @@ const AuthentificationModalRegisterInputs = ({
         trigger={trigger}
         uniqueInputVariantName={selectedVariant}
         isWithPasswordConfirmation={true}
+        mustNotBeEqualToValuesObj={passwordMustNotBeEqualToValuesObj}
         getValues={getValues}
-        mustNotBeEqualToEmail={true}
-        emailFieldName={emailNameFieldName}
       />
     </>
   );

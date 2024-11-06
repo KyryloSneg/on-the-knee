@@ -1,24 +1,23 @@
 import "./PasswordInputValidityRules.css";
 import { PASSWORD_VALIDATION_MESSAGES_OBJ } from "../../../utils/inputOptionsConsts";
-import isPasswordValidFunction from "../../../utils/isPasswordValidFunction";
-import { useWatch } from "react-hook-form";
 import fullfilledConditionIcon from "../../../assets/fullfilled-condition_00dd1d_20x20.svg";
 import closeIcon from "../../../assets/close_a10e0e_20x20.svg";
-import { lazy, Suspense } from "react";
+import { useWatch } from "react-hook-form";
+import isPasswordValidFunction from "utils/isPasswordValidFunction";
 
-const LazyImage = lazy(() => import("../lazyImage/LazyImage"));
-
-// we must pass getValues, mustNotBeEqualToEmail and emailFieldName to show the corresponding validation
+// if mustNotBeEqualToValuesObj has form field names as its keys, pass getValues 
 const PasswordInputValidityRules = ({ 
-  control, passwordFieldName, mustNotBeEqualToEmail = false, 
-  getValues = null, emailFieldName = null 
+  control, passwordFieldName, mustNotBeEqualToValuesObj = {}, getValues = null
 }) => {
   const formFields = useWatch({ control });
   
   const passwordValue = formFields?.[passwordFieldName];
+  // if isWithValidityRules === true,
   // we should show to user password requirements even before typing into the field
   // (the first render returns undefined, so return "" instead)
-  const { isValidDetails } = isPasswordValidFunction(passwordValue || "", mustNotBeEqualToEmail, getValues, emailFieldName);
+  const { 
+    isValidDetails, 
+  } = isPasswordValidFunction(passwordValue || "", mustNotBeEqualToValuesObj, getValues);
 
   return (
     <ul className="password-input-validity-rules">
@@ -34,9 +33,7 @@ const PasswordInputValidityRules = ({
         return (
           <li key={key}>
             <div className={className}>
-              <Suspense fallback={<div style={{ width: 20, height: 20 }} />}>
-                <LazyImage src={src} alt={alt} draggable="false" />
-              </Suspense>
+              <img src={src} alt={alt} draggable="false" />
               <p>{PASSWORD_VALIDATION_MESSAGES_OBJ[key]}</p>
             </div>
           </li>

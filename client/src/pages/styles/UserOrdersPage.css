@@ -1,0 +1,11 @@
+.user-orders-show-all-wrap {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-orders-show-all-wrap > a {
+  width: max-content;
+}

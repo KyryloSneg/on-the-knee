@@ -1,0 +1,6 @@
+.user-page-order-list {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}

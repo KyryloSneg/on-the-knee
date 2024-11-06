@@ -4,9 +4,11 @@ import "./styles/CommentsListItem.css";
 import useGettingOneUser from "../hooks/useGettingOneUser";
 import OriginalComment from "./OriginalComment";
 
-const CommentsListItem = ({ type, comment, singularCommentWord, isWithImages = true, closeGalleryModal = null }) => {
-  const [user, setUser] = useState(null);
-  useGettingOneUser(comment.userId, setUser, true, !comment.isAnonymously && !user);
+const CommentsListItem = ({ 
+  type, comment, singularCommentWord, propsUser = null, isWithImages = true, closeGalleryModal = null 
+}) => {
+  const [user, setUser] = useState(comment?.user || propsUser);
+  useGettingOneUser(comment?.userId, setUser, true, !comment.isAnonymously && !user);
 
   let replies;
   if (type === "deviceFeedbacks") {

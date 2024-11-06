@@ -11,12 +11,19 @@ export const DEVICE_QUESTIONS_ROUTE = "/device/:deviceIdCombo/questions";
 
 export const SELLER_ROUTE = "/seller/"; // + :sellerIdSlug
 export const SELLER_FEEDBACKS_ROUTE = "/seller/:sellerIdSlug/feedbacks";
+export const SELLER_WRITE_A_FEEDBACK_ROUTE = "/seller/:sellerIdSlug/write-feedback";
 export const SELLER_DEVICES_ROUTE = "/seller/:sellerIdSlug/devices";
 
 export const CHECKOUT_ROUTE = "/checkout";
-export const DESIRED_LIST_ROUTE = "/desired";
+
+// adding user route to open the user orders page as a fallback
 export const USER_ROUTE = "/user";
-// TODO: routing for user cabinet
+export const USER_PERSONAL_DATA_ROUTE = "/user/personal-data";
+export const USER_ORDERS_ROUTE = "/user/orders";
+export const USER_DESIRED_LIST_ROUTE = "/user/desired-list";
+export const USER_VIEWED_DEVICES_ROUTE = "/user/viewed-devices";
+export const USER_FEEDBACKS_ROUTE = "/user/my-feedbacks";
+export const USER_SELLERS_FEEDBACKS_ROUTE = "/user/my-feedbacks/sellers";
 
 export const CATEGORY_CATALOG_ROUTE = "/categories/"; // + ":categoryIdSlug" (1-smartphones for example)
 export const BRAND_CATALOG_ROUTE = "/brand/" // + ":brandIdSlug" (2-asus for example);
@@ -43,7 +50,7 @@ export const ONE_CART_API_URL = "/carts?userId=USER_ID_TO_REPLACE";
 export const ONE_CART_DEVICE_COMBINATIONS_API_URL = "/cart-device-combinations?_expand=device&_expand=device-combination&cartId=CART_ID_TO_REPLACE";
 
 // value: (asc / desc),(rating / price)
-export const sortingOptions = [
+export const sortingOptions = Object.freeze([
   {
     id: 0,
     title: "best rating",
@@ -65,7 +72,25 @@ export const sortingOptions = [
     title: "decreasing price",
     value: "desc,price",
   },
-];
+]);
+
+export const DESIRED_LIST_PAGE_OPTIONS = Object.freeze([
+  {
+    id: 0,
+    title: "By date added",
+    value: "desc,date",
+  },
+  {
+    id: 1,
+    title: "increasing price",
+    value: "asc,price",
+  },
+  {
+    id: 2,
+    title: "decreasing price",
+    value: "desc,price",
+  },
+]);
 
 // export const mockSearchResults = {
 //   "default": [
@@ -170,6 +195,8 @@ export const WIDTH_TO_SHOW_DEVICE_CAROUSEL_SIDEBAR = 870;
 export const WIDTH_TO_SHOW_BOTH_SELF_DELIVERY_MODAL_COLS = 800;
 export const WIDTH_TO_SHOW_DEVICE_INFO_DL_SEPARATOR = 640;
 export const WIDTH_TO_SHOW_PURCHASE_DEVICE_FOOTER = 340;
+export const WIDTH_TO_SHOW_USER_PAGE_DESKTOP_VERSION = 1280;
+export const WIDTH_TO_SHOW_USER_ORDERS_SEARCH_DESKTOP_VERSION = 420;
 
 export const DEFAULT_USER_LOCATION_NAME = "Kyiv";
 // coords of Kyiv
@@ -183,8 +210,18 @@ export const FIRST_CHECKOUT_ORDER_ID = 1;
 export const CHECKOUT_PAGE_INPUT_SERVICE_CLASS = "dataset-checkout-page-input";
 export const AUTHENTIFICATION_MODAL_INPUT_SERVICE_CLASS = "dataset-auth-modal-input";
 export const AUTHENTIFICATION_MODAL_SUBMIT_BTN_SERVICE_CLASS = "dataset-auth-modal-submit-btn";
+export const CHANGE_PASSWORD_MODAL_SUBMIT_BTN_SERVICE_CLASS = "dataset-change-password-modal-submit-btn";
 
 export const ERROR_MODAL_INITIAL_INFO = { children: "", id: "error-modal", className: "" };
+
+export const ORDER_STATUS_COLOR_OBJ = {
+  "Canceled": "#a10e0e",
+  "Cancelled": "#a10e0e",
+  "Pending": "#bd5e10",
+  "Paid": "#ffa300",
+  "Confirmed": "#00ed1f",
+  "Done": "#00cd1c",
+};
 
 // let it be commented below because i don't write any tests rn
 // (if you want to uncomment it, insert this code into a separate file

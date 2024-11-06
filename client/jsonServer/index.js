@@ -5,6 +5,7 @@ const createDesiredList = require("./utils/createDesiredList");
 const createDevices = require("./utils/createDevices");
 const createLocations = require("./utils/createLocations");
 const createOrders = require("./utils/createOrders");
+const createViewedDevicesList = require("./utils/createViewedDevicesList");
 const initializeEnvVars = require("./utils/initializeJsonServerEnvVars");
 
 module.exports = function createData () {
@@ -40,6 +41,9 @@ module.exports = function createData () {
     "desired-lists": [],
     "desired-list-devices": [],
 
+    "viewed-devices-lists": [],
+    "viewed-devices": [],
+
     "countries": [],
     "regions": [],
     "districts": [],
@@ -64,6 +68,7 @@ module.exports = function createData () {
     "order-courier-deliveries": [],
     "order-device-combinations": [],
     "order-selected-additional-services": [],
+    "order-problems": [],
 
     "deliveries": [],
     "delivery-types": [],
@@ -126,9 +131,13 @@ module.exports = function createData () {
     data["cart-device-combinations"] = cartDeviceCombos;
     data["cart-selected-additional-services"] = cartSelectedAdditionalServices;
 
-    const { desiredLists, desiredListDevices } = createDesiredList(result.devices);
+    const { desiredLists, desiredListDevices } = createDesiredList(result.devices, result.deviceCombinations);
     data["desired-lists"] = desiredLists;
     data["desired-list-devices"] = desiredListDevices;
+
+    const { viewedDevicesLists, viewedDevices } = createViewedDevicesList(result.devices, result.deviceCombinations);
+    data["viewed-devices-lists"] = viewedDevicesLists;
+    data["viewed-devices"] = viewedDevices;
   });
   
   Promise.all([locationsPromise, devicesPromise]).then(() => {
