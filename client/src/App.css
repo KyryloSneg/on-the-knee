@@ -172,6 +172,10 @@ ul {
   z-index: 8000;
 }
 
+#app-dark-bg.error-modal-shown {
+  z-index: 9001;
+}
+
 /* General classes */
 
 .w-100 {
@@ -364,6 +368,7 @@ ul {
   fill: white;
 }
 
+/* closer than dark bg only if the error modal is not shown */
 .closer-than-darkbg {
   z-index: 9000;
 }

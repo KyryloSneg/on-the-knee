@@ -10,7 +10,8 @@ import useWindowTriggerElemHandle from "../../../hooks/useWindowTriggerElemHandl
 
 const ModalWindow = observer(({ 
   isVisible, setIsVisible, children, headerText, id, 
-  triggerElemRef, propsClassName = "", isCloserThanDarkBg = true, ...props 
+  triggerElemRef, propsClassName = "", isToFocusTriggerElem = true,
+  isCloserThanDarkBg = true, ...props 
 }) => {
   const { app } = useContext(Context)
 
@@ -53,7 +54,7 @@ const ModalWindow = observer(({
   useWindowInvisibleFocus(closeModalBtnRef, isVisible);
   useFocusTraps(firstFocusTrapRef, lastFocusTrapRef, modalRef);
   useClickOnTheDarkBg(closeModalWindow, app.darkBgVisible);
-  useWindowTriggerElemHandle(triggerElemRef, id);
+  useWindowTriggerElemHandle(triggerElemRef, id, isToFocusTriggerElem);
 
   return (
     <section 

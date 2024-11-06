@@ -144,10 +144,10 @@ const UserPage = observer(({ type }) => {
   const accountTabChildren = (
     <div className="personal-data-acc-content-wrap">
       <p>
-        {user.user?.name || ""} {user.user?.surname || ""}
+        {user.user.name || ""} {user.user.surname || ""}
       </p>
       <p className="personal-data-acc-user-email">
-        {user.userAddress?.email || ""}
+        {user.userAddress.email || ""}
       </p>
     </div>
   );

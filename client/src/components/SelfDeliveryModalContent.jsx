@@ -144,7 +144,7 @@ const SelfDeliveryModalContent = observer(() => {
           </MapProvider>
         )
         : (
-          <Loader key="self-delivery-modal-loader" />
+          <Loader key="self-delivery-modal-loader" className="modal-window-loader" />
         )
       }
     </div>

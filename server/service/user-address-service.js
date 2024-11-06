@@ -6,6 +6,7 @@ const { EMAIL_TO_CONFIRM_EXPIRES_AFTER_S } = require("../consts");
 const mailService = require("./mail-service");
 const { parsePhoneNumber } = require('libphonenumber-js');
 const UserAddressDto = require("../dtos/user-address-dto");
+const EmailToConfirmDto = require("../dtos/email-to-confirm-dto");
 
 class UserAddressService {
 
@@ -55,6 +56,11 @@ class UserAddressService {
       // sending the activation mails
       await mailService.sendEmailConfirmationMail(address.email, linkForCurrEmailMail, expireDurationString);
       await mailService.sendEmailConfirmationMail(newEmail, linkForNewEmailMail, expireDurationString);
+
+      const emailsToConfirm = await EmailToConfirmModel.find({user: userId});
+      const emailToConfirmDtos = emailsToConfirm.map(email => new EmailToConfirmDto(email));
+
+      return emailToConfirmDtos;
   }
 
   async changePhoneNumber(newPhoneNumber, userId) {
@@ -70,6 +76,13 @@ class UserAddressService {
 
       const addressDto = new UserAddressDto(address);
       return addressDto;
+  }
+
+  async getUserEmailsToConfirm(userId) {
+    const emailsToConfirm = await EmailToConfirmModel.find({user: userId});
+    const emailToConfirmDtos = emailsToConfirm.map(email => new EmailToConfirmDto(email));
+
+    return emailToConfirmDtos;
   }
 
 }

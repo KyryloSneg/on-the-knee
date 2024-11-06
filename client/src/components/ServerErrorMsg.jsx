@@ -1,10 +1,10 @@
 import MessageToUser from "./UI/messageToUser/MessageToUser";
 
-const AuthentificationModalErrorMsg = ({ error }) => {
+const ServerErrorMsg = ({ error }) => {
   let errorMessage = error?.response?.data?.message;
   if (!errorMessage) return <div style={{ display: "none" }} />;
 
   return <MessageToUser messageText={errorMessage} />;
 }
 
-export default AuthentificationModalErrorMsg;
+export default ServerErrorMsg;

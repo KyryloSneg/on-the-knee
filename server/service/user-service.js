@@ -17,6 +17,7 @@ const { MAX_USER_DEVICES_AMOUNT } = require("../consts");
 const tokenModel = require("../models/token-model");
 const EmailToConfirmModel = require("../models/email-to-confirm-model");
 const DocumentNotFoundError = require("mongoose/lib/error/notFound");
+const EmailToConfirmDto = require("../dtos/email-to-confirm-dto");
 
 class UserService {
     async registration(name, surname, password, email, phoneNumber, ip) {
@@ -93,7 +94,7 @@ class UserService {
                     address.email = newEmail;
                     await address.save();
 
-                    const activationInfo = ActivationInfoModel.findOne({user: info.user});
+                    const activationInfo = await ActivationInfoModel.findOne({user: info.user});
                     if (!activationInfo.isActivated) {
                         activationInfo.isActivated = true;
                         await activationInfo.save();
@@ -279,12 +280,67 @@ class UserService {
 
         const userDto = new UserDto(user);
         const addressDto = new UserAddressDto(await UserAddressModel.findOne({ user: user._id }));
-        const tokens = tokenService.generateTokens({...userDto});
+        
+        const activationInfo = await ActivationInfoModel.findOne({ user: user._id }); 
+        const activationInfoDto = new ActivationInfoDto(activationInfo);
+
+        const emailsToConfirm = await EmailToConfirmModel.find({ user: user._id });
+        const emailToConfirmDtos = emailsToConfirm.map(email => new EmailToConfirmDto(email));
 
         console.log(userDevice);
-        
+        const tokens = tokenService.generateTokens({...userDto});
         await tokenService.saveToken(userDevice._id, tokens.refreshToken);
-        return {...tokens, user: userDto, address: addressDto}
+
+        return {
+            ...tokens, 
+            user: userDto, 
+            address: addressDto, 
+            activationInfo: activationInfoDto, 
+            emailsToConfirm: emailToConfirmDtos
+        };
+    }
+
+    async changeNameSurname(name, surname, userId) {
+        const user = await UserModel.findById(userId);
+  
+        // doing these ugly conditions to not save changed user model twice if both name and surname were changed
+        if (typeof name === "string" && typeof surname === "string") {
+            if (user.name !== name || user.surname !== surname) {
+                if (user.name !== name) {
+                  user.name = name;
+                }
+    
+                if (user.surname !== surname) {
+                  user.surname = surname;
+                }
+    
+                await user.save();
+            }
+        } else {
+            throw ApiError.BadRequest("Given name or surname isn't string");
+        }
+  
+        const userDto = new UserDto(user);
+        return userDto;
+    }
+
+    async changePassword(currentPassword, newPassword, userId) {
+        const user = await UserModel.findById(userId);
+
+        const isCurrPaswordValid = await bcrypt.compare(currentPassword, user.password);
+        if (!isCurrPaswordValid) {
+            throw ApiError.BadRequest('Incorrect current password');
+        }
+
+        const isNewPaswordTheSameAsTheOldOne = await bcrypt.compare(newPassword, currentPassword);
+        if (isNewPaswordTheSameAsTheOldOne) {
+            throw ApiError.BadRequest('The new password is the same as the old one');
+        }
+
+        const hashNewPassword = await bcrypt.hash(newPassword, 3);
+        user.password = hashNewPassword;
+
+        await user.save();
     }
 
     async getAllUsers() {

@@ -4,7 +4,7 @@ import AuthentificationModalAuthPhoneInputs from "./AuthentificationModalAuthPho
 import AuthentificationModalAuthEmailInputs from "./AuthentificationModalAuthEmailInputs";
 import UIButton from "./UI/uiButton/UIButton";
 import { AUTHENTIFICATION_MODAL_SUBMIT_BTN_SERVICE_CLASS } from "../utils/consts";
-import AuthentificationModalErrorMsg from "./AuthentificationModalErrorMsg";
+import ServerErrorMsg from "./ServerErrorMsg";
 
 const AuthentificationModalForm = ({
   onSubmit, register, errors, control, trigger, getValues,
@@ -71,7 +71,7 @@ const AuthentificationModalForm = ({
       <div className="authentification-modal-content-form-inputs-wrap">
         {renderInputs()}
       </div>
-      {possibleError && <AuthentificationModalErrorMsg error={possibleError} />}
+      {possibleError && <ServerErrorMsg error={possibleError} />}
       {(isSelectedAuth && hasAlreadyTriedToAuthRef.current) &&
         <p className="auth-modal-left-auth-attempts-msg">
           {authLeftAttempts} attempt{(authLeftAttempts > 1 || !authLeftAttempts) ? "s to log in are" : " to log in is"} left
