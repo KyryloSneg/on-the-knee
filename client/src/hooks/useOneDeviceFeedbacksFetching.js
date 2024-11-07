@@ -46,6 +46,10 @@ function useOneDeviceFeedbacksFetching(deviceId, setFeedbacks = null, setQuestio
   useEffect(() => {
     app.setIsGlobalLoading(isLoading);
   }, [app, isLoading])
+
+  useEffect(() => {
+    return () => app.setIsGlobalLoading(false);
+  }, [app]);
 }
 
 export default useOneDeviceFeedbacksFetching;

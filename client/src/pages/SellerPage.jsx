@@ -27,12 +27,21 @@ const SellerPage = observer(({ type }) => {
   if (!POSSIBLE_TYPES.includes(type)) throw Error("type of Seller Page is not defined or incorrect");
 
   function renderInnerPage() {
+    function getSortedByDateFeedbacks() {
+      const sortedByDateFeedbacks = [...deviceStore.sellersFeedbacks].sort(
+        (a, b) => b.date.localeCompare(a.date)
+      );
+
+      return sortedByDateFeedbacks
+    }
+
     let innerPage;
 
     if (type === "main") {
       innerPage = <MainSellerPage seller={seller} feedbacks={deviceStore.sellersFeedbacks} />;
     } else if (type === "feedbacks") {
-      innerPage = <SellerFeedbacksPage seller={seller} feedbacks={deviceStore.sellersFeedbacks} />;
+      const feedbacks = getSortedByDateFeedbacks();
+      innerPage = <SellerFeedbacksPage seller={seller} feedbacks={feedbacks} />;
     } else if (type === "devices") {
       innerPage = <SellerDevicesPage seller={seller} />;
     }

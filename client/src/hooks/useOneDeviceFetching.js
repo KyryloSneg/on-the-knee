@@ -21,6 +21,10 @@ function useOneDeviceFetching(id, setDevice, isToRedirectToMainPageOnFail = fals
   }, [app, isLoading]);
 
   useEffect(() => {
+    return () => app.setIsGlobalLoading(false);
+  }, [app]);
+
+  useEffect(() => {
     fetching();
   }, [fetching]);
 

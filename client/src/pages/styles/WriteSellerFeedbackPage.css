@@ -1,0 +1,22 @@
+.write-seller-feedback-page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 0 20px;
+}
+
+.write-seller-feedback-page > header > h2 {
+  margin-bottom: 0;
+}
+
+@media screen and (min-width: 960px) {
+  .write-seller-feedback-page {
+      padding: 0 5%;
+  }
+}
+
+@media screen and (min-width: 1400px) {
+  .write-seller-feedback-page {
+      padding: 0 10%;
+  }
+}
