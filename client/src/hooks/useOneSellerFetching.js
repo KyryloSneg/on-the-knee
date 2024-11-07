@@ -17,6 +17,10 @@ function useOneSellerFetching(id, setSeller, isToUseGlobalLoading = true) {
   }, [app, isLoading, isToUseGlobalLoading]);
 
   useEffect(() => {
+    return () => { if (isToUseGlobalLoading) app.setIsGlobalLoading(false); };
+  }, [app, isToUseGlobalLoading]);
+
+  useEffect(() => {
     fetching();
   }, [fetching]);
 
