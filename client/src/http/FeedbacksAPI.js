@@ -47,3 +47,8 @@ export async function createDeviceFeedbackReply(formData) {
   const { data } = await $mockApi.post("/device-feedback-replies", formData);
   return data;
 }
+
+export async function createSellerFeedback(formData) {
+  const { data } = await $mockApi.post("/seller-feedbacks", formData);
+  return data;
+}

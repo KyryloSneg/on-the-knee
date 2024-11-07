@@ -22,6 +22,10 @@ function useOneSellerFeedbacksFetching(sellerId, setFeedbacks = null) {
   }, [app, isLoading]);
 
   useEffect(() => {
+    return () => app.setIsGlobalLoading(false);
+  }, [app]);
+
+  useEffect(() => {
     fetching();
   }, [fetching]);
 
