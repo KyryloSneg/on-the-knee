@@ -14,7 +14,15 @@ class UserAddressService {
       const address = await UserAddressModel.findOne({user: userId});
       
       if (!address) throw ApiError.BadRequest("The user doesn't exist");
-      if (address.email === newEmail) throw ApiError.BadRequest("You have passed the same email as the current one");
+      if (address.email.replaceAll(" ", "") === newEmail.replaceAll(" ", "")) {
+        throw ApiError.BadRequest("You have passed the same email as the current one");
+      }
+
+      const emailCandidate = await UserAddressModel.findOne({email: newEmail});
+
+      if (emailCandidate) {
+          throw ApiError.BadRequest(`User with such a email ${newEmail} already exists`);
+      }
 
       // deleting existing emails to confirm of the user to reset the confirmation operation
       await EmailToConfirmModel.deleteMany({user: userId});
@@ -65,9 +73,15 @@ class UserAddressService {
 
   async changePhoneNumber(newPhoneNumber, userId) {
       const address = await UserAddressModel.findOne({user: userId});
+      if (!address) throw ApiError.BadRequest("The user doesn't exist");
 
-      const numberObj = parsePhoneNumber(newPhoneNumber);
+      const numberObj = parsePhoneNumber(newPhoneNumber.trim());
       const internationalNumber = numberObj.formatInternational();
+      const phoneNumberCandidate = await UserAddressModel.findOne({phoneNumber: internationalNumber});
+
+      if (phoneNumberCandidate) {
+          throw ApiError.BadRequest(`User with such a phone number ${newPhoneNumber} already exists`);
+      }
 
       if (address.phoneNumber !== internationalNumber) {
         address.phoneNumber = internationalNumber;
