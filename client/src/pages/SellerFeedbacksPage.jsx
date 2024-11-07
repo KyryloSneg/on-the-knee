@@ -1,4 +1,3 @@
-import React from 'react';
 import CommentsSection from '../components/CommentsSection';
 
 const SellerFeedbacksPage = ({ seller, feedbacks }) => {

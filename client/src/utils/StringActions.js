@@ -30,4 +30,9 @@ export default class StringActions {
     return splittedString;
   }
 
+  static splitByHyphens(str) {
+    let splittedString = str.split("-").join(" ");
+    return splittedString;
+  }
+
 }
