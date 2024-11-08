@@ -14,13 +14,21 @@ html * {
   transition: outline 0s;
 }
 
+/* making the page consume at least one height of viewport */
+#root > div {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr auto;
+}
+
 body {
   margin: 0;
 }
 
 /* every page must start with the <main /> element */
 main {
-  min-height: 100vh;
+  min-height: 100%;
 }
 
 /* implementing the scroll blocking like this, so the scroll bar doesn't disappear */
@@ -286,6 +294,8 @@ ul {
 #root > div > header {
   padding: 10px;
   background-color: #333333;
+  height: max-content;
+  align-self: flex-start;
 }
 
 #root > div > header {
