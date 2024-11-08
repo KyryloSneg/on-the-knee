@@ -26,7 +26,7 @@ const UserPersonalPageBtnGroup = observer(() => {
       navigate(ROOT_ROUTE);
     } catch {
       const errorModalInfoChildren = (
-        <p className="logout-error-modal">
+        <p className="error-modal-p">
           Unfortunately, log out has leaded to fail. Try a bit later
         </p>
       );

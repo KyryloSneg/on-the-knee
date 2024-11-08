@@ -74,11 +74,6 @@
   min-width: 76px;
 }
 
-.changing-personal-data-error-modal {
-  padding: 16px;
-  font-size: 1.6rem;
-}
-
 @media screen and (min-width: 620px) {
   .user-personal-details-inputs, .user-personal-details-values {
     grid-template-columns: 1fr 1fr;

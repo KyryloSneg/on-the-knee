@@ -316,7 +316,7 @@ const CheckoutPage = observer(() => {
       console.log(e.message);
 
       const errorModalInfoChildren = (
-        <p className="checkout-page-error-modal">
+        <p className="error-modal-p">
           Submitting the form leaded to the error. Try a bit later
         </p>
       );

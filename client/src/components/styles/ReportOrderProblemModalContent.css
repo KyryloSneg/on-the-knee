@@ -61,11 +61,6 @@
   gap: 8px;
 }
 
-.report-order-problem-submit-error-modal {
-  padding: 16px;
-  font-size: 1.6rem;
-}
-
 @media screen and (min-width: 200px) {
   .report-order-problem-modal-btn-group {
     grid-template-columns: 1fr 1fr;

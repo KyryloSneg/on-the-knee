@@ -16,11 +16,6 @@
   justify-self: start;
 }
 
-.logout-error-modal {
-  padding: 16px;
-  font-size: 1.6rem;
-}
-
 @media screen and (min-width: 320px) {
   .user-personal-page-btn-group {
     grid-template-columns: 1fr 1fr;

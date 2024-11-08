@@ -1,3 +1,8 @@
 .error-modal {
   z-index: 9002;
 }
+
+.error-modal-p {
+  padding: 16px;
+  font-size: 1.6rem;
+}
