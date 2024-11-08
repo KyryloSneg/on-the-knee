@@ -63,7 +63,7 @@ const UserPersonalAddressesContentChild = observer(({ id }) => {
 
   function openErrorModal() {
     const errorModalInfoChildren = (
-      <p className="changing-personal-data-error-modal">
+      <p className="error-modal-p">
         Unfortunately, changing phone number or email has failed. Try a bit later
       </p>
     );

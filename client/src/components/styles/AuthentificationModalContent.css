@@ -4,8 +4,3 @@
   flex-direction: column;
   gap: 24px;
 }
-
-.registration-error-modal {
-  padding: 16px;
-  font-size: 1.6rem;
-}

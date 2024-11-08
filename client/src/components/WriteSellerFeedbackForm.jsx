@@ -48,7 +48,7 @@ const WriteSellerFeedbackForm = observer(({ sellerId, sellerSlug }) => {
 
   const openErrorModal = useCallback(() => {
     const errorModalInfoChildren = (
-      <p className="changing-password-error-modal">
+      <p className="error-modal-p">
         Unfortunately, sending the feedback has failed. Try a bit later
       </p>
     );

@@ -47,7 +47,7 @@ const UserChangePasswordForm = observer(({ closeModal }) => {
 
   const openErrorModal = useCallback(() => {
     const errorModalInfoChildren = (
-      <p className="changing-password-error-modal">
+      <p className="error-modal-p">
         Unfortunately, changing password has failed. Try a bit later
       </p>
     );

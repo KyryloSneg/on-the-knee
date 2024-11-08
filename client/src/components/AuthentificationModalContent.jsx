@@ -59,7 +59,7 @@ const AuthentificationModalContent = observer(({ closeModal }) => {
 
   function openErrorModal() {
     const errorModalInfoChildren = (
-      <p className="registration-error-modal">
+      <p className="error-modal-p">
         Unfortunately, registration has failed. Try a bit later
       </p>
     );

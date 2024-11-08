@@ -30,7 +30,7 @@ const ReportOrderProblemModalContent = observer(({ closeModal }) => {
 
       if (Array.isArray(existingOrderProblem) ? existingOrderProblem.length > 0 : existingOrderProblem) {
         const errorModalInfoChildren = (
-          <p className="report-order-problem-submit-error-modal">
+          <p className="error-modal-p">
             You have already sent the problem. Wait for the response.
           </p>
         );
@@ -70,7 +70,7 @@ const ReportOrderProblemModalContent = observer(({ closeModal }) => {
     } catch (e) {
       console.log(e.message);
       const errorModalInfoChildren = (
-        <p className="report-order-problem-submit-error-modal">
+        <p className="error-modal-p">
           Something has gone wrong while sending the problem. Try a bit later.
         </p>
       );

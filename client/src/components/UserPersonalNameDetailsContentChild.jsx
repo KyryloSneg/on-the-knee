@@ -43,7 +43,7 @@ const UserPersonalNameDetailsContentChild = observer(({ id }) => {
 
   function openErrorModal() {
     const errorModalInfoChildren = (
-      <p className="changing-personal-data-error-modal">
+      <p className="error-modal-p">
         Unfortunately, changing name or surname has failed. Try a bit later
       </p>
     );
