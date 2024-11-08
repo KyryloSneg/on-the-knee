@@ -481,7 +481,7 @@ ul {
   background-color: #1e47ff;
   width: 25%;
   height: 100%;
-  animation: 0.35s linear infinite app-global-loading;
+  animation: 0.5s linear infinite app-global-loading;
 }
 
 /* device categories modal */
@@ -512,6 +512,12 @@ ul {
   }
 }
 
+@media screen and (min-width: 640px) {
+  .app-global-loading-bar-rect {
+    animation: 0.4s linear infinite app-global-loading;
+  }
+}
+
 @media screen and (min-width: 730px) {
   #categories-modal {
     max-width: 700px;
@@ -526,9 +532,9 @@ ul {
   }
 }
 
-@media screen and (min-width: 1000px) {
+@media screen and (min-width: 880px) {
   .app-global-loading-bar-rect {
-    animation: 0.3s linear infinite app-global-loading;
+    animation: 0.5s linear infinite app-global-loading;
   }
 }
 
