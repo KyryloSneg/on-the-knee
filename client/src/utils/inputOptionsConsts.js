@@ -47,14 +47,25 @@ export function getNumberInputOptions({
   return numberInputOptions;
 }
 
+// using only english letters
 export function isOnlyLetters(value) {
   // do not forget that our regex doesn't detect whitespaces, so matches.length might be less than value.length.
   // to prevent that, delete all whitespaces from the value
   const valueWithoutSpaces = value.replaceAll(" ", "");
-  const matches = valueWithoutSpaces.match(/\p{Letter}/gu);
+  // const matches = valueWithoutSpaces.match(/\p{Letter}/gu);
+  const matches = valueWithoutSpaces.match(/[a-zA-Z]/g);
 
   const isOnlyLetters = matches?.length === valueWithoutSpaces.length;
   return isOnlyLetters || "Letters only";
+}
+
+export function isEnglishWithOptionalDigits(value) {
+  const valueWithoutSpaces = value.replaceAll(" ", "");
+
+  return (
+    (/^[a-zA-Z0-9]+$/.test(valueWithoutSpaces) && isNaN(+valueWithoutSpaces)) 
+    || "English chars with digits (or without) only"
+  );
 }
 
 export function isValidEmail(value) {
