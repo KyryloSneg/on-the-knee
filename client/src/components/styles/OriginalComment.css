@@ -20,6 +20,10 @@
   word-break: break-word;
 }
 
+.comment-seller-name {
+  color: #3c3cd5;
+}
+
 .comment-date {
   font-size: 1.2rem;
   color: rgb(90, 90, 90);
@@ -86,6 +90,7 @@
 }
 
 .original-comment-rate-btn-group > button {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 4px;
@@ -95,14 +100,8 @@
   cursor: pointer;
 }
 
-.original-comment-rate-btn-group > button > svg {
-  transition: color 0.2s, fill 0.2s;
-}
-
-.original-comment-rate-btn-group > button:hover > svg,
-.original-comment-rate-btn-group > button:active > svg,
-.original-comment-rate-btn-group > button:focus-visible > svg {
-  fill: #3348E6;
+.original-comment-rate-btn-group > button:disabled {
+  cursor: auto;
 }
 
 .original-comment-rate-btn-group > button > span {
@@ -110,9 +109,9 @@
   transition: color 0.2s;
 }
 
-.original-comment-rate-btn-group > button:hover > span,
-.original-comment-rate-btn-group > button:active > span,
-.original-comment-rate-btn-group > button:focus-visible > span {
+.original-comment-rate-btn-group > button:enabled:hover > span,
+.original-comment-rate-btn-group > button:enabled:active > span,
+.original-comment-rate-btn-group > button:enabled:focus-visible > span {
   color: #bd5e10;
 }
 

@@ -1,5 +1,5 @@
-import { Spinner } from "react-bootstrap";
 import "./Loader.css";
+import { Spinner } from "react-bootstrap";
 
 const Loader = ({ className, ...props }) => {
   let spinnerClassName = "custom-loader no-select";

@@ -12,7 +12,7 @@ const WriteSellerFeedbackPage = () => {
   let [id, slug] = sellerIdSlug.split("--");
   id = +id;
 
-  useOneSellerFetching(id, setSeller, false);
+  useOneSellerFetching(id, setSeller, true, false);
   const sellerPlaceHolderName = StringActions.capitalize(StringActions.splitByHyphens(slug));
 
   return (
