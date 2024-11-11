@@ -4,11 +4,16 @@ import "./styles/AskSellerBtn.css";
 import UIButton from "./UI/uiButton/UIButton";
 import { Context } from "../Context";
 
-const AskSellerBtn = ({ seller }) => {
+const AskSellerBtn = ({ seller, isUserASellerOrManager, setIsToShowSellerAskQuestion }) => {
   const { app, deviceStore } = useContext(Context);
   const btnRef = useRef(null);
 
   function onClick() {
+    if (isUserASellerOrManager) {
+      setIsToShowSellerAskQuestion(true);
+      return;
+    }
+
     app.setAskSellerModalBtnRef(btnRef);
     deviceStore.setSelectedSellerId(seller.id);
 

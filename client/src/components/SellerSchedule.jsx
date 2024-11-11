@@ -1,6 +1,6 @@
 import "./styles/SellerSchedule.css";
 
-const SellerSchedule = ({ seller }) => {
+const SellerSchedule = ({ seller  }) => {
   return (
     <dl className="seller-schedule">
       {Object.entries(seller.schedule).map(([key, value]) => {

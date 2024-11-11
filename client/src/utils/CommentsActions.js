@@ -16,7 +16,7 @@ export default class CommentsActions {
     if (Array.isArray(comments)) {
       for (let comment of comments) {
         if (options.isToFetchFeedbacksUsers) {
-          if (!comment.isAnonymously && (comment.userId !== null && comment.userId !== undefined)) {
+          if (comment.userId !== null && comment.userId !== undefined) {
             const commentAuthor = await getUser(comment.userId, true);
             if (commentAuthor) comment.user = commentAuthor;
           };

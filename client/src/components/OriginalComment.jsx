@@ -251,7 +251,10 @@ const OriginalComment = observer(({
           {isSellerOrSellerManager
             ? <>Manager of <span className="comment-seller-name">{seller?.name || "..."}</span> seller</>
             : comment?.isAnonymously
-              ? "Anonym"
+              ? 
+                user
+                  ? `Anonym (You)`
+                  : "Anonym"
               : isWithName ? `${user.name} ${user.surname}` : "..."
           }
         </p>

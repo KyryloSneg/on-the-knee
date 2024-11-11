@@ -11,7 +11,7 @@ const CommentsListItem = ({
   const [user, setUser] = useState(comment?.user || propsUser);
   const [seller, setSeller] = useState(comment?.seller || null);
   
-  useGettingOneUser(comment?.userId, setUser, true, !comment.isAnonymously && !user);
+  useGettingOneUser(comment?.userId, setUser, true, !user);
   useOneSellerFetching(comment?.device?.sellerId, setSeller, comment?.device?.sellerId && !seller, false);
 
   let replies;

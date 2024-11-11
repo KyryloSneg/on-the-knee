@@ -1,5 +1,5 @@
 import "./styles/CommentModalContent.css";
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Context } from "../Context";
 import { useForm } from "react-hook-form";
 import { observer } from "mobx-react-lite";
@@ -19,8 +19,15 @@ const CommentModalContent = observer(({ type, closeModal }) => {
   const [isAnonymously, setIsAnonymously] = useState(false);
   const [settedStarRating, setSettedStarRating] = useState(0);
   const [isToShowStarError, setIsToShowStarError] = useState(false);
+  const [isToShowSellerCantRemainComment, setIsToShowSellerCantRemainComment] = useState(false);
   const [files, setFiles] = useState([]);
   const errorsBeforeBlock = useRef({});
+
+  const isUserASellerOrManager = user.user?.roles?.includes("SELLER") || user.user?.roles?.includes("SELLER-MANAGER");
+
+  useEffect(() => {
+    if (!isUserASellerOrManager) setIsToShowSellerCantRemainComment(false);
+  }, [isUserASellerOrManager]);
 
   const {
     register,
@@ -55,6 +62,7 @@ const CommentModalContent = observer(({ type, closeModal }) => {
       setIsToShowStarError(true);
       return;
     }
+    
     // react-form-hook doesn't let this function run
     // if there are any errors but i put errors 
     // in the condition below just in case
@@ -70,10 +78,15 @@ const CommentModalContent = observer(({ type, closeModal }) => {
 
     const filesToSend = files.map((file, index) => ({ ...file, fileObj: transformedFiles[index] }));
     if (type === "feedback") {
+      if (isUserASellerOrManager) {
+        setIsToShowSellerCantRemainComment(true);
+        return;
+      }
+
       const newFeedback = {
         "id": id,
         "deviceId": deviceStore.selectedDeviceId,
-        "userId": isAnonymously ? null : user.user?.id,
+        "userId": user.isAuth ? user.user.id : null,
         "isAnonymously": isAnonymously,
         "images": filesToSend,
         "message": data.comment,
@@ -92,7 +105,7 @@ const CommentModalContent = observer(({ type, closeModal }) => {
       const newReply = {
         "id": id,
         "device-feedbackId": deviceStore.selectedDeviceFeedbackId,
-        "userId": user.user?.id || null,
+        "userId": user.user.id,
         "message": data.comment,
         "date": date,
       };
@@ -102,10 +115,15 @@ const CommentModalContent = observer(({ type, closeModal }) => {
       const feedbacks = await getOneDeviceFeedbacks(deviceStore.selectedDeviceId, app.commentModalGetCommentsQueryParamsStr);
       deviceStore.setDevicesFeedbacks(feedbacks);
     } else if (type === "question") {
+      if (isUserASellerOrManager) {
+        setIsToShowSellerCantRemainComment(true);
+        return;
+      }
+      
       const newQuestion = {
         "id": id,
         "deviceId": deviceStore.selectedDeviceId,
-        "userId": isAnonymously ? null : user.user?.id,
+        "userId": user.isAuth ? user.user.id : null,
         "isAnonymously": isAnonymously,
         "images": filesToSend,
         "message": data.comment,
@@ -121,7 +139,7 @@ const CommentModalContent = observer(({ type, closeModal }) => {
       const newAnswer = {
         "id": id,
         "device-questionId": deviceStore.selectedDeviceQuestionId,
-        "userId": user.user?.id || null,
+        "userId": user.user.id,
         "message": data.comment,
         "date": date,
       };
@@ -131,10 +149,15 @@ const CommentModalContent = observer(({ type, closeModal }) => {
       const questions = await getOneDeviceQuestions(deviceStore.selectedDeviceId, app.commentModalGetCommentsQueryParamsStr);
       deviceStore.setDeviceQuestions(questions);
     } else if (type === "askSeller") {
+      if (isUserASellerOrManager) {
+        setIsToShowSellerCantRemainComment(true);
+        return;
+      }
+
       const newQuestion = {
         "id": id,
         "sellerId": deviceStore.selectedSellerId,
-        "userId": user.user?.id || null,
+        "userId": user.isAuth ? user.user.id : null,
         "message": data.comment,
         "date": date,
       };
@@ -180,6 +203,7 @@ const CommentModalContent = observer(({ type, closeModal }) => {
           closeModal={closeModal}
           areErrors={areErrors}
           areInputsBlocked={areInputsBlocked}
+          isToShowSellerCantRemainComment={isToShowSellerCantRemainComment}
         />
       </form>
     </section>
