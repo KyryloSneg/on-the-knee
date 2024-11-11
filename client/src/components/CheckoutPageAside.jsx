@@ -6,7 +6,7 @@ import { Context } from "../Context";
 import useGettingOrders from "../hooks/useGettingOrders";
 import CartComboActions from "../utils/CartComboActions";
 
-const CheckoutPageAside = observer(() => {
+const CheckoutPageAside = observer(({ isSubmitting }) => {
   const { app, deviceStore, user } = useContext(Context);
   const checkoutSubmitBtnRef = useRef(null);
 
@@ -109,6 +109,7 @@ const CheckoutPageAside = observer(() => {
       <UIButton 
         className="checkout-page-submit-btn" 
         type="submit"
+        isLoading={isSubmitting}
         ref={checkoutSubmitBtnRef}
       >
         Checkout {orderWord}
