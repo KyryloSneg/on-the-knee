@@ -10,7 +10,7 @@ const AuthentificationModalForm = ({
   onSubmit, register, errors, control, trigger, getValues,
   selectedVariant, phoneInputInfos, setPhoneInputInfos,
   phoneInputRefs, authLeftAttempts, hasAlreadyTriedToAuthRef, 
-  possibleError
+  possibleError, isSubmitting
 }) => {
   function renderInputs() {
     if (selectedVariant === "registration") {
@@ -77,7 +77,12 @@ const AuthentificationModalForm = ({
           {authLeftAttempts} attempt{(authLeftAttempts > 1 || !authLeftAttempts) ? "s to log in are" : " to log in is"} left
         </p>
       }
-      <UIButton variant="modal-submit" type="submit" className={AUTHENTIFICATION_MODAL_SUBMIT_BTN_SERVICE_CLASS}>
+      <UIButton 
+        variant="modal-submit" 
+        type="submit" 
+        className={AUTHENTIFICATION_MODAL_SUBMIT_BTN_SERVICE_CLASS}
+        isLoading={isSubmitting}
+      >
         {btnText}
       </UIButton>
     </form>

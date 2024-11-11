@@ -19,3 +19,7 @@
   color: #a10e0e;
   text-align: center;
 }
+
+.authentification-modal-content-form > .ui-button.modal-submit {
+  height: 35px;
+}

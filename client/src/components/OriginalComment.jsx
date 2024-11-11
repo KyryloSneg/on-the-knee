@@ -5,7 +5,7 @@ import filledLikeIcon from "../assets/thumb_up_24x24_filled_3348E6.svg";
 import notFilledLikeIcon from "../assets/thumb_up_24x24_not-filled_3348E6.svg";
 import filledDislikeIcon from "../assets/thumb_down_24x24_filled_3348E6.svg";
 import notFilledDislikeIcon from "../assets/thumb_down_24x24_not-filled_3348E6.svg";
-import { useContext, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { Context } from "../Context";
 import { observer } from "mobx-react-lite";
 import DeviceCommentRatesActions from "../utils/DeviceCommentRatesActions";
@@ -18,23 +18,28 @@ import SellerFeedbackStarRatings from "./SellerFeedbackStarRatings";
 import UIButton from "./UI/uiButton/UIButton";
 import getDateStr from "../utils/getDateStr";
 import setAuthentificationModalVisibility from "../utils/setAuthentificationModalVisibility";
+import useLodashThrottle from "hooks/useLodashThrottle";
+import setErrorModalVisibility from "utils/setErrorModalVisibility";
 
-const OriginalComment = observer(({ comment, user, type, singularCommentWord = "comment", isWithImages, closeGalleryModal }) => {
+const OriginalComment = observer(({ 
+  comment, user, seller, type, singularCommentWord = "comment", isWithImages, closeGalleryModal 
+}) => {
   const { user: userStore, app, deviceStore } = useContext(Context);
+  
+  const isGalleryModal = !!closeGalleryModal;
   
   const replyBtnRef = useRef(null);
   const likeBtnRef = useRef(null);
   const dislikeBtnRef = useRef(null);
+  const isAlreadyChangingRate = useRef(false);
 
-  // we must update likes and dislikes after user clicking on one of them
+  // we must update likes and dislikes after user clicks on one of them
   const [likes, setLikes] = useState(comment["device-feedback-likes"] || comment["device-question-likes"]);
   const [dislikes, setDislikes] = useState(comment["device-feedback-dislikes"] || comment["device-question-dislikes"]);
 
   const {
     fetchingLikes,
     fetchingDislikes,
-    likesFetchResultRef,
-    dislikesFetchResultRef
   } = useFetchingDeviceCommentRates(comment.id, setLikes, setDislikes, type);
 
   const createdAtDate = new Date(comment.date);
@@ -46,12 +51,21 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
   likeFromUser = likes?.find(like => like.userId === userStore.user?.id);
   dislikeFromUser = dislikes?.find(dislike => dislike.userId === userStore.user?.id);
 
-  const [isAlreadyLiked, setIsAlreadyLiked] = useState(!!likeFromUser);
-  const [isAlreadyDisliked, setIsAlreadyDisliked] = useState(!!dislikeFromUser);
-  const [isChangingRate, setIsChangingRate] = useState(false);
+  const [isChangingRate, setIsChangingRate] = useState({ isLiking: false, isDisliking: false });
   const [isCantRateYourCommentError, setIsCantRateYourCommentError] = useState(false)
 
   const isYourComment = (userStore.user?.id === user?.id && !!user);
+
+  useEffect(() => {
+    // if user have closed the gallery modal or have opened one, update likes and dislikes
+    if (
+      (!isGalleryModal && !app.isVisibleCommentGalleryModal)
+      || (isGalleryModal && app.isVisibleCommentGalleryModal)
+    ) {
+      fetchingLikes();
+      fetchingDislikes();
+    };
+  }, [app.isVisibleCommentGalleryModal, fetchingLikes, fetchingDislikes, isGalleryModal]);
 
   function reply() {
     deviceStore.setSelectedDeviceId(comment.deviceId);
@@ -60,18 +74,32 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
       deviceStore.setSelectedDeviceFeedbackId(comment.id);
       app.setReplyModalBtnRef(replyBtnRef);
 
-      setReplyModalVisibility(true, app, !!closeGalleryModal);
+      setReplyModalVisibility(true, app, isGalleryModal);
     } else if (type === "deviceQuestions") {
       deviceStore.setSelectedDeviceQuestionId(comment.id);
       app.setAnswerModalBtnRef(replyBtnRef);
 
-      setAnswerModalVisibility(true, app, !!closeGalleryModal);
+      setAnswerModalVisibility(true, app, isGalleryModal);
     }
 
-    if (closeGalleryModal) closeGalleryModal();
+    if (isGalleryModal) closeGalleryModal();
   }
 
-  async function removeLike() {
+  const openErrorModal = useCallback(isLike => {
+    const errorModalInfoChildren = (
+      <p className="error-modal-p">
+        Unfortunately, rating the comment has failed. Try a bit later
+      </p>
+    );
+
+    app.setErrorModalInfo({ children: errorModalInfoChildren, id: "change-comment-rate-error", className: "" });
+    app.setErrorModalBtnRef(isLike ? likeBtnRef : dislikeBtnRef);
+    app.setIsToFocusErrorModalPrevModalTriggerElem(false);
+
+    setErrorModalVisibility(true, app);
+  }, [app]);
+
+  const removeLike = useCallback(async () => {
     // adding this condition just in case
     // (rateComment fn is already doing this)
     if (!userStore.isAuth) {
@@ -88,12 +116,14 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
       if (isCantRateYourCommentError) setIsCantRateYourCommentError(false);
     }
 
-    // could be undefined
-    const error = await DeviceCommentRatesActions.removeLikeRate(likeFromUser.id, type, setIsAlreadyLiked);
-    if (!error) fetchingLikes();
-  }
+    await DeviceCommentRatesActions.removeLikeRate(likeFromUser.id, type, true);
+    await fetchingLikes();
+  }, [
+    app, fetchingLikes, isCantRateYourCommentError, 
+    isYourComment, likeFromUser?.id, type, userStore.isAuth
+  ]);
 
-  async function removeDislike() {
+  const removeDislike = useCallback(async () => {
     // once more adding this condition just in case
     // (rateComment fn is already doing this)
     if (!userStore.isAuth) {
@@ -110,11 +140,14 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
       if (isCantRateYourCommentError) setIsCantRateYourCommentError(false);
     }
 
-    const error = await DeviceCommentRatesActions.removeDislikeRate(dislikeFromUser.id, type, setIsAlreadyDisliked);
-    if (!error) fetchingDislikes();
-  }
+    await DeviceCommentRatesActions.removeDislikeRate(dislikeFromUser.id, type, true);
+    await fetchingDislikes();
+  }, [
+    app, dislikeFromUser?.id, fetchingDislikes, 
+    isCantRateYourCommentError, isYourComment, type, userStore.isAuth
+  ]);
 
-  async function rateComment(isLike) {
+  const rateComment = useCallback(async isLike => {
     if (!userStore.isAuth) {
       // open user login modal
       app.setAuthentificationModalBtnRef(isLike ? likeBtnRef : dislikeBtnRef);
@@ -123,103 +156,80 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
     };
 
     // we can't like and dislike a comment at the same time
-    if (isChangingRate) return;
+    if (isAlreadyChangingRate.current) return;
+    isAlreadyChangingRate.current = true
 
     if (isYourComment) {
       if (!isCantRateYourCommentError) setIsCantRateYourCommentError(true);
+      isAlreadyChangingRate.current = false;
+
       return;
     } else {
       if (isCantRateYourCommentError) setIsCantRateYourCommentError(false);
     }
 
-    if (isLike) {
-      // the next lines of code are created to prevent bug of liking (our example) / disliking
-      // the same comment outside one (liking the comment in the modal first 
-      // and doing the same thing in the comment section component)
-      // the bug was causing double likes / dislikes etc.
-      // So there is "isAlreadyLiked" state ISN'T updated yet, likesFetchResultRef.current IS updated version of likes
-      // (we can't use likes from the "likes" state because they're not updated)
-      // basically if we see differences in server's likes and client's ones,
-      // set actual "isAlreadyLiked" / "isAlreadyDisliked" state, 
-      // update opposite rate if user changed like to dislike or vice versa and DO NOT CHANGE A RATE AT ALL
-      await fetchingLikes();
-      const updatedLikes = likesFetchResultRef.current;
-
-      const updatedIsAlreadyLiked = !!updatedLikes?.find(like => like.userId === userStore.user?.id);
-      if (updatedIsAlreadyLiked !== isAlreadyLiked) {
-        setIsAlreadyLiked(updatedIsAlreadyLiked);
-        if (updatedIsAlreadyLiked && isAlreadyDisliked) {
-          await fetchingDislikes();
-          setIsAlreadyDisliked(false);
-        }
-
-        return;
-      };
-
-      if (isAlreadyLiked) {
-        await removeLike();
-      } else {
-        let likeObject = {
-          // some random id (implementation might be different from this one)
-          "id": v4(),
-          "userId": userStore.user?.id,
-        };
-
-        if (type === "deviceFeedbacks") {
-          likeObject["device-feedbackId"] = comment.id;
-        } else if (type === "deviceQuestions") {
-          likeObject["device-questionId"] = comment.id;
-        }
-
-        const error = await DeviceCommentRatesActions.likeFeedback(likeObject, type, setIsAlreadyLiked, setIsChangingRate);
-        // preventing redundant fetches if delete request failed
-        if (!error) fetchingLikes();
-
-        if (isAlreadyDisliked) {
-          // we can't like and dislike a feedback at the same time
-          await removeDislike();
-        }
-      }
-
-    } else {
-      await fetchingDislikes();
-      const updatedDislikes = dislikesFetchResultRef.current;
-
-      const updatedIsAlreadyDisliked = !!updatedDislikes?.find(dislike => dislike.userId === userStore.user?.id);
-      if (updatedIsAlreadyDisliked !== isAlreadyDisliked) {
-        setIsAlreadyDisliked(updatedIsAlreadyDisliked);
-        if (updatedIsAlreadyDisliked && isAlreadyLiked) {
-          await fetchingLikes();
-          setIsAlreadyLiked(false);
-        }
-
-        return;
-      };
-
-      if (isAlreadyDisliked) {
-        await removeDislike();
-      } else {
-        let dislikeObject = {
-          "id": v4(),
-          "userId": userStore.user?.id,
-        };
-
-        if (type === "deviceFeedbacks") {
-          dislikeObject["device-feedbackId"] = comment.id;
-        } else if (type === "deviceQuestions") {
-          dislikeObject["device-questionId"] = comment.id;
-        }
-
-        const error = await DeviceCommentRatesActions.dislikeFeedback(dislikeObject, type, setIsAlreadyDisliked, setIsChangingRate);
-        if (!error) fetchingDislikes();
-
-        if (isAlreadyLiked) {
+    try {
+      setIsChangingRate({ isLiking: isLike, isDisliking: !isLike });
+    
+      if (isLike) {
+        if (!!likeFromUser) {
           await removeLike();
+        } else {
+          let likeObject = {
+            "id": v4(),
+            "userId": userStore.user?.id,
+          };
+  
+          if (type === "deviceFeedbacks") {
+            likeObject["device-feedbackId"] = comment.id;
+          } else if (type === "deviceQuestions") {
+            likeObject["device-questionId"] = comment.id;
+          }
+  
+          await DeviceCommentRatesActions.likeFeedback(likeObject, type, null, true);
+          await fetchingLikes();
+  
+          if (!!dislikeFromUser) {
+            // we can't like and dislike a feedback at the same time
+            await removeDislike();
+          }
+        }
+      } else {
+        if (!!dislikeFromUser) {
+          await removeDislike();
+        } else {
+          let dislikeObject = {
+            "id": v4(),
+            "userId": userStore.user?.id,
+          };
+  
+          if (type === "deviceFeedbacks") {
+            dislikeObject["device-feedbackId"] = comment.id;
+          } else if (type === "deviceQuestions") {
+            dislikeObject["device-questionId"] = comment.id;
+          }
+  
+          await DeviceCommentRatesActions.dislikeFeedback(dislikeObject, type, null, true);
+          await fetchingDislikes();
+  
+          if (!!likeFromUser) {
+            await removeLike();
+          }
         }
       }
-
+    } catch (e) {
+      openErrorModal(isLike);
+    } finally {
+      isAlreadyChangingRate.current = false;
+      setIsChangingRate({ isLiking: false, isDisliking: false });
     }
-  }
+  }, [
+    app, comment.id, fetchingDislikes, isCantRateYourCommentError,
+    fetchingLikes, type, userStore.isAuth, userStore.user?.id, openErrorModal,
+    isYourComment, likeFromUser, dislikeFromUser, removeDislike, removeLike
+  ]);
+
+  const throttledRateComment = useLodashThrottle(rateComment, 50, { "trailing": false });
 
   let commentReplyWord = "Reply";
   if (type === "deviceQuestions") {
@@ -232,14 +242,17 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
   }];
 
   const isWithName = user?.name && user?.surname;
+  const isSellerOrSellerManager = user?.roles?.includes("SELLER") || user?.roles?.includes("SELLER-MANAGER");
 
   return (
     <section className="original-comment">
       <div className="comment-username-date-wrap">
         <p className="comment-username">
-          {comment?.isAnonymously
-            ? "Anonym"
-            : isWithName ? `${user.name} ${user.surname}` : "..."
+          {isSellerOrSellerManager
+            ? <>Manager of <span className="comment-seller-name">{seller?.name || "..."}</span> seller</>
+            : comment?.isAnonymously
+              ? "Anonym"
+              : isWithName ? `${user.name} ${user.surname}` : "..."
           }
         </p>
         <p className="comment-date">
@@ -300,30 +313,32 @@ const OriginalComment = observer(({ comment, user, type, singularCommentWord = "
           <div className="original-comment-rate-group-error-wrap">
             <div className="original-comment-rate-btn-group">
               <button
-                onClick={() => rateComment(true)}
+                onClick={() => throttledRateComment(true)}
                 aria-label={
-                  isAlreadyLiked
+                  !!likeFromUser
                     ? `Remove your like from the ${singularCommentWord}`
                     : `Like the ${singularCommentWord}`
                 }
+                disabled={isChangingRate.isLiking}
                 ref={likeBtnRef}
               >
-                {isAlreadyLiked
+                {!!likeFromUser
                   ? <img src={filledLikeIcon} alt="Remove like" draggable="false" />
                   : <img src={notFilledLikeIcon} alt="Like" />
                 }
                 <span>{likes?.length}</span>
               </button>
               <button
-                onClick={() => rateComment(false)}
+                onClick={() => throttledRateComment(false)}
                 aria-label={
-                  isAlreadyDisliked
+                  !!dislikeFromUser
                     ? `Remove your dislike from the ${singularCommentWord}`
                     : `Dislike the ${singularCommentWord}`
                 }
+                disabled={isChangingRate.isDisliking}
                 ref={dislikeBtnRef}
               >
-                {isAlreadyDisliked
+                {!!dislikeFromUser
                   ? <img src={filledDislikeIcon} alt="Remove dislike" draggable="false" />
                   : <img src={notFilledDislikeIcon} alt="Dislike" draggable="false" />
                 }

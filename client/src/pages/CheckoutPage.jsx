@@ -1,5 +1,5 @@
 import "./styles/CheckoutPage.css";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import useGettingCartData from "../hooks/useGettingCartData";
 import { Context } from "../Context";
 import _ from "lodash";
@@ -18,12 +18,12 @@ import { getOneDeviceSaleDevices } from "../http/SalesAPI";
 import StringActions from "../utils/StringActions";
 import { parsePhoneNumber } from "libphonenumber-js";
 import { createOrder, createOrderCourierDelivery, createOrderDeviceCombination, createOrderSelectedAdditionalServices, createReceivent } from "../http/OrderAPI";
-import useLodashDebounce from "../hooks/useLodashDebounce";
 import { deleteCartDeviceCombination, patchCartSelectedAdditionalServices } from "../http/CartAPI";
 import { getOneStock, patchStock } from "../http/StocksAPI";
 import { getDeviceCombination } from "../http/DeviceApi";
 import setCartModalVisibility from "../utils/setCartModalVisibility";
 import setWrongCartComboAmountsModalVisibility from "../utils/setWrongCartComboAmountsVisibility";
+import useLodashThrottle from "hooks/useLodashThrottle";
 
 const CheckoutPage = observer(() => {
   const { app, deviceStore, user } = useContext(Context);
@@ -33,6 +33,7 @@ const CheckoutPage = observer(() => {
 
   const [isSenderPhoneInputDirty, setIsSenderPhoneInputDirty] = useState(false);
   const [senderPhoneInputValue, setSenderPhoneInputValue] = useState(user.userAddress?.phoneNumber?.replaceAll(" ", "") || "");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const orders = useGettingOrders();
 
@@ -81,14 +82,12 @@ const CheckoutPage = observer(() => {
     (user.isAuth && !_.isEqual(user.user, {})) && _.isEqual(user.cart, {})
   ) || !Object.keys(user.cartSelectedAdditionalServices)?.length || !deviceStore.hasTriedToFetchSales;
 
-
-  // using isAlreadySubmittingRef and a small delay to make not possible to submit the same order a couple times in a row 
-  const debouncedSubmitCallback = useLodashDebounce(submitCallback, 500);
-
-  async function submitCallback(value) {
+  const submitCallback = useCallback(async value => {
     try {
-      if (isAlreadySubmittingRef.current) { isAlreadySubmittingRef.current = false; return };
+      if (isAlreadySubmittingRef.current) return;
       isAlreadySubmittingRef.current = true;
+
+      setIsSubmitting(true);
 
       for (let cartCombo of user.cartDeviceCombinations) {
         const totalStockToUse = cartCombo.device.isPreOrder
@@ -325,8 +324,16 @@ const CheckoutPage = observer(() => {
       setErrorModalVisibility(true, app);
     } finally {
       isAlreadySubmittingRef.current = false;
+      setIsSubmitting(false);
     }
-  }
+  }, [
+    app, deviceStore.hasTriedToFetchSales, deviceStore.saleTypeNames, deviceStore.sales,
+    fetching, navigate, orders, senderPhoneInputValue, user.cart?.id, user.cartDeviceCombinations,
+    user.cartSelectedAdditionalServices, user.isAuth, user.user?.id
+  ]);
+
+  // using isAlreadySubmittingRef and a small delay to make not possible to submit the same order a couple times in a row 
+  const throttledSubmitCallback = useLodashThrottle(submitCallback, 500, { "trailing": false });
 
   if (isLoadingContent) return <div />;
   if (!user.cartDeviceCombinations?.length) {
@@ -391,7 +398,7 @@ const CheckoutPage = observer(() => {
   async function onSubmit(value) {
     if (!checkInputsValidAndHandleInvalidInputFocus(false)) return;
 
-    debouncedSubmitCallback(value);
+    throttledSubmitCallback(value);
   }
 
   // disabling enter key in the form
@@ -429,7 +436,7 @@ const CheckoutPage = observer(() => {
             senderPhoneNumberInputRef={senderPhoneNumberInputRef}
             cartDataFetching={getCartData}
           />
-          <CheckoutPageAside />
+          <CheckoutPageAside isSubmitting={isSubmitting} />
         </form>
       </div>
       {/* <DevTool control={control} /> */}

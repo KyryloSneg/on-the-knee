@@ -1,8 +1,7 @@
 import "./styles/AuthentificationModalContent.css";
 import AuthentificationModalForm from "./AuthentificationModalForm";
 import AuthentificationModalVariationsList from "./AuthentificationModalVariationsList";
-import { useContext, useRef, useState } from 'react';
-import useLodashDebounce from "../hooks/useLodashDebounce";
+import { useCallback, useContext, useRef, useState } from 'react';
 import { useForm } from "react-hook-form";
 import isPhoneValidFn from "../utils/isPhoneValid";
 import { AUTHENTIFICATION_MODAL_INPUT_SERVICE_CLASS, AUTHENTIFICATION_MODAL_SUBMIT_BTN_SERVICE_CLASS } from "../utils/consts";
@@ -12,17 +11,21 @@ import { Context } from "../Context";
 import { observer } from "mobx-react-lite";
 import setErrorModalVisibility from "../utils/setErrorModalVisibility";
 import { AxiosError } from "axios";
+import useLodashThrottle from "hooks/useLodashThrottle";
 
 const VARIANTS = Object.freeze(["registration", "authentificateWithPhone", "authentificateWithEmail"]);
 const MAX_AUTH_ATTEMPTS = 8;
 
 const AuthentificationModalContent = observer(({ closeModal }) => {
   const { app, user } = useContext(Context);
+
   const [selectedVariant, setSelectedVariant] = useState(VARIANTS[0]);
-  const isAlreadySubmittingRef = useRef(false);
-  const hasAlreadyTriedToAuthRef = useRef(false);
   const [authLeftAttempts, setAuthLeftAttempts] = useState(MAX_AUTH_ATTEMPTS);
   const [possibleError, setPossibleError] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const isAlreadySubmittingRef = useRef(false);
+  const hasAlreadyTriedToAuthRef = useRef(false);
 
   const {
     register,
@@ -55,9 +58,8 @@ const AuthentificationModalContent = observer(({ closeModal }) => {
 
   const [phoneInputInfos, setPhoneInputInfos] = useState(initPhoneInputInfo);
   const phoneInputRefs = useRef(initPhoneInputRefs);
-  const debouncedSubmitCallback = useLodashDebounce(submitCallback, 500);
 
-  function openErrorModal() {
+  const openErrorModal = useCallback(() => {
     const errorModalInfoChildren = (
       <p className="error-modal-p">
         Unfortunately, registration has failed. Try a bit later
@@ -69,16 +71,18 @@ const AuthentificationModalContent = observer(({ closeModal }) => {
     app.setIsToFocusErrorModalPrevModalTriggerElem(false);
 
     setErrorModalVisibility(true, app);
-  }
+  }, [app]);
 
-  async function submitCallback(value) {
+  const submitCallback = useCallback(async (value) => {
     // we can change possible error state only if main logic has been invoked
     let callbackPossibleError = null;
     let hasBeenMainLogicInvoked = false;
 
     try {
-      if (isAlreadySubmittingRef.current) { isAlreadySubmittingRef.current = false; return };
+      if (isAlreadySubmittingRef.current) return ;
       isAlreadySubmittingRef.current = true;
+
+      setIsSubmitting(true);
 
       const password = value[`${selectedVariant}-password`];
       const ip = await getUserIp();
@@ -137,8 +141,9 @@ const AuthentificationModalContent = observer(({ closeModal }) => {
       };
 
       isAlreadySubmittingRef.current = false;
+      setIsSubmitting(false);
     }
-  }
+  }, [closeModal, openErrorModal, phoneInputInfos, selectedVariant, user]);
   
   function checkInputsValidAndHandleInvalidInputFocus(isErrorHandler, errorsFromHandler = null) {
     let areInputsValid = true;
@@ -173,6 +178,8 @@ const AuthentificationModalContent = observer(({ closeModal }) => {
     return areInputsValid;
   }
 
+  const throttledSubmitCallback = useLodashThrottle(submitCallback, 500, { "trailing": false });
+
   function onSubmit(value) {
     if (!checkInputsValidAndHandleInvalidInputFocus(false)) return;
 
@@ -184,7 +191,7 @@ const AuthentificationModalContent = observer(({ closeModal }) => {
       areAuthAttemptsLeft = false;
     };
 
-    if (areAuthAttemptsLeft) debouncedSubmitCallback(value);
+    if (areAuthAttemptsLeft) throttledSubmitCallback(value);
   }
 
   return (
@@ -203,6 +210,7 @@ const AuthentificationModalContent = observer(({ closeModal }) => {
         authLeftAttempts={authLeftAttempts}
         hasAlreadyTriedToAuthRef={hasAlreadyTriedToAuthRef}
         possibleError={possibleError}
+        isSubmitting={isSubmitting}
       />
       <AuthentificationModalVariationsList 
         selectedVariation={selectedVariant} 

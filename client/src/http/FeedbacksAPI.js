@@ -1,9 +1,16 @@
 import { ONE_DEVICE_FEEDBACKS_API_URL, ONE_SELLER_FEEDBACKS_API_URL } from "../utils/consts";
 import { $mockApi } from "./index";
+import { getOneSeller } from "./SellersAPI";
 
 // fetchStringQueryParams starts with an ampersand "&"
 export async function getOneDeviceFeedbacks(id, fetchStringQueryParams = "") {
   const { data } = await $mockApi.get(ONE_DEVICE_FEEDBACKS_API_URL.replace("ID_TO_REPLACE", id) + fetchStringQueryParams);
+
+  const seller = await getOneSeller(data?.[0]?.device?.sellerId);
+  for (let feedback of data) {
+    feedback.seller = seller;
+  }
+
   return data;
 }
 
