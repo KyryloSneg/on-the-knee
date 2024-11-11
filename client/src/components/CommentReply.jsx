@@ -3,7 +3,7 @@ import "./styles/CommentReply.css";
 import useGettingOneUser from "../hooks/useGettingOneUser";
 import getDateStr from "../utils/getDateStr";
 
-const CommentReply = ({ reply, type }) => {
+const CommentReply = ({ reply, type, seller }) => {
   const [user, setUser] = useState(reply?.user || null);
   useGettingOneUser(reply?.userId, setUser, true, !reply.isAnonymously && !user);
 
@@ -16,6 +16,8 @@ const CommentReply = ({ reply, type }) => {
   }
 
   const isWithName = user?.name && user?.surname;
+  const isSellerOrSellerManager = user?.roles?.includes("SELLER") || user?.roles?.includes("SELLER-MANAGER");
+
   return (
     <section className="comment-reply">
       <div className="comment-username-date-wrap">
@@ -24,7 +26,10 @@ const CommentReply = ({ reply, type }) => {
             {commentReplyLabelWord}
           </p>
           <p className="comment-username">
-            {isWithName ? `${user.name} ${user.surname}` : "..."}
+            {isSellerOrSellerManager
+              ? <>Manager of <span className="comment-seller-name">{seller?.name || "..."}</span> seller</>
+              : isWithName ? `${user.name} ${user.surname}` : "..."
+            }
           </p>
         </div>
         <p className="comment-date">

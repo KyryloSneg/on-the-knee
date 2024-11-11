@@ -44,12 +44,17 @@
 }
 
 .checkout-page-submit-btn.ui-button {
-  background-color: #00ca1b;
+  height: 35px;
 }
 
-.checkout-page-submit-btn.ui-button:hover,
-.checkout-page-submit-btn.ui-button:hover,
-.checkout-page-submit-btn.ui-button:focus-visible {
+.checkout-page-submit-btn.ui-button:enabled {
+  background-color: #00ca1b;
+  height: 35px;
+}
+
+.checkout-page-submit-btn.ui-button:enabled:hover,
+.checkout-page-submit-btn.ui-button:enabled:hover,
+.checkout-page-submit-btn.ui-button:enabled:focus-visible {
   background-color: #00da1d;
 }
 

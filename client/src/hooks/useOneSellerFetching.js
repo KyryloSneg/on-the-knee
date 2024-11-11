@@ -3,7 +3,7 @@ import useFetching from "./useFetching";
 import { Context } from "../Context";
 import { getOneSeller } from "../http/SellersAPI";
 
-function useOneSellerFetching(id, setSeller, isToUseGlobalLoading = true) {
+function useOneSellerFetching(id, setSeller, additionalCondition = true, isToUseGlobalLoading = true) {
   const { app } = useContext(Context);
 
   async function fetchingCallback(propsId) {
@@ -21,8 +21,8 @@ function useOneSellerFetching(id, setSeller, isToUseGlobalLoading = true) {
   }, [app, isToUseGlobalLoading]);
 
   useEffect(() => {
-    fetching();
-  }, [fetching]);
+    if (additionalCondition) fetching();
+  }, [fetching, additionalCondition]);
 
   return [fetching, isLoading, error];
 }

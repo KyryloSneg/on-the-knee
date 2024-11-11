@@ -1,5 +1,5 @@
 import "./styles/CommentGalleryModal.css";
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { Context } from '../Context';
 import { observer } from "mobx-react-lite";
 import ModalWindow from "./UI/modalWindow/ModalWindow";
@@ -23,6 +23,15 @@ const CommentGalleryModal = observer(() => {
   function setIsCommentGalleryVisible(isVisible, isToKeepDarkBg = false) {
     setCommentGalleryModalVisibility(isVisible, app, isToKeepDarkBg);
   }
+
+  useEffect(() => {
+    return () => {
+      // resetting global states
+      app.setCommentModalGetCommentsQueryParamsStr("");
+      app.setCommentGalleryModalType("deviceFeedbacks");
+      app.setCommentGallerySelectedImageId(null);
+    }
+  }, [app]);
 
   return (
     <ModalWindow
