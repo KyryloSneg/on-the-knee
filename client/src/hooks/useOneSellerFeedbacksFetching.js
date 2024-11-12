@@ -2,12 +2,14 @@ import { useContext, useEffect } from "react";
 import useFetching from "./useFetching";
 import { Context } from "../Context";
 import { getOneSellerFeedbacks } from "../http/FeedbacksAPI";
+import CommentsActions from "utils/CommentsActions";
 
 function useOneSellerFeedbacksFetching(sellerId, setFeedbacks = null) {
   const { app, deviceStore } = useContext(Context);
 
   async function fetchingCallback(propsSellerId) {
     const feedbacks = await getOneSellerFeedbacks(propsSellerId);
+    await CommentsActions.setCommentsUsers(feedbacks, "seller-feedbacks");
     
     if (setFeedbacks) {
       setFeedbacks(feedbacks);

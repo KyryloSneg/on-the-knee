@@ -16,6 +16,8 @@ import FileActions from "utils/FileActions";
 import { v4 } from "uuid";
 import { createSellerFeedback, getOneSellerFeedbacks } from "http/FeedbacksAPI";
 import ServerErrorMsg from "./ServerErrorMsg";
+import { getOneUserOrders } from "http/OrderAPI";
+import { getDeviceCombination } from "http/DeviceApi";
 
 const WriteSellerFeedbackForm = observer(({ sellerId, sellerSlug }) => {
   const { user, app } = useContext(Context);
@@ -66,43 +68,75 @@ const WriteSellerFeedbackForm = observer(({ sellerId, sellerSlug }) => {
 
       setIsSubmitting(true);
 
-      const thisSellerFeedbacksFromUsers = await getOneSellerFeedbacks(sellerId, `&userId=${user.user.id}`);
-      const hasUserAlreadyLeftAFeedback = !!thisSellerFeedbacksFromUsers?.length;
+      const allUserOrders = await getOneUserOrders(user.user.id, "&_embed=order-device-combinations");
+      let haveUserBoughtAnythingFromThisSeller = false;
 
-      if (!hasUserAlreadyLeftAFeedback) {
-        const id = v4();
-        const date = new Date().toISOString();
-  
-        const transformedFiles = await Promise.all(
-          files.map(file => FileActions.getBase64(file.fileObj))
-        );
-    
-        const filesToSend = files.map((file, index) => ({ ...file, fileObj: transformedFiles[index] }));
-        const sellerFeedback = {
-          "id": id,
-          "sellerId": sellerId,
-          "userId": user.user.id,
-          "images": filesToSend,
-          "message": formFields.comment || "",
-          "is-up-to-date-rate": isUpToDateRate,
-          "delivery-speed-rate": deliverySpeedRate,
-          "service-quality-rate": serviceQualityRate,
-          "date": date
-        };
-  
-        await createSellerFeedback(sellerFeedback);
+      console.log(allUserOrders);
+      
 
-        setPossibleError(null);
-        navigate(SELLER_FEEDBACKS_ROUTE.replace(":sellerIdSlug", `${sellerId}--${sellerSlug}`));
-      } else {
+      for (let order of allUserOrders) {
+        console.log(order);
+        for (let orderCombo of order["order-device-combinations"]) {
+          console.log(orderCombo);
+          
+          const devCombo = await getDeviceCombination(orderCombo["device-combinationId"], "_expand=device");
+          console.log(devCombo);
+          
+          if (devCombo.device.sellerId === sellerId) {
+            haveUserBoughtAnythingFromThisSeller = true;
+            break;
+          }
+        }
+      }
+
+      if (!haveUserBoughtAnythingFromThisSeller) {
         // let's pretend it's an error that has come from axios
         setPossibleError({
           response: {
             data: {
-              message: "You have already rated this seller"
+              message: "You haven't bought anything from this seller"
             }
           }
         })
+      } else {
+        const thisSellerFeedbacksFromUsers = await getOneSellerFeedbacks(sellerId, `&userId=${user.user.id}`);
+        const hasUserAlreadyLeftAFeedback = !!thisSellerFeedbacksFromUsers?.length;
+
+        if (hasUserAlreadyLeftAFeedback) {
+          // let's pretend it's an error that has come from axios
+          setPossibleError({
+            response: {
+              data: {
+                message: "You have already rated this seller"
+              }
+            }
+          })
+        } else {
+          const id = v4();
+          const date = new Date().toISOString();
+    
+          const transformedFiles = await Promise.all(
+            files.map(file => FileActions.getBase64(file.fileObj))
+          );
+    
+          const filesToSend = files.map((file, index) => ({ ...file, fileObj: transformedFiles[index] }));
+          const sellerFeedback = {
+            "id": id,
+            "sellerId": sellerId,
+            "userId": user.user.id,
+            "images": filesToSend,
+            "message": formFields.comment || "",
+            "is-up-to-date-rate": isUpToDateRate,
+            "delivery-speed-rate": deliverySpeedRate,
+            "service-quality-rate": serviceQualityRate,
+            "date": date
+          };
+    
+          await createSellerFeedback(sellerFeedback);
+    
+          setPossibleError(null);
+          navigate(SELLER_FEEDBACKS_ROUTE.replace(":sellerIdSlug", `${sellerId}--${sellerSlug}`));
+        }
       }
     } catch (e) {
       openErrorModal();
@@ -111,7 +145,7 @@ const WriteSellerFeedbackForm = observer(({ sellerId, sellerSlug }) => {
       setIsSubmitting(false);
     }
   }, [
-    sellerId, sellerSlug, openErrorModal, navigate, isUpToDateRate, 
+    sellerId, sellerSlug, openErrorModal, navigate, isUpToDateRate,
     deliverySpeedRate, serviceQualityRate, files, user.user?.id
   ]);
 
@@ -238,11 +272,11 @@ const WriteSellerFeedbackForm = observer(({ sellerId, sellerSlug }) => {
       </div>
       <FilePickerSection files={files} setFiles={setFiles} />
       {possibleError && <ServerErrorMsg error={possibleError} />}
-      <UIButton 
+      <UIButton
         type="submit"
-        className="write-seller-feedback-submit-btn" 
-        isLoading={isSubmitting} 
-        disabled={areErrors} 
+        className="write-seller-feedback-submit-btn"
+        isLoading={isSubmitting}
+        disabled={areErrors}
         ref={submitBtnRef}
       >
         Send the rate

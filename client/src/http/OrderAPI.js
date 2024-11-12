@@ -27,8 +27,11 @@ export async function createOrderSelectedAdditionalServices(orderSelectedAdditio
   return data;
 }
 
-export async function getOneUserOrders(userId) {
-  let { data } = await $mockApi.get(`/orders?_expand=receivent&_embed=order-selected-additional-services&userId=${userId}`);
+// fetchStringQueryParams starts with an ampersand "&"
+export async function getOneUserOrders(userId, fetchStringQueryParams = "") {
+  let { data } = await $mockApi.get(
+    `/orders?_expand=receivent&_embed=order-selected-additional-services&userId=${userId}${fetchStringQueryParams}`
+  );
 
   // json-server unfortunately can't fix the bug that make _expand param break
   // if the id value is null, so handle it by ourselves
