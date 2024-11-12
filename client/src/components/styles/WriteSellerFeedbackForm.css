@@ -29,7 +29,8 @@
   resize: vertical;
   box-sizing: border-box;
   width: 100%;
-  height: 112px;
+  /* making it not possible to resize the textarea to the height less than 112px */
+  min-height: 112px;
   padding: 6px;
   border: 1px solid rgb(130, 130, 130);
   border-radius: 8px;
