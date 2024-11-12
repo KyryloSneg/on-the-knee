@@ -27,7 +27,11 @@ const CommentGalleryModalContent = observer(({ type, singularCommentWord, closeM
 
   return (  
     <div className="comment-gallery-comment-content">
-      <ImagesCarousel images={carouselImages} initialSelectedId={app.commentGallerySelectedImageId} />
+      <ImagesCarousel 
+        images={carouselImages} 
+        isInModal={true}
+        initialSelectedId={app.commentGallerySelectedImageId} 
+      />
       <CommentsListItem 
         type={type} 
         comment={comment} 
