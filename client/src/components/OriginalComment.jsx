@@ -322,7 +322,7 @@ const OriginalComment = observer(({
                     ? `Remove your like from the ${singularCommentWord}`
                     : `Like the ${singularCommentWord}`
                 }
-                disabled={isChangingRate.isLiking}
+                disabled={isChangingRate.isLiking || isChangingRate.isDisliking}
                 ref={likeBtnRef}
               >
                 {!!likeFromUser
@@ -338,7 +338,7 @@ const OriginalComment = observer(({
                     ? `Remove your dislike from the ${singularCommentWord}`
                     : `Dislike the ${singularCommentWord}`
                 }
-                disabled={isChangingRate.isDisliking}
+                disabled={isChangingRate.isLiking || isChangingRate.isDisliking}
                 ref={dislikeBtnRef}
               >
                 {!!dislikeFromUser
