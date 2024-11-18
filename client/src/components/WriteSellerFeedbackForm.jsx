@@ -285,8 +285,7 @@ const WriteSellerFeedbackForm = observer(({
             <p id={isUpToDateParaId}>Is up to date</p>
             <StarRating
               id="write-seller-feedback-is-up-to-date-rate"
-              width={starSize}
-              height={starSize}
+              size={starSize}
               isWithText={isWithStarText}
               isReadOnly={false}
               settedValue={isUpToDateRate}
@@ -306,8 +305,7 @@ const WriteSellerFeedbackForm = observer(({
             <p id={deliverySpeedParaId}>Delivery speed</p>
             <StarRating
               id="write-seller-feedback-delivery-speed-rate"
-              width={starSize}
-              height={starSize}
+              size={starSize}
               isWithText={isWithStarText}
               isReadOnly={false}
               settedValue={deliverySpeedRate}
@@ -327,8 +325,7 @@ const WriteSellerFeedbackForm = observer(({
             <p id={serviceQualityParaId}>Service quality</p>
             <StarRating
               id="write-seller-feedback-service-quality-rate"
-              width={starSize}
-              height={starSize}
+              size={starSize}
               isWithText={isWithStarText}
               isReadOnly={false}
               settedValue={serviceQualityRate}

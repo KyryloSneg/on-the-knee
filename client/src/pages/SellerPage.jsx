@@ -71,8 +71,7 @@ const SellerPage = observer(({ type }) => {
         <StarRating 
           readOnlyValue={seller?.rating} 
           id="seller-page-rating" 
-          width={20}
-          height={20}
+          size={20}
         />
       </div>
       <TabsPageLayout

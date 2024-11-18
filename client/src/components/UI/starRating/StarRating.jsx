@@ -4,7 +4,7 @@ import { useState } from "react";
 
 // isWithText works only for 5-star rating
 const StarRating = ({ 
-  readOnlyValue = 0, id, maxValue = 5, width = 16, height = 16, isWithText = false, 
+  readOnlyValue = 0, id, maxValue = 5, size = 16, isWithText = false, 
   isReadOnly = true, areBtnsBlocked = false, settedValue = null, setSettedValue = null, onSetCb = null, ...props 
 }) => {
   const [hoveredValue, setHoveredValue] = useState(settedValue);
@@ -24,8 +24,7 @@ const StarRating = ({
           <Star 
             value={hoveredValue || settedValue || readOnlyValue} 
             starIndex={starIndex} 
-            width={width} 
-            height={height}
+            size={size}
             /* key that will be passed to our svg elements */
             starKey={`device / seller ${id}: ${starIndex}`}
             /* real key to prevent react console error */
