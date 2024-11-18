@@ -41,11 +41,6 @@ export async function changeUserEmail(email) {
 }
 
 export async function changeUserPassword(currentPassword, newPassword) {
-      // the endpoint doesn't return anything, so to prevent the 404 error from axios
-    // change headers["Accept"] a bit
-    // headers: {
-    //   "Accept": "*/*, application/json, text/plain",
-    // }
   const { data } = await $authApi.patch("/change-password", { currentPassword, newPassword });
   return data;
 }

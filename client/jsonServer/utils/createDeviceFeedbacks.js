@@ -35,6 +35,7 @@ module.exports = (feedbacks, feedbackReplies, deviceId) => {
       "disadvantages": faker.lorem.text(),
       "rate": rate,
       "date": faker.date.recent(),
+      "isEdited": false,
     }
 
     for (let j = 0; j < faker.number.int({ min: 2, max: 5 }); j++) {
@@ -46,6 +47,7 @@ module.exports = (feedbacks, feedbackReplies, deviceId) => {
         "userId": userId,
         "message": faker.lorem.text(),
         "date": faker.date.recent(),
+        "isEdited": false,
       }
 
       feedbackReplies.push(reply);

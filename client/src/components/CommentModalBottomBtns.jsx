@@ -1,10 +1,11 @@
 import "./styles/CommentModalBottomBtns.css";
+import { forwardRef } from "react";
 import UIButton from "./UI/uiButton/UIButton";
 
-const CommentModalBottomBtns = ({ 
-  type, setIsAnonymously, isAnonymously, closeModal,
-  areErrors, areInputsBlocked, isToShowSellerCantRemainComment 
-}) => {
+const CommentModalBottomBtns = forwardRef(({ 
+  type, setIsAnonymously, isAnonymously, closeModal, setIsEditing, isEditCommentForm, 
+  areErrors, areInputsBlocked, isToShowSellerCantRemainComment, isSubmitting 
+}, submitBtnRef) => {
   let checkboxDivClass = "checkbox-div";
   if (isAnonymously) {
     checkboxDivClass += " checked";
@@ -16,9 +17,14 @@ const CommentModalBottomBtns = ({
       : `A seller or a seller manager can't remain a ${type}`
   );
 
+  function onDeny() {
+    closeModal?.();
+    setIsEditing?.();
+  }
+  
   return (
     <div className="comment-modal-bottom-btns">
-      {(type === "feedback" || type === "question") &&
+      {((type === "feedback" || type === "question") && !isEditCommentForm) &&
         <button
           className="comment-modal-is-anonymously"
           onClick={() => setIsAnonymously(!isAnonymously)}
@@ -39,7 +45,7 @@ const CommentModalBottomBtns = ({
         <UIButton
           variant="modal-deny"
           className="comment-modal-form-deny-btn"
-          onClick={closeModal}
+          onClick={onDeny}
         >
           Deny
         </UIButton>
@@ -48,12 +54,14 @@ const CommentModalBottomBtns = ({
           className="comment-modal-form-submit-btn"
           type="submit"
           disabled={areErrors || areInputsBlocked}
+          isLoading={isSubmitting}
+          ref={submitBtnRef}
         >
           Submit
         </UIButton>
       </div>
     </div>
   );
-}
+});
 
 export default CommentModalBottomBtns;

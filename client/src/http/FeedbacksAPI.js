@@ -6,9 +6,14 @@ import { getOneSeller } from "./SellersAPI";
 export async function getOneDeviceFeedbacks(id, fetchStringQueryParams = "") {
   const { data } = await $mockApi.get(ONE_DEVICE_FEEDBACKS_API_URL.replace("ID_TO_REPLACE", id) + fetchStringQueryParams);
 
-  const seller = await getOneSeller(data?.[0]?.device?.sellerId);
-  for (let feedback of data) {
-    feedback.seller = seller;
+  try {
+    const seller = await getOneSeller(data?.[0]?.device?.sellerId);
+    
+    for (let feedback of data) {
+      feedback.seller = seller;
+    }
+  } catch (e) {
+    console.log(e.message);
   }
 
   return data;
@@ -57,5 +62,41 @@ export async function createDeviceFeedbackReply(formData) {
 
 export async function createSellerFeedback(formData) {
   const { data } = await $mockApi.post("/seller-feedbacks", formData);
+  return data;
+}
+
+export async function deleteDeviceFeedback(id) {
+  const { data } = await $mockApi.delete("/device-feedbacks/" + id);
+  return data;
+}
+
+export async function deleteDeviceFeedbackReply(id) {
+  const { data } = await $mockApi.delete("/device-feedback-replies/" + id);
+  return data;
+}
+
+export async function deleteSellerFeedback(id) {
+  const { data } = await $mockApi.delete("/seller-feedbacks/" + id);
+  return data;
+}
+
+export async function patchDeviceFeedback(id, contentToReplaceWith) {
+  const { data } = await $mockApi.patch("/device-feedbacks/" + id, contentToReplaceWith);
+  return data;
+}
+
+export async function patchDeviceFeedbackReply(id, contentToReplaceWith) {
+  const { data } = await $mockApi.patch("/device-feedback-replies/" + id, contentToReplaceWith);
+  return data;
+}
+
+export async function patchSellerFeedback(id, contentToReplaceWith) {
+  // sometimes it throws 404, so change headers a bit to prevent this
+  const { data } = await $mockApi.patch("/seller-feedbacks/" + id, contentToReplaceWith, {
+    headers: {
+      "Accept": "*/*, application/json, text/plain",
+    }
+  });
+
   return data;
 }

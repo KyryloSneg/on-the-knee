@@ -99,7 +99,7 @@ const UserPersonalAddressesContentChild = observer(({ id }) => {
       if (!callbackPossibleError?.response && callbackPossibleError?.code === AxiosError.ERR_NETWORK) {
         isToSetEmailsToConfirmOnSuccess = false;
         openErrorModal();
-      } else {
+      } else if (!callbackPossibleError) {
         setIsEditing(false);
       }
 

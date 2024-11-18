@@ -21,8 +21,8 @@ function useOneSellerFetching(id, setSeller, additionalCondition = true, isToUse
   }, [app, isToUseGlobalLoading]);
 
   useEffect(() => {
-    if (additionalCondition) fetching();
-  }, [fetching, additionalCondition]);
+    if ((id !== null && id !== undefined) && additionalCondition) fetching();
+  }, [id, fetching, additionalCondition]);
 
   return [fetching, isLoading, error];
 }

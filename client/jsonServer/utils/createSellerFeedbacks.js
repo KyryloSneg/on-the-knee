@@ -37,6 +37,7 @@ module.exports = (feedbacks, sellerId) => {
       "delivery-speed-rate": deliverySpeedRate,
       "service-quality-rate": serviceQualityRate,
       "date": faker.date.recent(),
+      "isEdited": false,
     }
 
     feedbacks.push(feedback);

@@ -65,7 +65,7 @@ const UserPersonalNameDetailsContentChild = observer(({ id }) => {
         // if we get ERR_NETWORK from the server (it has crashed for example), open the error modal
         if (!callbackPossibleError?.response && callbackPossibleError?.code === AxiosError.ERR_NETWORK) {
           openErrorModal();
-        } else {
+        } else if (!callbackPossibleError) {
           setIsEditing(false);
         }
       }

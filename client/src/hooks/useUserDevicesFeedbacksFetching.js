@@ -6,7 +6,7 @@ import CommentsActions from "utils/CommentsActions";
 
 function useUserDevicesFeedbacksFetching(
   deviceCombinations, setUserDevsFeedbacks = null, deviceStore = null,
-  isToFetchFeedbacksUsers = true, isToFetchRepliesUsers = true
+  isToFetchFeedbacksUsers = true, isToFetchRepliesUsers = true, isToFetch = true
 ) {
   const { user } = useContext(Context);
   const deviceCombinationsRef = useRef(deviceCombinations);
@@ -35,8 +35,8 @@ function useUserDevicesFeedbacksFetching(
   const [fetching, isLoading, error] = useFetching(fetchingCallback);
 
   useEffect(() => {
-    fetching();
-  }, [deviceCombinations, setUserDevsFeedbacks, deviceStore, fetching]);
+    if (isToFetch) fetching();
+  }, [deviceCombinations, setUserDevsFeedbacks, isToFetch, deviceStore, fetching]);
 
   return [fetching, isLoading, error];
 }

@@ -27,7 +27,7 @@ const DevicePage = observer(({ type }) => {
   const prevViewedDeviceComboIdRef = useRef(null);
 
   useOneDeviceFetching(id, setDevice, true);
-  useOneDeviceFeedbacksFetching(device?.id, null, null, deviceStore);
+  useOneDeviceFeedbacksFetching(device?.id);
 
   function renderInnerPage() {
     let innerPage;

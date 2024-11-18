@@ -79,7 +79,7 @@ const AuthentificationModalContent = observer(({ closeModal }) => {
     let hasBeenMainLogicInvoked = false;
 
     try {
-      if (isAlreadySubmittingRef.current) return ;
+      if (isAlreadySubmittingRef.current) return;
       isAlreadySubmittingRef.current = true;
 
       setIsSubmitting(true);
@@ -125,7 +125,7 @@ const AuthentificationModalContent = observer(({ closeModal }) => {
       // if we get ERR_NETWORK from the server (it has crashed for example), open the error modal
       if (!callbackPossibleError?.response && callbackPossibleError?.code === AxiosError.ERR_NETWORK) {
         openErrorModal();
-      } else {
+      } else if (!callbackPossibleError) {
         closeModal();
       }
     } catch(e) {
@@ -134,7 +134,7 @@ const AuthentificationModalContent = observer(({ closeModal }) => {
       if (hasBeenMainLogicInvoked) {
         if (
           (callbackPossibleError?.response && callbackPossibleError?.code !== AxiosError.ERR_NETWORK) 
-          || callbackPossibleError === null
+          || !callbackPossibleError
         ) {
           setPossibleError(callbackPossibleError);
         };

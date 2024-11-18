@@ -44,6 +44,10 @@ const ImagesCarousel = ({
       setTimeout(() => {
         carouselContentRefs.current.selectNextImgBtn?.focus();
       }, 0);
+    } else {
+      setTimeout(() => {
+        carouselContentRefs.current.selectPrevImgBtn?.focus();
+      }, 0);
     }
   }, [selectedId]);
 
@@ -55,6 +59,10 @@ const ImagesCarousel = ({
       // focusing the btn only after a possible user click
       setTimeout(() => {
         carouselContentRefs.current.selectPrevImgBtn?.focus();
+      }, 0);
+    } else {
+      setTimeout(() => {
+        carouselContentRefs.current.selectNextImgBtn?.focus();
       }, 0);
     }
   }, [selectedId, images.length]);
@@ -69,6 +77,9 @@ const ImagesCarousel = ({
     ) {
       switch (e.key) {
         case "ArrowLeft":
+          // preventing horizontal scroll
+          e.preventDefault();
+          
           if (selectedId > 0) selectPrev();
           break;
         case "ArrowUp":
@@ -81,6 +92,9 @@ const ImagesCarousel = ({
           
           break;
         case "ArrowRight":
+          // preventing horizontal scroll
+          e.preventDefault();
+          
           if (selectedId < images.length - 1) selectNext();
           break;
         case "ArrowDown":

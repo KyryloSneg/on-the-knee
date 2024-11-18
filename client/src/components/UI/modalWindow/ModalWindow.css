@@ -16,7 +16,7 @@
   grid-template-rows: auto auto 1fr auto;
 }
 
-.modal-window:not(.closer-than-darkbg) {
+section.modal-window:not(.closer-than-darkbg) {
   z-index: 7999;
 }
 

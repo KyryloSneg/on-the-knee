@@ -59,7 +59,7 @@ const CheckoutPage = observer(() => {
     }
   });
 
-  const fetching = useGettingCartData(user.cart?.id, null, true, true, true);
+  const fetching = useGettingCartData(user.cart?.id, null, true, true);
   function getCartData() {
     fetching(user.cart?.id, null, true);
   }

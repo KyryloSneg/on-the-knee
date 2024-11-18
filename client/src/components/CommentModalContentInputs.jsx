@@ -9,7 +9,7 @@ import { BASE_OPTIONS, REQUIRED_BASE_OPTIONS } from "../utils/inputOptionsConsts
 const CommentModalContentInputs = ({
   type, register, errors, areInputsBlocked, errorsBeforeBlock, isToShowErrors, setIsToShowErrors, clearErrors, setError,
   settedStarRating, setSettedStarRating, isToShowStarError, setIsToShowStarError, openLoginModal,
-  files, setFiles
+  files, setFiles, isEditCommentForm
 }) => {
   const windowWidth = useWindowWidth();
 
@@ -38,15 +38,31 @@ const CommentModalContentInputs = ({
     // eslint-disable-next-line
   }, [areInputsBlocked, clearErrors, setError]);
 
-  let starSize = 24;
+  let starSize = 16;
   let isWithStarText = false;
 
-  if (windowWidth >= 480) {
-    starSize = 40;
-    isWithStarText = true;
-  } else if (windowWidth >= 380) {
-    starSize = 32;
-    isWithStarText = true;
+  if (isEditCommentForm) {
+    starSize = 20;
+
+    if (windowWidth >= 700) {
+      starSize = 40;
+      isWithStarText = true;
+    } else if (windowWidth >= 670) {
+      starSize = 32;
+      isWithStarText = true;
+    } else if (windowWidth >= 320) {
+      starSize = 24;
+    }
+  } else {
+    starSize = 24;
+
+    if (windowWidth >= 480) {
+      starSize = 40;
+      isWithStarText = true;
+    } else if (windowWidth >= 380) {
+      starSize = 32;
+      isWithStarText = true;
+    }
   }
 
   return (
