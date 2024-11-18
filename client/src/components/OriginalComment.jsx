@@ -275,6 +275,7 @@ const OriginalComment = observer(({
   }];
 
   const isWithName = user?.name && user?.surname;
+  // if i was using the real server, it would also check is the user the seller of THIS device
   const isSellerOrSellerManager = user?.roles?.includes("SELLER") || user?.roles?.includes("SELLER-MANAGER");
 
   let optionsContent = [];
