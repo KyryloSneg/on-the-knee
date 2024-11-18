@@ -24,9 +24,10 @@ import UIOptions from "./UI/uiOptions/UIOptions";
 import deleteCommentLogic from "utils/deleteCommentLogic";
 import CommentModalContent from "./CommentModalContent";
 import WriteSellerFeedbackForm from "./WriteSellerFeedbackForm";
+import useGettingOneUser from "hooks/useGettingOneUser";
 
 const OriginalComment = observer(({
-  comment, user, type, seller, singularCommentWord = "comment", isWithImages, closeGalleryModal, isInModal,
+  comment, propsUser, type, seller, singularCommentWord = "comment", isWithImages, closeGalleryModal, isInModal,
   deviceFeedbacksFetching, deviceQuestionsFetching, sellerFeedbacksFetching
 }) => {
   const { user: userStore, app, deviceStore } = useContext(Context);
@@ -42,6 +43,12 @@ const OriginalComment = observer(({
   const isAlreadyDeletingComment = useRef(false);
 
   const [isEditing, setIsEditing] = useState(false);
+
+  // null means "no user", undefined means "user is needed to be set"
+  const [user, setUser] = useState((!!comment?.user || comment?.user === null) ? comment?.user : undefined);
+  const isToFetchUser = !user && user !== null && (comment.userId !== null && comment.userId !== undefined);
+  
+  useGettingOneUser(comment?.userId, setUser, true, isToFetchUser);
 
   // we must update likes and dislikes after user clicks on one of them
   const [likes, setLikes] = useState(comment["device-feedback-likes"] || comment["device-question-likes"]);

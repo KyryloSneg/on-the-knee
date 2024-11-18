@@ -16,8 +16,11 @@ const CommentReply = observer(({
   const { app, user: userStore } = useContext(Context);
   const [isEditing, setIsEditing] = useState(false);
 
-  const [user, setUser] = useState(reply?.user || null);
-  useGettingOneUser(reply?.userId, setUser, true, !reply.isAnonymously && !user);
+  // null means "no user", undefined means "user is needed to be set"
+  const [user, setUser] = useState((!!reply?.user || reply?.user === null) ? reply?.user : undefined);
+  const isToFetchUser = !user && user !== null && (reply.userId !== null && reply.userId !== undefined);
+  
+  useGettingOneUser(reply?.userId, setUser, true, isToFetchUser);
 
   const optionsBtnRef = useRef(null);
   const isAlreadyDeletingReply = useRef(false);

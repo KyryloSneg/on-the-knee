@@ -14,11 +14,19 @@ export default class CommentsActions {
       */
   static async setCommentsUsers(comments, type, options = { isToFetchFeedbacksUsers: true, isToFetchResponsesUsers: true }) {
     if (Array.isArray(comments)) {
+      // { id: user }
+      let cachedUsers = {};
+
       for (let comment of comments) {
         if (options.isToFetchFeedbacksUsers) {
           if (comment.userId !== null && comment.userId !== undefined) {
-            const commentAuthor = await getUser(comment.userId, true);
-            if (commentAuthor) comment.user = commentAuthor;
+            let cachedUser = cachedUsers[comment.userId]
+            const commentAuthor = (!!cachedUser || cachedUser === null) ? cachedUser : await getUser(comment.userId, true);
+            
+            cachedUser = commentAuthor;
+            if (!!commentAuthor || commentAuthor === null) comment.user = commentAuthor;
+          } else {
+            comment.user = null;
           };
         };
 
@@ -35,9 +43,16 @@ export default class CommentsActions {
           if (Array.isArray(responses)) {
             for (let response of responses) {
               if (response.userId !== null && response.userId !== undefined) {
-                const responseAuthor = await getUser(response.userId, true);
-                if (responseAuthor) response.user = responseAuthor;
-              }
+                let cachedUser = cachedUsers[response.userId];
+                const responseAuthor = (
+                  (!!cachedUser || cachedUser === null) ? cachedUser : await getUser(response.userId, true)
+                );
+                
+                cachedUsers[response.userId] = responseAuthor;
+                if (!!responseAuthor || responseAuthor === null) response.user = responseAuthor;
+              } else {
+                response.user = null;
+              };
             };
           };
         };
