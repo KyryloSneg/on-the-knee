@@ -1,22 +1,18 @@
 import "./styles/CommentsListItem.css";
 import { useState } from "react";
 import CommentRepliesList from "./CommentRepliesList";
-import useGettingOneUser from "../hooks/useGettingOneUser";
 import OriginalComment from "./OriginalComment";
 import useOneDeviceFeedbacksFetching from "hooks/useOneDeviceFeedbacksFetching";
 import useOneSellerFeedbacksFetching from "hooks/useOneSellerFeedbacksFetching";
 import useOneSellerFetching from "hooks/useOneSellerFetching";
 
 const CommentsListItem = ({ 
-  type, comment, singularCommentWord, propsUser = null, isWithImages = true, 
+  type, comment, singularCommentWord, propsUser = undefined, isWithImages = true, 
   closeGalleryModal = null, isInModal = false, updateFetchesQueryParams = "" 
 }) => {
-  const [user, setUser] = useState(comment?.user || propsUser);
   const [seller, setSeller] = useState(comment?.seller || null);
 
   const isToFetchSeller = (comment?.sellerId !== null && comment?.sellerId !== undefined) && !seller;
-
-  useGettingOneUser(comment?.userId, setUser, true, !user);
   useOneSellerFetching(comment?.sellerId, setSeller, isToFetchSeller, false);
 
   const isGalleryModal = !!closeGalleryModal;
@@ -42,7 +38,7 @@ const CommentsListItem = ({
     <div className="comments-list-item">
       <OriginalComment 
         comment={comment} 
-        user={user} 
+        propsUser={propsUser}
         type={type}
         seller={seller}
         singularCommentWord={singularCommentWord} 
