@@ -7,6 +7,7 @@ import _ from "lodash";
 import LocalStorageActions from "../utils/LocalStorageActions";
 import { getOneDeviceSaleDevices } from "../http/SalesAPI";
 import { getDevice, getDeviceCombination } from "../http/DeviceApi";
+import deleteFetchWithTryCatch from "utils/deleteFetchWithTryCatch";
 
 // haven't implemented setCartSelectedAdditionalServices 'cause i have no need in it rn
 // cartId is optional if isToFetch === false
@@ -118,12 +119,8 @@ function useGettingCartData(
         const isDeletedCombo = !currComboInActualCombos;
         
         if (isDeletedCombo) {
-          try {
-            deletedCombos.push(currComboInActualCombos);
-            await deleteCartDeviceCombination(initCombo.id);
-          } catch (e) {
-            if (e.response.status !== 500) console.log(e.message);
-          }
+          deletedCombos.push(currComboInActualCombos);
+          await deleteFetchWithTryCatch(async () => await deleteCartDeviceCombination(initCombo.id), false);
         };
       };
 
@@ -202,11 +199,7 @@ function useGettingCartData(
           const deletedComboId = cartDevCombos[index].id
 
           if (userStore.isAuth) {
-            try {
-              await deleteCartDeviceCombination(deletedComboId);
-            } catch (e) {
-              if (e.response.status !== 500) console.log(e.message);
-            }
+            await deleteFetchWithTryCatch(async () => await deleteCartDeviceCombination(deletedComboId), false);
           }
 
           if (cartSelectedAdditionalServices["selected-additional-services"][deletedComboId]) {
