@@ -7,9 +7,11 @@ function useFetching(callback, settingIsLoadingDelay = 0, finallyCallback = null
   let fetchResultRef = useRef(null);
 
   const fetching = useCallback(async (...args) => {
+    let result;
+
     try {
       setIsLoading(true);
-      const result = await callback(...args);
+      result = await callback(...args);
       // if everything is ok and we fetched some data there's no error
       fetchResultRef.current = result;
       setFetchResult(result);
@@ -22,6 +24,8 @@ function useFetching(callback, settingIsLoadingDelay = 0, finallyCallback = null
         setIsLoading(false); 
       }, settingIsLoadingDelay);
     }
+
+    return result;
     // eslint-disable-next-line
   }, dependencies);
 

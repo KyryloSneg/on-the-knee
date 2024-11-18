@@ -1,6 +1,8 @@
 import { deleteDeviceFeedback, deleteDeviceFeedbackReply, deleteSellerFeedback } from "http/FeedbacksAPI";
 import deleteFetchWithTryCatch from "./deleteFetchWithTryCatch";
 import { deleteDeviceAnswer, deleteDeviceQuestion } from "http/DeviceQuestionsAPI";
+import updateDeviceRating from "./updateDeviceRating";
+import updateSellerRating from "./updateSellerRating";
 
 /**
   * function to use in delete comment and delete reply functions of corresponding components
@@ -25,12 +27,16 @@ export default async function deleteCommentLogic(
 
   if (commentType === "deviceFeedbacks") {
     await deleteFetchWithTryCatch(async () => await deviceDeleteFetch(deleteDeviceFeedback, deleteDeviceFeedbackReply));
-    await deviceFeedbacksFetching();
+    const { feedbacks: updatedDeviceFeedbacks } = await deviceFeedbacksFetching();
+    
+    await updateDeviceRating(updatedDeviceFeedbacks);
   } else if (commentType === "deviceQuestions") {
     await deleteFetchWithTryCatch(async () => await deviceDeleteFetch(deleteDeviceQuestion, deleteDeviceAnswer));
     await deviceQuestionsFetching();
   } else if (commentType === "sellerFeedbacks") {
     await deleteFetchWithTryCatch(async () => await deleteSellerFeedback(id));
-    await sellerFeedbacksFetching();
+    const updatedSellerFeedbacks = await sellerFeedbacksFetching();
+
+    await updateSellerRating(updatedSellerFeedbacks, updatedSellerFeedbacks?.[0]?.sellerId);
   }
 }
