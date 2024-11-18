@@ -1,8 +1,15 @@
-.error-modal {
+section.modal-window.error-modal {
   z-index: 9002;
 }
 
 .error-modal-p {
   padding: 16px;
   font-size: 1.6rem;
+}
+
+@media screen and (min-width: 500px) {
+  section.modal-window.error-modal {
+    width: max-content;
+    max-width: 95%;
+  }
 }

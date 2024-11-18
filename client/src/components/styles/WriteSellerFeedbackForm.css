@@ -84,11 +84,20 @@
   padding-left: 4px;
 }
 
-.write-seller-feedback-submit-btn {
+.write-seller-feedback-btn-group {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.write-seller-feedback-btn-group > button {
+  width: 100%;
+}
+
+/* default and the isLoading btn states have different widths and heights, fix it */
+.write-seller-feedback-submit-btn, .write-seller-feedback-deny-btn {
   width: max-content;
-  /* default and the isLoading btn states have different widths and heights, fix it */
-  min-width: 129px;
-  height: 35px;
+  height: 37px;
 }
 
 @media screen and (min-width: 280px) {
@@ -101,5 +110,20 @@
 
   .write-seller-feedback-star-rating-wrap > .write-seller-feedback-error-msg {
     padding-left: 0;
+  }
+}
+
+@media screen and (min-width: 320px) {
+  .write-seller-feedback-btn-group {
+    grid-template-columns: auto auto;
+    justify-content: start;
+  }
+
+  .write-seller-feedback-btn-group > button {
+    width: max-content;
+  }
+
+  .write-seller-feedback-submit-btn {
+    min-width: 129px;
   }
 }

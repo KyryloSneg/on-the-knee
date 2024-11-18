@@ -4,8 +4,13 @@ import CommentsList from "./CommentsList";
 import { v4 } from "uuid";
 import { Link } from "react-router-dom";
 import UIDetails from "./UI/uiDetails/UIDetails";
+import { useContext } from "react";
+import { Context } from "Context";
+import { observer } from "mobx-react-lite";
 
-const RemainSellerFeedbackSectionItem = ({ sellerFeedbacksObj }) => {
+const RemainSellerFeedbackSectionItem = observer(({ type, sellerFeedbacksObj }) => {
+  const { user } = useContext(Context);
+
   const sellerIdSlug = `${sellerFeedbacksObj.seller.id}--${sellerFeedbacksObj.seller.slug}`;
   const sellerRoute = SELLER_ROUTE + sellerIdSlug;
 
@@ -30,6 +35,8 @@ const RemainSellerFeedbackSectionItem = ({ sellerFeedbacksObj }) => {
             type="sellerFeedbacks" 
             comments={sellerFeedbacksObj.feedbacks} 
             singularCommentWord="feedback" 
+            isInModal={type === "modal"}
+            updateFetchesQueryParams={`&userId=${user.user?.id}`}
             id={commentsListId}
           />
         }
@@ -52,6 +59,6 @@ const RemainSellerFeedbackSectionItem = ({ sellerFeedbacksObj }) => {
       </UIButton>
     </section>
   );
-}
+});
 
 export default RemainSellerFeedbackSectionItem;

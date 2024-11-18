@@ -5,7 +5,7 @@ import UIButton from "./UI/uiButton/UIButton";
 import { BASE_OPTIONS } from "utils/inputOptionsConsts";
 import useWindowWidth from "hooks/useWindowWidth";
 import StarRating from "./UI/starRating/StarRating";
-import { useCallback, useContext, useRef, useState } from "react";
+import { useCallback, useContext, useMemo, useRef, useState } from "react";
 import { observer } from "mobx-react-lite";
 import setErrorModalVisibility from "utils/setErrorModalVisibility";
 import useNavigateToEncodedURL from "hooks/useNavigateToEncodedURL";
@@ -14,12 +14,15 @@ import { Context } from "Context";
 import FilePickerSection from "./UI/filePicker/FilePickerSection";
 import FileActions from "utils/FileActions";
 import { v4 } from "uuid";
-import { createSellerFeedback, getOneSellerFeedbacks } from "http/FeedbacksAPI";
+import { createSellerFeedback, getOneSellerFeedbacks, patchSellerFeedback } from "http/FeedbacksAPI";
 import ServerErrorMsg from "./ServerErrorMsg";
 import { getOneUserOrders } from "http/OrderAPI";
 import { getDeviceCombination } from "http/DeviceApi";
+import _ from "lodash";
 
-const WriteSellerFeedbackForm = observer(({ sellerId, sellerSlug }) => {
+const WriteSellerFeedbackForm = observer(({ 
+  sellerId, sellerSlug, setIsEditing = null, isEditCommentForm = false, comment = null, sellerFeedbacksFetching = null 
+}) => {
   const { user, app } = useContext(Context);
   const windowWidth = useWindowWidth();
   const navigate = useNavigateToEncodedURL();
@@ -29,23 +32,35 @@ const WriteSellerFeedbackForm = observer(({ sellerId, sellerSlug }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [possibleError, setPossibleError] = useState(null);
 
-  const [isUpToDateRate, setIsUpToDateRate] = useState(0);
+  const [isUpToDateRate, setIsUpToDateRate] = useState(comment?.["is-up-to-date-rate"] || 0);
   const [isToShowIsUpToDateRateError, setIsToShowIsUpToDateRateError] = useState(false);
 
-  const [deliverySpeedRate, setDeliverySpeedRate] = useState(0);
+  const [deliverySpeedRate, setDeliverySpeedRate] = useState(comment?.["delivery-speed-rate"] || 0);
   const [isToShowDeliverySpeedRateError, setIsToShowDeliverySpeedRateError] = useState(false);
 
-  const [serviceQualityRate, setServiceQualityRate] = useState(0);
+  const [serviceQualityRate, setServiceQualityRate] = useState(comment?.["service-quality-rate"] || 0);
   const [isToShowServiceQualityRateError, setIsToShowServiceQualityRateError] = useState(false);
 
-  const [files, setFiles] = useState([]);
+  const filesFromComment = useMemo(() => comment?.images?.map(image => {
+    let result = image instanceof File ? image.fileObj : FileActions.getFileFromBase64(image.fileObj);
+
+    let imageCopy = _.cloneDeep(image);
+    imageCopy.fileObj = result;
+
+    return imageCopy;
+  }), [comment?.images]);
+
+  const [files, setFiles] = useState(filesFromComment || []);
 
   const {
     register,
     formState: { errors },
     handleSubmit,
   } = useForm({
-    mode: "onBlur"
+    mode: "onBlur",
+    defaultValues: {
+      comment: comment?.message || ""
+    }
   });
 
   const openErrorModal = useCallback(() => {
@@ -68,76 +83,115 @@ const WriteSellerFeedbackForm = observer(({ sellerId, sellerSlug }) => {
 
       setIsSubmitting(true);
 
-      const allUserOrders = await getOneUserOrders(user.user.id, "&_embed=order-device-combinations");
-      let haveUserBoughtAnythingFromThisSeller = false;
+      if (isEditCommentForm) {
+        const areEditedValuesAreTheSameAsBefore = (
+          isEditCommentForm
+            ? (
+              formFields.comment.trim() === comment.message.trim()
+              && isUpToDateRate === comment["is-up-to-date-rate"]
+              && deliverySpeedRate === comment["delivery-speed-rate"]
+              && serviceQualityRate === comment["service-quality-rate"]
+              && _.isEqual(files, filesFromComment || [])
+            )
+            : false
+        );
 
-      console.log(allUserOrders);
+        if (!areEditedValuesAreTheSameAsBefore) {
+          const transformedFiles = await Promise.all(
+            files.map(file => FileActions.getBase64(file.fileObj))
+          );
       
+          const filesToSend = files.map((file, index) => ({ ...file, fileObj: transformedFiles[index] }));
 
-      for (let order of allUserOrders) {
-        console.log(order);
-        for (let orderCombo of order["order-device-combinations"]) {
-          console.log(orderCombo);
-          
-          const devCombo = await getDeviceCombination(orderCombo["device-combinationId"], "_expand=device");
-          console.log(devCombo);
-          
-          if (devCombo.device.sellerId === sellerId) {
-            haveUserBoughtAnythingFromThisSeller = true;
-            break;
+          let feedbackFieldsToUpdate = {};
+    
+          if (!_.isEqual(filesFromComment || [], files)) feedbackFieldsToUpdate.images = filesToSend;
+          if (comment.message.trim() !== formFields.comment.trim()) feedbackFieldsToUpdate.message = formFields.comment.trim();
+
+          if (comment["is-up-to-date-rate"] !== isUpToDateRate) feedbackFieldsToUpdate["is-up-to-date-rate"] = isUpToDateRate;
+          if (comment["delivery-speed-rate"] !== deliverySpeedRate) {
+            feedbackFieldsToUpdate["delivery-speed-rate"] = deliverySpeedRate;
+          }
+
+          if (comment["service-quality-rate"] !== serviceQualityRate) {
+            feedbackFieldsToUpdate["service-quality-rate"] = serviceQualityRate;
+          }
+  
+          if (Object.keys(feedbackFieldsToUpdate).length) {
+            if (!comment.isEdited) feedbackFieldsToUpdate.isEdited = true;
+
+            await patchSellerFeedback(comment.id, feedbackFieldsToUpdate);
+            await sellerFeedbacksFetching();
           }
         }
-      }
-
-      if (!haveUserBoughtAnythingFromThisSeller) {
-        // let's pretend it's an error that has come from axios
-        setPossibleError({
-          response: {
-            data: {
-              message: "You haven't bought anything from this seller"
+      } else {
+        const allUserOrders = await getOneUserOrders(user.user.id, "&_embed=order-device-combinations");
+        let haveUserBoughtAnythingFromThisSeller = false;
+  
+        for (let order of allUserOrders) {
+          for (let orderCombo of order["order-device-combinations"]) {
+            const devCombo = await getDeviceCombination(orderCombo["device-combinationId"], "_expand=device");
+            
+            if (devCombo.device.sellerId === sellerId) {
+              haveUserBoughtAnythingFromThisSeller = true;
+              break;
             }
           }
-        })
-      } else {
-        const thisSellerFeedbacksFromUsers = await getOneSellerFeedbacks(sellerId, `&userId=${user.user.id}`);
-        const hasUserAlreadyLeftAFeedback = !!thisSellerFeedbacksFromUsers?.length;
-
-        if (hasUserAlreadyLeftAFeedback) {
+        }
+  
+        if (!haveUserBoughtAnythingFromThisSeller) {
           // let's pretend it's an error that has come from axios
           setPossibleError({
             response: {
               data: {
-                message: "You have already rated this seller"
+                message: "You haven't bought anything from this seller"
               }
             }
           })
         } else {
-          const id = v4();
-          const date = new Date().toISOString();
-    
-          const transformedFiles = await Promise.all(
-            files.map(file => FileActions.getBase64(file.fileObj))
-          );
-    
-          const filesToSend = files.map((file, index) => ({ ...file, fileObj: transformedFiles[index] }));
-          const sellerFeedback = {
-            "id": id,
-            "sellerId": sellerId,
-            "userId": user.user.id,
-            "images": filesToSend,
-            "message": formFields.comment || "",
-            "is-up-to-date-rate": isUpToDateRate,
-            "delivery-speed-rate": deliverySpeedRate,
-            "service-quality-rate": serviceQualityRate,
-            "date": date
-          };
-    
-          await createSellerFeedback(sellerFeedback);
-    
-          setPossibleError(null);
-          navigate(SELLER_FEEDBACKS_ROUTE.replace(":sellerIdSlug", `${sellerId}--${sellerSlug}`));
+          const thisSellerFeedbacksFromUsers = await getOneSellerFeedbacks(sellerId, `&userId=${user.user.id}`);
+          const hasUserAlreadyLeftAFeedback = !!thisSellerFeedbacksFromUsers?.length;
+  
+          if (hasUserAlreadyLeftAFeedback) {
+            // let's pretend it's an error that has come from axios
+            setPossibleError({
+              response: {
+                data: {
+                  message: "You have already rated this seller"
+                }
+              }
+            })
+          } else {
+            const id = v4();
+            const date = new Date().toISOString();
+      
+            const transformedFiles = await Promise.all(
+              files.map(file => FileActions.getBase64(file.fileObj))
+            );
+      
+            const filesToSend = files.map((file, index) => ({ ...file, fileObj: transformedFiles[index] }));
+            const sellerFeedback = {
+              "id": id,
+              "sellerId": sellerId,
+              "userId": user.user.id,
+              "images": filesToSend,
+              "message": formFields.comment || "",
+              "is-up-to-date-rate": isUpToDateRate,
+              "delivery-speed-rate": deliverySpeedRate,
+              "service-quality-rate": serviceQualityRate,
+              "date": date,
+              "isEdited": false
+            };
+      
+            await createSellerFeedback(sellerFeedback);
+      
+            setPossibleError(null);
+            navigate(SELLER_FEEDBACKS_ROUTE.replace(":sellerIdSlug", `${sellerId}--${sellerSlug}`));
+          }
         }
       }
+
+      setIsEditing?.(false);
     } catch (e) {
       openErrorModal();
     } finally {
@@ -146,7 +200,8 @@ const WriteSellerFeedbackForm = observer(({ sellerId, sellerSlug }) => {
     }
   }, [
     sellerId, sellerSlug, openErrorModal, navigate, isUpToDateRate,
-    deliverySpeedRate, serviceQualityRate, files, user.user?.id
+    deliverySpeedRate, serviceQualityRate, files, user.user?.id,
+    comment, filesFromComment, isEditCommentForm, setIsEditing, sellerFeedbacksFetching
   ]);
 
   const throttledSubmitCallback = useLodashThrottle(submitCallback, 500, { "trailing": false });
@@ -177,20 +232,50 @@ const WriteSellerFeedbackForm = observer(({ sellerId, sellerSlug }) => {
     }
   });
 
-  let starSize = 24;
+  let starSize = 16;
   let isWithStarText = false;
 
-  if (windowWidth >= 480) {
-    starSize = 40;
-    isWithStarText = true;
-  } else if (windowWidth >= 380) {
-    starSize = 32;
-    isWithStarText = true;
+  if (isEditCommentForm) {
+    starSize = 20;
+
+    if (windowWidth >= 520) {
+      starSize = 40;
+      isWithStarText = true;
+    } else if (windowWidth >= 500) {
+      starSize = 32;
+      isWithStarText = true;
+    } else if (windowWidth >= 380) {
+      starSize = 32;
+    } else if (windowWidth >= 320) {
+      starSize = 24;
+    } 
+  } else {
+    starSize = 24
+
+    if (windowWidth >= 480) {
+      starSize = 40;
+      isWithStarText = true;
+    } else if (windowWidth >= 380) {
+      starSize = 32;
+      isWithStarText = true;
+    }
   }
 
   const isUpToDateParaId = "write-seller-feedback-is-up-to-date-p";
   const deliverySpeedParaId = "write-seller-feedback-delivery-speed-p";
   const serviceQualityParaId = "write-seller-feedback-service-quality-p";
+
+  const submitButton = (
+    <UIButton
+      type="submit"
+      className="write-seller-feedback-submit-btn"
+      isLoading={isSubmitting}
+      disabled={areErrors}
+      ref={submitBtnRef}
+    >
+      Send the rate
+    </UIButton>
+  );
 
   return (
     <form className="write-seller-feedback-form" onSubmit={handleSubmit(onSubmit)}>
@@ -272,15 +357,21 @@ const WriteSellerFeedbackForm = observer(({ sellerId, sellerSlug }) => {
       </div>
       <FilePickerSection files={files} setFiles={setFiles} />
       {possibleError && <ServerErrorMsg error={possibleError} />}
-      <UIButton
-        type="submit"
-        className="write-seller-feedback-submit-btn"
-        isLoading={isSubmitting}
-        disabled={areErrors}
-        ref={submitBtnRef}
-      >
-        Send the rate
-      </UIButton>
+      {isEditCommentForm
+        ? (
+          <div className="write-seller-feedback-btn-group">
+            <UIButton 
+              className="write-seller-feedback-deny-btn" 
+              variant="modal-deny" 
+              onClick={() => setIsEditing?.(false)}
+            >
+              Deny
+            </UIButton>
+            {submitButton}
+          </div>
+        )
+        : submitButton
+      }
     </form>
   );
 });

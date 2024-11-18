@@ -26,10 +26,12 @@ const CommentGalleryModal = observer(() => {
 
   useEffect(() => {
     return () => {
-      // resetting global states
-      app.setCommentModalGetCommentsQueryParamsStr("");
-      app.setCommentGalleryModalType("deviceFeedbacks");
-      app.setCommentGallerySelectedImageId(null);
+      if (!app.isVisibleCommentGalleryModal) {
+        // resetting global states
+        app.setCommentModalGetCommentsQueryParamsStr("");
+        app.setCommentGalleryModalType("deviceFeedbacks");
+        app.setCommentGallerySelectedImageId(null);
+      }
     }
   }, [app]);
 

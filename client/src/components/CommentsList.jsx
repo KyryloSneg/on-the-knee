@@ -1,7 +1,9 @@
 import "./styles/CommentsList.css";
 import CommentsListItem from "./CommentsListItem";
 
-const CommentsList = ({ type, comments, singularCommentWord, propsUser = null, ...props }) => {
+const CommentsList = ({ 
+  type, comments, singularCommentWord, propsUser = null, isInModal = false, updateFetchesQueryParams = "", ...props 
+}) => {
   return (
     <ul className="comments-list" {...props}>
       {comments.map(comment => 
@@ -11,6 +13,8 @@ const CommentsList = ({ type, comments, singularCommentWord, propsUser = null, .
             comment={comment} 
             singularCommentWord={singularCommentWord} 
             propsUser={propsUser}
+            isInModal={isInModal}
+            updateFetchesQueryParams={updateFetchesQueryParams}
           />
         </li>
       )}

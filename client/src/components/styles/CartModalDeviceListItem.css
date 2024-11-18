@@ -21,9 +21,7 @@
   justify-content: center;
 }
 
-.cart-modal-list-item-main-row > a, 
-.cart-modal-item-options-btn, 
-.cart-modal-item-options-btn > img {
+.cart-modal-list-item-main-row > a {
   transition: color 0.2s, outline 0s;
 }
 

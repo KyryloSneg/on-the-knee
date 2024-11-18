@@ -8,6 +8,7 @@
 
 .remain-seller-dev-feedback.default-version {
   padding: 0;
+  padding-bottom: 45px;
 }
 
 .remain-seller-dev-feedback.modal-version {
@@ -144,6 +145,10 @@
   .remain-seller-dev-feedback-li-name-img > h4 {
     font-size: 1.5rem;
   }
+
+  .remain-seller-dev-feedback.default-version {
+    padding-bottom: 25px;
+  }
 }
 
 @media screen and (min-width: 660px) {
@@ -163,5 +168,6 @@
 @media screen and (min-width: 800px) {
   .remain-seller-dev-feedback.default-version {
     padding: 22px;
+    padding-bottom: 25px;
   }
 }

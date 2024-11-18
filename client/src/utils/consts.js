@@ -31,18 +31,19 @@ export const SEARCH_CATALOG_ROUTE = "/search" // + ?text=value;
 
 export const SALES_ROUTE = "/sales" // SALE_ROUTE is the same but + :saleIdSlug;
 
-export const DEVICE_API_URL = "/devices?_embed=device-combinations&_embed=device-feedbacks&_embed=device-infos&_embed=sale-devices&_embed=additional-service-devices";
-export const ONE_DEVICE_API_URL = "/devices/ID_TO_REPLACE?_embed=device-combinations&_embed=device-feedbacks&_embed=device-infos&_embed=sale-devices&_embed=additional-service-devices";
+const deviceAPIUrlQueryParams = "_embed=device-combinations&_embed=device-feedbacks&_embed=device-infos&_embed=sale-devices&_embed=additional-service-devices"
+export const DEVICE_API_URL = "/devices?" + deviceAPIUrlQueryParams;
+export const ONE_DEVICE_API_URL = "/devices/ID_TO_REPLACE?" + deviceAPIUrlQueryParams;
 export const SALES_API_URL = "/sales?_embed=sale-types";
 export const ATRIBUTES_API_URL = "/attributes?_expand=attribute-value&_expand=attribute-name";
 export const ONE_ADDITIONAL_SERVICES_API_URL = "/additional-services/ID_TO_REPLACE";
 export const ONE_DEV_ADDITIONAL_SERVICE_DEVICES_API_URL = "/additional-service-devices?deviceId=ID_TO_REPLACE";
 
 export const DEVICE_FEEDBACKS_API_URL = "/device-feedbacks?_expand=device&_embed=device-feedback-replies&_embed=device-feedback-likes&_embed=device-feedback-dislikes";
-export const ONE_DEVICE_FEEDBACKS_API_URL = "/device-feedbacks?deviceId=ID_TO_REPLACE&_expand=device&_embed=device-feedback-replies&_embed=device-feedback-likes&_embed=device-feedback-dislikes";
+export const ONE_DEVICE_FEEDBACKS_API_URL = DEVICE_FEEDBACKS_API_URL + "&deviceId=ID_TO_REPLACE";
 
 export const DEVICE_QUESTIONS_API_URL = "/device-questions?_expand=device&_embed=device-answers&_embed=device-question-likes&_embed=device-question-dislikes";
-export const ONE_DEVICE_QUESTIONS_API_URL = "/device-questions?deviceId=ID_TO_REPLACE&_expand=device&_embed=device-answers&_embed=device-question-likes&_embed=device-question-dislikes";
+export const ONE_DEVICE_QUESTIONS_API_URL = DEVICE_QUESTIONS_API_URL + "&deviceId=ID_TO_REPLACE";
 
 export const ONE_SELLER_FEEDBACKS_API_URL = "/seller-feedbacks?sellerId=ID_TO_REPLACE";
 

@@ -36,7 +36,7 @@ const RemainSellerDevFeedback = observer(({
           <header>
             <h3>Leave a device feedback</h3>
           </header>
-          <RemainSellerDevFeedbackDevList devCombosFeedbacksObjArray={devCombosFeedbacksObjArray} />
+          <RemainSellerDevFeedbackDevList type={type} devCombosFeedbacksObjArray={devCombosFeedbacksObjArray} />
         </section>
       )}
     </div>

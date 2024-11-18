@@ -4,8 +4,12 @@ import UIButton from "./UI/uiButton/UIButton";
 import CommentsList from "./CommentsList";
 import { v4 } from "uuid";
 import UIDetails from "./UI/uiDetails/UIDetails";
+import { observer } from "mobx-react-lite";
+import { useContext } from "react";
+import { Context } from "Context";
 
-const RemainSellerDevFeedbackDevListItem = ({ comboFeedbackObj }) => {
+const RemainSellerDevFeedbackDevListItem = observer(({ type, comboFeedbackObj }) => {
+  const { user } = useContext(Context);
   const deviceRouteCombo = comboFeedbackObj.deviceCombination.combinationString || "default";
 
   const deviceTo = DEVICE_ROUTE + `${comboFeedbackObj.deviceCombination.deviceId}--${deviceRouteCombo}`;
@@ -33,6 +37,8 @@ const RemainSellerDevFeedbackDevListItem = ({ comboFeedbackObj }) => {
             type="deviceFeedbacks" 
             comments={comboFeedbackObj.feedbacks} 
             singularCommentWord="feedback" 
+            isInModal={type === "modal"}
+            updateFetchesQueryParams={`&userId=${user.user?.id}`}
             id={commentsListId}
           />
         }
@@ -50,6 +56,6 @@ const RemainSellerDevFeedbackDevListItem = ({ comboFeedbackObj }) => {
       </UIButton>
     </section>
   );
-};
+});
 
 export default RemainSellerDevFeedbackDevListItem;
