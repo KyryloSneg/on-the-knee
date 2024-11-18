@@ -8,7 +8,7 @@ const MainSellerPageRatingDetails = ({ ratingsObj, feedbacksAmount }) => {
       {Object.entries(ratingsObj).map(([name, value]) => 
         <div key={`${name}-${value}`}>
           <dt>
-            <Star starIndex={1} value={1} width={14} height={14} starKey={`${name}-${value}`} />
+            <Star starIndex={1} value={1} size={14} starKey={`${name}-${value}`} />
             <span>{name}</span>
           </dt>
           <dd >

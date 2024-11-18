@@ -108,8 +108,7 @@ const CommentsSection = observer(({ type, comments, isFullVersion = true, device
           <StarRating
             readOnlyValue={device?.rating || seller?.rating}
             id={`comments-section-${type}-comments-section-rating`}
-            width={20}
-            height={20}
+            size={20}
           />
           <p>{commentsAmount} {commentWord}</p>
         </div>

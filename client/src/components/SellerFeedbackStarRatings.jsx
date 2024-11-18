@@ -12,8 +12,7 @@ const SellerFeedbackStarRatings = ({ isUpToDateVal, deliverySpeedVal, serviceQua
         <p id={isUpToDateParaId}>Up-to-date</p>
         <StarRating
           readOnlyValue={isUpToDateVal}
-          width={size}
-          height={size}
+          size={size}
           id={`${idStart}-up-to-date-original-comment-rating`}
           aria-labelledby={isUpToDateParaId}
         />
@@ -22,8 +21,7 @@ const SellerFeedbackStarRatings = ({ isUpToDateVal, deliverySpeedVal, serviceQua
         <p id={deliverySpeedParaId}>Delivery speed</p>
         <StarRating
           readOnlyValue={deliverySpeedVal}
-          width={size}
-          height={size}
+          size={size}
           id={`${idStart}-del-speed-original-comment-rating`}
           aria-labelledby={deliverySpeedParaId}
         />
@@ -32,8 +30,7 @@ const SellerFeedbackStarRatings = ({ isUpToDateVal, deliverySpeedVal, serviceQua
       <p id={serviceQualityParaId}>Service quality</p>
         <StarRating
           readOnlyValue={serviceQualityVal}
-          width={size}
-          height={size}
+          size={size}
           id={`${idStart}-service-original-comment-rating`}
           aria-labelledby={serviceQualityParaId}
         />

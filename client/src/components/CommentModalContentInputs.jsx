@@ -73,8 +73,7 @@ const CommentModalContentInputs = ({
             <h3>Rate device</h3>
             <StarRating
               id="comments-modal-content-star-rating"
-              width={starSize}
-              height={starSize}
+              size={starSize}
               isWithText={isWithStarText}
               isReadOnly={false}
               areBtnsBlocked={areInputsBlocked}
