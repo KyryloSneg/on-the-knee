@@ -48,6 +48,8 @@ function useOneDeviceFeedbacksFetching(
 
     if (isToFetchFeedbacks) setFeedbacksFn(feedbacks);
     if (isToFetchQuestions) setQuestionsFn(questions);
+
+    return { feedbacks, questions };
   };
 
   const [fetching, isLoading] = useFetching(() => fetchingFunc(deviceId), 0, null, [deviceId]);

@@ -19,6 +19,7 @@ import ServerErrorMsg from "./ServerErrorMsg";
 import { getOneUserOrders } from "http/OrderAPI";
 import { getDeviceCombination } from "http/DeviceApi";
 import _ from "lodash";
+import updateSellerRating from "utils/updateSellerRating";
 
 const WriteSellerFeedbackForm = observer(({ 
   sellerId, sellerSlug, setIsEditing = null, isEditCommentForm = false, comment = null, sellerFeedbacksFetching = null 
@@ -121,7 +122,9 @@ const WriteSellerFeedbackForm = observer(({
             if (!comment.isEdited) feedbackFieldsToUpdate.isEdited = true;
 
             await patchSellerFeedback(comment.id, feedbackFieldsToUpdate);
-            await sellerFeedbacksFetching();
+            const updatedSellerFeedbacks = await sellerFeedbacksFetching();
+
+            await updateSellerRating(updatedSellerFeedbacks, sellerId);
           }
         }
       } else {
@@ -184,6 +187,9 @@ const WriteSellerFeedbackForm = observer(({
             };
       
             await createSellerFeedback(sellerFeedback);
+            const updatedSellerFeedbacks = await getOneSellerFeedbacks(sellerId);
+
+            await updateSellerRating(updatedSellerFeedbacks, sellerId);
       
             setPossibleError(null);
             navigate(SELLER_FEEDBACKS_ROUTE.replace(":sellerIdSlug", `${sellerId}--${sellerSlug}`));

@@ -22,6 +22,8 @@ function useOneSellerFeedbacksFetching(sellerId, setFeedbacks = null, isUpdateFe
     } else {
       deviceStore.setSellersFeedbacks(feedbacks);
     }
+
+    return feedbacks;
   }
 
   const [fetching, isLoading, error] = useFetching(fetchingCallback);

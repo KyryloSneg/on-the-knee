@@ -15,6 +15,7 @@ import useOneDeviceFeedbacksFetching from "hooks/useOneDeviceFeedbacksFetching";
 import _ from "lodash";
 import useLodashThrottle from "hooks/useLodashThrottle";
 import setErrorModalVisibility from "utils/setErrorModalVisibility";
+import updateDeviceRating from "utils/updateDeviceRating";
 
 const POSSIBLE_TYPES = ["feedback", "reply", "question", "answer", "askSeller"];
 
@@ -153,7 +154,12 @@ const CommentModalContent = observer(({
               if (!comment.isEdited) feedbackFieldsToUpdate.isEdited = true;
 
               await patchDeviceFeedback(comment.id, feedbackFieldsToUpdate);
-              await deviceFeedbacksFetching();
+              const { feedbacks: updatedDeviceFeedbacks } = await deviceFeedbacksFetching();
+
+              // if we have changed the rate (it's impossible for the rate to be zero, so np with that check)
+              if (feedbackFieldsToUpdate.rate) {
+                await updateDeviceRating(updatedDeviceFeedbacks);
+              }
             }
           } else if (type === "reply") {
             let replyFieldsToUpdate = {};
@@ -210,8 +216,10 @@ const CommentModalContent = observer(({
             "isEdited": false,
           };
     
-          await createDeviceFeedback(newFeedback);
-          await deviceFeedbacksFetching();
+          await createDeviceFeedback(newFeedback); 
+          const { feedbacks: updatedDeviceFeedbacks } = await deviceFeedbacksFetching();
+
+          await updateDeviceRating(updatedDeviceFeedbacks);
         } else if (type === "reply") {
           const newReply = {
             "id": id,
