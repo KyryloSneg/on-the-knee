@@ -3,6 +3,7 @@ import { Context } from "../Context";
 import { createViewedDevice, deleteViewedDevice, getOneViewedDevicesListDevs } from "../http/ViewedDevicesAPI";
 import _ from "lodash";
 import { v4 } from "uuid";
+import deleteFetchWithTryCatch from "utils/deleteFetchWithTryCatch";
 
 // passing prevDeviceCombinationIdRef to use it properly in tabs page layout 
 // without unnecessary ref.current resets on tab switches
@@ -50,14 +51,7 @@ export default function useAddingViewedDeviceOnVisit(deviceId, deviceCombination
             if (user.isAuth) {
               // delete the viewed device and create it once again with 
               // the new creation date of the viewed devices list
-              try {
-                await deleteViewedDevice(existingViewedDevice.id);
-              } catch (e) {
-                if (e.response.status !== 500) {
-                  throw e;
-                }
-              };
-  
+              await deleteFetchWithTryCatch(async () => await deleteViewedDevice(existingViewedDevice.id));
               await authAddViewedDeviceLogic();
   
               const updatedViewedDevices = await getOneViewedDevicesListDevs(user.viewedDevicesList?.id);

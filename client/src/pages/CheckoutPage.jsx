@@ -24,6 +24,7 @@ import { getDeviceCombination } from "../http/DeviceApi";
 import setCartModalVisibility from "../utils/setCartModalVisibility";
 import setWrongCartComboAmountsModalVisibility from "../utils/setWrongCartComboAmountsVisibility";
 import useLodashThrottle from "hooks/useLodashThrottle";
+import deleteFetchWithTryCatch from "utils/deleteFetchWithTryCatch";
 
 const CheckoutPage = observer(() => {
   const { app, deviceStore, user } = useContext(Context);
@@ -287,11 +288,7 @@ const CheckoutPage = observer(() => {
           );
 
           for (let cartCombo of user.cartDeviceCombinations) {
-            try {
-              await deleteCartDeviceCombination(cartCombo.id);
-            } catch (e) {
-              if (e.response.status !== 500) console.log(e.message);
-            }
+            await deleteFetchWithTryCatch(async () => await deleteCartDeviceCombination(cartCombo.id), false);
           }
         } else {
           const newCartSelectedAdditionalServices = {

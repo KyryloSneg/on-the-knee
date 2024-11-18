@@ -1,5 +1,6 @@
 import { createQuestionDislike, createQuestionLike, removeQuestionDislike, removeQuestionLike } from "../http/DeviceQuestionsAPI";
 import { createDislike, createLike, removeDislike, removeLike } from "../http/FeedbacksAPI";
+import deleteFetchWithTryCatch from "./deleteFetchWithTryCatch";
 
 export default class DeviceCommentRatesActions {
 
@@ -45,41 +46,27 @@ export default class DeviceCommentRatesActions {
   }
 
   static async removeLikeRate(id, type, isToThrowError = false) {
-    try {
+    async function cb() {
       if (type === "deviceFeedbacks") {
         await removeLike(id);
       } else if (type === "deviceQuestions") {
         await removeQuestionLike(id);
       }
-    } catch (e) {
-      // there's weird error with status 500 that occurs in json-server
-      // (like is deleted btw, so just handle the error in catch)
-      if (e.response.status !== 500) {
-        if (isToThrowError) {
-          throw e;
-        } else {
-          return e.message;
-        }
-      }
     }
+
+    await deleteFetchWithTryCatch(async () => await cb(), isToThrowError);
   }
 
   static async removeDislikeRate(id, type, isToThrowError = false) {
-    try {
+    async function cb() {
       if (type === "deviceFeedbacks") {
         await removeDislike(id);
       } else if (type === "deviceQuestions") {
         await removeQuestionDislike(id);
       }
-    } catch (e) {
-      if (e.response.status !== 500) {
-        if (isToThrowError) {
-          throw e;
-        } else {
-          return e.message;
-        }
-      }
     }
+
+    await deleteFetchWithTryCatch(async () => await cb(), isToThrowError);
   }
 
 }
