@@ -1,7 +1,7 @@
-import sortIcon from "../../../assets/sort.svg";
-import dropdownArrowIcon from "../../../assets/expand_more.svg";
 import "./SortingFilterBtn.css";
+import sortIcon from "../../../assets/sort.svg";
 import { forwardRef } from "react";
+import DropdownArrow from "../dropdownArrow/DropdownArrow";
 
 const SortingFilterBtn = forwardRef(({ value, onClick, visible, dropdownOptionsId }, ref) => {
   return (
@@ -19,7 +19,7 @@ const SortingFilterBtn = forwardRef(({ value, onClick, visible, dropdownOptionsI
         ref={ref} 
       >
         <span>{value || "..."}</span>
-        <img src={dropdownArrowIcon} className={visible ? "rotated" : ""} alt="" draggable="false" />
+        <DropdownArrow isExpanded={visible} />
       </button>
     </section>
   );

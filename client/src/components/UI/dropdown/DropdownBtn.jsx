@@ -2,8 +2,8 @@ import "./DropdownBtn.css";
 import { forwardRef } from "react";
 import SortingFilterBtn from "./SortingFilterBtn";
 import sortIcon from "../../../assets/sort.svg";
-import dropdownArrowIcon from "../../../assets/expand_more.svg";
 import UIButton from "../uiButton/UIButton";
+import DropdownArrow from "../dropdownArrow/DropdownArrow";
 
 const DropdownBtn = forwardRef(({ variant, value, onClick, visible, dropdownOptionsId, isWithFilterIcon }, ref) => {
   if (variant === "default-select") {
@@ -23,7 +23,7 @@ const DropdownBtn = forwardRef(({ variant, value, onClick, visible, dropdownOpti
       >
         {isWithFilterIcon && <img src={sortIcon} alt="" draggable="false" />}
         <span>{value || "..."}</span>
-        <img src={dropdownArrowIcon} alt="" draggable="false" className={visible ? "rotated" : ""} />
+        <DropdownArrow isExpanded={visible} />
       </UIButton>
     );
   }
