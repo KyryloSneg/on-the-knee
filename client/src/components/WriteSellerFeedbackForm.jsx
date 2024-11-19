@@ -2,7 +2,7 @@ import "./styles/WriteSellerFeedbackForm.css";
 import useLodashThrottle from "hooks/useLodashThrottle";
 import { useForm } from "react-hook-form";
 import UIButton from "./UI/uiButton/UIButton";
-import { BASE_OPTIONS } from "utils/inputOptionsConsts";
+import { TEXTAREA_OPTIONS } from "utils/inputOptionsConsts";
 import useWindowWidth from "hooks/useWindowWidth";
 import StarRating from "./UI/starRating/StarRating";
 import { useCallback, useContext, useMemo, useRef, useState } from "react";
@@ -20,6 +20,7 @@ import { getOneUserOrders } from "http/OrderAPI";
 import { getDeviceCombination } from "http/DeviceApi";
 import _ from "lodash";
 import updateSellerRating from "utils/updateSellerRating";
+import ReactHookFormTextarea from "./UI/reactHookFormTextarea/ReactHookFormTextarea";
 
 const WriteSellerFeedbackForm = observer(({ 
   sellerId, sellerSlug, setIsEditing = null, isEditCommentForm = false, comment = null, sellerFeedbacksFetching = null 
@@ -230,13 +231,8 @@ const WriteSellerFeedbackForm = observer(({
     || deliverySpeedRate === 0 || serviceQualityRate === 0
   );
 
-  const commentRegisterResult = register("comment", {
-    ...BASE_OPTIONS,
-    validate: {
-      ...BASE_OPTIONS.validate,
-      isTooLarge: value => value.trim().length <= 3000 || "This field must contain less than or equal to 3000 characters",
-    }
-  });
+  const commentTextareaName = "comment";
+  const commentRegisterResult = register(commentTextareaName, TEXTAREA_OPTIONS);
 
   let starSize = 16;
   let isWithStarText = false;
@@ -346,17 +342,12 @@ const WriteSellerFeedbackForm = observer(({
             </p>
           }
         </div>
-        <div>
-          <label>
-            Comment
-            <textarea className={errors?.comment ? "invalid" : ""} {...commentRegisterResult} />
-          </label>
-          {errors?.comment &&
-            <p className="write-seller-feedback-error-msg" aria-live="polite">
-              {errors?.comment?.message || "Error!"}
-            </p>
-          }
-        </div>
+        <ReactHookFormTextarea 
+          labelText="Comment"
+          textareaName={commentTextareaName}
+          errors={errors}
+          registerFnResult={commentRegisterResult}
+        />
       </div>
       <FilePickerSection files={files} setFiles={setFiles} />
       {possibleError && <ServerErrorMsg error={possibleError} />}
