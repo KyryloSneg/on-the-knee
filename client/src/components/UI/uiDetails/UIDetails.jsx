@@ -1,6 +1,6 @@
+import DropdownArrow from "../dropdownArrow/DropdownArrow";
 import "./UIDetails.css";
 import React, { useState } from 'react';
-import dropdownArrowIcon from "../../../assets/expand_more.svg";
 
 // btnChildren should include heading
 const UIDetails = ({ 
@@ -42,12 +42,7 @@ const UIDetails = ({
         >
           {/* passing isExpanded and setIsExpanded props to the btn children element */}
           {btnChildrenToRender}
-          <img
-            src={dropdownArrowIcon}
-            alt={isExpanded ? "Collapse" : "Expand"}
-            className={isExpanded ? "rotated" : ""}
-            draggable="false"
-          />
+          <DropdownArrow isExpanded={isExpanded} />
         </button>
       </header>
       {isExpanded && contentChildren}

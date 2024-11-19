@@ -1,8 +1,8 @@
 import "./styles/AdditionalServicesListItem.css";
 import { useEffect, useState } from 'react';
-import dropdownArrowIcon from "../assets/expand_more.svg";
 import AdditionalServicesExpandedList from './AdditionalServicesExpandedList';
 import _ from "lodash";
+import DropdownArrow from "./UI/dropdownArrow/DropdownArrow";
 
 const AdditionalServicesListItem = ({ additionalService, id, selectedItems, setSelectedItems, isReadOnly }) => {
   const isChecked = !!selectedItems?.find(item => item.parentId === id);
@@ -74,12 +74,7 @@ const AdditionalServicesListItem = ({ additionalService, id, selectedItems, setS
           </span>
         </button>
         <button type="button" className="additional-services-item-arrow" onClick={onArrowClick}>
-          <img
-            src={dropdownArrowIcon}
-            alt={isExpanded ? "Collapse" : "Expand"}
-            className={isExpanded ? "rotated" : ""}
-            draggable="false"
-          />
+          <DropdownArrow isExpanded={isExpanded} />
         </button>
       </div>
       {isExpanded &&
