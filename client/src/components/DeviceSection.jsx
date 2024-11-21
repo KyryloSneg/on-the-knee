@@ -1,9 +1,9 @@
+import "./styles/DeviceSection.css";
 import { useContext, useEffect, useRef } from "react";
 import { Context } from "../Context";
 import { observer } from "mobx-react-lite";
 import getTotalPages from "../utils/getTotalPages";
 import DeviceList from "./DeviceList";
-import "./styles/DeviceSection.css";
 import ButtonPagination from "./UI/pagination/ButtonPagination";
 import PagesPagination from "./UI/pagination/PagesPagination";
 import isCanLoadMoreContent from "../utils/isCanLoadMoreContent";
@@ -17,7 +17,7 @@ const DeviceSection = observer(({ isLoading, retryDevicesFetch, error }) => {
   const canLoadMore = isCanLoadMoreContent(
     deviceStore.totalCount,
     deviceStore.devices.length,
-    (deviceStore.page - 1) * deviceStore._limit
+    (deviceStore.page - 1) * deviceStore.limit
   );
 
   useEffect(() => {
@@ -66,12 +66,6 @@ const DeviceSection = observer(({ isLoading, retryDevicesFetch, error }) => {
           isLoading={isLoading}
         />
       }
-      
-      {/* i don't really remember what is this */}
-      {/* {(!canLoadMore && isLoading) &&
-        <div className="visually-hidden" tabIndex={0} />
-      } */}
-
       {/* if devices are fetched and we've got totalCount (usually these conditions returns true at the same moment) */}
       {(!!(+deviceStore.totalCount) && !!deviceStore.devices.length) &&
         <PagesPagination

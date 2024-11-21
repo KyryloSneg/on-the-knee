@@ -7,7 +7,7 @@ import { getAdditionalService, getOneDevAdditionalServiceDevices } from "../http
 // if not isMultiple, pass device, otherwise pass devices array
 function useGettingAddServicesRelatedData(
   device = null, setAdditionalServicesObj, isToFetch = true, 
-  isMultiple = false, devices = null
+  isMultiple = false, devices = null, additionalCondition = true
 ) {
   const prevDevicesRef = useRef(null);
 
@@ -58,10 +58,13 @@ function useGettingAddServicesRelatedData(
   const [fetching] = useFetching(fetchingFunc);
 
   useEffect(() => {
-    if ((!!device || devices) && isToFetch && (devices ? !_.isEqual(devices, prevDevicesRef.current) : true)) {
+    if (
+      (!!device || devices) && isToFetch && (devices ? !_.isEqual(devices, prevDevicesRef.current) : true)
+      && additionalCondition
+    ) {
       fetching(device, devices, isMultiple);
     }
-  }, [device, devices, isMultiple, fetching, isToFetch]);
+  }, [device, devices, isMultiple, fetching, isToFetch, additionalCondition]);
 
   useEffect(() => {
     prevDevicesRef.current = devices;

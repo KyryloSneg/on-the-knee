@@ -63,7 +63,7 @@ async function getDevicesBySearchQuery(fetchStringQueryParams, additionalConditi
     }
   }
 
-  return devices;
+  return { devices, spellCheckedSearchQuery };
 }
 
 export default getDevicesBySearchQuery;

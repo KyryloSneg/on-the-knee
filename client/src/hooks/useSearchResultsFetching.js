@@ -27,7 +27,7 @@ function useSearchResultsFetching(setResults, backupValue) {
       const preparedBackupValue = getPreparedForMockServerStr(backupValue);
       const fetchStringQueryParams = `name_like=${preparedBackupValue.trim().toLowerCase()}`.replaceAll(`"`, "");
       try {
-        deviceResults = await getDevicesBySearchQuery(fetchStringQueryParams);
+        deviceResults = (await getDevicesBySearchQuery(fetchStringQueryParams)).devices;
       } catch (e) {
         console.log(e.message);
       }

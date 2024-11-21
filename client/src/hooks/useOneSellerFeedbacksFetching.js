@@ -5,8 +5,10 @@ import { getOneSellerFeedbacks } from "../http/FeedbacksAPI";
 import CommentsActions from "utils/CommentsActions";
 
 // update fetch is the fetch that is used to refresh feedbacks, not to get them from zero
-function useOneSellerFeedbacksFetching(sellerId, setFeedbacks = null, isUpdateFetch = false) {
-  const { app, deviceStore } = useContext(Context);
+function useOneSellerFeedbacksFetching(
+  sellerId, setFeedbacks = null, isUpdateFetch = false, isTopSellerPageFetch = false
+) {
+  const { app, deviceStore, fetchRefStore } = useContext(Context);
   const sellerIdRef = useRef(sellerId);
 
   useEffect(() => {
@@ -23,14 +25,30 @@ function useOneSellerFeedbacksFetching(sellerId, setFeedbacks = null, isUpdateFe
       deviceStore.setSellersFeedbacks(feedbacks);
     }
 
+    if (isTopSellerPageFetch) fetchRefStore.setLastSellerPageSellerIdWithFetchedFeedbacks(sellerIdRef.current);
+
     return feedbacks;
   }
 
   const [fetching, isLoading, error] = useFetching(fetchingCallback);
 
   useEffect(() => {
-    if ((sellerIdRef.current !== null && sellerIdRef.current !== undefined) && !isUpdateFetch) fetching();
-  }, [sellerId, isUpdateFetch, fetching]);
+    const topSellerPageAdditionalCondition = (
+      isTopSellerPageFetch
+      && (
+        (
+          fetchRefStore.lastSellerPageSellerIdWithFetchedFeedbacks === null
+          || fetchRefStore.lastSellerPageSellerIdWithFetchedFeedbacks === undefined
+        )
+        || fetchRefStore.lastSellerPageSellerIdWithFetchedFeedbacks !== sellerIdRef.current
+      )
+    );
+
+    if (
+      (sellerIdRef.current !== null && sellerIdRef.current !== undefined) 
+      && !isUpdateFetch && (isTopSellerPageFetch ? topSellerPageAdditionalCondition : true) 
+    ) fetching();
+  }, [sellerId, isUpdateFetch, fetching, fetchRefStore.lastSellerPageSellerIdWithFetchedFeedbacks, isTopSellerPageFetch]);
 
   useEffect(() => {
     if (!isUpdateFetch) app.setIsGlobalLoading(isLoading);

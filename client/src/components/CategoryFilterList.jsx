@@ -28,6 +28,11 @@ const CategoryFilterList = observer(({ filter, variant, elemToFocusRef = null })
   }
 
   useEffect(() => {
+    setQuery("");
+    setFilteredValues(deviceStore.filters[filter])
+  }, [deviceStore.filters, filter]);
+
+  useEffect(() => {
     if (document.activeElement === showMoreBtnRef.current && document.activeElement !== null) {
       const filtersElems = getAllFocusableElements(filterListRef.current);
 

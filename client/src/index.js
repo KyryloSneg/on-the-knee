@@ -7,6 +7,7 @@ import { Context } from "./Context";
 import AppRouterProvider from './components/AppRouterProvider';
 import 'overlayscrollbars/overlayscrollbars.css';
 import withAuth from "./hocs/withAuth";
+import FetchRefStore from "stores/FetchRefStore";
 
 const AppRouterProviderWithAuth = withAuth(AppRouterProvider);
 
@@ -17,6 +18,7 @@ root.render(
       app: new AppStore(),
       user: new UserStore(),
       deviceStore: new DeviceStore(),
+      fetchRefStore: new FetchRefStore(),
       isTest: false,
     }}>
       <AppRouterProviderWithAuth />

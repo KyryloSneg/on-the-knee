@@ -1,5 +1,5 @@
 import "./styles/SellerPage.css";
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import TabsPageLayout from '../components/UI/tabsPageLayout/TabsPageLayout';
 import useOneSellerFetching from '../hooks/useOneSellerFetching';
 import useOneSellerFeedbacksFetching from '../hooks/useOneSellerFeedbacksFetching';
@@ -11,18 +11,36 @@ import SellerDevicesPage from './SellerDevicesPage';
 import { Context } from '../Context';
 import { observer } from 'mobx-react-lite';
 import StarRating from '../components/UI/starRating/StarRating';
+import StringActions from "utils/StringActions";
 
 const POSSIBLE_TYPES = ["main", "feedbacks", "devices"];
 const SellerPage = observer(({ type }) => {
-  const { deviceStore } = useContext(Context);
+  const { deviceStore, fetchRefStore } = useContext(Context);
   const { sellerIdSlug } = useParams();
-  const [seller, setSeller] = useState(null);
 
-  let [id] = sellerIdSlug.split("--");
+  let [id, slug] = sellerIdSlug.split("--");
   id = +id;
 
-  useOneSellerFetching(id, setSeller);
-  useOneSellerFeedbacksFetching(seller?.id);
+  const initialSeller = (
+    fetchRefStore.lastSellerPageSellerFetchResult?.id === id 
+      ? fetchRefStore.lastSellerPageSellerFetchResult 
+      : null
+  );
+  
+  const [seller, setSeller] = useState(initialSeller);
+  
+  const hasAlreadyFetchedDevicesRef = useRef(false);
+  const prevUsedFiltersRef = useRef({});
+  const prevSortFilterRef = useRef(null);
+
+  const sellerPlaceHolderName = StringActions.capitalize(StringActions.splitByHyphens(slug));
+
+  useOneSellerFetching(id, setSeller, !seller);
+  useOneSellerFeedbacksFetching(seller?.id, null, false, true);
+
+  useEffect(() => {
+    if (seller) fetchRefStore.setLastSellerPageSellerFetchResult(seller);
+  }, [fetchRefStore, seller]);
 
   if (!POSSIBLE_TYPES.includes(type)) throw Error("type of Seller Page is not defined or incorrect");
 
@@ -37,13 +55,38 @@ const SellerPage = observer(({ type }) => {
 
     let innerPage;
 
+    const hasAlreadyFetchedFeedbacks = (
+      (
+        fetchRefStore.lastSellerPageSellerIdWithFetchedFeedbacks !== null
+        && fetchRefStore.lastSellerPageSellerIdWithFetchedFeedbacks !== undefined
+      )
+      && fetchRefStore.lastSellerPageSellerIdWithFetchedFeedbacks === seller?.id
+    );
+
     if (type === "main") {
-      innerPage = <MainSellerPage seller={seller} feedbacks={deviceStore.sellersFeedbacks} />;
+      innerPage = (
+        <MainSellerPage 
+          seller={seller} 
+          feedbacks={hasAlreadyFetchedFeedbacks ? deviceStore.sellersFeedbacks || [] : []} 
+        />
+      );
     } else if (type === "feedbacks") {
       const feedbacks = getSortedByDateFeedbacks();
-      innerPage = <SellerFeedbacksPage seller={seller} feedbacks={feedbacks} />;
+      innerPage = (
+        <SellerFeedbacksPage 
+          seller={seller} 
+          feedbacks={hasAlreadyFetchedFeedbacks ? feedbacks : []} 
+        />
+      );
     } else if (type === "devices") {
-      innerPage = <SellerDevicesPage seller={seller} />;
+      innerPage = (
+        <SellerDevicesPage 
+          seller={seller} 
+          hasAlreadyFetchedDevicesRef={hasAlreadyFetchedDevicesRef} 
+          prevUsedFiltersRef={prevUsedFiltersRef} 
+          prevSortFilterRef={prevSortFilterRef}
+        />
+      );
     }
 
     return innerPage;
@@ -56,17 +99,17 @@ const SellerPage = observer(({ type }) => {
         `Comments (${deviceStore.sellersFeedbacks?.length || 0})`,
       to: SELLER_FEEDBACKS_ROUTE.replace(":sellerIdSlug", sellerIdSlug)
     },
-    { children: "Devices", to: SELLER_DEVICES_ROUTE.replace(":sellerIdSlug", sellerIdSlug) },
+    { children: "Devices", to: SELLER_DEVICES_ROUTE.replace(":sellerIdSlug", sellerIdSlug) + "?page=1&pagesToFetch=1" },
   ];
 
   return (
     <main className="seller-page">
       <h2 className="top-h2">
-        Seller {seller?.name || ""}
+        Seller {seller?.name || sellerPlaceHolderName}
       </h2>
       <div className="seller-page-rating-wrap">
         <p>
-          {seller?.rating}
+          {seller?.rating || "0.0"}
         </p>
         <StarRating 
           readOnlyValue={seller?.rating} 
