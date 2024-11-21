@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { useEffect, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { getStocks } from "../http/StocksAPI";
 import { getSaleTypeNames, getSales } from "../http/SalesAPI";
 import useFetching from "./useFetching";
@@ -17,12 +17,16 @@ import useNavigateToEncodedURL from "./useNavigateToEncodedURL";
 import getDescendantCategories from "../utils/getDescendantCategories";
 import getDevicesBySearchQuery from "../utils/getDevicesBySearchQuery";
 import getPreparedForMockServerStr from "../utils/getPreparedForMockServerStr";
+import { Context } from "Context";
 
 // query params without pagination ones
 function useDeviceSectionFetching(
-  deviceStore, app, originalType, setIsFoundDevicesByQuery = null, 
-  setSpellCheckedQuery = null, seller = null
+  originalType, setIsFoundDevicesByQuery = null, 
+  setSpellCheckedQuery = null, seller = null, 
+  additionalCondition = true, hasAlreadyFetchedDevicesRef = null
 ) {
+  const { deviceStore, app, fetchRefStore } = useContext(Context);
+  
   const location = useLocation();
   const { categoryIdSlug } = useParams();
   const navigate = useNavigateToEncodedURL();
@@ -47,10 +51,6 @@ function useDeviceSectionFetching(
     
     try {
       if (isInitialFetch) {
-        if (hasChangedURL) {
-          deviceStore.setFilters({});
-        }
-  
         app.setIsGlobalLoading(true);
       }
       
@@ -84,7 +84,7 @@ function useDeviceSectionFetching(
       if (type === "search") fetchStringQueryParams += `&name_like=${preparedSearchQuery}`.replaceAll(`"`, "");
       if (categoryIdParam && type !== "category") fetchStringQueryParams += `&categoryId=${categoryIdParam}`.replaceAll(`"`, "");
 
-      let devices = await getDevicesBySearchQuery(
+      let { devices, spellCheckedSearchQuery } = await getDevicesBySearchQuery(
         fetchStringQueryParams, type === "search", setIsFoundDevicesByQuery, setSpellCheckedQuery, navigate
       );
 
@@ -94,6 +94,14 @@ function useDeviceSectionFetching(
         descendantCategories.push(categoryId);
   
         devices = devices.filter(dev => descendantCategories.includes(dev.categoryId));
+      }
+
+      if (isInitialFetch) {
+        // something causes the global loading to not appear
+        // and setting it here alongstead with the of the action
+        // at the start of the try ... catch block fixes the problem
+        // (idk why)
+        app.setIsGlobalLoading(true);
       }
   
       const stocks = await getStocks();
@@ -212,6 +220,11 @@ function useDeviceSectionFetching(
       if (!_.isEqual(deviceStore.saleTypeNames.slice(), saleTypeNames)) {
         deviceStore.setSaleTypeNames(saleTypeNames);
       }
+
+      fetchRefStore.setLastDevicesFetchCategoryId(type === "category" ? categoryIdSlug?.split("-")?.[0] || null : null);
+      fetchRefStore.setLastDevicesFetchUsedFilters(deviceStore.usedFilters || null);
+      fetchRefStore.setLastDevicesFetchSearch(type === "search" ? spellCheckedSearchQuery || preparedSearchQuery || null : null);
+      fetchRefStore.setLastDevicesFetchSellerId(type === "seller" ? seller?.id || null : null);
   
       prevUsedFilters.current = deviceStore.usedFilters;
       prevLocationPathname.current = location.pathname;
@@ -219,6 +232,8 @@ function useDeviceSectionFetching(
       if (isInitialFetch) {
         app.setIsGlobalLoading(false);
       }
+
+      if (hasAlreadyFetchedDevicesRef !== null) hasAlreadyFetchedDevicesRef.current = true;
     }
     
   }
@@ -226,7 +241,7 @@ function useDeviceSectionFetching(
   const [fetching, isLoading, error] = useFetching((location, categoryIdSlug, hasChangedURL) => fetchingCallback(location, categoryIdSlug, hasChangedURL, originalType), 0, null, [originalType]);
 
   useEffect(() => {
-    fetching(location, categoryIdSlug, hasChangedURL);
+    if (additionalCondition) fetching(location, categoryIdSlug, hasChangedURL);
     // do not use fetching, stocks, sales and saleTypeNames in dependency list
     // eslint-disable-next-line
   }, [
@@ -237,6 +252,7 @@ function useDeviceSectionFetching(
     // if param queries or pathname have changed, re-fetch devices
     location.search,
     location.pathname,
+    additionalCondition
   ]);
 
   return [isLoading, error, fetching];

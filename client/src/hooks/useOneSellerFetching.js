@@ -3,12 +3,16 @@ import useFetching from "./useFetching";
 import { Context } from "../Context";
 import { getOneSeller } from "../http/SellersAPI";
 
-function useOneSellerFetching(id, setSeller, additionalCondition = true, isToUseGlobalLoading = true) {
-  const { app } = useContext(Context);
+function useOneSellerFetching(
+  id, setSeller, additionalCondition = true, isToUseGlobalLoading = true, isTopDevicePageFetch = false
+) {
+  const { app, fetchRefStore } = useContext(Context);
 
   async function fetchingCallback(propsId) {
     const fetchedSeller = await getOneSeller(propsId);
     setSeller(fetchedSeller);
+
+    if (isTopDevicePageFetch) fetchRefStore.setLastDevicePageFetchSeller(fetchedSeller);
   }
 
   const [fetching, isLoading, error] = useFetching(() => fetchingCallback(id), 0, null, [id]);

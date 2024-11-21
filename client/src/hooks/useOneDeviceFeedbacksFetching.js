@@ -8,9 +8,10 @@ import { Context } from "Context";
 // update fetch is the fetch that is used to refresh feedbacks, not to get them from zero
 function useOneDeviceFeedbacksFetching(
   deviceId, setFeedbacks = null, setQuestions = null, isUpdateFetch = false,
-  isToFetchFeedbacks = true, isToFetchQuestions = true, fetchStringQueryParams = ""
+  isToFetchFeedbacks = true, isToFetchQuestions = true, fetchStringQueryParams = "",
+  isTopDevicePageFetch = false
 ) {
-  const { app, deviceStore } = useContext(Context);
+  const { app, deviceStore, fetchRefStore } = useContext(Context);
 
   async function fetchingFunc(id) {
     function setFeedbacksFn(value) {
@@ -49,16 +50,33 @@ function useOneDeviceFeedbacksFetching(
     if (isToFetchFeedbacks) setFeedbacksFn(feedbacks);
     if (isToFetchQuestions) setQuestionsFn(questions);
 
+    if (isTopDevicePageFetch) fetchRefStore.setLastDevicePageDeviceIdWithFetchedComments(id);
+
     return { feedbacks, questions };
   };
 
   const [fetching, isLoading] = useFetching(() => fetchingFunc(deviceId), 0, null, [deviceId]);
 
   useEffect(() => {
-    if ((deviceId !== null && deviceId !== undefined) && !isUpdateFetch) fetching();
+    const topDevicePageAdditionalCondition = (
+      isTopDevicePageFetch
+      && (
+        (
+          fetchRefStore.lastDevicePageDeviceIdWithFetchedComments === null
+          || fetchRefStore.lastDevicePageDeviceIdWithFetchedComments === undefined
+        )
+        || fetchRefStore.lastDevicePageDeviceIdWithFetchedComments !== deviceId
+      )
+    );
+
+    if (
+      (deviceId !== null && deviceId !== undefined) && !isUpdateFetch
+      && (isTopDevicePageFetch ? topDevicePageAdditionalCondition : true) 
+    ) fetching();
   }, [
     setFeedbacks, setQuestions, deviceId, isToFetchFeedbacks, isToFetchQuestions, 
-    isUpdateFetch, fetchStringQueryParams, fetching
+    isUpdateFetch, fetchStringQueryParams, isTopDevicePageFetch, fetching,
+    fetchRefStore.lastDevicePageDeviceIdWithFetchedComments
   ]);
 
   useEffect(() => {

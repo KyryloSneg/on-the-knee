@@ -5,10 +5,11 @@ import { Link } from "react-router-dom";
 const Tab = ({ tabData, doesHaveDynamicParam }) => {
   const currentPath = useCurrentPath();
   
-  let tabDataRoute = tabData.to;
+  // delete query params before checking is this tab active
+  let tabDataRoute = tabData.to.split("?")[0];
   if (doesHaveDynamicParam) {
     // replace dynamic param value with the param's name 
-    let splittedTabDataTo = tabData.to.split("/");
+    let splittedTabDataTo = tabDataRoute.split("/");
     splittedTabDataTo[2] = currentPath.split("/")[2];
     
     tabDataRoute = splittedTabDataTo.join("/");

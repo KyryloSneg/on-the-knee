@@ -4,7 +4,7 @@ import "./styles/CatalogPage.css";
 import useWindowWidth from "../hooks/useWindowWidth";
 import DeviceSection from "../components/DeviceSection";
 import { WIDTH_TO_SHOW_ASIDE, sortingOptions } from "../utils/consts";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Context } from "../Context";
 import CatalogAside from "../components/CatalogAside";
 import useDeviceSectionFetching from "../hooks/useDeviceSectionFetching";
@@ -15,33 +15,69 @@ import { useLocation, useParams } from "react-router-dom";
 import ChildCategoriesBar from "../components/ChildCategoriesBar";
 import CustomScrollbar from "../components/UI/customScrollbar/CustomScrollbar";
 import useDeletingRedundantCategoryId from "../hooks/useDeletingRedundantCategoryId";
+import _ from "lodash";
 
 const POSSIBLE_TYPES = ["category", "search", "seller"];
 
-const CatalogPage = observer(({ type, seller = null }) => {
+const CatalogPage = observer(({ type, seller = null, isToFetch = true, hasAlreadyFetchedDevicesRef = null }) => {
   if (!POSSIBLE_TYPES.includes(type)) throw Error("type of Catalog Page is not defined or incorrect");
 
   const location = useLocation();
   const { categoryIdSlug } = useParams();
   const navigate = useNavigateToEncodedURL();
-  const { deviceStore, app, isTest } = useContext(Context);
+  const { deviceStore, fetchRefStore, isTest } = useContext(Context);
   const windowWidth = useWindowWidth();
+
+  const isInitialRenderRef = useRef(true);
+
   const [isFoundDevicesByQuery, setIsFoundDevicesByQuery] = useState(true);
   const [spellCheckedQuery, setSpellCheckedQuery] = useState(type === "search" ? URLActions.getParamValue("text") : null);
 
   const categoryId = +categoryIdSlug?.split("-")[0] || undefined;
   const category = deviceStore.categories.find(cat => cat.id === categoryId);
   const childCategories = deviceStore.categories.filter(cat => !cat.isVariation && cat.parentCategoryId === categoryId);
+  
+  const hasAlreadyFetchedDevsWithTheseUsedFilters = _.isEqual(
+    URLActions.getUsedFilters(deviceStore.filters).usedFilters, fetchRefStore.lastDevicesFetchUsedFilters
+  );
+
+  // show the wrapper immediately if user has returned to the same page after, for example, visiting device page
+  const hasAlreadyFetchedThisCategory = (
+    type === "category" && `${categoryId}` === fetchRefStore.lastDevicesFetchCategoryId 
+    && hasAlreadyFetchedDevsWithTheseUsedFilters
+  );
+
+  const hasAlreadyFetchedThisSearch = (
+    type === "search" && spellCheckedQuery === fetchRefStore.lastDevicesFetchSearch 
+    && hasAlreadyFetchedDevsWithTheseUsedFilters
+  );
+
+  const hasAlreadyFetchedThisSeller = (
+    type === "seller" && seller?.id === fetchRefStore.lastDevicesFetchSellerId 
+    && hasAlreadyFetchedDevsWithTheseUsedFilters
+  );
 
   useEffect(() => {
     window.scroll(0, 0);
   }, [location.pathname, isFoundDevicesByQuery]);
 
-  // resetting states below because user can navigate to this page from another page
   useEffect(() => {
-    deviceStore.setDevices([]);
-    deviceStore.setFilters([]);
-  }, [deviceStore]);
+    // if we haven't already fetched devices, reset devices and filters states
+    // useful, for example, in switching between two different seller devices pages
+    // (it gives a smooth transition because of the effect "clear" logic)
+    if (
+      (!hasAlreadyFetchedThisCategory && !hasAlreadyFetchedThisSearch && !hasAlreadyFetchedThisSeller)
+      && (hasAlreadyFetchedDevicesRef !== null || !hasAlreadyFetchedDevicesRef?.current)
+    ) {
+      deviceStore.setDevices([]);
+      deviceStore.setFilters([]);
+    }
+
+    // for this logic we need only initial values of the vars we used in the condition,
+    // so no need in including them in the dependency array
+
+    // eslint-disable-next-line
+  }, [deviceStore, hasAlreadyFetchedDevicesRef]);
 
   // we have no need in categoryId param if we're already at the category catalog page
   useDeletingRedundantCategoryId(type);
@@ -61,11 +97,15 @@ const CatalogPage = observer(({ type, seller = null }) => {
       navigate(url.replace(basename, ""), { replace: true });
     }
 
-  }, [location.search, deviceStore, deviceStore.filters, deviceStore.filters, location.pathname, navigate, isTest]);
+  }, [location.search, deviceStore, deviceStore.filters, location.pathname, navigate, isTest]);
 
   const [isLoading, error, deviceFetching] = useDeviceSectionFetching(
-    deviceStore, app, type, setIsFoundDevicesByQuery, setSpellCheckedQuery, seller
+    type, setIsFoundDevicesByQuery, setSpellCheckedQuery, seller, isToFetch, hasAlreadyFetchedDevicesRef
   );
+
+  useEffect(() => {
+    isInitialRenderRef.current = false;
+  }, []);
 
   if (error) console.log(error);
 
@@ -111,12 +151,17 @@ const CatalogPage = observer(({ type, seller = null }) => {
           className="child-categories-scrollbar"
         />
       }
-      <div id="wrapper" className={wrapperClassName}>
-        {isToRenderFilters &&
-          <CatalogAside key={"aside"} />
-        }
-        <DeviceSection isLoading={isLoading} retryDevicesFetch={deviceFetching} error={error} key={"devSection"} />
-      </div>
+      {(
+        !isInitialRenderRef.current || hasAlreadyFetchedThisCategory 
+        || hasAlreadyFetchedThisSearch || hasAlreadyFetchedThisSeller
+      ) &&
+        <div id="wrapper" className={wrapperClassName}>
+          {isToRenderFilters &&
+            <CatalogAside key={"aside"} />
+          }
+          <DeviceSection isLoading={isLoading} retryDevicesFetch={deviceFetching} error={error} key={"devSection"} />
+        </div>
+      }
     </div>
   );
 });

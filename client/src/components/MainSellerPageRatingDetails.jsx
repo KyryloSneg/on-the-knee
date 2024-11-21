@@ -12,7 +12,8 @@ const MainSellerPageRatingDetails = ({ ratingsObj, feedbacksAmount }) => {
             <span>{name}</span>
           </dt>
           <dd >
-            <CustomProgressBar progress={value / feedbacksAmount * 100} />
+            {/* do not show Infinity if we have no feedbacks, show zero instead */}
+            <CustomProgressBar progress={feedbacksAmount === 0 ? 0 : (value / feedbacksAmount) * 100} />
             <span>{value}</span>
           </dd>
         </div>

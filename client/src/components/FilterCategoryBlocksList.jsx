@@ -1,10 +1,10 @@
+import "./styles/FilterCategoryBlocksList.css";
 import { useContext } from "react";
 import { observer } from "mobx-react-lite";
 import { Context } from "../Context";
 import FilterCategoryBlock from "./FilterCategoryBlock";
 import { FILTERS_OPTIONS_LENGTH_LIMIT, SPECIAL_TO_HANDLE_FILTERS } from "../utils/consts";
 import ArrayActions from "../utils/ArrayActions";
-import "./styles/FilterCategoryBlocksList.css";
 
 const FilterCategoryBlocksList = observer(({ areInitiallyVisible }) => {
   const { deviceStore } = useContext(Context);

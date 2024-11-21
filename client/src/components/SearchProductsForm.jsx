@@ -183,7 +183,7 @@ const SearchProductsForm = observer(({ navbarRef }) => {
         // add hint search result only if the result links to not empty catalog page
         const preparedValue = getPreparedForMockServerStr(backupValue);
         const fetchStringQueryParams = `name_like=${encodeURIComponent(preparedValue.trim().toLowerCase())}`.replaceAll(`"`, "");
-        const devicesBySearchQuery = await getDevicesBySearchQuery(fetchStringQueryParams);
+        const { devices: devicesBySearchQuery } = await getDevicesBySearchQuery(fetchStringQueryParams);
 
         if (devicesBySearchQuery.length === 1) {
           // navigating directly to device page
@@ -195,6 +195,9 @@ const SearchProductsForm = observer(({ navbarRef }) => {
           const to = DEVICE_ROUTE + `${devicesBySearchQuery[0].id}--${deviceRouteCombo}`;
 
           navigate(to);
+          setTimeout(() => {
+            window.scrollTo(0, 0);
+          }, 0);
         } else {
           addHintSearchResult({ value: value.trim().toLowerCase() })
 

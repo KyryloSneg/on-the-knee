@@ -3,7 +3,7 @@ import SellerScheduleSection from "../components/SellerScheduleSection";
 import MainSellerPageRatingSection from "../components/MainSellerPageRatingSection";
 
 const MainSellerPage = ({ seller, feedbacks }) => {
-  if (!seller || !feedbacks?.length) return <div />;
+  if (!seller) return <div />;
 
   let feedbacksAmountObj = {
     "is-up-to-date-rate": [],
@@ -46,7 +46,7 @@ const MainSellerPage = ({ seller, feedbacks }) => {
         feedbacksAmount={feedbacksAmount}
         feedbacksAmountObj={feedbacksAmountObj}
       />
-      <SellerScheduleSection seller={seller} feedbacks={feedbacks} />
+      <SellerScheduleSection seller={seller} />
     </section>
   );
 }

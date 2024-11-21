@@ -5,7 +5,7 @@ import { Context } from "../Context";
 import useNavigateToEncodedURL from "./useNavigateToEncodedURL";
 import { ROOT_ROUTE } from "../utils/consts";
 
-function useOneDeviceFetching(id, setDevice, isToRedirectToMainPageOnFail = false) {
+function useOneDeviceFetching(id, setDevice, additionalCondition = true, isToRedirectToMainPageOnFail = false) {
   const { app } = useContext(Context);
   const navigate = useNavigateToEncodedURL();
 
@@ -25,8 +25,8 @@ function useOneDeviceFetching(id, setDevice, isToRedirectToMainPageOnFail = fals
   }, [app]);
 
   useEffect(() => {
-    fetching();
-  }, [fetching]);
+    if (additionalCondition) fetching();
+  }, [fetching, additionalCondition]);
 
   useEffect(() => {
     if (isToRedirectToMainPageOnFail && error) navigate(ROOT_ROUTE);

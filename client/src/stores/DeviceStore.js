@@ -61,6 +61,7 @@ class DeviceStore {
     this._pagesToFetch = 1;
     this._totalCount = 0;
     this._limit = 40;
+
     makeAutoObservable(this);
   }
 

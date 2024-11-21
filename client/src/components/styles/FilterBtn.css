@@ -16,6 +16,10 @@
   text-decoration: none;
 }
 
+.remove-filter.with-invisible-text {
+  grid-template-columns: auto 1fr 28px;
+}
+
 .remove-filter:hover {
   background-color: rgb(209, 209, 209);
 }
