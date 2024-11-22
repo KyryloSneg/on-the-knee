@@ -4,7 +4,7 @@ import TabsPageLayout from '../components/UI/tabsPageLayout/TabsPageLayout';
 import useOneSellerFetching from '../hooks/useOneSellerFetching';
 import useOneSellerFeedbacksFetching from '../hooks/useOneSellerFeedbacksFetching';
 import { SELLER_DEVICES_ROUTE, SELLER_FEEDBACKS_ROUTE, SELLER_ROUTE } from '../utils/consts';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import MainSellerPage from './MainSellerPage';
 import SellerFeedbacksPage from './SellerFeedbacksPage';
 import SellerDevicesPage from './SellerDevicesPage';
@@ -17,6 +17,8 @@ const POSSIBLE_TYPES = ["main", "feedbacks", "devices"];
 const SellerPage = observer(({ type }) => {
   const { deviceStore, fetchRefStore } = useContext(Context);
   const { sellerIdSlug } = useParams();
+  const location = useLocation();
+  const currentQueryParamsFromTheDevicesPage = useRef("?page=1&pagesToFetch=1")
 
   let [id, slug] = sellerIdSlug.split("--");
   id = +id;
@@ -41,6 +43,10 @@ const SellerPage = observer(({ type }) => {
   useEffect(() => {
     if (seller) fetchRefStore.setLastSellerPageSellerFetchResult(seller);
   }, [fetchRefStore, seller]);
+
+  useEffect(() => {
+    if (type === "devices") currentQueryParamsFromTheDevicesPage.current = location.search;
+  }, [type, location.search]);
 
   if (!POSSIBLE_TYPES.includes(type)) throw Error("type of Seller Page is not defined or incorrect");
 
@@ -99,7 +105,10 @@ const SellerPage = observer(({ type }) => {
         `Comments (${deviceStore.sellersFeedbacks?.length || 0})`,
       to: SELLER_FEEDBACKS_ROUTE.replace(":sellerIdSlug", sellerIdSlug)
     },
-    { children: "Devices", to: SELLER_DEVICES_ROUTE.replace(":sellerIdSlug", sellerIdSlug) + "?page=1&pagesToFetch=1" },
+    { 
+      children: "Devices", 
+      to: SELLER_DEVICES_ROUTE.replace(":sellerIdSlug", sellerIdSlug) + currentQueryParamsFromTheDevicesPage.current 
+    },
   ];
 
   return (

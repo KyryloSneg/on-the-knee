@@ -31,7 +31,7 @@ const Tab = ({ tabData, doesHaveDynamicParam }) => {
   }
 
   return (
-    <Link to={tabData.to} className={className}>
+    <Link to={tabData.to} className={className} onClick={() => window.scroll(0, 0)}>
       {icon
         ? (
           <>

@@ -97,6 +97,7 @@ const SearchResultItem = ({ type, active = false, value, id, onFocus, inputValue
       data-type={type}
       data-testid={`${isBackupValueOption ? "backup" : (id >= 0 ? id : null)}-searchResultHistory`}
     >
+      {/* TODO: SCROLL */}
       <Link 
         to={to}
         tabIndex={tabIndex}
