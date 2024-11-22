@@ -10,7 +10,7 @@ import isCanLoadMoreContent from "../utils/isCanLoadMoreContent";
 import useGettingPaginationParams from "../hooks/useGettingPaginationParams";
 import Loader from "./UI/loader/Loader";
 
-const DeviceSection = observer(({ isLoading, retryDevicesFetch, error }) => {
+const DeviceSection = observer(({ isLoading, retryDevicesFetch, error, isInitialRenderRef }) => {
   const { app, deviceStore } = useContext(Context);
   const deviceSectionRef = useRef(null);
   const totalPages = getTotalPages(deviceStore.totalCount, deviceStore.limit);
@@ -35,13 +35,12 @@ const DeviceSection = observer(({ isLoading, retryDevicesFetch, error }) => {
       {/* <DevicePageList /> */}
       {deviceStore.devices.length
         ? <DeviceList devices={deviceStore.devices} />
-        : (!error && !!Object.keys(deviceStore.usedFilters).length && !isLoading) && (
+        : (!isInitialRenderRef.current && !error && !!Object.keys(deviceStore.usedFilters).length && !isLoading) && (
           <p className="no-devices-message">
             We haven't found devices with such filters {":("}
           </p>
         )
       }
-
       {/* spinner on "retry" fetch */}
       {(error && isLoading) &&
         <Loader className="error-retry-spinner" />
@@ -72,7 +71,6 @@ const DeviceSection = observer(({ isLoading, retryDevicesFetch, error }) => {
           totalPages={totalPages}
           currentPage={deviceStore.page}
           pagesToFetch={deviceStore.pagesToFetch}
-          scrollElem={deviceSectionRef.current}
           ariaLabel="Device pages"
         />
       }

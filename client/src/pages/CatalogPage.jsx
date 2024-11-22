@@ -58,10 +58,6 @@ const CatalogPage = observer(({ type, seller = null, isToFetch = true, hasAlread
   );
 
   useEffect(() => {
-    window.scroll(0, 0);
-  }, [location.pathname, isFoundDevicesByQuery]);
-
-  useEffect(() => {
     // if we haven't already fetched devices, reset devices and filters states
     // useful, for example, in switching between two different seller devices pages
     // (it gives a smooth transition because of the effect "clear" logic)
@@ -159,7 +155,13 @@ const CatalogPage = observer(({ type, seller = null, isToFetch = true, hasAlread
           {isToRenderFilters &&
             <CatalogAside key={"aside"} />
           }
-          <DeviceSection isLoading={isLoading} retryDevicesFetch={deviceFetching} error={error} key={"devSection"} />
+          <DeviceSection 
+            isLoading={isLoading} 
+            retryDevicesFetch={deviceFetching} 
+            error={error} 
+            isInitialRenderRef={isInitialRenderRef}
+            key={"devSection"} 
+          />
         </div>
       }
     </div>

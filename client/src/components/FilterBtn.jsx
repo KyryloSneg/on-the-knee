@@ -24,7 +24,7 @@ const FilterBtn = ({ value, paramKey, testId }) => {
   }
 
   return (
-    <Link to={to} className={className} data-testid={testId}>
+    <Link to={to} className={className} data-testid={testId} preventScrollReset={true}>
       {isToRenderPriceInvisibleText && (
         <span className="visually-hidden">{priceFilterInvisibleText}</span>
       )}

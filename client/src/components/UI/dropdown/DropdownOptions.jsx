@@ -55,6 +55,7 @@ const DropdownOptions = (props) => {
                 }}
                 aria-checked={isSelected}
                 role="radio"
+                preventScrollReset={true}
               >
                 {opt.title}
               </Link>

@@ -21,6 +21,7 @@ const CategoryFilter = forwardRef(({ filter, value, count, active, onKeyDown, te
       aria-checked={active ? "true" : "false"}
       ref={ref}
       data-testid={testId}
+      preventScrollReset={true}
     >
       <div className={className} aria-hidden="true" data-testid={iconTestId} />
       <p>{value[0].toUpperCase() + value.slice(1)}</p>
