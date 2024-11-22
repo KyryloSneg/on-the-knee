@@ -29,7 +29,7 @@ const ButtonPagination = observer(({ isLoading, className = "" }) => {
   const spinnerClassName = isLoading ? "no-select" : "no-select placeholder";
 
   return (
-    <Link to={to} className={`btn-pagination ${disabledClassName} ${className}`}>
+    <Link to={to} className={`btn-pagination ${disabledClassName} ${className}`} preventScrollReset={true}>
       {/* turning on animation on click */}
       <Spinner
         animation="border"

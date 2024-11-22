@@ -3,7 +3,7 @@ import "react-international-phone/style.css";
 import Navbar from "./components/Navbar";
 import MyFooter from "./components/MyFooter";
 import { useCallback, useContext, useEffect, useRef } from "react";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, ScrollRestoration, useLocation } from "react-router-dom";
 import { Context } from "./Context";
 import { observer } from "mobx-react-lite";
 import getAllFocusableElements from "./utils/getAllFocusableElements";
@@ -28,7 +28,6 @@ import setFiltersSidebarVisibility from "./utils/setFiltersSidebarVisibility";
 import setUsedFiltersBarVisibility from "./utils/setUsedFiltersBarVisibility";
 import useClosingCategoriesModalWidth from "./hooks/useClosingCategoriesModalWidth";
 import useClosingAllWindows from "./hooks/useClosingAllWindows";
-import useScrollingToPagesTop from "./hooks/useScrollingToPagesTop";
 import SelectUserLocationModal from "./components/SelectUserLocationModal";
 import SelfDeliveryModal from "./components/SelfDeliveryModal";
 import DeviceFeedbackModal from "./components/DeviceFeedbackModal";
@@ -98,10 +97,10 @@ const App = observer(() => {
   useClosingUsedFiltersBarValue(deviceStore.usedFilters, app.isVisibleUsedFiltersSidebar, closeUsedFiltersSidebar);
 
   useBlockingScroll(app.isBlockedScroll);
-  useScrollingToPagesTop();
 
   return (
     <div>
+      <ScrollRestoration />
       {/* our gray bg on global loading */}
       {app.isGlobalLoading &&
         <div id="app-global-loading-bg" />
