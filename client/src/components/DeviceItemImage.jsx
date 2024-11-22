@@ -16,6 +16,7 @@ const DeviceItemImage = ({ thumbnail, to, deviceId, combinationId, textSaleTypes
         combinationId={combinationId} 
         withHistoryDeletionBtn={withHistoryDeletionBtn} 
       />
+      {/* TODO: SCROLL */}
       <Link to={to} className="main-device-img-wrap">
         <img src={thumbnail.src} alt={thumbnail.alt} draggable="false" />
       </Link>
