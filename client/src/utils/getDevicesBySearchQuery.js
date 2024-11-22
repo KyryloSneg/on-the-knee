@@ -17,14 +17,20 @@ async function getDevicesBySearchQuery(fetchStringQueryParams, additionalConditi
   }
 
   let spellCheckedSearchQuery = preparedSearchQuery;
-  if (!devices.length && additionalCondition && preparedSearchQuery) {
-    spellCheckedSearchQuery = await spellCheck(preparedSearchQuery);
 
-    const fetchParams = fetchStringQueryParams.split("&");
-    fetchParams[2] = `name_like=${spellCheckedSearchQuery}`.replaceAll(`"`, "");
-
-    fetchStringQueryParams = fetchParams.join("&");
-    devices = (await getDevices(fetchStringQueryParams)).devices || [];
+  // failed spellCheck shouldn't affect the whole logic
+  try {
+    if (!devices.length && additionalCondition && preparedSearchQuery) {
+      spellCheckedSearchQuery = await spellCheck(preparedSearchQuery);
+  
+      const fetchParams = fetchStringQueryParams.split("&");
+      fetchParams[2] = `name_like=${spellCheckedSearchQuery}`.replaceAll(`"`, "");
+  
+      fetchStringQueryParams = fetchParams.join("&");
+      devices = (await getDevices(fetchStringQueryParams)).devices || [];
+    }
+  } catch (e) {
+    console.log(e.message);
   }
 
   if (additionalCondition) {

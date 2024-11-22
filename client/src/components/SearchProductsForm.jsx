@@ -17,10 +17,13 @@ import useNavigateToEncodedURL from "../hooks/useNavigateToEncodedURL";
 import DeviceComboActions from "../utils/DeviceComboActions";
 import getPreparedForMockServerStr from "../utils/getPreparedForMockServerStr";
 import LocalStorageActions from "../utils/LocalStorageActions";
+import { useLocation } from "react-router-dom";
 
 const SearchProductsForm = observer(({ navbarRef }) => {
   const { app, isTest, isEmptySearchResults } = useContext(Context);
   const navigate = useNavigateToEncodedURL();
+  const location = useLocation();
+
   const [stocks, setStocks] = useState([]);
   const [value, setValue] = useState(""); // the value that will be submitted to the form
   // the value that user can return to (it renders as the first search option if the input value isn't empty)
@@ -194,16 +197,14 @@ const SearchProductsForm = observer(({ navbarRef }) => {
           const deviceRouteCombo = defaultCombo.combinationString || "default";
           const to = DEVICE_ROUTE + `${devicesBySearchQuery[0].id}--${deviceRouteCombo}`;
 
-          navigate(to);
-          setTimeout(() => {
-            window.scrollTo(0, 0);
-          }, 0);
+          navigate(to, { replace: to === location.pathname + location.search });
         } else {
           addHintSearchResult({ value: value.trim().toLowerCase() })
 
           const hrefValue = value.trim().replaceAll("&", "%2526");
           const href = `/search/?text=${hrefValue}&page=1&pagesToFetch=1`;
-          navigate(href);
+
+          navigate(href, { replace: href === location.pathname + location.search });
         }
       } catch (error) {
         console.log(error.message)
