@@ -40,9 +40,6 @@ const DevicePage = observer(({ type }) => {
       : null
   ), [initialDevice?.sellerId, fetchRefStore.lastDevicePageFetchSeller]);
 
-  console.log(initialDevice, initialSeller);
-  
-
   const [seller, setSeller] = useState(initialSeller);
   const [additionalServicesObj, setAdditionalServicesObj] = useState([]);
 
