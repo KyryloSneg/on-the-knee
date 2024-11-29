@@ -5,7 +5,7 @@ import CommentsList from "./CommentsList";
 import { v4 } from "uuid";
 import UIDetails from "./UI/uiDetails/UIDetails";
 
-const RemainSellerDevFeedbackDevListItem = ({ type, comboFeedbackObj, userOrderDeviceCombinations }) => {
+const RemainSellerDevFeedbackDevListItem = ({ type, comboFeedbackObj, userOrderDeviceCombinations, closeModal }) => {
   const deviceRouteCombo = comboFeedbackObj.deviceCombination.combinationString || "default";
 
   const deviceTo = DEVICE_ROUTE + `${comboFeedbackObj.deviceCombination.deviceId}--${deviceRouteCombo}`;
@@ -37,6 +37,7 @@ const RemainSellerDevFeedbackDevListItem = ({ type, comboFeedbackObj, userOrderD
             areUserFeedbacks={type === "userFeedbacks"}
             userOrderDeviceCombinations={userOrderDeviceCombinations}
             id={commentsListId}
+            closeRemainAFeedbackModal={closeModal}
           />
         }
         contentId={commentsListId}
