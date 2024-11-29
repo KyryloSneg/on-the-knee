@@ -14,6 +14,8 @@ const SearchResults = ({
   const { app } = useContext(Context);
 
   const searchResultsRef = useRef(null);
+  console.log(results.hint, results.device, results.category, results.history);
+  
   const amount = results.hint.length + results.device.length + results.category.length + results.history.length;
 
   useChangingMinMaxIds(minId, maxId, setSelectedId, results, backupValue);
@@ -31,8 +33,7 @@ const SearchResults = ({
     inputRef.current.input.focus();
   }
 
-  // starting with 1 because we have one search result as minimum (if we have found any results)
-  let currentResultId = 1;
+  let currentResultId = minId.current;
   const isBackupValue = !!backupValue.trim().length;
 
   return (
@@ -46,6 +47,7 @@ const SearchResults = ({
               active={currentResultId === selectedId}
               value={backupValue}
               type={isBackupValue ? "hint" : "hidden"}
+              currentIndexAmongOtherResults={currentResultId}
               isBackupValueOption={true}
             />
             {!!results.hint.length &&
@@ -60,6 +62,7 @@ const SearchResults = ({
                       value={result.value}
                       id={index}
                       inputValue={backupValue}
+                      currentIndexAmongOtherResults={currentResultId}
                     />
                   )
                 })}
@@ -77,6 +80,7 @@ const SearchResults = ({
                       value={result}
                       id={index}
                       inputValue={backupValue}
+                      currentIndexAmongOtherResults={currentResultId}
                       stocks={stocks}
                     />
                   )
@@ -97,6 +101,7 @@ const SearchResults = ({
                         value={result}
                         inputValue={backupValue}
                         id={index}
+                        currentIndexAmongOtherResults={currentResultId}
                       />
                     );
                   })}
@@ -118,6 +123,7 @@ const SearchResults = ({
                         value={result}
                         inputValue={backupValue}
                         id={index}
+                        currentIndexAmongOtherResults={currentResultId}
                       />
                     );
                   })}
@@ -148,6 +154,7 @@ const SearchResults = ({
                         results={results}
                         setResults={setResults}
                         inputRef={inputRef}
+                        currentIndexAmongOtherResults={currentResultId}
                       />
                     );
                   })}
