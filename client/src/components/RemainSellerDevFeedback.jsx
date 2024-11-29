@@ -11,7 +11,7 @@ const POSSIBLE_TYPES = ["default", "userFeedbacks", "modal"];
 // sellersFeedbacksObjArray: [{ seller: {...}, feedbacks: [{...}, ...] }, ...]
 const RemainSellerDevFeedback = observer(({ 
   type = "default", propsSellersFeedbacksObjArray = null, propsDevCombosFeedbacksObjArray = null,
-  userOrderDeviceCombinations = null
+  userOrderDeviceCombinations = null, closeModal = null
 }) => {
   const { app } = useContext(Context);
   if (!POSSIBLE_TYPES.includes(type)) throw Error("type of RemainSellerDevFeedback is not defined or incorrect");
@@ -45,6 +45,7 @@ const RemainSellerDevFeedback = observer(({
             type={type} 
             devCombosFeedbacksObjArray={devCombosFeedbacksObjArray} 
             userOrderDeviceCombinations={userOrderDeviceCombinations}
+            closeModal={closeModal}
           />
         </section>
       )}

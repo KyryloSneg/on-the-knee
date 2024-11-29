@@ -27,12 +27,13 @@ import WriteSellerFeedbackForm from "./WriteSellerFeedbackForm";
 import useGettingOneUser from "hooks/useGettingOneUser";
 
 const OriginalComment = observer(({
-  comment, type, seller, singularCommentWord = "comment", isWithImages, closeGalleryModal, isInModal, 
-  deviceQuestionsFetching, areUserFeedbacks, updateDeviceFeedbacksCb, updateSellerFeedbacksCb
+  comment, type, seller, singularCommentWord = "comment", isWithImages, closeGalleryModal, closeRemainAFeedbackModal, 
+  isInModal, deviceQuestionsFetching, areUserFeedbacks, updateDeviceFeedbacksCb, updateSellerFeedbacksCb
 }) => {
   const { user: userStore, app, deviceStore, fetchRefStore } = useContext(Context);
 
   const isGalleryModal = !!closeGalleryModal;
+  const isRemainAFeedbackModal = !!closeRemainAFeedbackModal;
 
   const replyBtnRef = useRef(null);
   const likeBtnRef = useRef(null);
@@ -92,7 +93,7 @@ const OriginalComment = observer(({
       app.setCommentModalContentAreUserFeedbacks(areUserFeedbacks || fetchRefStore.hasAlreadyFetchedUserDevsFeedbacks);
       app.setReplyModalBtnRef(replyBtnRef);
 
-      setReplyModalVisibility(true, app, isGalleryModal);
+      setReplyModalVisibility(true, app, isGalleryModal || isRemainAFeedbackModal);
     } else if (type === "deviceQuestions") {
       deviceStore.setSelectedDeviceQuestionId(comment.id);
       app.setAnswerModalBtnRef(replyBtnRef);
@@ -101,6 +102,7 @@ const OriginalComment = observer(({
     }
 
     if (isGalleryModal) closeGalleryModal();
+    if (closeRemainAFeedbackModal) closeRemainAFeedbackModal();
   }
 
   const openErrorModal = useCallback((errorType, btnRef) => {

@@ -4,7 +4,7 @@ import CommentsListItem from "./CommentsListItem";
 const CommentsList = ({ 
   type, comments, singularCommentWord, propsUser = null, isInModal = false, 
   updateFetchesQueryParams = "", areUserFeedbacks = false, userOrderDeviceCombinations = null, 
-  ...props 
+  closeRemainAFeedbackModal = null, ...props 
 }) => {
   return (
     <ul className="comments-list" {...props}>
@@ -19,6 +19,7 @@ const CommentsList = ({
             updateFetchesQueryParams={updateFetchesQueryParams}
             areUserFeedbacks={areUserFeedbacks}
             userOrderDeviceCombinations={userOrderDeviceCombinations}
+            closeRemainAFeedbackModal={closeRemainAFeedbackModal}
           />
         </li>
       )}

@@ -14,7 +14,7 @@ import useUpdatingFeedbacksCbs from "hooks/useUpdatingFeedbacksCbs";
 const CommentsListItem = observer(({ 
   type, comment, singularCommentWord, propsUser = undefined, isWithImages = true, 
   closeGalleryModal = null, isInModal = false, updateFetchesQueryParams = "",
-  areUserFeedbacks = false, userOrderDeviceCombinations = null
+  areUserFeedbacks = false, userOrderDeviceCombinations = null, closeRemainAFeedbackModal = null
 }) => {
   const { user } = useContext(Context);
   const [seller, setSeller] = useState(comment?.seller || null);
@@ -67,6 +67,7 @@ const CommentsListItem = observer(({
         areUserFeedbacks={areUserFeedbacks}
         updateDeviceFeedbacksCb={updateDeviceFeedbacksCb}
         updateSellerFeedbacksCb={updateSellerFeedbacksCb}
+        closeRemainAFeedbackModal={closeRemainAFeedbackModal}
       />
       {!!replies?.length && (
         <CommentRepliesList 

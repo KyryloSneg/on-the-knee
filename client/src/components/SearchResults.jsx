@@ -14,8 +14,6 @@ const SearchResults = ({
   const { app } = useContext(Context);
 
   const searchResultsRef = useRef(null);
-  console.log(results.hint, results.device, results.category, results.history);
-  
   const amount = results.hint.length + results.device.length + results.category.length + results.history.length;
 
   useChangingMinMaxIds(minId, maxId, setSelectedId, results, backupValue);

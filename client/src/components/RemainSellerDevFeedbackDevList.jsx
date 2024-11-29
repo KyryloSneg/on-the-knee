@@ -1,6 +1,8 @@
 import RemainSellerDevFeedbackDevListItem from "./RemainSellerDevFeedbackDevListItem";
 
-const RemainSellerDevFeedbackDevList = ({ type, devCombosFeedbacksObjArray, userOrderDeviceCombinations }) => {
+const RemainSellerDevFeedbackDevList = ({ 
+  type, devCombosFeedbacksObjArray, userOrderDeviceCombinations, closeModal 
+}) => {
   return (
     <ul className="remain-seller-dev-feedback-list">
       {devCombosFeedbacksObjArray?.map(comboFeedbackObj => 
@@ -9,6 +11,7 @@ const RemainSellerDevFeedbackDevList = ({ type, devCombosFeedbacksObjArray, user
             type={type} 
             comboFeedbackObj={comboFeedbackObj} 
             userOrderDeviceCombinations={userOrderDeviceCombinations}
+            closeModal={closeModal}
           />
         </li>
       )}
