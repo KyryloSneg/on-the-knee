@@ -11,7 +11,6 @@ const DeviceItemAvgRating = ({ rating = null, feedbackAmount = null, deviceId = 
     const correctedFeedbackForm = feedbackAmount === 1 ? "feedback" : "feedbacks";
     return (
       <div className="main-device-rating-wrap">
-        {/* TODO: SCROLL */}
         <Link 
           to={to} 
           className="main-device-rating link-colors" 
@@ -26,7 +25,6 @@ const DeviceItemAvgRating = ({ rating = null, feedbackAmount = null, deviceId = 
 
   return (
     <div className="main-device-rating-wrap">
-      {/* TODO: SCROLL */}
       <Link to={to} className="main-device-rating link-colors">
         <span className="device-item-remain-feedback">Remain feedback</span>
       </Link>

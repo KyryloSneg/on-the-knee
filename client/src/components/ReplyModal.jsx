@@ -20,6 +20,8 @@ const ReplyModal = observer(() => {
         <CommentModalContent 
           type="reply" 
           closeModal={() => setIsReplyModalVisible(false)}
+          isModalVisible={app.isVisibleReplyModal}
+          areUserFeedbacks={app.commentModalContentAreUserFeedbacks}
         />
       }
       headerText="Reply"

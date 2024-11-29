@@ -15,6 +15,8 @@ const CommentsSection = observer(({ type, comments, isFullVersion = true, device
   const createCommentBtnRef = useRef(null);
   const [isToShowSellerCantRemainComment, setIsToShowSellerCantRemainComment] = useState(false);
 
+  // we can't determine is user the seller of THIS device (or THIS seller) 
+  // because sellers are not implemented on the real server
   const isUserASellerOrManager = user.user?.roles?.includes("SELLER") || user.user?.roles?.includes("SELLER-MANAGER");
 
   useEffect(() => {

@@ -27,10 +27,10 @@ import WriteSellerFeedbackForm from "./WriteSellerFeedbackForm";
 import useGettingOneUser from "hooks/useGettingOneUser";
 
 const OriginalComment = observer(({
-  comment, propsUser, type, seller, singularCommentWord = "comment", isWithImages, closeGalleryModal, isInModal,
-  deviceFeedbacksFetching, deviceQuestionsFetching, sellerFeedbacksFetching
+  comment, type, seller, singularCommentWord = "comment", isWithImages, closeGalleryModal, isInModal, 
+  deviceQuestionsFetching, areUserFeedbacks, updateDeviceFeedbacksCb, updateSellerFeedbacksCb
 }) => {
-  const { user: userStore, app, deviceStore } = useContext(Context);
+  const { user: userStore, app, deviceStore, fetchRefStore } = useContext(Context);
 
   const isGalleryModal = !!closeGalleryModal;
 
@@ -89,6 +89,7 @@ const OriginalComment = observer(({
 
     if (type === "deviceFeedbacks") {
       deviceStore.setSelectedDeviceFeedbackId(comment.id);
+      app.setCommentModalContentAreUserFeedbacks(areUserFeedbacks || fetchRefStore.hasAlreadyFetchedUserDevsFeedbacks);
       app.setReplyModalBtnRef(replyBtnRef);
 
       setReplyModalVisibility(true, app, isGalleryModal);
@@ -259,15 +260,32 @@ const OriginalComment = observer(({
       if (isAlreadyDeletingComment.current) return;
       isAlreadyDeletingComment.current = true
 
+      let deviceOrSellerId;
+      if (type === "deviceFeedbacks") {
+        deviceOrSellerId = comment.deviceId;
+      } else if (type === "sellerFeedbacks") {
+        deviceOrSellerId = comment.sellerId;
+      }
+
       await deleteCommentLogic(
-        comment.id, type, "comment", deviceFeedbacksFetching, deviceQuestionsFetching, sellerFeedbacksFetching
+        comment.id, deviceOrSellerId, type, "comment", updateDeviceFeedbacksCb, 
+        deviceQuestionsFetching, updateSellerFeedbacksCb, areUserFeedbacks
       );
+      
+
+      // updateAlreadyFetchedDeviceFeedbacks();
     } catch (e) {
       openErrorModal("deleteComment", optionsBtnRef);
     } finally {
       isAlreadyDeletingComment.current = false;
     }
-  }, [comment.id, type, openErrorModal, deviceFeedbacksFetching, deviceQuestionsFetching, sellerFeedbacksFetching]);
+    // eslint-disable-next-line
+  }, [
+    comment.id, type, openErrorModal, areUserFeedbacks,
+    comment.deviceId, comment?.sellerId, deviceStore.devicesFeedbacks, deviceStore.sellersFeedbacks,
+    fetchRefStore.lastDevicePageDeviceIdWithFetchedComments, deviceQuestionsFetching, 
+    updateDeviceFeedbacksCb, updateSellerFeedbacksCb, deviceStore
+  ]);
 
   const throttledDeleteComment = useLodashThrottle(deleteComment, 500, { "trailing": false });
 
@@ -351,6 +369,7 @@ const OriginalComment = observer(({
                 setIsEditing={setIsEditing}
                 isEditCommentForm={true}
                 comment={comment}
+                areUserFeedbacks={areUserFeedbacks}
               />
             )
             : (
@@ -360,7 +379,8 @@ const OriginalComment = observer(({
                 setIsEditing={setIsEditing}
                 isEditCommentForm={true}  
                 comment={comment}
-                sellerFeedbacksFetching={sellerFeedbacksFetching}
+                updateSellerFeedbacksCb={updateSellerFeedbacksCb}
+                areUserFeedbacks={areUserFeedbacks}
               />
             )
           : (

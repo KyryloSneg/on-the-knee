@@ -6,8 +6,11 @@ import { Context } from "Context";
 import CommentsActions from "utils/CommentsActions";
 
 // returns [{ seller: {...}, feedbacks: [...] }, ...]
-function useOrdersListSellersFetching(orders, setSellerFeedbacksObjArray = null, deviceStore = null) {
-  const { user } = useContext(Context);
+function useOrdersListSellersFetching(
+  orders, setSellerFeedbacksObjArray = null, isUserStore = false, 
+  additionalCondition = true, isUpdateFetch = false
+) {
+  const { user, fetchRefStore } = useContext(Context);
   const ordersRef = useRef(orders);
 
   useEffect(() => {
@@ -28,19 +31,22 @@ function useOrdersListSellersFetching(orders, setSellerFeedbacksObjArray = null,
   
         if (seller) {
           const userFeedbacks = await getOneSellerFeedbacks(seller.id, `&userId=${user.user?.id}`);
-  
-          if (Array.isArray(userFeedbacks)) {
+          const sortedByDateFeedbacks = [...userFeedbacks].sort(
+            (a, b) => b.date.localeCompare(a.date)
+          );
+
+          if (Array.isArray(sortedByDateFeedbacks)) {
             await CommentsActions.setCommentsUsers(
-              userFeedbacks, "seller-feedbacks", 
+              sortedByDateFeedbacks, "seller-feedbacks", 
               { isToFetchFeedbacksUsers: true, isToFetchResponsesUsers: false }
             );
   
-            sellersFeedbacks = sellersFeedbacks.concat(userFeedbacks);
+            sellersFeedbacks = sellersFeedbacks.concat(sortedByDateFeedbacks);
           };
   
           const sellerFeedbacksObj = {
             seller,
-            feedbacks: userFeedbacks || []
+            feedbacks: sortedByDateFeedbacks || []
           };
   
           sellerFeedbacksObjArray.push(sellerFeedbacksObj);
@@ -48,15 +54,20 @@ function useOrdersListSellersFetching(orders, setSellerFeedbacksObjArray = null,
       };
     };
 
-    if (setSellerFeedbacksObjArray) setSellerFeedbacksObjArray(sellerFeedbacksObjArray);
-    if (deviceStore) deviceStore.setSellersFeedbacks(sellersFeedbacks);
+    if (setSellerFeedbacksObjArray) {
+      setSellerFeedbacksObjArray(sellerFeedbacksObjArray)
+      fetchRefStore.setHasAlreadyFetchedOrdersListSellers(true);
+    } else if (isUserStore) {
+      user.setOrdersListSellers(sellerFeedbacksObjArray)
+      fetchRefStore.setHasAlreadyFetchedOrdersListSellers(true);
+    };
   };
 
   const [fetching, isLoading, error] = useFetching(fetchingCallback);
 
   useEffect(() => {
-    fetching();
-  }, [orders, fetching]);
+    if (additionalCondition && !isUpdateFetch) fetching();
+  }, [orders, additionalCondition, isUpdateFetch, fetching]);
 
   return [fetching, isLoading, error];
 }

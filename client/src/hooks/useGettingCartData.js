@@ -8,6 +8,7 @@ import LocalStorageActions from "../utils/LocalStorageActions";
 import { getOneDeviceSaleDevices } from "../http/SalesAPI";
 import { getDevice, getDeviceCombination } from "../http/DeviceApi";
 import deleteFetchWithTryCatch from "utils/deleteFetchWithTryCatch";
+import useIsGlobalLoadingSetter from "./useIsGlobalLoadingSetter";
 
 // haven't implemented setCartSelectedAdditionalServices 'cause i have no need in it rn
 // cartId is optional if isToFetch === false
@@ -15,10 +16,11 @@ function useGettingCartData(
   cartId = null, setCartDevCombos = null, isUserStore = false,
   isToFetch = true, isToSetGlobalLoading = false, propToInvokeEffect = null
 ) {
-  const { user: userStore, app } = useContext(Context);
+  const { user: userStore } = useContext(Context);
+  const isGlobalLoadingSetter = useIsGlobalLoadingSetter();
 
   async function fetchingFunc(propsCartId = null, propsSetCartDevCombos = null, propsIsUserStore = false) {
-    if (isToSetGlobalLoading) app.setIsGlobalLoading(true);
+    if (isToSetGlobalLoading) isGlobalLoadingSetter(true);
 
     let cartDevCombos = [];
     let initCartSelectedAdditionalServices = {};
@@ -256,7 +258,7 @@ function useGettingCartData(
   const [fetching] = useFetching(
     (propsCartId, propsSetCartDevCombos, propsIsUserStore) =>
       fetchingFunc(propsCartId, propsSetCartDevCombos, propsIsUserStore),
-    0, () => { if (isToSetGlobalLoading) app.setIsGlobalLoading(false) }
+    0, () => { if (isToSetGlobalLoading) isGlobalLoadingSetter(false) }
   );
 
   useEffect(() => {

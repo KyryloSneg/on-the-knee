@@ -4,6 +4,7 @@ import { getOneDeviceFeedbacks } from "../http/FeedbacksAPI";
 import { getOneDeviceQuestions } from "../http/DeviceQuestionsAPI";
 import CommentsActions from "utils/CommentsActions";
 import { Context } from "Context";
+import useIsGlobalLoadingSetter from "./useIsGlobalLoadingSetter";
 
 // update fetch is the fetch that is used to refresh feedbacks, not to get them from zero
 function useOneDeviceFeedbacksFetching(
@@ -12,6 +13,7 @@ function useOneDeviceFeedbacksFetching(
   isTopDevicePageFetch = false
 ) {
   const { app, deviceStore, fetchRefStore } = useContext(Context);
+  const isGlobalLoadingSetter = useIsGlobalLoadingSetter();
 
   async function fetchingFunc(id) {
     function setFeedbacksFn(value) {
@@ -31,8 +33,8 @@ function useOneDeviceFeedbacksFetching(
     }
 
     // resetting feedbacks and questions
-    if (!isUpdateFetch) setFeedbacksFn([]);
-    if (!isUpdateFetch) setQuestionsFn([]);
+    if (!isUpdateFetch && isToFetchFeedbacks) setFeedbacksFn([]);
+    if (!isUpdateFetch && isToFetchQuestions) setQuestionsFn([]);
     
     let feedbacks;
     let questions;
@@ -80,12 +82,12 @@ function useOneDeviceFeedbacksFetching(
   ]);
 
   useEffect(() => {
-    if (!isUpdateFetch) app.setIsGlobalLoading(isLoading);
-  }, [app, isLoading, isUpdateFetch])
+    if (!isUpdateFetch) isGlobalLoadingSetter(isLoading);
+  }, [app, isLoading, isUpdateFetch, isGlobalLoadingSetter])
 
   useEffect(() => {
-    return () => { if (!isUpdateFetch) app.setIsGlobalLoading(false); };
-  }, [app, isUpdateFetch]);
+    return () => { if (!isUpdateFetch) isGlobalLoadingSetter(false); };
+  }, [app, isUpdateFetch, isGlobalLoadingSetter]);
 
   return fetching;
 }

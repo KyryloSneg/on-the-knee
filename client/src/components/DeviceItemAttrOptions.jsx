@@ -68,7 +68,6 @@ const DeviceItemAttrOptions = ({ attributeName, valuesObjects, deviceId, default
           return (
             <li key={`${deviceId}-${attributeName}: ${obj.href} ${obj.attrValue}`} {...liProps}>
               {/* we don't have a reason to show selected on the device page attr as a Link component */}
-              {/* TODO: SCROLL */}
               {isSelected && isDefaultDiv
                 ? (
                   <div className={className}>

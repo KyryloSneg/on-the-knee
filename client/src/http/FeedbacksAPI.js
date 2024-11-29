@@ -3,14 +3,16 @@ import { $mockApi } from "./index";
 import { getOneSeller } from "./SellersAPI";
 
 // fetchStringQueryParams starts with an ampersand "&"
-export async function getOneDeviceFeedbacks(id, fetchStringQueryParams = "") {
+export async function getOneDeviceFeedbacks(id, fetchStringQueryParams = "", isToSetSellers = true) {
   const { data } = await $mockApi.get(ONE_DEVICE_FEEDBACKS_API_URL.replace("ID_TO_REPLACE", id) + fetchStringQueryParams);
 
   try {
-    const seller = await getOneSeller(data?.[0]?.device?.sellerId);
-    
-    for (let feedback of data) {
-      feedback.seller = seller;
+    if (data?.length && isToSetSellers) {
+      const seller = await getOneSeller(data[0]?.device?.sellerId);
+      
+      for (let feedback of data) {
+        feedback.seller = seller;
+      }
     }
   } catch (e) {
     console.log(e.message);

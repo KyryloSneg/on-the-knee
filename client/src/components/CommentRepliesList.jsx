@@ -3,7 +3,8 @@ import CommentReply from './CommentReply';
 
 const CommentRepliesList = ({ 
   replies, type, seller, deviceId, isInModal,
-  deviceFeedbacksFetching, deviceQuestionsFetching, sellerFeedbacksFetching 
+  updateDeviceFeedbacksCb, deviceQuestionsFetching, 
+  areUserFeedbacks 
 }) => {
   return (
     <ul className="comments-replies-list">
@@ -15,9 +16,9 @@ const CommentRepliesList = ({
             seller={seller} 
             deviceId={deviceId}
             isInModal={isInModal}
-            deviceFeedbacksFetching={deviceFeedbacksFetching}
+            updateDeviceFeedbacksCb={updateDeviceFeedbacksCb}
             deviceQuestionsFetching={deviceQuestionsFetching}
-            sellerFeedbacksFetching={sellerFeedbacksFetching}
+            areUserFeedbacks={areUserFeedbacks}
           />
         </li>
       )}

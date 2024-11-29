@@ -15,6 +15,7 @@ import useGettingAddServicesRelatedData from "hooks/useGettingAddServicesRelated
 import useAddingViewedDeviceOnVisit from "hooks/useAddingViewedDeviceOnVisit";
 import useGettingCartData from "hooks/useGettingCartData";
 import useOneSellerFetching from "hooks/useOneSellerFetching";
+import _ from "lodash";
 
 const POSSIBLE_TYPES = ["main", "info", "comments", "questions"];
 const DevicePage = observer(({ type }) => {
@@ -48,8 +49,18 @@ const DevicePage = observer(({ type }) => {
   const prevViewedDeviceComboIdRef = useRef(null);
 
   useEffect(() => {
-    setDevice(initialDevice);
-    setSeller(initialSeller);
+    // idk why does this effect invokes a couple times even if it seems 
+    // like we don't change initial device / seller every render
+    // (i'm lazy to find the reason)
+    
+    if (!_.isEqual(device, initialDevice)) {
+      setDevice(initialDevice);
+    }
+
+    if (!_.isEqual(seller, initialSeller)) {
+      setSeller(initialSeller);
+    }
+    // eslint-disable-next-line
   }, [id, initialDevice, initialSeller]);
 
   useOneDeviceFetching(id, setDevice, !device, true);

@@ -11,7 +11,7 @@ import UIOptions from "./UI/uiOptions/UIOptions";
 import CommentModalContent from "./CommentModalContent";
 
 const CommentReply = observer(({ 
-  reply, type, seller, deviceId, isInModal, deviceFeedbacksFetching, deviceQuestionsFetching, sellerFeedbacksFetching 
+  reply, type, seller, deviceId, isInModal, updateDeviceFeedbacksCb, deviceQuestionsFetching, areUserFeedbacks
 }) => {
   const { app, user: userStore } = useContext(Context);
   const [isEditing, setIsEditing] = useState(false);
@@ -46,14 +46,19 @@ const CommentReply = observer(({
       isAlreadyDeletingReply.current = true
 
       await deleteCommentLogic(
-        reply.id, type, "reply", deviceFeedbacksFetching, deviceQuestionsFetching, sellerFeedbacksFetching
+        reply.id, deviceId, type, "reply", updateDeviceFeedbacksCb, 
+        deviceQuestionsFetching, null, areUserFeedbacks
       );
+
+      await updateDeviceFeedbacksCb();
     } catch (e) {
       openErrorModal();
     } finally {
       isAlreadyDeletingReply.current = false;
     }
-  }, [reply.id, type, openErrorModal, deviceFeedbacksFetching, deviceQuestionsFetching, sellerFeedbacksFetching]);
+  }, [
+    reply, deviceId, type, openErrorModal, updateDeviceFeedbacksCb, deviceQuestionsFetching, areUserFeedbacks 
+  ]);
 
   const throttledDeleteReply = useLodashThrottle(deleteReply, 500, { "trailing": false });
 
@@ -130,17 +135,16 @@ const CommentReply = observer(({
           </p>
         </div>
         {isEditing
-          ? type !== "sellerFeedbacks"
-            ? (
+          ? type !== "sellerFeedbacks" && (
               <CommentModalContent
                 type={editCommentModalType}
                 setIsEditing={setIsEditing}
                 isEditCommentForm={true}
                 comment={reply}
                 propsDeviceId={deviceId}
+                areUserFeedbacks={areUserFeedbacks}
               />
             )
-            : <div />
           : (
             <div className="comment-msg-wrap">
               {reply.isEdited && <p className="comment-edited-msg">(Edited)</p>}
