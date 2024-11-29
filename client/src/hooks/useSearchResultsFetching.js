@@ -33,10 +33,14 @@ function useSearchResultsFetching(setResults, backupValue) {
       }
     }
     
-    const categoryResults = deviceResults.map(device => {
-      const category = deviceStore.categories.find(cat => +cat.id === +device.categoryId);
-      return category;
-    });
+    let categoryResults = [];
+    for (let device of deviceResults) {
+      const doesCategoryAlreadyExist = categoryResults.find(cat => +cat.id === +device.categoryId);
+      if (!doesCategoryAlreadyExist) {
+        const category = deviceStore.categories.find(cat => +cat.id === +device.categoryId);
+        categoryResults.push(category);
+      }
+    }
 
     const historyResults = LocalStorageActions.getItem("historyResults") || [];
     const nextResults = {

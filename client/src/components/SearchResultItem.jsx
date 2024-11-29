@@ -5,7 +5,10 @@ import DeviceSearchResultItem from "./DeviceSearchResultItem";
 import "./styles/SearchResultItem.css";
 import { Link } from "react-router-dom";
 
-const SearchResultItem = ({ type, active = false, value, id, onFocus, inputValue, results, setResults, inputRef, isBackupValueOption = false, stocks = null }) => {  
+const SearchResultItem = ({ 
+  type, active = false, value, id, onFocus, inputValue, results, setResults, 
+  inputRef, currentIndexAmongOtherResults, isBackupValueOption = false, stocks = null 
+}) => {  
   let className = type !== "hint" ? `search-result-${type}` : "";
   className = active ? `${className} active` : className;
   const tabIndex = type === "hidden" ? "-1" : "0" ;
@@ -90,11 +93,13 @@ const SearchResultItem = ({ type, active = false, value, id, onFocus, inputValue
   return (
     <li 
       className={`search-result ${className}`.trim()} 
+      id={`search-result-${currentIndexAmongOtherResults}`}
       role="radio" 
       aria-checked={active} 
       aria-labelledby={labelledBy} 
       data-value={value}
       data-type={type}
+      data-to={to}
       data-testid={`${isBackupValueOption ? "backup" : (id >= 0 ? id : null)}-searchResultHistory`}
     >
       <Link 
