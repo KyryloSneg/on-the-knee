@@ -108,6 +108,8 @@ class AppStore {
     this._selfDeliveryModalSelectedPointValueId = null;
     this._selfDeliveryModalOnSelectCb = null;
 
+    this._commentModalContentAreUserFeedbacks = false;
+
     this._isToShowAsideDeliveryPrice = false;
 
     this._errorModalInfo = ERROR_MODAL_INITIAL_INFO;
@@ -433,6 +435,10 @@ class AppStore {
 
   setSelfDeliveryModalOnSelectCb(selfDeliveryModalOnSelectCb) {
     this._selfDeliveryModalOnSelectCb = selfDeliveryModalOnSelectCb;
+  }
+
+  setCommentModalContentAreUserFeedbacks(commentModalContentAreUserFeedbacks) {
+    this._commentModalContentAreUserFeedbacks = commentModalContentAreUserFeedbacks;
   }
   
   setIsToShowAsideDeliveryPrice(isToShowAsideDeliveryPrice) {
@@ -763,6 +769,10 @@ class AppStore {
     return this._selfDeliveryModalOnSelectCb;
   }
 
+  get commentModalContentAreUserFeedbacks() {
+    return this._commentModalContentAreUserFeedbacks;
+  }
+
   get isToShowAsideDeliveryPrice() {
     return this._isToShowAsideDeliveryPrice;
   }
@@ -770,7 +780,6 @@ class AppStore {
   get errorModalInfo() {
     return this._errorModalInfo;
   }
-
 }
 
 export default AppStore;

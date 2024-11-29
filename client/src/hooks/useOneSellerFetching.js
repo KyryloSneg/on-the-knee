@@ -2,11 +2,13 @@ import { useContext, useEffect } from "react";
 import useFetching from "./useFetching";
 import { Context } from "../Context";
 import { getOneSeller } from "../http/SellersAPI";
+import useIsGlobalLoadingSetter from "./useIsGlobalLoadingSetter";
 
 function useOneSellerFetching(
   id, setSeller, additionalCondition = true, isToUseGlobalLoading = true, isTopDevicePageFetch = false
 ) {
   const { app, fetchRefStore } = useContext(Context);
+  const isGlobalLoadingSetter = useIsGlobalLoadingSetter();
 
   async function fetchingCallback(propsId) {
     const fetchedSeller = await getOneSeller(propsId);
@@ -17,12 +19,12 @@ function useOneSellerFetching(
 
   const [fetching, isLoading, error] = useFetching(() => fetchingCallback(id), 0, null, [id]);
   useEffect(() => {
-    if (isToUseGlobalLoading) app.setIsGlobalLoading(isLoading);
-  }, [app, isLoading, isToUseGlobalLoading]);
+    if (isToUseGlobalLoading) isGlobalLoadingSetter(isLoading);
+  }, [app, isLoading, isGlobalLoadingSetter, isToUseGlobalLoading]);
 
   useEffect(() => {
-    return () => { if (isToUseGlobalLoading) app.setIsGlobalLoading(false); };
-  }, [app, isToUseGlobalLoading]);
+    return () => { if (isToUseGlobalLoading) isGlobalLoadingSetter(false); };
+  }, [app, isGlobalLoadingSetter, isToUseGlobalLoading]);
 
   useEffect(() => {
     if ((id !== null && id !== undefined) && additionalCondition) fetching();

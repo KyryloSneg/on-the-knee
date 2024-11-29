@@ -22,10 +22,11 @@ import _ from "lodash";
 import updateSellerRating from "utils/updateSellerRating";
 import ReactHookFormTextarea from "./UI/reactHookFormTextarea/ReactHookFormTextarea";
 
-const WriteSellerFeedbackForm = observer(({ 
-  sellerId, sellerSlug, setIsEditing = null, isEditCommentForm = false, comment = null, sellerFeedbacksFetching = null 
+const WriteSellerFeedbackForm = observer(({
+  sellerId, sellerSlug, setIsEditing = null, isEditCommentForm = false,
+  comment = null, updateSellerFeedbacksCb = null, areUserFeedbacks = false
 }) => {
-  const { user, app } = useContext(Context);
+  const { user, app, deviceStore, fetchRefStore } = useContext(Context);
   const windowWidth = useWindowWidth();
   const navigate = useNavigateToEncodedURL();
 
@@ -102,11 +103,11 @@ const WriteSellerFeedbackForm = observer(({
           const transformedFiles = await Promise.all(
             files.map(file => FileActions.getBase64(file.fileObj))
           );
-      
+
           const filesToSend = files.map((file, index) => ({ ...file, fileObj: transformedFiles[index] }));
 
           let feedbackFieldsToUpdate = {};
-    
+
           if (!_.isEqual(filesFromComment || [], files)) feedbackFieldsToUpdate.images = filesToSend;
           if (comment.message.trim() !== formFields.comment.trim()) feedbackFieldsToUpdate.message = formFields.comment.trim();
 
@@ -118,12 +119,12 @@ const WriteSellerFeedbackForm = observer(({
           if (comment["service-quality-rate"] !== serviceQualityRate) {
             feedbackFieldsToUpdate["service-quality-rate"] = serviceQualityRate;
           }
-  
+
           if (Object.keys(feedbackFieldsToUpdate).length) {
             if (!comment.isEdited) feedbackFieldsToUpdate.isEdited = true;
 
             await patchSellerFeedback(comment.id, feedbackFieldsToUpdate);
-            const updatedSellerFeedbacks = await sellerFeedbacksFetching();
+            const updatedSellerFeedbacks = await updateSellerFeedbacksCb();
 
             await updateSellerRating(updatedSellerFeedbacks, sellerId);
           }
@@ -131,18 +132,18 @@ const WriteSellerFeedbackForm = observer(({
       } else {
         const allUserOrders = await getOneUserOrders(user.user.id, "&_embed=order-device-combinations");
         let haveUserBoughtAnythingFromThisSeller = false;
-  
+
         for (let order of allUserOrders) {
           for (let orderCombo of order["order-device-combinations"]) {
             const devCombo = await getDeviceCombination(orderCombo["device-combinationId"], "_expand=device");
-            
+
             if (devCombo.device.sellerId === sellerId) {
               haveUserBoughtAnythingFromThisSeller = true;
               break;
             }
           }
         }
-  
+
         if (!haveUserBoughtAnythingFromThisSeller) {
           // let's pretend it's an error that has come from axios
           setPossibleError({
@@ -155,7 +156,7 @@ const WriteSellerFeedbackForm = observer(({
         } else {
           const thisSellerFeedbacksFromUsers = await getOneSellerFeedbacks(sellerId, `&userId=${user.user.id}`);
           const hasUserAlreadyLeftAFeedback = !!thisSellerFeedbacksFromUsers?.length;
-  
+
           if (hasUserAlreadyLeftAFeedback) {
             // let's pretend it's an error that has come from axios
             setPossibleError({
@@ -168,11 +169,11 @@ const WriteSellerFeedbackForm = observer(({
           } else {
             const id = v4();
             const date = new Date().toISOString();
-      
+
             const transformedFiles = await Promise.all(
               files.map(file => FileActions.getBase64(file.fileObj))
             );
-      
+
             const filesToSend = files.map((file, index) => ({ ...file, fileObj: transformedFiles[index] }));
             const sellerFeedback = {
               "id": id,
@@ -186,12 +187,12 @@ const WriteSellerFeedbackForm = observer(({
               "date": date,
               "isEdited": false
             };
-      
+
             await createSellerFeedback(sellerFeedback);
-            const updatedSellerFeedbacks = await getOneSellerFeedbacks(sellerId);
+            const updatedSellerFeedbacks = await updateSellerFeedbacksCb?.();
 
             await updateSellerRating(updatedSellerFeedbacks, sellerId);
-      
+
             setPossibleError(null);
             navigate(SELLER_FEEDBACKS_ROUTE.replace(":sellerIdSlug", `${sellerId}--${sellerSlug}`));
           }
@@ -199,16 +200,18 @@ const WriteSellerFeedbackForm = observer(({
       }
 
       setIsEditing?.(false);
-    } catch (e) {
+    } catch (e) {      
       openErrorModal();
     } finally {
       isAlreadySubmittingRef.current = false;
       setIsSubmitting(false);
     }
+    // eslint-disable-next-line
   }, [
     sellerId, sellerSlug, openErrorModal, navigate, isUpToDateRate,
     deliverySpeedRate, serviceQualityRate, files, user.user?.id,
-    comment, filesFromComment, isEditCommentForm, setIsEditing, sellerFeedbacksFetching
+    comment, filesFromComment, isEditCommentForm, setIsEditing, updateSellerFeedbacksCb,
+    areUserFeedbacks, deviceStore, user, fetchRefStore.lastSellerPageSellerIdWithFetchedFeedbacks
   ]);
 
   const throttledSubmitCallback = useLodashThrottle(submitCallback, 500, { "trailing": false });
@@ -250,7 +253,7 @@ const WriteSellerFeedbackForm = observer(({
       starSize = 32;
     } else if (windowWidth >= 320) {
       starSize = 24;
-    } 
+    }
   } else {
     starSize = 24
 
@@ -342,7 +345,7 @@ const WriteSellerFeedbackForm = observer(({
             </p>
           }
         </div>
-        <ReactHookFormTextarea 
+        <ReactHookFormTextarea
           labelText="Comment"
           textareaName={commentTextareaName}
           errors={errors}
@@ -354,9 +357,9 @@ const WriteSellerFeedbackForm = observer(({
       {isEditCommentForm
         ? (
           <div className="write-seller-feedback-btn-group">
-            <UIButton 
-              className="write-seller-feedback-deny-btn" 
-              variant="modal-deny" 
+            <UIButton
+              className="write-seller-feedback-deny-btn"
+              variant="modal-deny"
               onClick={() => setIsEditing?.(false)}
             >
               Deny

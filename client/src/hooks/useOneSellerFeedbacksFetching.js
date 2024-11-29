@@ -3,12 +3,14 @@ import useFetching from "./useFetching";
 import { Context } from "../Context";
 import { getOneSellerFeedbacks } from "../http/FeedbacksAPI";
 import CommentsActions from "utils/CommentsActions";
+import useIsGlobalLoadingSetter from "./useIsGlobalLoadingSetter";
 
 // update fetch is the fetch that is used to refresh feedbacks, not to get them from zero
 function useOneSellerFeedbacksFetching(
   sellerId, setFeedbacks = null, isUpdateFetch = false, isTopSellerPageFetch = false
 ) {
   const { app, deviceStore, fetchRefStore } = useContext(Context);
+  const isGlobalLoadingSetter = useIsGlobalLoadingSetter();
   const sellerIdRef = useRef(sellerId);
 
   useEffect(() => {
@@ -16,17 +18,22 @@ function useOneSellerFeedbacksFetching(
   }, [sellerId]);
 
   async function fetchingCallback() {
+    function setFeedbacksValue(value) {
+      if (setFeedbacks) {
+        setFeedbacks(value);
+      } else {
+        deviceStore.setSellersFeedbacks(value);
+      }
+    }
+
+    if (!isUpdateFetch) setFeedbacksValue([]);
+
     const feedbacks = await getOneSellerFeedbacks(sellerIdRef.current);
     await CommentsActions.setCommentsUsers(feedbacks, "seller-feedbacks");
     
-    if (setFeedbacks) {
-      setFeedbacks(feedbacks);
-    } else {
-      deviceStore.setSellersFeedbacks(feedbacks);
-    }
+    setFeedbacksValue(feedbacks);
 
     if (isTopSellerPageFetch) fetchRefStore.setLastSellerPageSellerIdWithFetchedFeedbacks(sellerIdRef.current);
-
     return feedbacks;
   }
 
@@ -51,12 +58,12 @@ function useOneSellerFeedbacksFetching(
   }, [sellerId, isUpdateFetch, fetching, fetchRefStore.lastSellerPageSellerIdWithFetchedFeedbacks, isTopSellerPageFetch]);
 
   useEffect(() => {
-    if (!isUpdateFetch) app.setIsGlobalLoading(isLoading);
-  }, [app, isLoading, isUpdateFetch]);
+    if (!isUpdateFetch) isGlobalLoadingSetter(isLoading);
+  }, [app, isLoading, isUpdateFetch, isGlobalLoadingSetter]);
 
   useEffect(() => {
-    return () => { if (!isUpdateFetch) app.setIsGlobalLoading(false); };
-  }, [app, isUpdateFetch]);
+    return () => { if (!isUpdateFetch) isGlobalLoadingSetter(false); };
+  }, [app, isUpdateFetch, isGlobalLoadingSetter]);
 
   return [fetching, isLoading, error];
 }

@@ -5,15 +5,24 @@ import UIButton from "components/UI/uiButton/UIButton";
 import TabsPageLayout from "components/UI/tabsPageLayout/TabsPageLayout";
 import UserSellersFeedbacksPage from "./UserSellersFeedbacksPage";
 import UserDevicesFeedbacksPage from "./UserDevicesFeedbacksPage";
+import { useContext } from "react";
+import { Context } from "Context";
 
 const POSSIBLE_TYPES = ["devicesFeedbacks", "sellersFeedbacks"];
 const UserFeedbacksPage = observer(({ 
-  type, orders, ordersSellerFeedbacksObjArray, isInitialRender, areOrdersLoading, areOrdersListSellersLoading,
-  userDeviceFeedbacksObjArray, 
+  type, orders, isInitialRender, areOrdersLoading, areOrdersListSellersLoading, userDeviceFeedbacksObjArray, 
+  orderDeviceCombinations
 }) => {
+  const { user, fetchRefStore } = useContext(Context);
   if (!POSSIBLE_TYPES.includes(type)) throw Error("type of UserFeedbacksPage is not defined or incorrect");
 
-  if (areOrdersLoading || areOrdersListSellersLoading || isInitialRender) return (
+  const isToShowLoaderOnInitialRender = (
+    isInitialRender 
+    && !fetchRefStore.hasAlreadyFetchedUserDevsFeedbacks 
+    && !fetchRefStore.hasAlreadyFetchedOrdersListSellers
+  );
+
+  if (areOrdersLoading || areOrdersListSellersLoading || isToShowLoaderOnInitialRender) return (
     <section className="user-page-section">
       <header>
         <h2>
@@ -27,12 +36,13 @@ const UserFeedbacksPage = observer(({
   function renderInnerPage() {
     if (type === "devicesFeedbacks") {
       return (
-        <UserDevicesFeedbacksPage orders={orders} userDeviceFeedbacksObjArray={userDeviceFeedbacksObjArray} />
+        <UserDevicesFeedbacksPage 
+          userDeviceFeedbacksObjArray={userDeviceFeedbacksObjArray} 
+          orderDeviceCombinations={orderDeviceCombinations}
+        />
       );
     } else if (type === "sellersFeedbacks") {
-      return (
-        <UserSellersFeedbacksPage ordersSellerFeedbacksObjArray={ordersSellerFeedbacksObjArray} />
-      );
+      return <UserSellersFeedbacksPage />;
     }
   }
 
@@ -48,7 +58,7 @@ const UserFeedbacksPage = observer(({
           Your feedbacks
         </h2>
       </header>
-      {(!!orders?.length || !!ordersSellerFeedbacksObjArray?.length)
+      {(!!orders?.length || !!user.ordersListSellers?.length)
         ? (
           <TabsPageLayout
             tabsData={tabsData}

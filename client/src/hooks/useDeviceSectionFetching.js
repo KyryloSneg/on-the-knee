@@ -18,6 +18,7 @@ import getDescendantCategories from "../utils/getDescendantCategories";
 import getDevicesBySearchQuery from "../utils/getDevicesBySearchQuery";
 import getPreparedForMockServerStr from "../utils/getPreparedForMockServerStr";
 import { Context } from "Context";
+import useIsGlobalLoadingSetter from "./useIsGlobalLoadingSetter";
 
 // query params without pagination ones
 function useDeviceSectionFetching(
@@ -25,11 +26,12 @@ function useDeviceSectionFetching(
   setSpellCheckedQuery = null, seller = null, 
   additionalCondition = true, hasAlreadyFetchedDevicesRef = null
 ) {
-  const { deviceStore, app, fetchRefStore } = useContext(Context);
+  const { deviceStore, fetchRefStore } = useContext(Context);
   
   const location = useLocation();
   const { categoryIdSlug } = useParams();
   const navigate = useNavigateToEncodedURL();
+  const isGlobalLoadingSetter = useIsGlobalLoadingSetter();
   
   const prevUsedFilters = useRef(deviceStore.usedFilters);
   const prevLocationPathname = useRef(location.pathname);
@@ -51,7 +53,7 @@ function useDeviceSectionFetching(
     
     try {
       if (isInitialFetch) {
-        app.setIsGlobalLoading(true);
+        isGlobalLoadingSetter(true);
       }
       
       const [minQueryPrice, maxQueryPrice] =
@@ -101,7 +103,7 @@ function useDeviceSectionFetching(
         // and setting it here alongstead with the of the action
         // at the start of the try ... catch block fixes the problem
         // (idk why)
-        app.setIsGlobalLoading(true);
+        isGlobalLoadingSetter(true);
       }
   
       const stocks = await getStocks();
@@ -230,7 +232,7 @@ function useDeviceSectionFetching(
       prevLocationPathname.current = location.pathname;
     } finally {
       if (isInitialFetch) {
-        app.setIsGlobalLoading(false);
+        isGlobalLoadingSetter(false);
       }
 
       if (hasAlreadyFetchedDevicesRef !== null) hasAlreadyFetchedDevicesRef.current = true;

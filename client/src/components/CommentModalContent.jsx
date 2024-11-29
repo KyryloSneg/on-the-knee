@@ -6,7 +6,7 @@ import { observer } from "mobx-react-lite";
 import CommentModalContentInputs from "./CommentModalContentInputs";
 import CommentModalBottomBtns from "./CommentModalBottomBtns";
 import { v4 } from "uuid";
-import { createDeviceFeedback, createDeviceFeedbackReply, patchDeviceFeedback, patchDeviceFeedbackReply } from "../http/FeedbacksAPI";
+import { createDeviceFeedback, createDeviceFeedbackReply, getOneDeviceFeedbacks, patchDeviceFeedback, patchDeviceFeedbackReply } from "../http/FeedbacksAPI";
 import { createDeviceAnswer, createDeviceQuestion, patchDeviceAnswer, patchDeviceQuestion } from "../http/DeviceQuestionsAPI";
 import { createSellerQuestion } from "../http/SellerQuestionsAPI";
 import setAuthentificationModalVisibility from "../utils/setAuthentificationModalVisibility";
@@ -16,14 +16,18 @@ import _ from "lodash";
 import useLodashThrottle from "hooks/useLodashThrottle";
 import setErrorModalVisibility from "utils/setErrorModalVisibility";
 import updateDeviceRating from "utils/updateDeviceRating";
+import useUpdatingFeedbacksCbs from "hooks/useUpdatingFeedbacksCbs";
+import getUserOrderDeviceCombinations from "utils/getUserOrderDeviceCombinations";
+import useUserDevicesFeedbacksFetching from "hooks/useUserDevicesFeedbacksFetching";
 
 const POSSIBLE_TYPES = ["feedback", "reply", "question", "answer", "askSeller"];
 
 // we use propsDeviceId if we can't reach it from the comment
-const CommentModalContent = observer(({ 
-  type, closeModal = null, setIsEditing = null, isEditCommentForm = false, comment = null, propsDeviceId = null
+const CommentModalContent = observer(({
+  type, closeModal = null, isModalVisible = false, setIsEditing = null, 
+  isEditCommentForm = false, comment = null, propsDeviceId = null, areUserFeedbacks = false
 }) => {
-  const { deviceStore, user, app } = useContext(Context);
+  const { deviceStore, user, app, fetchRefStore } = useContext(Context);
   const [isToShowErrors, setIsToShowErrors] = useState(true);
   const [isAnonymously, setIsAnonymously] = useState(false);
   const [settedStarRating, setSettedStarRating] = useState(comment?.rate || 0);
@@ -48,18 +52,37 @@ const CommentModalContent = observer(({
 
   const deviceId = propsDeviceId || (isEditCommentForm ? comment?.deviceId : deviceStore.selectedDeviceId);
   const deviceFeedbacksFetching = useOneDeviceFeedbacksFetching(
-    deviceId, null, null, true, true, false, app.commentModalGetCommentsQueryParamsStr
+    deviceId, null, null, true, true, false, app.commentModalGetCommentsQueryParamsStr, false, areUserFeedbacks
   );
 
   const deviceQuestionsFetching = useOneDeviceFeedbacksFetching(
     deviceId, null, null, true, false, true, app.commentModalGetCommentsQueryParamsStr
   );
 
+  const orderDeviceCombinations = useMemo(() => getUserOrderDeviceCombinations(user.orders), [user.orders]);
+  const [userDevicesFeedbacksFetching] = useUserDevicesFeedbacksFetching(
+    orderDeviceCombinations, null, true, true, true, false
+  );
+
+  const { updateDeviceFeedbacksCb } = useUpdatingFeedbacksCbs(
+    deviceId, null, areUserFeedbacks, 
+    deviceFeedbacksFetching, null, userDevicesFeedbacksFetching
+  );
+
+  // we can't determine is user the seller of THIS device (or THIS seller) 
+  // because sellers are not implemented on the real server
   const isUserASellerOrManager = user.user?.roles?.includes("SELLER") || user.user?.roles?.includes("SELLER-MANAGER");
 
   useEffect(() => {
     if (!isUserASellerOrManager && !isEditCommentForm) setIsToShowSellerCantRemainComment(false);
   }, [isUserASellerOrManager, isEditCommentForm]);
+
+  useEffect(() => {
+    return () => {
+      if (isModalVisible) return;
+      app.setCommentModalContentAreUserFeedbacks(false);
+    };
+  }, [app, isModalVisible]);
 
   const {
     register,
@@ -117,13 +140,13 @@ const CommentModalContent = observer(({
 
       const id = v4();
       const date = new Date().toISOString();
-  
+
       // unfortunately we can't post data into json-server like FormData, 
       // so we base64 encode our files to send them in the request with json body
       const transformedFiles = await Promise.all(
         files.map(file => FileActions.getBase64(file.fileObj))
       );
-  
+
       const filesToSend = files.map((file, index) => ({ ...file, fileObj: transformedFiles[index] }));
       if (isEditCommentForm) {
         const areEditedValuesAreTheSameAsBefore = (
@@ -141,7 +164,7 @@ const CommentModalContent = observer(({
         if (!areEditedValuesAreTheSameAsBefore) {
           if (type === "feedback") {
             let feedbackFieldsToUpdate = {};
-    
+
             if (!_.isEqual(filesFromComment || [], files)) feedbackFieldsToUpdate.images = filesToSend;
             if (comment.message.trim() !== data.comment.trim()) feedbackFieldsToUpdate.message = data.comment.trim();
             if (comment.advantages?.trim() !== data.advantages?.trim()) feedbackFieldsToUpdate.advantages = data.advantages?.trim() || null;
@@ -149,34 +172,46 @@ const CommentModalContent = observer(({
               feedbackFieldsToUpdate.disadvantages = data.disadvantages?.trim() || null;
             }
             if (comment.rate !== settedStarRating) feedbackFieldsToUpdate.rate = settedStarRating;
-    
+
             if (Object.keys(feedbackFieldsToUpdate).length) {
               if (!comment.isEdited) feedbackFieldsToUpdate.isEdited = true;
 
               await patchDeviceFeedback(comment.id, feedbackFieldsToUpdate);
-              const { feedbacks: updatedDeviceFeedbacks } = await deviceFeedbacksFetching();
+              const fetchingResult = await deviceFeedbacksFetching();
 
               // if we have changed the rate (it's impossible for the rate to be zero, so np with that check)
               if (feedbackFieldsToUpdate.rate) {
-                await updateDeviceRating(updatedDeviceFeedbacks);
+                let updatedDeviceFeedbacks;
+      
+                if (areUserFeedbacks) {
+                  updatedDeviceFeedbacks = await getOneDeviceFeedbacks(deviceId, "", false);
+                } else {
+                  updatedDeviceFeedbacks = fetchingResult.feedbacks;
+                }
+      
+                await updateDeviceRating(updatedDeviceFeedbacks, deviceId);
               }
+
+              await updateDeviceFeedbacksCb();
             }
           } else if (type === "reply") {
             let replyFieldsToUpdate = {};
             if (comment.message !== data.comment?.trim()) replyFieldsToUpdate.message = data.comment.trim();
-    
+
             if (Object.keys(replyFieldsToUpdate).length) {
               if (!comment.isEdited) replyFieldsToUpdate.isEdited = true;
 
               await patchDeviceFeedbackReply(comment.id, replyFieldsToUpdate);
               await deviceFeedbacksFetching();
+
+              await updateDeviceFeedbacksCb();
             }
           } else if (type === "question") {
             let questionFieldsToUpdate = {};
-    
+
             if (!_.isEqual(filesFromComment || [], files)) questionFieldsToUpdate.images = filesToSend;
             if (comment.message !== data.comment.trim()) questionFieldsToUpdate.message = data.comment.trim();
-    
+
             if (Object.keys(questionFieldsToUpdate).length) {
               if (!comment.isEdited) questionFieldsToUpdate.isEdited = true;
 
@@ -186,7 +221,7 @@ const CommentModalContent = observer(({
           } else if (type === "answer") {
             let answerFieldsToUpdate = {};
             if (comment.message !== data.comment.trim()) answerFieldsToUpdate.message = data.comment.trim();
-    
+
             if (Object.keys(answerFieldsToUpdate).length) {
               if (!comment.isEdited) answerFieldsToUpdate.isEdited = true;
 
@@ -201,10 +236,10 @@ const CommentModalContent = observer(({
             setIsToShowSellerCantRemainComment(true);
             return;
           }
-    
+
           const newFeedback = {
             "id": id,
-            "deviceId": deviceStore.selectedDeviceId,
+            "deviceId": deviceId,
             "userId": user.isAuth ? user.user.id : null,
             "isAnonymously": isAnonymously,
             "images": filesToSend,
@@ -215,11 +250,19 @@ const CommentModalContent = observer(({
             "date": date,
             "isEdited": false,
           };
-    
-          await createDeviceFeedback(newFeedback); 
-          const { feedbacks: updatedDeviceFeedbacks } = await deviceFeedbacksFetching();
 
-          await updateDeviceRating(updatedDeviceFeedbacks);
+          await createDeviceFeedback(newFeedback);
+
+          let updatedDeviceFeedbacks;
+          const fetchingResult = await updateDeviceFeedbacksCb();
+
+          if (areUserFeedbacks) {
+            updatedDeviceFeedbacks = await getOneDeviceFeedbacks(deviceId, "", false);
+          } else {
+            updatedDeviceFeedbacks = fetchingResult.feedbacks;
+          }
+
+          await updateDeviceRating(updatedDeviceFeedbacks, deviceId);
         } else if (type === "reply") {
           const newReply = {
             "id": id,
@@ -229,15 +272,15 @@ const CommentModalContent = observer(({
             "date": date,
             "isEdited": false,
           };
-    
+
           await createDeviceFeedbackReply(newReply);
-          await deviceFeedbacksFetching();
+          await updateDeviceFeedbacksCb();
         } else if (type === "question") {
           if (isUserASellerOrManager) {
             setIsToShowSellerCantRemainComment(true);
             return;
           }
-          
+
           const newQuestion = {
             "id": id,
             "deviceId": deviceStore.selectedDeviceId,
@@ -248,7 +291,7 @@ const CommentModalContent = observer(({
             "date": date,
             "isEdited": false,
           };
-    
+
           await createDeviceQuestion(newQuestion);
           await deviceQuestionsFetching();
         } else if (type === "answer") {
@@ -260,7 +303,7 @@ const CommentModalContent = observer(({
             "date": date,
             "isEdited": false,
           };
-    
+
           await createDeviceAnswer(newAnswer);
           await deviceQuestionsFetching();
         } else if (type === "askSeller") {
@@ -268,7 +311,7 @@ const CommentModalContent = observer(({
             setIsToShowSellerCantRemainComment(true);
             return;
           }
-    
+
           const newQuestion = {
             "id": id,
             "sellerId": deviceStore.selectedSellerId,
@@ -276,11 +319,11 @@ const CommentModalContent = observer(({
             "message": data.comment.trim(),
             "date": date,
           };
-    
+
           await createSellerQuestion(newQuestion);
         }
       }
-  
+
       closeModal?.();
       setIsEditing?.(false);
     } catch (e) {
@@ -289,12 +332,15 @@ const CommentModalContent = observer(({
       isAlreadySubmittingRef.current = false;
       setIsSubmitting(false);
     }
+    // eslint-disable-next-line
   }, [
     closeModal, comment, deviceFeedbacksFetching,
     deviceQuestionsFetching, deviceStore.selectedDeviceFeedbackId, deviceStore.selectedDeviceQuestionId,
-    deviceStore.selectedSellerId, deviceStore.selectedDeviceId, files, 
-    isAnonymously, isEditCommentForm, isUserASellerOrManager, openErrorModal, 
-    setIsEditing, settedStarRating, type, user.isAuth, user.user?.id, filesFromComment
+    deviceStore.selectedSellerId, deviceStore.selectedDeviceId, files,
+    isAnonymously, isEditCommentForm, isUserASellerOrManager, openErrorModal,
+    setIsEditing, settedStarRating, type, user.isAuth, user.user?.id, filesFromComment,
+    areUserFeedbacks, deviceStore, fetchRefStore.lastDevicePageDeviceIdWithFetchedComments,
+    deviceId
   ]);
 
   const throttledSubmitCallback = useLodashThrottle(submitCallback, 500, { "trailing": false });
@@ -304,7 +350,7 @@ const CommentModalContent = observer(({
       setIsToShowStarError(true);
       return;
     }
-    
+
     // react-form-hook doesn't let this function run
     // if there are any errors but i put errors 
     // in the condition below just in case
@@ -314,9 +360,9 @@ const CommentModalContent = observer(({
 
   const areErrors = !!Object.keys(errors).length || isToShowStarError;
   const areInputsBlocked = !user.isAuth && (
-    (type === "feedback" || type === "question") 
-    ? !isAnonymously
-    : false
+    (type === "feedback" || type === "question")
+      ? !isAnonymously
+      : false
   );
 
   let sectionClassName = "comment-modal-content";
@@ -327,7 +373,7 @@ const CommentModalContent = observer(({
   return (
     <section className={sectionClassName}>
       <form className="comment-modal-form" onSubmit={handleSubmit(onSubmit)}>
-        <CommentModalContentInputs 
+        <CommentModalContentInputs
           type={type}
           register={register}
           errors={errors}
@@ -346,7 +392,7 @@ const CommentModalContent = observer(({
           setFiles={setFiles}
           isEditCommentForm={isEditCommentForm}
         />
-        <CommentModalBottomBtns 
+        <CommentModalBottomBtns
           type={type}
           setIsAnonymously={setIsAnonymously}
           isAnonymously={isAnonymously}

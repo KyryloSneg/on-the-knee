@@ -5,10 +5,10 @@ import { Context } from "Context";
 import CommentsActions from "utils/CommentsActions";
 
 function useUserDevicesFeedbacksFetching(
-  deviceCombinations, setUserDevsFeedbacks = null, deviceStore = null,
-  isToFetchFeedbacksUsers = true, isToFetchRepliesUsers = true, isToFetch = true
+  deviceCombinations = null, setUserDevsFeedbacks = null, isUserStore = false,
+  isToFetchFeedbacksUsers = true, isToFetchRepliesUsers = true, isToFetch = true,
 ) {
-  const { user } = useContext(Context);
+  const { user, fetchRefStore } = useContext(Context);
   const deviceCombinationsRef = useRef(deviceCombinations);
 
   useEffect(() => {
@@ -28,15 +28,20 @@ function useUserDevicesFeedbacksFetching(
       if (userDevFeedbacks) userDevsFeedbacks = userDevsFeedbacks.concat(userDevFeedbacks);
     };
 
-    if (setUserDevsFeedbacks) setUserDevsFeedbacks(userDevsFeedbacks)
-    else if (deviceStore) deviceStore.setDevicesFeedbacks(userDevsFeedbacks);
+    if (setUserDevsFeedbacks) {
+      setUserDevsFeedbacks(userDevsFeedbacks)
+      fetchRefStore.setHasAlreadyFetchedUserDevsFeedbacks(true);
+    } else if (isUserStore) {
+      user.setUserDevicesFeedbacks(userDevsFeedbacks)
+      fetchRefStore.setHasAlreadyFetchedUserDevsFeedbacks(true);
+    };
   };
 
   const [fetching, isLoading, error] = useFetching(fetchingCallback);
 
   useEffect(() => {
-    if (isToFetch) fetching();
-  }, [deviceCombinations, setUserDevsFeedbacks, isToFetch, deviceStore, fetching]);
+    if (isToFetch && deviceCombinationsRef.current) fetching();
+  }, [deviceCombinations, setUserDevsFeedbacks, isToFetch, isUserStore, fetching]);
 
   return [fetching, isLoading, error];
 }

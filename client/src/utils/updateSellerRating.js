@@ -16,6 +16,11 @@ export default async function updateSellerRating(updatedSellerFeedbacks, sellerI
       feedbacksRatings.push(feedback["service-quality-rate"]);
     }
 
+    if (!feedbacksRatingSum.length) {
+      await patchOneSeller(sellerId, { rating: "0.0" });
+      return;
+    }
+
     const newRating = (feedbacksRatingSum / feedbacksRatings.length).toFixed(1);
 
     // we can't update seller state immediately from the seller page,

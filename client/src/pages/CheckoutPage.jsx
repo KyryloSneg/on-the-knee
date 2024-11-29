@@ -25,9 +25,10 @@ import setCartModalVisibility from "../utils/setCartModalVisibility";
 import setWrongCartComboAmountsModalVisibility from "../utils/setWrongCartComboAmountsVisibility";
 import useLodashThrottle from "hooks/useLodashThrottle";
 import deleteFetchWithTryCatch from "utils/deleteFetchWithTryCatch";
+import useGettingOneUserOrders from "hooks/useGettingOneUserOrders";
 
 const CheckoutPage = observer(() => {
-  const { app, deviceStore, user } = useContext(Context);
+  const { app, deviceStore, user, fetchRefStore } = useContext(Context);
   const navigate = useNavigateToEncodedURL();
   const senderPhoneNumberInputRef = useRef(null);
   const isAlreadySubmittingRef = useRef(false);
@@ -37,6 +38,7 @@ const CheckoutPage = observer(() => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const orders = useGettingOrders();
+  const [userOrdersFetching] = useGettingOneUserOrders(user.user?.id, null, true, false);
 
   // auto-fill sender data inputs with user data if he / she logged in
   const {
@@ -307,6 +309,14 @@ const CheckoutPage = observer(() => {
         console.log(e.message);
       }
 
+      // updating user orders in the user store if (he / she) is auth and the orders
+      // have already been fetched earlier
+      if (user.isAuth && fetchRefStore.hasAlreadyFetchedUserOrders) {
+        // (possible error in the fetching is handled inside try ... catch block in the definition of it,
+        // so it won't prevent navigation to the main page if an error occurs)
+        await userOrdersFetching();
+      }
+
       navigate(ROOT_ROUTE);
     } catch (e) {
       console.log(e.message);
@@ -326,7 +336,8 @@ const CheckoutPage = observer(() => {
   }, [
     app, deviceStore.hasTriedToFetchSales, deviceStore.saleTypeNames, deviceStore.sales,
     fetching, navigate, orders, senderPhoneInputValue, user.cart?.id, user.cartDeviceCombinations,
-    user.cartSelectedAdditionalServices, user.isAuth, user.user?.id
+    user.cartSelectedAdditionalServices, user.isAuth, user.user?.id, userOrdersFetching,
+    fetchRefStore.hasAlreadyFetchedUserOrders
   ]);
 
   // using isAlreadySubmittingRef and a small delay to make not possible to submit the same order a couple times in a row 
