@@ -35,7 +35,6 @@ main {
 .global-blocked-scroll {
   position: fixed;
   width: 100%;
-  overflow-y: scroll;
 }
 
 ::selection {
@@ -287,6 +286,10 @@ ul {
 .link-colors-wrap a:active > svg,
 .link-colors-wrap a:focus-visible > svg {
   fill: #bd5e10;
+}
+
+.scroll-y {
+  overflow-y: scroll;
 }
 
 /* navigation header */
