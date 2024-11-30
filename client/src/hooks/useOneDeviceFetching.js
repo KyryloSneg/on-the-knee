@@ -1,13 +1,12 @@
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import useFetching from "./useFetching";
 import { getDevice } from "../http/DeviceApi";
-import { Context } from "../Context";
 import useNavigateToEncodedURL from "./useNavigateToEncodedURL";
 import { ROOT_ROUTE } from "../utils/consts";
 import useIsGlobalLoadingSetter from "./useIsGlobalLoadingSetter";
+import useLoadingSyncWithGlobalLoading from "./useLoadingSyncWithGlobalLoading";
 
 function useOneDeviceFetching(id, setDevice, additionalCondition = true, isToRedirectToMainPageOnFail = false) {
-  const { app } = useContext(Context);
   const navigate = useNavigateToEncodedURL();
   const isGlobalLoadingSetter = useIsGlobalLoadingSetter();
 
@@ -18,13 +17,7 @@ function useOneDeviceFetching(id, setDevice, additionalCondition = true, isToRed
 
   // updating our propsId on getting other device from different url
   const [fetching, isLoading, error] = useFetching(() => fetchingCallback(id), 0, null, [id]);
-  useEffect(() => {
-    isGlobalLoadingSetter(isLoading);
-  }, [app, isLoading, isGlobalLoadingSetter]);
-
-  useEffect(() => {
-    return () => isGlobalLoadingSetter(false);
-  }, [app, isGlobalLoadingSetter]);
+  useLoadingSyncWithGlobalLoading(isLoading, isGlobalLoadingSetter);
 
   useEffect(() => {
     if (additionalCondition) fetching();
