@@ -15,7 +15,8 @@ import useSynchronizingAdditionalServices from "../hooks/useSynchronizingAdditio
 import useChangingServerAddServicesOnChange from "../hooks/useChangingServerAddServicesOnChange";
 
 const MainDevicePage = observer(({ 
-  device, combinationString, feedbacks, seller, additionalServicesObj, selectedCombination, cartDataFetching 
+  device, combinationString, feedbacks, seller, additionalServicesObj, 
+  selectedCombination, cartDataFetching, isToRenderPage 
 }) => {
   const { deviceStore, user } = useContext(Context);
   const windowWidth = useWindowWidth();
@@ -67,8 +68,8 @@ const MainDevicePage = observer(({
   useSynchronizingAdditionalServices(setSelectedAddServices, combinationInCart?.id);
   useChangingServerAddServicesOnChange(selectedAddServices, combinationInCart?.id, cartDataFetching, isInitialRender);
 
-  if (!device || !deviceStore.hasTriedToFetchSales || !deviceStore.stocks.length || !seller || !selectedCombination) {
-    return <div />
+  if (!isToRenderPage) {
+    return <div aria-hidden="true" />
   }
 
   let deviceSaleTypes = [];
