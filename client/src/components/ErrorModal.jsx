@@ -31,11 +31,17 @@ const ErrorModal = observer(() => {
     }
   }, [app, app.isVisibleErrorModal]);
   
+  const children = (
+    typeof app.errorModalInfo.children === "string"
+      ? <p className="error-modal-p">{app.errorModalInfo.children}</p>
+      : app.errorModalInfo.children
+  );
+
   return (
     <ModalWindow
       isVisible={app.isVisibleErrorModal}
       setIsVisible={setIsErrorModalVisible}
-      children={app.errorModalInfo.children}
+      children={children}
       headerText="Error has occured"
       propsClassName={className}
       id={app.errorModalInfo.id}
