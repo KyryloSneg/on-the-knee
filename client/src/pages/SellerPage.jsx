@@ -35,8 +35,6 @@ const SellerPage = observer(({ type }) => {
   const prevUsedFiltersRef = useRef({});
   const prevSortFilterRef = useRef(null);
 
-  const sellerPlaceHolderName = StringActions.capitalize(StringActions.splitByHyphens(slug));
-
   useOneSellerFetching(id, setSeller, !seller);
   useOneSellerFeedbacksFetching(seller?.id, null, false, true);
 
@@ -113,25 +111,29 @@ const SellerPage = observer(({ type }) => {
 
   return (
     <main className="seller-page">
-      <h2 className="top-h2">
-        Seller {seller?.name || sellerPlaceHolderName}
-      </h2>
-      <div className="seller-page-rating-wrap">
-        <p>
-          {seller?.rating || "0.0"}
-        </p>
-        <StarRating 
-          readOnlyValue={seller?.rating} 
-          id="seller-page-rating" 
-          size={20}
-        />
-      </div>
-      <TabsPageLayout
-        tabsData={tabsData}
-        pageContent={renderInnerPage()}
-        doesHaveDynamicParam={true}
-        isToUsePaddingForPage={type !== "devices"}
-      />
+      {seller && (
+        <>
+          <h2 className="top-h2">
+            Seller {seller?.name}
+          </h2>
+          <div className="seller-page-rating-wrap">
+            <p>
+              {seller?.rating}
+            </p>
+            <StarRating 
+              readOnlyValue={seller?.rating} 
+              id="seller-page-rating" 
+              size={20}
+            />
+          </div>
+          <TabsPageLayout
+            tabsData={tabsData}
+            pageContent={renderInnerPage()}
+            doesHaveDynamicParam={true}
+            isToUsePaddingForPage={type !== "devices"}
+          />
+        </>
+      )}
     </main>
   );
 });

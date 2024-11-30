@@ -92,6 +92,10 @@ const DevicePage = observer(({ type }) => {
     cartFetching(user.cart?.id, null, true);
   }
 
+  const isToRenderMainPageCondition = (
+    device && deviceStore.hasTriedToFetchSales && deviceStore.stocks.length && seller && selectedCombination
+  );
+
   function renderInnerPage() {
     let innerPage;
 
@@ -117,6 +121,7 @@ const DevicePage = observer(({ type }) => {
           additionalServicesObj={additionalServicesObj}
           selectedCombination={selectedCombination}
           cartDataFetching={cartDataFetching}
+          isToRenderPage={isToRenderMainPageCondition}
         />
       );
     } else if (type === "info") {
@@ -167,7 +172,7 @@ const DevicePage = observer(({ type }) => {
   
   return (
     <main className="device-page">
-      {prevId.current === id && (
+      {(prevId.current === id && (type !== "main" || isToRenderMainPageCondition)) && (
         <TabsPageLayout 
           tabsData={tabsData} 
           pageContent={renderInnerPage()} 
