@@ -409,15 +409,6 @@ const CheckoutPage = observer(() => {
     throttledSubmitCallback(value);
   }
 
-  // disabling enter key in the form
-  function onFormKeyDown(e) {
-    if (e.key !== "Enter" || e.target.tagName === "TEXTAREA" || e.target.tagName === "BUTTON") {
-      return;
-    }
-
-    e.preventDefault()
-  }
-
   return (
     <>
       <div className="checkout-page">
@@ -428,7 +419,6 @@ const CheckoutPage = observer(() => {
           onSubmit={handleSubmit(
             onSubmit, (errors) => checkInputsValidAndHandleInvalidInputFocus(true, errors))
           }
-          onKeyDown={onFormKeyDown}
         >
           <CheckoutPageMainContent
             register={register}

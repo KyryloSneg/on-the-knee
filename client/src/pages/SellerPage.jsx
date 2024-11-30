@@ -11,7 +11,6 @@ import SellerDevicesPage from './SellerDevicesPage';
 import { Context } from '../Context';
 import { observer } from 'mobx-react-lite';
 import StarRating from '../components/UI/starRating/StarRating';
-import StringActions from "utils/StringActions";
 
 const POSSIBLE_TYPES = ["main", "feedbacks", "devices"];
 const SellerPage = observer(({ type }) => {
@@ -20,7 +19,7 @@ const SellerPage = observer(({ type }) => {
   const location = useLocation();
   const currentQueryParamsFromTheDevicesPage = useRef("?page=1&pagesToFetch=1")
 
-  let [id, slug] = sellerIdSlug.split("--");
+  let [id] = sellerIdSlug.split("--");
   id = +id;
 
   const initialSeller = (
