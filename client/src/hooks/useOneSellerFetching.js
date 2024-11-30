@@ -3,11 +3,12 @@ import useFetching from "./useFetching";
 import { Context } from "../Context";
 import { getOneSeller } from "../http/SellersAPI";
 import useIsGlobalLoadingSetter from "./useIsGlobalLoadingSetter";
+import useLoadingSyncWithGlobalLoading from "./useLoadingSyncWithGlobalLoading";
 
 function useOneSellerFetching(
   id, setSeller, additionalCondition = true, isToUseGlobalLoading = true, isTopDevicePageFetch = false
 ) {
-  const { app, fetchRefStore } = useContext(Context);
+  const { fetchRefStore } = useContext(Context);
   const isGlobalLoadingSetter = useIsGlobalLoadingSetter();
 
   async function fetchingCallback(propsId) {
@@ -18,13 +19,7 @@ function useOneSellerFetching(
   }
 
   const [fetching, isLoading, error] = useFetching(() => fetchingCallback(id), 0, null, [id]);
-  useEffect(() => {
-    if (isToUseGlobalLoading) isGlobalLoadingSetter(isLoading);
-  }, [app, isLoading, isGlobalLoadingSetter, isToUseGlobalLoading]);
-
-  useEffect(() => {
-    return () => { if (isToUseGlobalLoading) isGlobalLoadingSetter(false); };
-  }, [app, isGlobalLoadingSetter, isToUseGlobalLoading]);
+  useLoadingSyncWithGlobalLoading(isLoading, isGlobalLoadingSetter, isToUseGlobalLoading);
 
   useEffect(() => {
     if ((id !== null && id !== undefined) && additionalCondition) fetching();

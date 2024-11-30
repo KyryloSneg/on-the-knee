@@ -5,6 +5,7 @@ import { getOneDeviceQuestions } from "../http/DeviceQuestionsAPI";
 import CommentsActions from "utils/CommentsActions";
 import { Context } from "Context";
 import useIsGlobalLoadingSetter from "./useIsGlobalLoadingSetter";
+import useLoadingSyncWithGlobalLoading from "./useLoadingSyncWithGlobalLoading";
 
 // update fetch is the fetch that is used to refresh feedbacks, not to get them from zero
 function useOneDeviceFeedbacksFetching(
@@ -12,7 +13,7 @@ function useOneDeviceFeedbacksFetching(
   isToFetchFeedbacks = true, isToFetchQuestions = true, fetchStringQueryParams = "",
   isTopDevicePageFetch = false
 ) {
-  const { app, deviceStore, fetchRefStore } = useContext(Context);
+  const { deviceStore, fetchRefStore } = useContext(Context);
   const isGlobalLoadingSetter = useIsGlobalLoadingSetter();
 
   async function fetchingFunc(id) {
@@ -81,13 +82,7 @@ function useOneDeviceFeedbacksFetching(
     fetchRefStore.lastDevicePageDeviceIdWithFetchedComments
   ]);
 
-  useEffect(() => {
-    if (!isUpdateFetch) isGlobalLoadingSetter(isLoading);
-  }, [app, isLoading, isUpdateFetch, isGlobalLoadingSetter])
-
-  useEffect(() => {
-    return () => { if (!isUpdateFetch) isGlobalLoadingSetter(false); };
-  }, [app, isUpdateFetch, isGlobalLoadingSetter]);
+  useLoadingSyncWithGlobalLoading(isLoading, isGlobalLoadingSetter, !isUpdateFetch);
 
   return fetching;
 }
