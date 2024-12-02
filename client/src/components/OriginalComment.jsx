@@ -25,6 +25,7 @@ import deleteCommentLogic from "utils/deleteCommentLogic";
 import CommentModalContent from "./CommentModalContent";
 import WriteSellerFeedbackForm from "./WriteSellerFeedbackForm";
 import useGettingOneUser from "hooks/useGettingOneUser";
+import getDatetime from "utils/getDatetime";
 
 const OriginalComment = observer(({
   comment, type, seller, singularCommentWord = "comment", isWithImages, closeGalleryModal, closeRemainAFeedbackModal, 
@@ -62,6 +63,7 @@ const OriginalComment = observer(({
 
   const createdAtDate = new Date(comment.date);
   const createdAtDateStr = getDateStr(createdAtDate);
+  const createdAtDatetime = getDatetime(createdAtDate);
 
   let likeFromUser;
   let dislikeFromUser;
@@ -359,9 +361,9 @@ const OriginalComment = observer(({
               : isWithName ? `${user.name} ${user.surname}` : "..."
             }
           </p>
-          <p className="comment-date">
+          <time dateTime={createdAtDatetime} className="comment-date">
             {createdAtDateStr}
-          </p>
+          </time>
         </div>
         {isEditing
           ? type !== "sellerFeedbacks"
