@@ -1,0 +1,110 @@
+.slim-device-combination-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.slim-device-combination-info > div {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.slim-device-combination-info-img-wrap {
+  display: grid;
+}
+
+.slim-device-combination-info-img-wrap > img {
+  width: 95px;
+  max-height: 95px;
+  object-fit: contain;
+  align-self: center;
+  justify-self: center;
+}
+
+.slim-device-combination-info-info {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.slim-device-combination-info-info > a {
+  font-size: 1.5rem;
+  transition: color 0.2s, outline 0s;
+  word-break: break-word;
+}
+
+.slim-device-combination-info-price-row {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.slim-device-combination-info-price-row > div {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.slim-device-combination-info-price-row > div > span {
+  font-size: 1rem;
+}
+
+.slim-device-combination-info-price-row .main-device-price b {
+  font-size: 1.3rem;
+}
+
+.slim-device-combination-info-price-row .main-device-old-price > span:first-of-type,
+.slim-device-combination-info-price-row .main-device-price > .main-device-currency {
+  font-size: 1.1rem;
+}
+
+.slim-dslim-device-combination-info.checkout-page-version .slim-device-combination-info-price-row .main-device-old-price > .main-device-currency {
+  font-size: 1rem;
+}
+
+.slim-dslim-device-combination-info.checkout-page-version .slim-device-combination-info-price-row > div > span {
+  font-size: 1.2rem;
+}
+
+/* checkout page version of the price has the same font-sizes amongst all resolutions */
+
+.slim-device-combination-info.checkout-page-version .slim-device-combination-info-price-row .main-device-price b {
+  font-size: 1.8rem;
+}
+
+.slim-device-combination-info.checkout-page-version .slim-device-combination-info-price-row .main-device-old-price > span:first-of-type,
+.slim-device-combination-info.checkout-page-version .slim-device-combination-info-price-row .main-device-price > .main-device-currency {
+  font-size: 1.5rem;
+}
+
+.slim-device-combination-info.checkout-page-version .slim-device-combination-info-price-row .main-device-old-price > .main-device-currency {
+  font-size: 1.2rem;
+}
+
+@media screen and (min-width: 450px) {
+  .slim-device-combination-info > div {
+    flex-direction: row;
+  }
+}
+
+@media screen and (min-width: 580px) {
+  .slim-device-combination-info-price-row > div > span {
+    font-size: 1.2rem;
+  }
+  
+  .slim-device-combination-info-price-row .main-device-price b {
+    font-size: 1.8rem;
+  }
+  
+  .slim-device-combination-info-price-row .main-device-old-price > span:first-of-type,
+  .slim-device-combination-info-price-row .main-device-price > .main-device-currency {
+    font-size: 1.5rem;
+  }
+  
+  .slim-device-combination-info-price-row .main-device-old-price > .main-device-currency {
+    font-size: 1.2rem;
+  }
+}

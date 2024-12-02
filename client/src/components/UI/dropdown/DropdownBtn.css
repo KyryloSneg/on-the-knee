@@ -3,6 +3,7 @@ button.dropdown-default-select-btn {
   border-radius: 12px;
   justify-content: space-between;
   overflow: hidden;
+  max-width: 100%;
 }
 
 button.dropdown-default-select-btn:hover, 
