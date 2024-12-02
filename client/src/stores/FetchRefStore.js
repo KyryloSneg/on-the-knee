@@ -23,6 +23,8 @@ class FetchRefStore {
     this._lastDevicesFetchUsedFilters = createRef(null);
     this._lastDevicesFetchSearch = createRef(null);
     this._lastDevicesFetchSellerId = createRef(null);
+    // { deviceId: ..., data: [...] }
+    this._lastDevicesFetchAddServicesObj = createRef(null);
 
     this._hasAlreadyFetchedUserOrders = createRef(false)
     this._hasAlreadyFetchedUserDevsFeedbacks = createRef(false)
@@ -72,6 +74,10 @@ class FetchRefStore {
 
   get lastDevicesFetchSellerId() {
     return this._lastDevicesFetchSellerId.current;
+  }
+
+  get lastDevicesFetchAddServicesObj() {
+    return this._lastDevicesFetchAddServicesObj.current;
   }
 
   get hasAlreadyFetchedUserOrders() {
@@ -138,6 +144,10 @@ class FetchRefStore {
 
   setLastDevicesFetchSellerId(lastDevicesFetchSellerId) {
     this._lastDevicesFetchSellerId.current = lastDevicesFetchSellerId;
+  }
+
+  setLastDevicesFetchAddServicesObj(lastDevicesFetchAddServicesObj) {
+    this._lastDevicesFetchAddServicesObj.current = lastDevicesFetchAddServicesObj;
   }
   
   setHasAlreadyFetchedUserOrders(hasAlreadyFetchedUserOrders) {
