@@ -35,14 +35,30 @@ const DevicePage = observer(({ type }) => {
 
   const [device, setDevice] = useState(initialDevice);
   const initialSeller = useMemo(() => (
-    (fetchRefStore.lastDevicePageFetchSeller !== null && fetchRefStore.lastDevicePageFetchSeller?.id !== undefined)
+    (fetchRefStore.lastDevicePageFetchSeller?.id !== null && fetchRefStore.lastDevicePageFetchSeller?.id !== undefined)
     && fetchRefStore.lastDevicePageFetchSeller?.id === initialDevice?.sellerId 
       ? fetchRefStore.lastDevicePageFetchSeller
       : null
   ), [initialDevice?.sellerId, fetchRefStore.lastDevicePageFetchSeller]);
 
+  const [initialAddServicesObj, hasAddServicesAlreadyFetched] = useMemo(() => {
+    let result = [];
+    let hasAlreadyFetched = false;
+
+    if (
+      fetchRefStore.lastDevicesFetchAddServicesObj?.content !== null 
+      && fetchRefStore.lastDevicesFetchAddServicesObj?.content !== undefined
+      && fetchRefStore.lastDevicesFetchAddServicesObj?.deviceId === id
+    ) {
+      result = fetchRefStore.lastDevicesFetchAddServicesObj.content;
+      hasAlreadyFetched = true;
+    }
+
+    return [result, hasAlreadyFetched];
+  }, [id, fetchRefStore.lastDevicesFetchAddServicesObj]);
+
   const [seller, setSeller] = useState(initialSeller);
-  const [additionalServicesObj, setAdditionalServicesObj] = useState([]);
+  const [additionalServicesObj, setAdditionalServicesObj] = useState(initialAddServicesObj);
 
   // using prevId to evade bugs that could possibly happen on switching between two different devices in browser history
   const prevId = useRef(id);
@@ -60,8 +76,12 @@ const DevicePage = observer(({ type }) => {
     if (!_.isEqual(seller, initialSeller)) {
       setSeller(initialSeller);
     }
+
+    if (!_.isEqual(additionalServicesObj, initialAddServicesObj)) {
+      setAdditionalServicesObj(initialAddServicesObj);
+    }
     // eslint-disable-next-line
-  }, [id, initialDevice, initialSeller]);
+  }, [id, initialDevice, initialSeller, initialAddServicesObj]);
 
   useOneDeviceFetching(id, setDevice, !device, true);
   useOneDeviceFeedbacksFetching(device?.id, null, null, false, true, true, "", true);
@@ -74,7 +94,9 @@ const DevicePage = observer(({ type }) => {
   // theoretically setting sales and sale type names would not lead to bugs in the catalog page
   useGettingSalesAndTypeNames(isToFetchMiscData);
   useOneSellerFetching(device?.sellerId, setSeller, !seller, false, true);
-  useGettingAddServicesRelatedData(device, setAdditionalServicesObj, true, false, null, isToFetchMiscData);
+  useGettingAddServicesRelatedData(
+    device, setAdditionalServicesObj, true, false, null, !hasAddServicesAlreadyFetched, true
+  );
 
   const devCombos = device?.["device-combinations"];
   let selectedCombination;

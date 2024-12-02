@@ -1,14 +1,17 @@
-import { useEffect, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 import useFetching from "./useFetching";
 import { getDevice } from "../http/DeviceApi";
 import _ from "lodash";
 import { getAdditionalService, getOneDevAdditionalServiceDevices } from "../http/AdditionalServicesAPI";
+import { Context } from "Context";
 
 // if not isMultiple, pass device, otherwise pass devices array
 function useGettingAddServicesRelatedData(
   device = null, setAdditionalServicesObj, isToFetch = true, 
-  isMultiple = false, devices = null, additionalCondition = true
+  isMultiple = false, devices = null, additionalCondition = true,
+  isDevicePageFetch = false
 ) {
+  const { fetchRefStore } = useContext(Context);
   const prevDevicesRef = useRef(null);
 
   async function fetchingFunc(dev, devs, isMult) {
@@ -43,6 +46,16 @@ function useGettingAddServicesRelatedData(
     if (!isMult) {
       const additionalServiceDevices = await getTheDataForADevice(dev);
       setAdditionalServicesObj(additionalServiceDevices);
+
+      // in the device page fetch, we can only get here
+      if (isDevicePageFetch) {
+        if (fetchRefStore.lastDevicesFetchAddServicesObj?.deviceId !== dev.id) {
+          fetchRefStore.setLastDevicesFetchAddServicesObj({
+            deviceId: dev.id,
+            content: additionalServiceDevices
+          });
+        }
+      }
     } else {
       let addServiceDevicesObjArray = [];
 
