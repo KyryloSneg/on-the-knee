@@ -3,6 +3,8 @@
   flex-direction: column;
   gap: 16px;
   height: max-content;
+  /* making the  */
+  min-width: 210px;
   padding: 18px;
   border: 1px solid #e9e9e9;
   border-radius: 16px;
@@ -62,5 +64,7 @@
   .checkout-page-aside {
     position: sticky;
     top: 90px;
+    /* changing internal content of the aside in most cases shouldn't affect the width of the entire page */
+    min-width: 217px;
   }
 }
