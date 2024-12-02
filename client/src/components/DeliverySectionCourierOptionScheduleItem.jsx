@@ -1,6 +1,7 @@
 import "./styles/DeliverySectionCourierOptionScheduleItem.css";
 import getDateStr from '../utils/getDateStr';
 import getWeekDay from "../utils/getWeekDay";
+import getDatetime from "utils/getDatetime";
 
 const DeliverySectionCourierOptionScheduleItem = ({ 
   setIsDirty, schedule, selectedCourierScheduleId, setSelectedCourierScheduleId, 
@@ -8,6 +9,7 @@ const DeliverySectionCourierOptionScheduleItem = ({
 }) => {
   const date = new Date(schedule.date);
   const dateStr = getDateStr(date, "MMM Do");
+  const datetime = getDatetime(date);
 
   const weekDay = getWeekDay(date);
 
@@ -15,7 +17,7 @@ const DeliverySectionCourierOptionScheduleItem = ({
     <dl className="delivery-section-courier-option-schedule-item">
       <dt>
         <span>
-          <b>{dateStr}</b> ({weekDay})
+          <time dateTime={datetime}><b>{dateStr}</b></time> ({weekDay})
         </span>
       </dt>
       {Object.entries(schedule.shifts)?.map(([number, shift]) => {
@@ -29,8 +31,8 @@ const DeliverySectionCourierOptionScheduleItem = ({
         const startTimeDate = new Date(shift.startTime);
         const endTimeDate = new Date(shift.endTime);
         
-        const startTimeStr = getDateStr(startTimeDate, "hh:mm A", false);
-        const endTimeStr = getDateStr(endTimeDate, "hh:mm A", false);
+        const startTimeStr = getDateStr(startTimeDate, "hh:mm A");
+        const endTimeStr = getDateStr(endTimeDate, "hh:mm A");
 
         function onClick() {
           setSelectedCourierScheduleId(schedule.id);

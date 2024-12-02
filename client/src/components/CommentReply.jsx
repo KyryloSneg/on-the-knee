@@ -9,6 +9,7 @@ import useLodashThrottle from "hooks/useLodashThrottle";
 import deleteCommentLogic from "utils/deleteCommentLogic";
 import UIOptions from "./UI/uiOptions/UIOptions";
 import CommentModalContent from "./CommentModalContent";
+import getDatetime from "utils/getDatetime";
 
 const CommentReply = observer(({ 
   reply, type, seller, deviceId, isInModal, updateDeviceFeedbacksCb, deviceQuestionsFetching, areUserFeedbacks
@@ -64,6 +65,7 @@ const CommentReply = observer(({
 
   const createdAtDate = new Date(reply.date);
   const createdAtDateStr = getDateStr(createdAtDate);
+  const createdAtDatetime = getDatetime(createdAtDate);
 
   let commentReplyLabelWord = "Reply";
   if (type === "deviceQuestions") {
@@ -130,9 +132,9 @@ const CommentReply = observer(({
               }
             </p>
           </div>
-          <p className="comment-date">
+          <time dateTime={createdAtDatetime} className="comment-date">
             {createdAtDateStr}
-          </p>
+          </time>
         </div>
         {isEditing
           ? type !== "sellerFeedbacks" && (

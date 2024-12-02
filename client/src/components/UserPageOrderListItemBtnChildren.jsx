@@ -1,18 +1,13 @@
 import "./styles/UserPageOrderListItemBtnChildren.css";
 import getDateStr from "../utils/getDateStr";
-import DateActions from "../utils/DateActions";
 import { ORDER_STATUS_COLOR_OBJ } from "../utils/consts";
+import getDatetime from "utils/getDatetime";
 
 const UserPageOrderListItemBtnChildren = ({ order, isExpanded }) => {
   const date = new Date(order.date);
   const dateStr = getDateStr(date);
 
-  const year = DateActions.getDatePartWithPossibleZeros(date.getFullYear(), 4);
-  const month = DateActions.getDatePartWithPossibleZeros(date.getMonth(), 2);
-  const monthDay = DateActions.getDatePartWithPossibleZeros(date.getDate(), 2);
-
-  // YYYY-MM-DD
-  const datetime = `${year}-${month}-${monthDay}`;
+  const datetime = getDatetime(date);
 
   return (
     <div className="user-page-order-li-btn-main">
