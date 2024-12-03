@@ -44,6 +44,7 @@ import AuthentificationModal from "./components/AuthenticationModal";
 import ReportOrderProblemModal from "./components/ReportOrderProblemModal";
 import RemainASellerOrDeviceFeedbackModal from "./components/RemainASellerOrDeviceFeedbackModal";
 import UserChangePasswordModal from "components/UserChangePasswordModal";
+import useGettingCartData from "hooks/useGettingCartData";
  
 const App = observer(() => {
   const { app, deviceStore, user } = useContext(Context);
@@ -86,6 +87,8 @@ const App = observer(() => {
 
   useInitialDataFetching();
   useDeliveriesFetching();
+  // fixes a bug on the checkout page that resets all selected add. services
+  useGettingCartData(user.cart?.id, null, true);
   useClosingAllWindows();
 
   useClosingFiltersSidebarWidth(windowWidth, app.isVisibleFiltersSidebar, closeFiltersSidebar);

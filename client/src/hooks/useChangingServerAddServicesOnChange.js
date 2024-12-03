@@ -1,8 +1,8 @@
 import _ from "lodash";
-import { patchCartSelectedAdditionalServices } from "../http/CartAPI";
 import useLodashDebounce from "./useLodashDebounce";
 import useLoadingSyncWithGlobalLoading from "./useLoadingSyncWithGlobalLoading";
 import useIsGlobalLoadingSetter from "./useIsGlobalLoadingSetter";
+import updateServerCartSelectedAddServices from "utils/updateServerCartSelectedAddServices";
 
 const { useEffect, useContext, useState } = require("react");
 const { Context } = require("../Context");
@@ -31,21 +31,10 @@ function useChangingServerAddServicesOnChange(selectedAddServices, combinationId
           )) {
             setIsLoading(true);
 
-            let newCartSelectedAdditionalServices = _.cloneDeep(user.cartSelectedAdditionalServices);
-            newCartSelectedAdditionalServices["selected-additional-services"][combinationId] = selectedAddServices;
-
-            if (user.isAuth) {
-              if (newCartSelectedAdditionalServices?.id) {
-                await patchCartSelectedAdditionalServices(
-                  newCartSelectedAdditionalServices.id,
-                  { "selected-additional-services": newCartSelectedAdditionalServices["selected-additional-services"] }
-                );
-                await cartDataFetching();
-              }
-            } else {
-              localStorage.setItem("cartSelectedAddServices", JSON.stringify(newCartSelectedAdditionalServices));
-              await cartDataFetching();
-            }
+            await updateServerCartSelectedAddServices(
+              user.cartSelectedAdditionalServices, selectedAddServices, combinationId, user.isAuth,
+              { isWithFetch: true, cartDataFetching: cartDataFetching }
+            );
           }
         }
       }

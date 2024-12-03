@@ -10,8 +10,11 @@ import setCartModalVisibility from "../utils/setCartModalVisibility";
 import { getDevice } from "../http/DeviceApi";
 import { getOneDeviceSaleDevices } from "../http/SalesAPI";
 import useLodashThrottle from "../hooks/useLodashThrottle";
+import updateServerCartSelectedAddServices from "utils/updateServerCartSelectedAddServices";
 
-const DeviceItemAddToCartBtn = observer(({ combinations, combo, isWithText = false, isPreOrder = false }) => {
+const DeviceItemAddToCartBtn = observer(({ 
+  combinations, combo, selectedAddServices = null, isWithText = false, isPreOrder = false 
+}) => {
   const { app, user } = useContext(Context);
   const isAlreadyAddingRef = useRef(false);
   const btnRef = useRef(null);
@@ -48,14 +51,20 @@ const DeviceItemAddToCartBtn = observer(({ combinations, combo, isWithText = fal
         localStorage.setItem("cartDeviceCombinations", JSON.stringify(newCartDevCombos));
       }
 
-      user.cartDataFetching();
+      if (selectedAddServices?.length) {
+        await updateServerCartSelectedAddServices(
+          user.cartSelectedAdditionalServices, selectedAddServices, cartDevCombo.id, user.isAuth
+        );
+      }
+
+      await user.cartDataFetching();
     } catch (e) {
       console.log(e.message);
     } finally {
       isAlreadyAddingRef.current = false;
     }
     // eslint-disable-next-line
-  }, [user, isAlreadyAddingRef, combo]);
+  }, [user, isAlreadyAddingRef, combo, selectedAddServices]);
 
   // using trailing false to prevent invoking the logic twice after double click within 3 seconds
   const throttledAddToCartLogic = useLodashThrottle(addToCartLogic, 3000, { "trailing": false });

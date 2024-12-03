@@ -262,7 +262,7 @@ function useGettingCartData(
   );
 
   useEffect(() => {
-    if (isToFetch) fetching(cartId, setCartDevCombos, isUserStore);
+    if (isToFetch && cartId) fetching(cartId, setCartDevCombos, isUserStore);
   }, [cartId, setCartDevCombos, isUserStore, isToFetch, fetching, propToInvokeEffect]);
 
   return fetching;
