@@ -14,7 +14,7 @@ module.exports = (deviceId, categorySlug, deviceInfos, attributeNames) => {
       if (Object.keys(attributeNames).includes(name)) continue;
 
       const info = {
-        "id": deviceInfos.length + 1,
+        "id": faker.string.uuid(),
         "deviceId": deviceId,
         "name": name,
         "value": StringActions.capitalize(value),
@@ -25,7 +25,7 @@ module.exports = (deviceId, categorySlug, deviceInfos, attributeNames) => {
   } else {
     // if there's no info for a device, we create only "material" one by default 
     const info = {
-      "id": deviceInfos.length + 1,
+      "id": faker.string.uuid(),
       "deviceId": deviceId,
       "name": "material",
       "value": faker.commerce.productMaterial(),

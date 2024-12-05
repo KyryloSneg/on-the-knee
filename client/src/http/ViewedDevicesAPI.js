@@ -9,7 +9,7 @@ export async function getOneViewedDevicesList(userId) {
 
 // order: "desc" | "asc"
 export async function getOneViewedDevicesListDevs(viewedDevicesListId, options = { isToSortByDate: true, order: "desc" } ) {
-  const { data } = await $mockApi.get(`/viewed-devices?viewed-devices-listId=${viewedDevicesListId}`);
+  let { data } = await $mockApi.get(`/viewed-devices?viewed-devices-listId=${viewedDevicesListId}`);
 
   if (Array.isArray(data)) {
     if (options.isToSortByDate) {

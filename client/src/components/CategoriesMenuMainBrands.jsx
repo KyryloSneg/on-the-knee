@@ -12,7 +12,7 @@ const CategoriesMenuMainBrands = ({ selectedId }) => {
     <ul className="categories-menu-main-brands">
       {mainCategory.mainBrands.map(id => {
         const brand = deviceStore.brands.find(brand => brand.id === id);
-        const to = `${BRAND_CATALOG_ROUTE}${id}-${brand.slug}`;
+        const to = `${BRAND_CATALOG_ROUTE}${id}--${brand.slug}`;
         
         return (
           <li key={id}>

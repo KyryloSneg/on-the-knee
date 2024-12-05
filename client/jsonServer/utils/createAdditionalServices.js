@@ -19,13 +19,13 @@ module.exports = (deviceId, devices, additionalServices, additionalServiceDevice
     }
   
     const additionalService = {
-      "id": additionalServices.length + 1,
+      "id": faker.string.uuid(),
       "deviceId": randomDevice.id,
       "names": names,
     };
   
     const additionalServiceDevice = {
-      "id": additionalServiceDevices.length + 1,
+      "id": faker.string.uuid(),
       "deviceId": deviceId,
       "name": randomDevice.name,
       "additional-serviceId": additionalService.id

@@ -1,3 +1,4 @@
+const { faker } = require("@faker-js/faker");
 const findSale = require("./findSale");
 
 module.exports = (combinations, cartDeviceCombinations, orderId, devices, deviceCombinations, saleDevices, sales, saleTypes) => {
@@ -21,7 +22,7 @@ module.exports = (combinations, cartDeviceCombinations, orderId, devices, device
     }
     
     const orderDeviceCombination = {
-      "id": combinations.length + 1,
+      "id": faker.string.uuid(),
       "orderId": orderId,
       "saleId": saleId,
       "discountPercentage": discountPercentage,

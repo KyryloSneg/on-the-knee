@@ -10,7 +10,9 @@ module.exports = (sellerQuestions) => {
   let sellerFeedbacks = [];
 
   for (let i = 0; i < 10; i++) {
-    const rating = createSellerFeedbacks(sellerFeedbacks, sellers.length + 1);
+    const id = faker.string.uuid();
+
+    const rating = createSellerFeedbacks(sellerFeedbacks, id);
     const name = faker.company.name();
     const slug = StringActions.nameToSlug(name);
     const schedule = POSSIBLE_SELLER_WORK_SCHEDULES[
@@ -23,7 +25,7 @@ module.exports = (sellerQuestions) => {
     phoneNumber = internationalNumber;
 
     const seller = {
-      "id": sellers.length + 1,
+      "id": id,
       "logo": faker.image.url({ width: LOGO_WIDTH, height: LOGO_HEIGHT }),
       "name": name,
       "slug": slug,

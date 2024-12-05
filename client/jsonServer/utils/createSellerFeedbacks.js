@@ -28,7 +28,7 @@ module.exports = (feedbacks, sellerId) => {
 
     const userId = MOCK_USER._id;
     const feedback = {
-      "id": feedbacks.length + 1,
+      "id": faker.string.uuid(),
       "sellerId": sellerId,
       "userId": userId,
       "images": images,

@@ -20,7 +20,6 @@ const SellerPage = observer(({ type }) => {
   const currentQueryParamsFromTheDevicesPage = useRef("?page=1&pagesToFetch=1")
 
   let [id] = sellerIdSlug.split("--");
-  id = +id;
 
   const initialSeller = (
     fetchRefStore.lastSellerPageSellerFetchResult?.id === id 

@@ -91,7 +91,7 @@ function useDeviceSectionFetching(
       );
 
       if (type === "category") {
-        const categoryId = +categoryIdSlug?.split("-")[0];
+        const categoryId = categoryIdSlug?.split("--")[0];
         let descendantCategories = getDescendantCategories(categoryId, deviceStore.categories);
         descendantCategories.push(categoryId);
   
@@ -223,7 +223,7 @@ function useDeviceSectionFetching(
         deviceStore.setSaleTypeNames(saleTypeNames);
       }
 
-      fetchRefStore.setLastDevicesFetchCategoryId(type === "category" ? categoryIdSlug?.split("-")?.[0] || null : null);
+      fetchRefStore.setLastDevicesFetchCategoryId(type === "category" ? categoryIdSlug?.split("--")?.[0] || null : null);
       fetchRefStore.setLastDevicesFetchUsedFilters(deviceStore.usedFilters || null);
       fetchRefStore.setLastDevicesFetchSearch(type === "search" ? spellCheckedSearchQuery || preparedSearchQuery || null : null);
       fetchRefStore.setLastDevicesFetchSellerId(type === "seller" ? seller?.id || null : null);

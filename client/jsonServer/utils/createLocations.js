@@ -16,14 +16,14 @@ module.exports = async () => {
 
   for (let [country, regs] of Object.entries(STORE_LOCATIONS)) {
     const dbCountry = {
-      "id": countries.length + 1,
+      "id": faker.string.uuid(),
       "name": StringActions.capitalize(country),
     }
     countries.push(dbCountry);
 
     for (let [reg, cts] of Object.entries(regs)) {
       const dbRegion = {
-        "id": regions.length + 1,
+        "id": faker.string.uuid(),
         "countryId": country.id,
         "name": StringActions.capitalize(reg),
       }
@@ -33,7 +33,7 @@ module.exports = async () => {
         let dbDistrict = null;
         if (cityInfo.district) {
           dbDistrict = {
-            "id": districts.length + 1,
+            "id": faker.string.uuid(),
             "regionId": dbRegion.id,
             "name": StringActions.capitalize(cityInfo.district),
           };
@@ -42,7 +42,7 @@ module.exports = async () => {
 
         const currentRegion = city === "Kyiv" ? null : dbRegion
         const currentDistrict = city === "Kyiv" ? null : districts[districts.length - 1];
-        const dbCityId = cities.length + 1;
+        const dbCityId = faker.string.uuid();
         const name = StringActions.capitalize(city);
 
         let fullName;
@@ -66,7 +66,7 @@ module.exports = async () => {
 
         for (let [street, houseNumbers] of Object.entries(cityInfo.streets)) {
           const dbStreet = {
-            "id": streets.length + 1,
+            "id": faker.string.uuid(),
             "cityId": dbCity.id,
             "name": StringActions.capitalize(street),
           }
@@ -104,7 +104,7 @@ module.exports = async () => {
             phoneNumber = internationalNumber;
             
             const dbStorePickupPoint = {
-              "id": storePickupPoints.length + 1,
+              "id": faker.string.uuid(),
               "cityId": dbCity.id,
               "streetId": dbStreet.id,
               "houseNumber": number,
@@ -128,7 +128,7 @@ module.exports = async () => {
     const doesExist = !!cities.find(city => city.name === uaCity.city);
     if (doesExist) continue;
 
-    const id = cities.length + 1;
+    const id = faker.string.uuid();
     let type;
 
     if (+uaCity.population < 5000) {
@@ -142,7 +142,7 @@ module.exports = async () => {
     let region = regions.find(regionItem => regionItem.name === uaCity["admin_name"]);
     if (!region) {
       region = {
-        "id": regions.length + 1,
+        "id": faker.string.uuid(),
         "name": uaCity["admin_name"]
       };
 

@@ -23,7 +23,7 @@ module.exports = (questions, answers, deviceId) => {
     }
 
     const question = {
-      "id": questions.length + 1,
+      "id": faker.string.uuid(),
       "deviceId": deviceId,
       "userId": userId,
       "isAnonymously": isAnonymously,
@@ -37,7 +37,7 @@ module.exports = (questions, answers, deviceId) => {
       const userId = MOCK_USER._id;
 
       const answer = {
-        "id": answers.length + 1,
+        "id": faker.string.uuid(),
         "device-questionId": question.id,
         "userId": userId,
         "message": faker.lorem.text(),

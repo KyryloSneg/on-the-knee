@@ -20,7 +20,7 @@ module.exports = (saleId, saleTypes, saleTypeNames) => {
     }
 
     const saleType = {
-      "id": saleTypes.length + 1,
+      "id": faker.string.uuid(),
       "saleId": saleId,
       "saleTypeNameId": name.id,
       "discountPercentage": discountPercentage,

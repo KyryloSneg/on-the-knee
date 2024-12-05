@@ -60,6 +60,7 @@ const DeviceItemAddToCartBtn = observer(({
       await user.cartDataFetching();
     } catch (e) {
       console.log(e.message);
+      throw e;
     } finally {
       isAlreadyAddingRef.current = false;
     }

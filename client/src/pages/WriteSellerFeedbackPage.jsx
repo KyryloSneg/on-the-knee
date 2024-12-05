@@ -16,7 +16,6 @@ const WriteSellerFeedbackPage = observer(() => {
   const [seller, setSeller] = useState(null);
 
   let [id, slug] = sellerIdSlug.split("--");
-  id = +id;
 
   useOneSellerFetching(id, setSeller, true, false);
 

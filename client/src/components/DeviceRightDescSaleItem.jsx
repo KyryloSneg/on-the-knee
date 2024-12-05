@@ -5,7 +5,7 @@ import getDateStr from "../utils/getDateStr";
 import getDatetime from "utils/getDatetime";
 
 const DeviceRightDescSaleItem = ({ sale, saleTypes }) => {
-  const to = SALES_ROUTE + `/${sale.slug}`;
+  const to = SALES_ROUTE + `/${sale.id}--${sale.slug}`;
 
   const createdAtDate = new Date(sale.createdAt);
   const expiresAtDate = new Date(sale.expiresAt);
