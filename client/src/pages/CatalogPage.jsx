@@ -33,7 +33,7 @@ const CatalogPage = observer(({ type, seller = null, isToFetch = true, hasAlread
   const [isFoundDevicesByQuery, setIsFoundDevicesByQuery] = useState(true);
   const [spellCheckedQuery, setSpellCheckedQuery] = useState(type === "search" ? URLActions.getParamValue("text") : null);
 
-  const categoryId = +categoryIdSlug?.split("-")[0] || undefined;
+  const categoryId = categoryIdSlug?.split("--")[0] || undefined;
   const category = deviceStore.categories.find(cat => cat.id === categoryId);
   const childCategories = deviceStore.categories.filter(cat => !cat.isVariation && cat.parentCategoryId === categoryId);
   

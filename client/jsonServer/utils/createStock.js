@@ -16,7 +16,7 @@ module.exports = (device, deviceCombinationId, stocks, isPreOrder) => {
   }
 
   const stock = {
-    "id": stocks.length + 1,
+    "id": faker.string.uuid(),
     "stockStatus": stockStatus,
     "totalStock": totalStock,
     "device-combinationId": deviceCombinationId,

@@ -9,7 +9,7 @@ module.exports = (questions, deviceQuestionLikes, deviceQuestionDislikes) => {
 
       if (isLike) {
         const rate = {
-          "id": deviceQuestionLikes.length + 1,
+          "id": faker.string.uuid(),
           "device-questionId": question.id,
           "userId": userId
         };
@@ -17,7 +17,7 @@ module.exports = (questions, deviceQuestionLikes, deviceQuestionDislikes) => {
         deviceQuestionLikes.push(rate);
       } else {
         const rate = {
-          "id": deviceQuestionDislikes.length + 1,
+          "id": faker.string.uuid(),
           "device-questionId": question.id,
           "userId": userId
         };

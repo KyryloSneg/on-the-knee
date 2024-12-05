@@ -33,7 +33,7 @@ const CategoriesMenuSecondary = forwardRef(({ selectedId, mainCategoriesListRef 
     const mainCategoriesItems = getAllFocusableElements(mainCategoriesListRef.current);
     selectedMainCategoryRef.current = mainCategoriesItems?.find(elem => {
       if (elem.tagName !== "A") return false;
-      return +elem.dataset.id === selectedId;
+      return elem.dataset.id === selectedId;
     });
   }, [mainCategoriesListRef, selectedId]);
 

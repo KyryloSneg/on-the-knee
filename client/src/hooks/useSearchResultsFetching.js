@@ -35,9 +35,9 @@ function useSearchResultsFetching(setResults, backupValue) {
     
     let categoryResults = [];
     for (let device of deviceResults) {
-      const doesCategoryAlreadyExist = categoryResults.find(cat => +cat.id === +device.categoryId);
+      const doesCategoryAlreadyExist = categoryResults.find(cat => cat.id === device.categoryId);
       if (!doesCategoryAlreadyExist) {
-        const category = deviceStore.categories.find(cat => +cat.id === +device.categoryId);
+        const category = deviceStore.categories.find(cat => cat.id === device.categoryId);
         categoryResults.push(category);
       }
     }

@@ -8,7 +8,7 @@ module.exports = (sales, saleTypes, saleTypeNames) => {
   if (!saleTypeNames.length) {
     for (let { name } of POSSIBLE_SALE_TYPE_NAMES) {
       const typeName = {
-        "id": saleTypeNames.length + 1,
+        "id": faker.string.uuid(),
         "name": name,
       }
   
@@ -18,7 +18,7 @@ module.exports = (sales, saleTypes, saleTypeNames) => {
   }
   
   for (let i = 0; i <= 10; i++) {
-    const id = sales.length + 1;
+    const id = faker.string.uuid();
     const description = faker.lorem.sentence({ min: 5, max: 15 });
 
     const width = faker.number.int({ min: MIN_SALE_IMAGE_WIDTH, max: MAX_SALE_IMAGE_WIDTH });
@@ -26,7 +26,7 @@ module.exports = (sales, saleTypes, saleTypeNames) => {
 
     const typeNames = createSaleTypes(id, saleTypes, saleTypeNames);
     const typeNameStr = typeNames.map(t => t.name).join("-");
-    const slug = `${id}-${typeNameStr}`.toLowerCase();
+    const slug = typeNameStr.toLowerCase();
 
     const expiresAfter = faker.number.int({ min: 3, max: 40 }); // a sale expires after 3-40 days
     const hours = DateActions.generateRandomHours();

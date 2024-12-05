@@ -18,7 +18,7 @@ module.exports = (deviceId, categorySlug, attributes, attributeNames, attributeV
         attrName = existingName;
       } else {
         attrName = {
-          "id": attributeNames.length + 1,
+          "id": faker.string.uuid(),
           "name": name,
         }
 
@@ -36,7 +36,7 @@ module.exports = (deviceId, categorySlug, attributes, attributeNames, attributeV
           attrValue = existingValue;
         } else {
           attrValue = {
-            "id": attributeValues.length + 1,
+            "id": faker.string.uuid(),
             "value": value,
           }
 
@@ -46,7 +46,7 @@ module.exports = (deviceId, categorySlug, attributes, attributeNames, attributeV
         tempValues.push(attrValue.value);
 
         const attr = {
-          "id": attributes.length + 1,
+          "id": faker.string.uuid(),
           "attribute-nameId": attrName.id,
           "attribute-valueId": attrValue.id,
           "deviceId": deviceId,

@@ -164,6 +164,7 @@ function useInitialDataFetching() {
       if (viewedDevices) user.setViewedDevices(viewedDevices);
     } catch (e) {
       console.log(e.message);
+      throw e;
     }
 
     app.setHasTriedToFetchInitialData(true);

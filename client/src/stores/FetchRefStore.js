@@ -8,6 +8,8 @@ class FetchRefStore {
   constructor() {
     // ref that is used to prevent the race of different changes of isGlobalLoading state
     this._globalLoadingChangesObj = createRef({});
+    this._isAlreadyAddingViewedDevice = createRef(false);
+    this._isAlreadyAddingViewedDeviceCleanupTimeoutId = createRef(null);
 
     this._lastSellerPageSellerFetchResult = createRef(null); 
     // id of the seller which feedbacks are fetched last time
@@ -38,6 +40,16 @@ class FetchRefStore {
     // setting the initial value on the first call of this getter
     if (this._globalLoadingChangesObj.current === null) this._globalLoadingChangesObj.current = {};
     return this._globalLoadingChangesObj.current;
+  }
+
+  get isAlreadyAddingViewedDevice() {
+    // setting the initial value on the first call of this getter
+    if (this._isAlreadyAddingViewedDevice.current === null) this._isAlreadyAddingViewedDevice.current = false;
+    return this._isAlreadyAddingViewedDevice.current;
+  }
+
+  get isAlreadyAddingViewedDeviceCleanupTimeoutId() {
+    return this._isAlreadyAddingViewedDeviceCleanupTimeoutId.current;
   }
 
   get lastSellerPageSellerFetchResult() {
@@ -108,6 +120,14 @@ class FetchRefStore {
 
   setGlobalLoadingChangesObj(globalLoadingChangesObj) {
     this._globalLoadingChangesObj.current = globalLoadingChangesObj;
+  }
+
+  setIsAlreadyAddingViewedDevice(isAlreadyAddingViewedDevice) {
+    this._isAlreadyAddingViewedDevice.current = isAlreadyAddingViewedDevice;
+  }
+
+  setIsAlreadyAddingViewedDeviceCleanupTimeoutId(isAlreadyAddingViewedDeviceCleanupTimeoutId) {
+    this._isAlreadyAddingViewedDeviceCleanupTimeoutId.current = isAlreadyAddingViewedDeviceCleanupTimeoutId;
   }
 
   setLastSellerPageSellerFetchResult(lastSellerPageSellerFetchResult) {

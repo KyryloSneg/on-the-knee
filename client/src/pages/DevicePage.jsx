@@ -25,7 +25,6 @@ const DevicePage = observer(({ type }) => {
   const { deviceIdCombo } = useParams();
   
   let [id, combinationString] = deviceIdCombo.split("--");
-  id = +id;
 
   const initialDevice = useMemo(() => (
     fetchRefStore.lastDevicePageDeviceFetchResult?.id === id 

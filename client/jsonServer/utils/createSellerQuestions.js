@@ -5,7 +5,7 @@ module.exports = (sellerQuestions, sellerId) => {
   const userId = MOCK_USER._id;
 
   const question = {
-    "id": sellerQuestions.length + 1,
+    "id": faker.string.uuid(),
     "sellerId": sellerId,
     "userId": userId,
     "message": faker.lorem.text(),

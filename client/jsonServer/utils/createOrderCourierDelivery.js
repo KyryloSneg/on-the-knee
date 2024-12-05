@@ -6,7 +6,7 @@ module.exports = (orderCourierDeliveries, courierSchedules, orderId) => {
   const shiftNumber = shifts[faker.number.int({ min: shifts[0], max: shifts[shifts.length - 1] })]
     
   const orderCourierDelivery = {
-    "id": orderCourierDeliveries.length + 1,
+    "id": faker.string.uuid(),
     "orderId": orderId,
     "deliveryId": schedule.deliveryId,
     "courier-scheduleId": schedule.id,

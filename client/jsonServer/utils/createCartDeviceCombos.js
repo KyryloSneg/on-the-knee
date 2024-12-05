@@ -5,7 +5,7 @@ module.exports = (cartDeviceCombos, cartId, deviceCombos) => {
   for (let i = 0; i < faker.number.int({ min: 0, max: 10 }); i++) {
     const deviceCombination = deviceCombos[faker.number.int({ min: 0, max: deviceCombos.length - 1 })];
     const cartDeviceCombo = {
-      "id": cartDeviceCombos.length + 1,
+      "id": faker.string.uuid(),
       "cartId": cartId,
       "deviceId": deviceCombination.deviceId,
       "device-combinationId": deviceCombination.id,

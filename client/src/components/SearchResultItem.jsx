@@ -71,7 +71,7 @@ const SearchResultItem = ({
   if (type === "hint" || type === "history") {
     to = SEARCH_CATALOG_ROUTE + `?page=1&pagesToFetch=1&text=${value}`;
   } else if (type === "category") {
-    to = CATEGORY_CATALOG_ROUTE + `${value.id}-${value.slug}`;
+    to = CATEGORY_CATALOG_ROUTE + `${value.id}--${value.slug}`;
   } else if (type === "category-search") {
     to = SEARCH_CATALOG_ROUTE + `?categoryId=${value.id}&page=1&pagesToFetch=1&text=${inputValue}`;
   } else if (type === "device") {

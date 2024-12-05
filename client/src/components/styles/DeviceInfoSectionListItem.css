@@ -13,6 +13,11 @@
   border-bottom: 1px dashed #dfdfdf;
 }
 
+.device-info-section-list-item > dt,
+.device-info-section-list-item > dd {
+  word-break: break-word;
+}
+
 .device-info-section-list-item > dt {
   font-weight: bold;
 }

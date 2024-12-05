@@ -19,9 +19,11 @@ module.exports = (categoryObjects, categoriesLengthOffset = 0) => {
 
 		if (!categoryObj.parentCategoryId && categoryObj.type !== "brand") {
 			if (categories.length >= MAIN_CATEGORIES_AMOUNT && categories.length < startNestLevelThreeNum) {
-				parentId = faker.number.int({ min: 1, max: MAIN_CATEGORIES_AMOUNT });
+				parentId = categories[faker.number.int({ min: 0, max: MAIN_CATEGORIES_AMOUNT - 1 })].id;
 			} else if (categories.length >= startNestLevelThreeNum) {
-				parentId = faker.number.int({ min: MAIN_CATEGORIES_AMOUNT + 1, max: startNestLevelThreeNum - 1 });
+				parentId = categories[
+					faker.number.int({ min: MAIN_CATEGORIES_AMOUNT, max: startNestLevelThreeNum - 2 })
+				].id;
 			}
 		}
 
@@ -52,7 +54,7 @@ module.exports = (categoryObjects, categoriesLengthOffset = 0) => {
 
 		const name = categoryObj.slug ? StringActions.slugToName(categoryObj.slug) : null;
 		const category = {
-			"id": categories.length + 1 + categoriesLengthOffset,
+			"id": faker.string.uuid(),
 			"treeParentCategoriesIds": treeParentIds,
 			"parentCategoryId": parentId,
 			// "nestLevel": parentId ? categories[parentId - 1].nestLevel + 1 : 0,

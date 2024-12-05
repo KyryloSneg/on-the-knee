@@ -29,7 +29,7 @@ module.exports = (feedbacks, feedbackReplies, deviceId) => {
     }
 
     const feedback = {
-      "id": feedbacks.length + 1,
+      "id": faker.string.uuid(),
       "deviceId": deviceId,
       "userId": userId,
       "isAnonymously": isAnonymously,
@@ -46,7 +46,7 @@ module.exports = (feedbacks, feedbackReplies, deviceId) => {
       const userId = MOCK_USER._id;
 
       const reply = {
-        "id": feedbackReplies.length + 1,
+        "id": faker.string.uuid(),
         "device-feedbackId": feedback.id,
         "userId": userId,
         "message": faker.lorem.text(),

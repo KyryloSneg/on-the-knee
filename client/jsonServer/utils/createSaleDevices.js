@@ -9,7 +9,7 @@ module.exports = (sales, devices) => {
 
     for (let dev of devices.slice(deviceStart, deviceStart + promotionalDeviceAmount + 1)) {
       const saleDevice = {
-        "id": saleDevices.length + 1,
+        "id": faker.string.uuid(),
         "saleId": sale.id,
         "deviceId": dev.id,
       }
