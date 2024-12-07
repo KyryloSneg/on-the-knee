@@ -28,10 +28,6 @@ const SellerPage = observer(({ type }) => {
   );
   
   const [seller, setSeller] = useState(initialSeller);
-  
-  const hasAlreadyFetchedDevicesRef = useRef(false);
-  const prevUsedFiltersRef = useRef({});
-  const prevSortFilterRef = useRef(null);
 
   useOneSellerFetching(id, setSeller, !seller);
   useOneSellerFeedbacksFetching(seller?.id, null, false, true);
@@ -82,12 +78,7 @@ const SellerPage = observer(({ type }) => {
       );
     } else if (type === "devices") {
       innerPage = (
-        <SellerDevicesPage 
-          seller={seller} 
-          hasAlreadyFetchedDevicesRef={hasAlreadyFetchedDevicesRef} 
-          prevUsedFiltersRef={prevUsedFiltersRef} 
-          prevSortFilterRef={prevSortFilterRef}
-        />
+        <SellerDevicesPage seller={seller} />
       );
     }
 

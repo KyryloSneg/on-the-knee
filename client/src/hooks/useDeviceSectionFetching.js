@@ -24,7 +24,7 @@ import useIsGlobalLoadingSetter from "./useIsGlobalLoadingSetter";
 function useDeviceSectionFetching(
   originalType, setIsFoundDevicesByQuery = null, 
   setSpellCheckedQuery = null, seller = null, 
-  additionalCondition = true, hasAlreadyFetchedDevicesRef = null
+  additionalCondition = true
 ) {
   const { deviceStore, fetchRefStore } = useContext(Context);
   
@@ -225,6 +225,8 @@ function useDeviceSectionFetching(
 
       fetchRefStore.setLastDevicesFetchCategoryId(type === "category" ? categoryIdSlug?.split("--")?.[0] || null : null);
       fetchRefStore.setLastDevicesFetchUsedFilters(deviceStore.usedFilters || null);
+      fetchRefStore.setLastDevicesFetchSortFilter(sortFilter || null);
+      fetchRefStore.setLastDevicesFetchPageFiltersObj({ page: deviceStore.page, pagesToFetch: deviceStore.pagesToFetch } || null);
       fetchRefStore.setLastDevicesFetchSearch(type === "search" ? spellCheckedSearchQuery || preparedSearchQuery || null : null);
       fetchRefStore.setLastDevicesFetchSellerId(type === "seller" ? seller?.id || null : null);
   
@@ -234,8 +236,6 @@ function useDeviceSectionFetching(
       if (isInitialFetch) {
         isGlobalLoadingSetter(false);
       }
-
-      if (hasAlreadyFetchedDevicesRef !== null) hasAlreadyFetchedDevicesRef.current = true;
     }
     
   }
@@ -243,6 +243,8 @@ function useDeviceSectionFetching(
   const [fetching, isLoading, error] = useFetching((location, categoryIdSlug, hasChangedURL) => fetchingCallback(location, categoryIdSlug, hasChangedURL, originalType), 0, null, [originalType]);
 
   useEffect(() => {
+    console.log(additionalCondition);
+    
     if (additionalCondition) fetching(location, categoryIdSlug, hasChangedURL);
     // do not use fetching, stocks, sales and saleTypeNames in dependency list
     // eslint-disable-next-line

@@ -23,6 +23,8 @@ class FetchRefStore {
 
     this._lastDevicesFetchCategoryId = createRef(null);
     this._lastDevicesFetchUsedFilters = createRef(null);
+    this._lastDevicesFetchSortFilter = createRef(null);
+    this._lastDevicesFetchPageFiltersObj = createRef({});
     this._lastDevicesFetchSearch = createRef(null);
     this._lastDevicesFetchSellerId = createRef(null);
     // { deviceId: ..., data: [...] }
@@ -78,6 +80,16 @@ class FetchRefStore {
 
   get lastDevicesFetchUsedFilters() {
     return this._lastDevicesFetchUsedFilters.current;
+  }
+
+  get lastDevicesFetchSortFilter() {
+    return this._lastDevicesFetchSortFilter.current;
+  }
+
+  get lastDevicesFetchPageFiltersObj() {
+    // setting the initial value on the first call of this getter
+    if (this._lastDevicesFetchPageFiltersObj.current === null) this._lastDevicesFetchPageFiltersObj.current = {};
+    return this._lastDevicesFetchPageFiltersObj.current;
   }
 
   get lastDevicesFetchSearch() {
@@ -156,6 +168,14 @@ class FetchRefStore {
 
   setLastDevicesFetchUsedFilters(lastDevicesFetchUsedFilters) {
     this._lastDevicesFetchUsedFilters.current = lastDevicesFetchUsedFilters;
+  }
+
+  setLastDevicesFetchSortFilter(lastDevicesFetchSortFilter) {
+    this._lastDevicesFetchSortFilter.current = lastDevicesFetchSortFilter;
+  }
+
+  setLastDevicesFetchPageFiltersObj(lastDevicesFetchPageFiltersObj) {
+    this._lastDevicesFetchPageFiltersObj.current = lastDevicesFetchPageFiltersObj;
   }
 
   setLastDevicesFetchSearch(lastDevicesFetchSearch) {

@@ -42,7 +42,11 @@ const DropdownOptions = (props) => {
         const isSelected = opt.id === props.selectedId;
 
         if (props.paramKey) {
-          const to = URLActions.setNewParam(props.paramKey, opt.value);
+          let to = URLActions.setNewParam(props.paramKey, opt.value);
+          if (props.variant === "sorting-filter") {
+            to = URLActions.getURLWithResettedPageRelatedParams(to);
+          }
+
           return (
             <li key={opt.id} className={isSelected ? "active" : ""}>
               <Link
