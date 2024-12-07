@@ -34,6 +34,7 @@ const RemainSellerDevFeedbackDevListItem = ({ type, comboFeedbackObj, userOrderD
             comments={comboFeedbackObj.feedbacks} 
             singularCommentWord="feedback" 
             isInModal={type === "modal"}
+            isInUserFeedbacksModal={type === "modal"}
             areUserFeedbacks={type === "userFeedbacks"}
             userOrderDeviceCombinations={userOrderDeviceCombinations}
             id={commentsListId}

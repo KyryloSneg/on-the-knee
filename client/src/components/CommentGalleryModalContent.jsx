@@ -6,15 +6,26 @@ import ImagesCarousel from "./UI/imagesCarousel/ImagesCarousel";
 import CommentsListItem from "./CommentsListItem";
 
 const CommentGalleryModalContent = observer(({ type, singularCommentWord, closeModal }) => {
-  const { app, deviceStore } = useContext(Context);
+  const { app, deviceStore, user } = useContext(Context);
 
   let comment;
   if (type === "deviceFeedbacks") {
     comment = deviceStore.devicesFeedbacks?.find(feedback => feedback.id === deviceStore.selectedDeviceFeedbackId);
+    // i'm lazy enough to not create another state to handle user feedbacks 
+    if (!comment) comment = user.userDevicesFeedbacks?.find(feedback => feedback.id === deviceStore.selectedDeviceFeedbackId);
   } else if (type === "deviceQuestions") {
     comment = deviceStore.deviceQuestions?.find(question => question.id === deviceStore.selectedDeviceQuestionId);
   } else if (type === "sellerFeedbacks") {
     comment = deviceStore.sellersFeedbacks?.find(feedback => feedback.id === deviceStore.selectedSellerFeedbackId);
+    if (!comment && Array.isArray(user.ordersListSellers)) {
+      for (let ordersListSellerObj of user.ordersListSellers) {
+        const possibleComment = ordersListSellerObj.feedbacks.find(
+          feedback => feedback.id === deviceStore.selectedSellerFeedbackId
+        );
+        
+        if (possibleComment) comment = possibleComment;
+      }
+    }
   }
 
   let carouselImages = [];

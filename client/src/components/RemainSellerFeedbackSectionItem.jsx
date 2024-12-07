@@ -31,6 +31,7 @@ const RemainSellerFeedbackSectionItem = ({ type, sellerFeedbacksObj }) => {
             comments={sellerFeedbacksObj.feedbacks} 
             singularCommentWord="feedback" 
             isInModal={type === "modal"}
+            isInUserFeedbacksModal={type === "modal"}
             areUserFeedbacks={type === "userFeedbacks"}
             id={commentsListId}
           />

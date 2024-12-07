@@ -1,8 +1,13 @@
 import getIsVisibleMultipleWindows from "./getIsVisibleMultipleWindows";
 
-function setCommentGalleryModalVisibility(isToShowModal, app, isToKeepDarkBg = false) {
+function setCommentGalleryModalVisibility(isToShowModal, app, isToKeepDarkBg = false, btnRef = null) {
   app.setIsVisibleCommentGalleryModal(isToShowModal);
-  if (isToShowModal) app.setIsToSetLastBtnRefInCurrWindow(true);
+
+  if (isToShowModal) {
+    app.setIsToSetLastBtnRefInCurrWindow(true);
+  } else if (btnRef) {
+    btnRef?.current?.focus?.();
+  }
 
   if (getIsVisibleMultipleWindows() || isToKeepDarkBg) return;
 
