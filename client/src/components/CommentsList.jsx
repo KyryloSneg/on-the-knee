@@ -2,7 +2,7 @@ import "./styles/CommentsList.css";
 import CommentsListItem from "./CommentsListItem";
 
 const CommentsList = ({ 
-  type, comments, singularCommentWord, propsUser = null, isInModal = false, 
+  type, comments, singularCommentWord, propsUser = null, isInModal = false, isInUserFeedbacksModal = false,
   updateFetchesQueryParams = "", areUserFeedbacks = false, userOrderDeviceCombinations = null, 
   closeRemainAFeedbackModal = null, ...props 
 }) => {
@@ -16,6 +16,7 @@ const CommentsList = ({
             singularCommentWord={singularCommentWord} 
             propsUser={propsUser}
             isInModal={isInModal}
+            isInUserFeedbacksModal={isInUserFeedbacksModal}
             updateFetchesQueryParams={updateFetchesQueryParams}
             areUserFeedbacks={areUserFeedbacks}
             userOrderDeviceCombinations={userOrderDeviceCombinations}

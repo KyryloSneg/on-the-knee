@@ -83,6 +83,7 @@ class AppStore {
     this._commentModalGetCommentsQueryParamsStr = "";
     this._commentGalleryModalType = "deviceFeedbacks";
     this._commentGallerySelectedImageId = null;
+    this._commentGalleryIsOpenedFromRemainFeedbackModal = false;
     this._reportOrderProblemOrderId = null;
     this._modalRemainSellerFeedbacksObj = null;
     this._modalRemainDevCombosFeedbacksObj = null;
@@ -363,6 +364,10 @@ class AppStore {
 
   setCommentGallerySelectedImageId(commentGallerySelectedImageId) {
     this._commentGallerySelectedImageId = commentGallerySelectedImageId;
+  }
+
+  setCommentGalleryIsOpenedFromRemainFeedbackModal(commentGalleryIsOpenedFromRemainFeedbackModal) {
+    this._commentGalleryIsOpenedFromRemainFeedbackModal = commentGalleryIsOpenedFromRemainFeedbackModal;
   }
 
   setReportOrderProblemOrderId(reportOrderProblemOrderId) {
@@ -695,6 +700,10 @@ class AppStore {
 
   get commentGallerySelectedImageId() {
     return this._commentGallerySelectedImageId;
+  }
+
+  get commentGalleryIsOpenedFromRemainFeedbackModal() {
+    return this._commentGalleryIsOpenedFromRemainFeedbackModal;
   }
 
   get reportOrderProblemOrderId() {

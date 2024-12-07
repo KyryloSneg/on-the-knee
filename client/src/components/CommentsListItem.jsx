@@ -13,7 +13,7 @@ import useUpdatingFeedbacksCbs from "hooks/useUpdatingFeedbacksCbs";
 
 const CommentsListItem = observer(({ 
   type, comment, singularCommentWord, propsUser = undefined, isWithImages = true, 
-  closeGalleryModal = null, isInModal = false, updateFetchesQueryParams = "",
+  closeGalleryModal = null, isInModal = false, isInUserFeedbacksModal = false, updateFetchesQueryParams = "",
   areUserFeedbacks = false, userOrderDeviceCombinations = null, closeRemainAFeedbackModal = null
 }) => {
   const { user } = useContext(Context);
@@ -42,15 +42,18 @@ const CommentsListItem = observer(({
     comment?.device?.id, comment?.sellerId, areUserFeedbacks, deviceFeedbacksFetching,
     sellerFeedbacksFetching, userDevicesFeedbacksFetching, userSellersFeedbacksFetching
   );
+
+  // just in case
+  if (!comment) return <div />;
   
   let replies;
   if (type === "deviceFeedbacks") {
-    replies = comment["device-feedback-replies"]?.slice();
+    replies = comment?.["device-feedback-replies"]?.slice() || [];
   } else if (type === "deviceQuestions") {
-    replies = comment["device-answers"]?.slice();
+    replies = comment?.["device-answers"]?.slice() || [];
   }
 
-  if (replies) replies.sort((a, b) => a.date.localeCompare(b.date));
+  if (replies?.length) replies.sort((a, b) => a.date.localeCompare(b.date));
 
   return (
     <div className="comments-list-item">
@@ -63,6 +66,7 @@ const CommentsListItem = observer(({
         isWithImages={isWithImages}
         closeGalleryModal={closeGalleryModal}
         isInModal={isInModal || isGalleryModal}
+        isInUserFeedbacksModal={isInUserFeedbacksModal}
         deviceQuestionsFetching={deviceQuestionsFetching}
         areUserFeedbacks={areUserFeedbacks}
         updateDeviceFeedbacksCb={updateDeviceFeedbacksCb}

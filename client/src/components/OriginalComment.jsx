@@ -28,8 +28,9 @@ import useGettingOneUser from "hooks/useGettingOneUser";
 import getDatetime from "utils/getDatetime";
 
 const OriginalComment = observer(({
-  comment, type, seller, singularCommentWord = "comment", isWithImages, closeGalleryModal, closeRemainAFeedbackModal, 
-  isInModal, deviceQuestionsFetching, areUserFeedbacks, updateDeviceFeedbacksCb, updateSellerFeedbacksCb
+  comment, type, seller, singularCommentWord = "comment", isWithImages, 
+  closeGalleryModal, closeRemainAFeedbackModal, isInModal, isInUserFeedbacksModal, 
+  deviceQuestionsFetching, areUserFeedbacks, updateDeviceFeedbacksCb, updateSellerFeedbacksCb
 }) => {
   const { user: userStore, app, deviceStore, fetchRefStore } = useContext(Context);
 
@@ -430,7 +431,11 @@ const OriginalComment = observer(({
                 </dl>
               }
               {(!!comment.images.length && isWithImages) &&
-                <CommentImagesSection imagesObjs={imagesObjs} type={type} />
+                <CommentImagesSection 
+                  imagesObjs={imagesObjs} 
+                  type={type} 
+                  isInUserFeedbacksModal={isInUserFeedbacksModal}
+                />
               }
             </>
           )
