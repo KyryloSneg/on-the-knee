@@ -4,7 +4,8 @@ import URLActions from "../utils/URLActions";
 import { Link } from "react-router-dom";
 
 const FilterBtn = ({ value, paramKey, testId }) => {
-  const to = URLActions.deleteParamValue(paramKey, value);
+  let to = URLActions.deleteParamValue(paramKey, value);
+  to = URLActions.getURLWithResettedPageRelatedParams(to);
   
   let priceFilterInvisibleText = null;
   if (paramKey === "price") {

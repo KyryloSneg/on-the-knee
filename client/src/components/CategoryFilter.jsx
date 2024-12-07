@@ -5,10 +5,17 @@ import URLActions from "../utils/URLActions";
 
 const CategoryFilter = forwardRef(({ filter, value, count, active, onKeyDown, testId }, ref) => {
   // if the name of our filter is "color", do not include color's HEX part in the value 
-  value = 
-    filter === "color" ? value.split("_")[0] : value;
+  value = filter === "color" ? value.split("_")[0] : value;
 
-  const to = active ? URLActions.deleteParamValue(filter, value) : URLActions.addParamValue(filter, value);
+  let to = "#";
+  if (active) {
+    to = URLActions.deleteParamValue(filter, value);
+    to = URLActions.getURLWithResettedPageRelatedParams(to);
+  } else {
+    to = URLActions.addParamValue(filter, value);
+    to = URLActions.getURLWithResettedPageRelatedParams(to);
+  }
+  
   const className = active ? "checkbox-div checked" : "checkbox-div";
   const iconTestId = active ? testId + " - icon checked" : testId + " - icon";
 

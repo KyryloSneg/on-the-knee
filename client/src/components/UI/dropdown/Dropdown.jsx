@@ -24,7 +24,7 @@ import useInitialDropdownValue from "../../../hooks/useInitialDropdownValue";
 const Dropdown = forwardRef((
   { 
     variant = "default-select", options, propsSelectedId = null, paramKey = null,
-    hasDefaultValue = true, placeHolder = "", onSelectCb = null, isWithFilterIcon = false, ...props 
+    hasDefaultValue = true, defaultValue = null, placeHolder = "", onSelectCb = null, isWithFilterIcon = false, ...props 
   },
   ref
 ) => {

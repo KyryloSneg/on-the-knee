@@ -19,7 +19,7 @@ import _ from "lodash";
 
 const POSSIBLE_TYPES = ["category", "search", "seller"];
 
-const CatalogPage = observer(({ type, seller = null, isToFetch = true, hasAlreadyFetchedDevicesRef = null }) => {
+const CatalogPage = observer(({ type, seller = null }) => {
   if (!POSSIBLE_TYPES.includes(type)) throw Error("type of Catalog Page is not defined or incorrect");
 
   const location = useLocation();
@@ -37,43 +37,43 @@ const CatalogPage = observer(({ type, seller = null, isToFetch = true, hasAlread
   const category = deviceStore.categories.find(cat => cat.id === categoryId);
   const childCategories = deviceStore.categories.filter(cat => !cat.isVariation && cat.parentCategoryId === categoryId);
   
+  // some boilerplate that is used for optimization
   const hasAlreadyFetchedDevsWithTheseUsedFilters = _.isEqual(
     URLActions.getUsedFilters(deviceStore.filters).usedFilters, fetchRefStore.lastDevicesFetchUsedFilters
+  );
+
+  const hasAlreadyFetchedDevsWithThisSortFilter = (
+    URLActions.getParamValue("sort") === fetchRefStore.lastDevicesFetchSortFilter
+  );
+
+  const hasAlreadyFetchedDevsWithThesePageFilters = (
+    fetchRefStore.lastDevicesFetchPageFiltersObj.page === deviceStore.page
+    && fetchRefStore.lastDevicesFetchPageFiltersObj.pagesToFetch === deviceStore.pagesToFetch
+  );
+
+  const hasAlreadyFetchedWithTheseFilters = (
+    hasAlreadyFetchedDevsWithTheseUsedFilters 
+    && hasAlreadyFetchedDevsWithThisSortFilter
+    && hasAlreadyFetchedDevsWithThesePageFilters
   );
 
   // show the wrapper immediately if user has returned to the same page after, for example, visiting device page
   const hasAlreadyFetchedThisCategory = (
     type === "category" && `${categoryId}` === fetchRefStore.lastDevicesFetchCategoryId 
-    && hasAlreadyFetchedDevsWithTheseUsedFilters
+    && hasAlreadyFetchedWithTheseFilters
   );
 
   const hasAlreadyFetchedThisSearch = (
     type === "search" && spellCheckedQuery === fetchRefStore.lastDevicesFetchSearch 
-    && hasAlreadyFetchedDevsWithTheseUsedFilters
+    && hasAlreadyFetchedWithTheseFilters
   );
 
   const hasAlreadyFetchedThisSeller = (
     type === "seller" && seller?.id === fetchRefStore.lastDevicesFetchSellerId 
-    && hasAlreadyFetchedDevsWithTheseUsedFilters
+    && hasAlreadyFetchedWithTheseFilters
   );
 
-  useEffect(() => {
-    // if we haven't already fetched devices, reset devices and filters states
-    // useful, for example, in switching between two different seller devices pages
-    // (it gives a smooth transition because of the effect "clear" logic)
-    if (
-      (!hasAlreadyFetchedThisCategory && !hasAlreadyFetchedThisSearch && !hasAlreadyFetchedThisSeller)
-      && (hasAlreadyFetchedDevicesRef !== null || !hasAlreadyFetchedDevicesRef?.current)
-    ) {
-      deviceStore.setDevices([]);
-      deviceStore.setFilters([]);
-    }
-
-    // for this logic we need only initial values of the vars we used in the condition,
-    // so no need in including them in the dependency array
-
-    // eslint-disable-next-line
-  }, [deviceStore, hasAlreadyFetchedDevicesRef]);
+  const isToFetchDevices = !hasAlreadyFetchedThisCategory && !hasAlreadyFetchedThisSearch && !hasAlreadyFetchedThisSeller;
 
   // we have no need in categoryId param if we're already at the category catalog page
   useDeletingRedundantCategoryId(type);
@@ -96,7 +96,7 @@ const CatalogPage = observer(({ type, seller = null, isToFetch = true, hasAlread
   }, [location.search, deviceStore, deviceStore.filters, location.pathname, navigate, isTest]);
 
   const [isLoading, error, deviceFetching] = useDeviceSectionFetching(
-    type, setIsFoundDevicesByQuery, setSpellCheckedQuery, seller, isToFetch, hasAlreadyFetchedDevicesRef
+    type, setIsFoundDevicesByQuery, setSpellCheckedQuery, seller, isToFetchDevices
   );
 
   useEffect(() => {
@@ -122,6 +122,10 @@ const CatalogPage = observer(({ type, seller = null, isToFetch = true, hasAlread
   const isToRenderFilters = !!Object.keys(deviceStore.filters).length;
   const wrapperClassName = !isToRenderFilters ? "no-catalog-aside" : "";
 
+  const defaultSortingFilterDropdownId = sortingOptions.find(option => 
+    option.value === fetchRefStore.lastDevicesFetchSortFilter
+  )?.id || null;
+
   return (
     <div className="display-grid">
       {(!!deviceStore.devices.length && type === "search")
@@ -138,6 +142,7 @@ const CatalogPage = observer(({ type, seller = null, isToFetch = true, hasAlread
           options={sortingOptions}
           paramKey="sort"
           className="device-sorting-filter"
+          propsSelectedId={defaultSortingFilterDropdownId}
         />
       </div>
       {(type === "category" && !!childCategories.length) &&
