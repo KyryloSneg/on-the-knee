@@ -9,6 +9,7 @@ import PagesPagination from "./UI/pagination/PagesPagination";
 import isCanLoadMoreContent from "../utils/isCanLoadMoreContent";
 import useGettingPaginationParams from "../hooks/useGettingPaginationParams";
 import Loader from "./UI/loader/Loader";
+import DevicePageList from "./DevicePageList";
 
 const DeviceSection = observer(({ isLoading, retryDevicesFetch, error, isInitialRenderRef }) => {
   const { app, deviceStore } = useContext(Context);
@@ -32,9 +33,8 @@ const DeviceSection = observer(({ isLoading, retryDevicesFetch, error, isInitial
 
   return (
     <main className="device-section-main" ref={deviceSectionRef}>
-      {/* <DevicePageList /> */}
       {deviceStore.devices.length
-        ? <DeviceList devices={deviceStore.devices} />
+        ? <DevicePageList />
         : (!isInitialRenderRef.current && !error && !!Object.keys(deviceStore.usedFilters).length && !isLoading) && (
           <p className="no-devices-message">
             We haven't found devices with such filters {":("}
