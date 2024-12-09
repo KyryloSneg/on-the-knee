@@ -26,6 +26,7 @@ import setWrongCartComboAmountsModalVisibility from "../utils/setWrongCartComboA
 import useLodashThrottle from "hooks/useLodashThrottle";
 import deleteFetchWithTryCatch from "utils/deleteFetchWithTryCatch";
 import useGettingOneUserOrders from "hooks/useGettingOneUserOrders";
+import getAddServicesDataOfDevice from "utils/getAddServicesDataOfDevice";
 
 const CheckoutPage = observer(() => {
   const { app, deviceStore, user, fetchRefStore } = useContext(Context);
@@ -132,6 +133,17 @@ const CheckoutPage = observer(() => {
           "selected-additional-services": {}
         };
 
+        const orderDevices = order?.value?.map(orderCombo => {
+          return orderCombo?.device;
+        }) || [];
+
+        let orderAdditionalServices = [];
+
+        for (let deviceItem of orderDevices) {
+          const addServiceDevices = await getAddServicesDataOfDevice(deviceItem);
+          orderAdditionalServices.push(addServiceDevices);
+        }
+        
         if (user.isAuth && (user.user?.id !== null && user.user?.id !== undefined)) {
           orderResult.userId = user.user.id;
         } else {
@@ -148,11 +160,15 @@ const CheckoutPage = observer(() => {
         let additionalServicesPrice = 0;
 
         for (let cartCombo of order.value) {
+          // if dev combo is deleted we can still show the order properly to user 
+          const devComboOfCartCombo = await getDeviceCombination(cartCombo["device-combinationId"]);
+
           const orderDeviceCombo = {
             "id": v4(),
             "orderId": orderResult.id,
             "deviceId": cartCombo.deviceId,
             "device-combinationId": cartCombo["device-combinationId"],
+            "device-combination": devComboOfCartCombo,
             "amount": cartCombo.amount,
             "isPreOrder": cartCombo.device.isPreOrder
           };
@@ -168,7 +184,13 @@ const CheckoutPage = observer(() => {
           }
 
           orderDeviceCombinationsResult.push(orderDeviceCombo);
-          saleDevices.push(await getOneDeviceSaleDevices(cartCombo.device.id));
+
+          try {
+            const orderSaleDevices = await getOneDeviceSaleDevices(cartCombo.device.id, true);
+            if (orderSaleDevices?.length) saleDevices.push(orderSaleDevices);
+          } catch {
+            // do nothing (there's no sales for a device)
+          }
         }
 
         const { deviceAmount, devicePrice } = CartComboActions.getDeviceAmountAndTotalPrice(
@@ -233,13 +255,15 @@ const CheckoutPage = observer(() => {
         orderResult["order-courier-deliveryId"] = orderCourierDeliveryResult?.id || null;
 
         orderResult.saleDevices = saleDevices;
+        // if one of add services is deleted, we would still show them to user without any struggles 
+        orderResult["additional-services"] = orderAdditionalServices;
 
         const result = {
           order: orderResult,
           receivent: receiventResult,
           orderCourierDelivery: orderCourierDeliveryResult,
           orderDeviceCombinations: orderDeviceCombinationsResult,
-          orderSelectedAdditionalServices: orderSelectedAdditionalServicesResult
+          orderSelectedAdditionalServices: orderSelectedAdditionalServicesResult,
         };
 
         ordersToPost.push(result);
@@ -255,8 +279,7 @@ const CheckoutPage = observer(() => {
           await createOrderDeviceCombination(combo);
 
           if (!combo.isPreOrder) {
-            const deviceCombination = await getDeviceCombination(combo["device-combinationId"]);
-            const stock = deviceCombination.stock;
+            const stock = combo["device-combination"].stock;
 
             const newTotalStock = (stock.totalStock - combo.amount) || 0;
             let stockStatus;

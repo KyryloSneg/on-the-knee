@@ -18,6 +18,7 @@ function useFetching(callback, settingIsLoadingDelay = 0, finallyCallback = null
       setError('');
     } catch (e) {
       setError(e.message);
+      throw e;
     } finally {
       if (finallyCallback) finallyCallback();
       setTimeout(() => {
