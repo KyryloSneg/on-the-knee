@@ -30,7 +30,7 @@ export async function createOrderSelectedAdditionalServices(orderSelectedAdditio
 // fetchStringQueryParams starts with an ampersand "&"
 export async function getOneUserOrders(userId, fetchStringQueryParams = "") {
   let { data } = await $mockApi.get(
-    `/orders?_expand=receivent&_embed=order-selected-additional-services&userId=${userId}${fetchStringQueryParams}`
+    `/orders?_expand=receivent&_embed=order-device-combinations&_embed=order-selected-additional-services&userId=${userId}${fetchStringQueryParams}`
   );
 
   // json-server unfortunately can't fix the bug that make _expand param break
@@ -59,7 +59,7 @@ export async function getOneUserOrders(userId, fetchStringQueryParams = "") {
 }
 
 export async function getOrderDeviceCombosOfOneOrder(orderId) {
-  let { data } = await $mockApi.get(`/order-device-combinations?orderId=${orderId}&_expand=device-combination`);
+  let { data } = await $mockApi.get(`/order-device-combinations?orderId=${orderId}`);
   return data;
 }
 

@@ -1,6 +1,6 @@
 import { useContext, useEffect } from "react";
 import useFetching from "./useFetching";
-import { getOneUserOrders, getOrderDeviceCombosOfOneOrder } from "../http/OrderAPI";
+import { getOneUserOrders } from "../http/OrderAPI";
 import { getDevice } from "../http/DeviceApi";
 import { Context } from "Context";
 
@@ -11,12 +11,9 @@ function useGettingOneUserOrders(userId, setOrders = null, isUserStore = false, 
     const orders = await getOneUserOrders(userId);
 
     await Promise.all(orders.map(async order => {
-      const orderDevCombos = await getOrderDeviceCombosOfOneOrder(order?.id);
-      await Promise.all(orderDevCombos?.map(async orderCombo => {
+      await Promise.all(order["order-device-combinations"]?.map(async orderCombo => {
         orderCombo["device-combination"].device = await getDevice(orderCombo["device-combination"].deviceId);
       }));
-
-      order["order-device-combinations"] = orderDevCombos;
     }));
 
     if (setOrders) {
