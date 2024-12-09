@@ -3,7 +3,6 @@ import { useContext, useEffect, useRef } from "react";
 import { Context } from "../Context";
 import { observer } from "mobx-react-lite";
 import getTotalPages from "../utils/getTotalPages";
-import DeviceList from "./DeviceList";
 import ButtonPagination from "./UI/pagination/ButtonPagination";
 import PagesPagination from "./UI/pagination/PagesPagination";
 import isCanLoadMoreContent from "../utils/isCanLoadMoreContent";
