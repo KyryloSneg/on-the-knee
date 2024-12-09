@@ -1,56 +1,48 @@
-import { useContext } from "react";
+import "./styles/DevicePageList.css";
+import { useContext, useRef } from "react";
 import { Context } from "../Context";
 import DeviceList from "./DeviceList";
 import { observer } from "mobx-react-lite";
-import "./styles/DevicePageList.css";
+import _ from "lodash";
 
-// component for future possible optimization
 const DevicePageList = observer(() => {
   const { deviceStore } = useContext(Context);
+  const prevPagesRef = useRef({});
 
-  function renderPages() {
-    let pages = [];
+  function getPagesObj() {
+    let pagesObj = {};
 
     if (deviceStore.devices.length) {
-      for (let i = 1; i <= deviceStore.page; i++) {
-        const start = deviceStore.limit * (i - 1);
-        const end = deviceStore.limit * i;
+      const lastCurrentPage = deviceStore.page + deviceStore.pagesToFetch - 1;
+
+      let index = 0;
+      for (let currentPage = deviceStore.page; currentPage <= lastCurrentPage; currentPage++) {
+        const start = deviceStore.limit * index;
+        const end = deviceStore.limit * (index + 1);
 
         const devices = deviceStore.devices.slice(start, end);
-        let stocks = [];
 
-        for (let dev of devices) {
-          for (let combination of dev["device-combinations"]) {
-            const stock = deviceStore.stocks.find(item => item.id === combination.stockId);
-            stocks.push(stock);
-          }
+        if (_.isEqual(devices, prevPagesRef.current[currentPage])) {
+          pagesObj[currentPage] = prevPagesRef.current[currentPage];
+        } else {
+          pagesObj[currentPage] = devices;
         }
 
-        const page = {
-          "devices": devices,
-          "stocks": stocks,
-          "sales": deviceStore.sales,
-          "saleTypeNames": deviceStore.saleTypeNames,
-        }
-        pages.push(page);
+        index++;
       }
-
     }
 
-    return pages;
+    return pagesObj;
   }
 
-  const pages = renderPages();
+  const pagesObj = getPagesObj();
+  prevPagesRef.current = pagesObj;
+
   return (
     <ul className="main-device-page-list">
-      {pages.map((page, index) =>
-        <li key={`main-device-page: ${index + 1}`}>
-          <DeviceList 
-            devices={page.devices} 
-            stocks={page.stocks} 
-            sales={page.sales} 
-            saleTypeNames={page.saleTypeNames} 
-          />
+      {Object.entries(pagesObj).map(([key, value]) =>
+        <li key={`main-device-page: ${key}`}>
+          <DeviceList devices={value} />
         </li>
       )}
     </ul>

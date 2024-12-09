@@ -243,8 +243,6 @@ function useDeviceSectionFetching(
   const [fetching, isLoading, error] = useFetching((location, categoryIdSlug, hasChangedURL) => fetchingCallback(location, categoryIdSlug, hasChangedURL, originalType), 0, null, [originalType]);
 
   useEffect(() => {
-    console.log(additionalCondition);
-    
     if (additionalCondition) fetching(location, categoryIdSlug, hasChangedURL);
     // do not use fetching, stocks, sales and saleTypeNames in dependency list
     // eslint-disable-next-line

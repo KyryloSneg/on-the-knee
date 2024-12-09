@@ -60,7 +60,8 @@ class DeviceStore {
     this._page = 1;
     this._pagesToFetch = 1;
     this._totalCount = 0;
-    this._limit = 40;
+    // perfectly works for device rows with 1, 2, 3, 4, 5 device(s)
+    this._limit = 60;
 
     makeAutoObservable(this);
   }
