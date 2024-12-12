@@ -261,21 +261,26 @@ class UserService {
         if (!userData || !tokenFromDb) {
             throw ApiError.UnauthorizedError();
         }
+
         const user = await UserModel.findById(userData.id);
 
-        const userDevices = await UserDeviceModel.find({user: user._id});
-        console.log(userDevices);
-        
+        // refreshToken is unique, so if the given token exists in the DB,
+        // we can find the user device (we were doing this with just ips but they're 
+        // not the best way to do this because of existing of dynamic ones, system-wide ips etc.,
+        // but when we combine this method with the check of refreshToken, it becomes very useful)
         let userDevice = null;
+        if (tokenFromDb) {
+            userDevice = await UserDeviceModel.findById(tokenFromDb.userDevice);
+        }
 
-        console.log(ip);
-        for (let dev of userDevices) { // kolxoz
-            if (await bcrypt.compare(ip, dev.ip)) {
-                userDevice = {...dev};
-                console.log("setted", userDevice);
-                
-                break;
-            }
+        if (!userDevice) {
+            throw ApiError.UnauthorizedError();
+        }
+
+        const isOldIpTheSame = await bcrypt.compare(ip, userDevice.ip);
+        if (isOldIpTheSame) {
+            userDevice.ip = await bcrypt.hash(ip, 3);
+            await userDevice.save();
         }
 
         const userDto = new UserDto(user);
@@ -287,7 +292,6 @@ class UserService {
         const emailsToConfirm = await EmailToConfirmModel.find({ user: user._id });
         const emailToConfirmDtos = emailsToConfirm.map(email => new EmailToConfirmDto(email));
 
-        console.log(userDevice);
         const tokens = tokenService.generateTokens({...userDto});
         await tokenService.saveToken(userDevice._id, tokens.refreshToken);
 
