@@ -10,7 +10,7 @@ module.exports = (cities) => {
 
   for (let [name, price] of Object.entries(POSSIBLE_DELIVERY_TYPES)) {
     const delType = {
-      "id": deliveryTypes.length + 1,
+      "id": faker.string.uuid(),
       "name": name,
       "price": price,
     }
@@ -39,7 +39,7 @@ module.exports = (cities) => {
     }
 
     for (let typeId of cityDelTypeIds) {
-      const isPrice = deliveryTypes[typeId - 1].name !== "self-delivery";
+      const isPrice = deliveryTypes.find(type => type.id === typeId).name !== "self-delivery";
       let price = isPrice ? faker.number.int({ min: 3, max: 10 }) : null;
 
       if (price) {
@@ -47,7 +47,7 @@ module.exports = (cities) => {
       }
 
       const delivery = {
-        "id": deliveries.length + 1,
+        "id": faker.string.uuid(),
         "delivery-typeId": typeId,
         "price": price,
         "cityId": city.id,

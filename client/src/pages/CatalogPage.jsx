@@ -4,7 +4,7 @@ import "./styles/CatalogPage.css";
 import useWindowWidth from "../hooks/useWindowWidth";
 import DeviceSection from "../components/DeviceSection";
 import { WIDTH_TO_SHOW_ASIDE, sortingOptions } from "../utils/consts";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Context } from "../Context";
 import CatalogAside from "../components/CatalogAside";
 import useDeviceSectionFetching from "../hooks/useDeviceSectionFetching";
@@ -15,6 +15,7 @@ import { useLocation, useParams } from "react-router-dom";
 import ChildCategoriesBar from "../components/ChildCategoriesBar";
 import CustomScrollbar from "../components/UI/customScrollbar/CustomScrollbar";
 import useDeletingRedundantCategoryId from "../hooks/useDeletingRedundantCategoryId";
+import _ from "lodash";
 
 const POSSIBLE_TYPES = ["category", "search", "seller"];
 
@@ -24,24 +25,55 @@ const CatalogPage = observer(({ type, seller = null }) => {
   const location = useLocation();
   const { categoryIdSlug } = useParams();
   const navigate = useNavigateToEncodedURL();
-  const { deviceStore, app, isTest } = useContext(Context);
+  const { deviceStore, fetchRefStore, isTest } = useContext(Context);
   const windowWidth = useWindowWidth();
+
+  const isInitialRenderRef = useRef(true);
+
   const [isFoundDevicesByQuery, setIsFoundDevicesByQuery] = useState(true);
   const [spellCheckedQuery, setSpellCheckedQuery] = useState(type === "search" ? URLActions.getParamValue("text") : null);
 
-  const categoryId = +categoryIdSlug?.split("-")[0] || undefined;
+  const categoryId = categoryIdSlug?.split("--")[0] || undefined;
   const category = deviceStore.categories.find(cat => cat.id === categoryId);
   const childCategories = deviceStore.categories.filter(cat => !cat.isVariation && cat.parentCategoryId === categoryId);
+  
+  // some boilerplate that is used for optimization
+  const hasAlreadyFetchedDevsWithTheseUsedFilters = _.isEqual(
+    URLActions.getUsedFilters(deviceStore.filters).usedFilters, fetchRefStore.lastDevicesFetchUsedFilters
+  );
 
-  useEffect(() => {
-    window.scroll(0, 0);
-  }, [location.pathname, isFoundDevicesByQuery]);
+  const hasAlreadyFetchedDevsWithThisSortFilter = (
+    URLActions.getParamValue("sort") === fetchRefStore.lastDevicesFetchSortFilter
+  );
 
-  // resetting states below because user can navigate to this page from another page
-  useEffect(() => {
-    deviceStore.setDevices([]);
-    deviceStore.setFilters([]);
-  }, [deviceStore]);
+  const hasAlreadyFetchedDevsWithThesePageFilters = (
+    fetchRefStore.lastDevicesFetchPageFiltersObj.page === deviceStore.page
+    && fetchRefStore.lastDevicesFetchPageFiltersObj.pagesToFetch === deviceStore.pagesToFetch
+  );
+
+  const hasAlreadyFetchedWithTheseFilters = (
+    hasAlreadyFetchedDevsWithTheseUsedFilters 
+    && hasAlreadyFetchedDevsWithThisSortFilter
+    && hasAlreadyFetchedDevsWithThesePageFilters
+  );
+
+  // show the wrapper immediately if user has returned to the same page after, for example, visiting device page
+  const hasAlreadyFetchedThisCategory = (
+    type === "category" && `${categoryId}` === fetchRefStore.lastDevicesFetchCategoryId 
+    && hasAlreadyFetchedWithTheseFilters
+  );
+
+  const hasAlreadyFetchedThisSearch = (
+    type === "search" && spellCheckedQuery === fetchRefStore.lastDevicesFetchSearch 
+    && hasAlreadyFetchedWithTheseFilters
+  );
+
+  const hasAlreadyFetchedThisSeller = (
+    type === "seller" && seller?.id === fetchRefStore.lastDevicesFetchSellerId 
+    && hasAlreadyFetchedWithTheseFilters
+  );
+
+  const isToFetchDevices = !hasAlreadyFetchedThisCategory && !hasAlreadyFetchedThisSearch && !hasAlreadyFetchedThisSeller;
 
   // we have no need in categoryId param if we're already at the category catalog page
   useDeletingRedundantCategoryId(type);
@@ -58,14 +90,18 @@ const CatalogPage = observer(({ type, seller = null }) => {
     const currentUrl = basename + location.pathname + location.search;
 
     if (currentUrl !== url && !isTest) {
-      navigate(url.replace(basename, ""), { replace: true });
+      navigate(url.replace(basename, ""), { replace: true, preventScrollReset: true });
     }
 
-  }, [location.search, deviceStore, deviceStore.filters, deviceStore.filters, location.pathname, navigate, isTest]);
+  }, [location.search, deviceStore, deviceStore.filters, location.pathname, navigate, isTest]);
 
   const [isLoading, error, deviceFetching] = useDeviceSectionFetching(
-    deviceStore, app, type, setIsFoundDevicesByQuery, setSpellCheckedQuery, seller
+    type, setIsFoundDevicesByQuery, setSpellCheckedQuery, seller, isToFetchDevices
   );
+
+  useEffect(() => {
+    isInitialRenderRef.current = false;
+  }, []);
 
   if (error) console.log(error);
 
@@ -86,6 +122,10 @@ const CatalogPage = observer(({ type, seller = null }) => {
   const isToRenderFilters = !!Object.keys(deviceStore.filters).length;
   const wrapperClassName = !isToRenderFilters ? "no-catalog-aside" : "";
 
+  const defaultSortingFilterDropdownId = sortingOptions.find(option => 
+    option.value === fetchRefStore.lastDevicesFetchSortFilter
+  )?.id || null;
+
   return (
     <div className="display-grid">
       {(!!deviceStore.devices.length && type === "search")
@@ -102,6 +142,7 @@ const CatalogPage = observer(({ type, seller = null }) => {
           options={sortingOptions}
           paramKey="sort"
           className="device-sorting-filter"
+          propsSelectedId={defaultSortingFilterDropdownId}
         />
       </div>
       {(type === "category" && !!childCategories.length) &&
@@ -111,12 +152,23 @@ const CatalogPage = observer(({ type, seller = null }) => {
           className="child-categories-scrollbar"
         />
       }
-      <div id="wrapper" className={wrapperClassName}>
-        {isToRenderFilters &&
-          <CatalogAside key={"aside"} />
-        }
-        <DeviceSection isLoading={isLoading} retryDevicesFetch={deviceFetching} error={error} key={"devSection"} />
-      </div>
+      {(
+        !isInitialRenderRef.current || hasAlreadyFetchedThisCategory 
+        || hasAlreadyFetchedThisSearch || hasAlreadyFetchedThisSeller
+      ) &&
+        <div id="wrapper" className={wrapperClassName}>
+          {isToRenderFilters &&
+            <CatalogAside key={"aside"} />
+          }
+          <DeviceSection 
+            isLoading={isLoading} 
+            retryDevicesFetch={deviceFetching} 
+            error={error} 
+            isInitialRenderRef={isInitialRenderRef}
+            key={"devSection"} 
+          />
+        </div>
+      }
     </div>
   );
 });

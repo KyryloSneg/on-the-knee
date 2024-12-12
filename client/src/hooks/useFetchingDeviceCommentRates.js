@@ -27,15 +27,10 @@ function useFetchingDeviceCommentRates(commentId, setLikes, setDislikes, type) {
     return dislikes;
   }
 
-  const [fetchingLikes, , , , likesFetchResultRef] = useFetching(fetchingLikesCb);
-  const [fetchingDislikes, , , , dislikesFetchResultRef] = useFetching(fetchingDislikesCb);
+  const [fetchingLikes] = useFetching(fetchingLikesCb);
+  const [fetchingDislikes] = useFetching(fetchingDislikesCb);
 
-  return { 
-    fetchingLikes, 
-    fetchingDislikes, 
-    likesFetchResultRef, 
-    dislikesFetchResultRef 
-  };
+  return { fetchingLikes, fetchingDislikes };
 }
 
 export default useFetchingDeviceCommentRates;

@@ -2,15 +2,19 @@ import { Link } from "react-router-dom";
 import "./styles/DeviceRightDescSaleItem.css";
 import { SALES_ROUTE } from "../utils/consts";
 import getDateStr from "../utils/getDateStr";
+import getDatetime from "utils/getDatetime";
 
 const DeviceRightDescSaleItem = ({ sale, saleTypes }) => {
-  const to = SALES_ROUTE + `/${sale.slug}`;
+  const to = SALES_ROUTE + `/${sale.id}--${sale.slug}`;
 
   const createdAtDate = new Date(sale.createdAt);
   const expiresAtDate = new Date(sale.expiresAt);
 
   const createdAtStr = getDateStr(createdAtDate, "MMM Do");
+  const createdAtDatetime = getDatetime(createdAtDate);
+
   const expiresAtStr = getDateStr(expiresAtDate, "MMM Do YYYY");
+  const expiresAtDatetime = getDatetime(expiresAtDate);
   
   return (
     <section className="device-right-desc-sale-item">
@@ -39,7 +43,16 @@ const DeviceRightDescSaleItem = ({ sale, saleTypes }) => {
         <Link to={to} className="link-colors">
           {sale.description}
         </Link>
-        <p>From <strong>{createdAtStr}</strong> to <strong>{expiresAtStr}</strong></p>
+        <p>
+          From 
+          <time dateTime={createdAtDatetime}>
+            <strong> {createdAtStr} </strong>
+          </time> 
+          to 
+          <time dateTime={expiresAtDatetime}>
+            <strong> {expiresAtStr}</strong>
+          </time>
+        </p>
       </div>
     </section>
   );

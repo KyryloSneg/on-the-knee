@@ -5,12 +5,13 @@ import { observer } from "mobx-react-lite";
 import RemainSellerDevFeedbackDevList from "./RemainSellerDevFeedbackDevList";
 import RemainSellerFeedbackSection from "./RemainSellerFeedbackSection";
 
-const POSSIBLE_TYPES = ["default", "modal"];
+const POSSIBLE_TYPES = ["default", "userFeedbacks", "modal"];
 
 // devCombosFeedbacksObjArray: [{ deviceCombination: {...}, feedbacks: [{...}, ...] }, ...]
 // sellersFeedbacksObjArray: [{ seller: {...}, feedbacks: [{...}, ...] }, ...]
 const RemainSellerDevFeedback = observer(({ 
-  type = "default", propsSellersFeedbacksObjArray = null, propsDevCombosFeedbacksObjArray = null 
+  type = "default", propsSellersFeedbacksObjArray = null, propsDevCombosFeedbacksObjArray = null,
+  userOrderDeviceCombinations = null, closeModal = null
 }) => {
   const { app } = useContext(Context);
   if (!POSSIBLE_TYPES.includes(type)) throw Error("type of RemainSellerDevFeedback is not defined or incorrect");
@@ -24,7 +25,11 @@ const RemainSellerDevFeedback = observer(({
   };
 
   let className = "remain-seller-dev-feedback";
-  className += ` ${type}-version`;
+  if (type === "userFeedbacks") {
+    className += ` default-version`;
+  } else {
+    className += ` ${type}-version`;
+  }
 
   return (
     <div className={className}>
@@ -36,7 +41,12 @@ const RemainSellerDevFeedback = observer(({
           <header>
             <h3>Leave a device feedback</h3>
           </header>
-          <RemainSellerDevFeedbackDevList devCombosFeedbacksObjArray={devCombosFeedbacksObjArray} />
+          <RemainSellerDevFeedbackDevList 
+            type={type} 
+            devCombosFeedbacksObjArray={devCombosFeedbacksObjArray} 
+            userOrderDeviceCombinations={userOrderDeviceCombinations}
+            closeModal={closeModal}
+          />
         </section>
       )}
     </div>

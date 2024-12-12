@@ -83,6 +83,7 @@ class AppStore {
     this._commentModalGetCommentsQueryParamsStr = "";
     this._commentGalleryModalType = "deviceFeedbacks";
     this._commentGallerySelectedImageId = null;
+    this._commentGalleryIsOpenedFromRemainFeedbackModal = false;
     this._reportOrderProblemOrderId = null;
     this._modalRemainSellerFeedbacksObj = null;
     this._modalRemainDevCombosFeedbacksObj = null;
@@ -107,6 +108,8 @@ class AppStore {
     this._selfDeliveryModalDefaultSelectedPointId = null;
     this._selfDeliveryModalSelectedPointValueId = null;
     this._selfDeliveryModalOnSelectCb = null;
+
+    this._commentModalContentAreUserFeedbacks = false;
 
     this._isToShowAsideDeliveryPrice = false;
 
@@ -363,6 +366,10 @@ class AppStore {
     this._commentGallerySelectedImageId = commentGallerySelectedImageId;
   }
 
+  setCommentGalleryIsOpenedFromRemainFeedbackModal(commentGalleryIsOpenedFromRemainFeedbackModal) {
+    this._commentGalleryIsOpenedFromRemainFeedbackModal = commentGalleryIsOpenedFromRemainFeedbackModal;
+  }
+
   setReportOrderProblemOrderId(reportOrderProblemOrderId) {
     this._reportOrderProblemOrderId = reportOrderProblemOrderId;
   }
@@ -433,6 +440,10 @@ class AppStore {
 
   setSelfDeliveryModalOnSelectCb(selfDeliveryModalOnSelectCb) {
     this._selfDeliveryModalOnSelectCb = selfDeliveryModalOnSelectCb;
+  }
+
+  setCommentModalContentAreUserFeedbacks(commentModalContentAreUserFeedbacks) {
+    this._commentModalContentAreUserFeedbacks = commentModalContentAreUserFeedbacks;
   }
   
   setIsToShowAsideDeliveryPrice(isToShowAsideDeliveryPrice) {
@@ -691,6 +702,10 @@ class AppStore {
     return this._commentGallerySelectedImageId;
   }
 
+  get commentGalleryIsOpenedFromRemainFeedbackModal() {
+    return this._commentGalleryIsOpenedFromRemainFeedbackModal;
+  }
+
   get reportOrderProblemOrderId() {
     return this._reportOrderProblemOrderId;
   }
@@ -763,6 +778,10 @@ class AppStore {
     return this._selfDeliveryModalOnSelectCb;
   }
 
+  get commentModalContentAreUserFeedbacks() {
+    return this._commentModalContentAreUserFeedbacks;
+  }
+
   get isToShowAsideDeliveryPrice() {
     return this._isToShowAsideDeliveryPrice;
   }
@@ -770,7 +789,6 @@ class AppStore {
   get errorModalInfo() {
     return this._errorModalInfo;
   }
-
 }
 
 export default AppStore;

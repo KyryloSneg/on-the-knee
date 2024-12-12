@@ -28,7 +28,8 @@ const FilePickerSection = ({
   files, setFiles, isMultiple = true, accept = ".png,.jpg,.gif", 
   MIMEType = "image", isDisabled = false 
 }) => {
-  const [isFileError, setFileError] = useState(false);
+  const [isFileError, setIsFileError] = useState(false);
+  const [isTooManyFilesError, setIsTooManyFilesError] = useState(false);
   const [isDragged, setIsDragged] = useState(false);
   const { onDragEnter, onDragLeave, onDragOver, onDrop } = useDragAndDrop(handleChange, isDragged, setIsDragged);
   const isImage = MIMEType === "image";
@@ -52,10 +53,10 @@ const FilePickerSection = ({
     if (file.size > MAX_FILE_SIZE_BYTES
       || !isSupportedFormat
     ) {
-      if (!isFileError) setFileError(true);
+      if (!isFileError) setIsFileError(true);
       return;
     } else {
-      if (isFileError) setFileError(false);
+      if (isFileError) setIsFileError(false);
     };
 
     let nextFile = file;
@@ -69,10 +70,11 @@ const FilePickerSection = ({
     if (isMultiple) {
       let nextFiles = [...files, nextFile];
       if (nextFiles.length > MAX_FILES_AMOUNT) {
-        nextFiles.shift();
+        setIsTooManyFilesError(true);
+      } else {
+        setIsTooManyFilesError(false);
+        setFiles(nextFiles);
       }
-
-      setFiles(nextFiles);
     } else {
       setFiles(nextFile);
     }
@@ -141,6 +143,11 @@ const FilePickerSection = ({
                 The file is too big or its format isn't supported
               </p>
             }
+            {isTooManyFilesError &&
+              <p className="file-picker-error-msg" aria-live="polite">
+                Delete one of the files to add a new one
+              </p>
+            }
           </div>
         </div>
         <FilePicker
@@ -161,6 +168,7 @@ const FilePickerSection = ({
                     filesArray={files}
                     setFiles={setFiles}
                     isImage={isImage}
+                    setIsTooManyFilesError={setIsTooManyFilesError}
                   />
                 </li>
               )}
@@ -173,6 +181,7 @@ const FilePickerSection = ({
             filesArray={files}
             setFiles={setFiles}
             isImage={isImage}
+            setIsTooManyFilesError={setIsTooManyFilesError}
           />
         )
       }

@@ -1,33 +1,64 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useRef } from "react";
 import useFetching from "./useFetching";
 import { Context } from "../Context";
 import { getOneSellerFeedbacks } from "../http/FeedbacksAPI";
+import CommentsActions from "utils/CommentsActions";
+import useIsGlobalLoadingSetter from "./useIsGlobalLoadingSetter";
+import useLoadingSyncWithGlobalLoading from "./useLoadingSyncWithGlobalLoading";
 
-function useOneSellerFeedbacksFetching(sellerId, setFeedbacks = null) {
-  const { app, deviceStore } = useContext(Context);
+// update fetch is the fetch that is used to refresh feedbacks, not to get them from zero
+function useOneSellerFeedbacksFetching(
+  sellerId, setFeedbacks = null, isUpdateFetch = false, isTopSellerPageFetch = false
+) {
+  const { deviceStore, fetchRefStore } = useContext(Context);
+  const isGlobalLoadingSetter = useIsGlobalLoadingSetter();
+  const sellerIdRef = useRef(sellerId);
 
-  async function fetchingCallback(propsSellerId) {
-    const feedbacks = await getOneSellerFeedbacks(propsSellerId);
-    
-    if (setFeedbacks) {
-      setFeedbacks(feedbacks);
-    } else {
-      deviceStore.setSellersFeedbacks(feedbacks);
+  useEffect(() => {
+    sellerIdRef.current = sellerId;
+  }, [sellerId]);
+
+  async function fetchingCallback() {
+    function setFeedbacksValue(value) {
+      if (setFeedbacks) {
+        setFeedbacks(value);
+      } else {
+        deviceStore.setSellersFeedbacks(value);
+      }
     }
+
+    if (!isUpdateFetch) setFeedbacksValue([]);
+
+    const feedbacks = await getOneSellerFeedbacks(sellerIdRef.current);
+    await CommentsActions.setCommentsUsers(feedbacks, "seller-feedbacks");
+    
+    setFeedbacksValue(feedbacks);
+
+    if (isTopSellerPageFetch) fetchRefStore.setLastSellerPageSellerIdWithFetchedFeedbacks(sellerIdRef.current);
+    return feedbacks;
   }
 
-  const [fetching, isLoading, error] = useFetching(() => fetchingCallback(sellerId), 0, null, [sellerId]);
-  useEffect(() => {
-    app.setIsGlobalLoading(isLoading);
-  }, [app, isLoading]);
+  const [fetching, isLoading, error] = useFetching(fetchingCallback);
 
   useEffect(() => {
-    return () => app.setIsGlobalLoading(false);
-  }, [app]);
+    const topSellerPageAdditionalCondition = (
+      isTopSellerPageFetch
+      && (
+        (
+          fetchRefStore.lastSellerPageSellerIdWithFetchedFeedbacks === null
+          || fetchRefStore.lastSellerPageSellerIdWithFetchedFeedbacks === undefined
+        )
+        || fetchRefStore.lastSellerPageSellerIdWithFetchedFeedbacks !== sellerIdRef.current
+      )
+    );
 
-  useEffect(() => {
-    fetching();
-  }, [fetching]);
+    if (
+      (sellerIdRef.current !== null && sellerIdRef.current !== undefined) 
+      && !isUpdateFetch && (isTopSellerPageFetch ? topSellerPageAdditionalCondition : true) 
+    ) fetching();
+  }, [sellerId, isUpdateFetch, fetching, fetchRefStore.lastSellerPageSellerIdWithFetchedFeedbacks, isTopSellerPageFetch]);
+
+  useLoadingSyncWithGlobalLoading(isLoading, isGlobalLoadingSetter, !isUpdateFetch);
 
   return [fetching, isLoading, error];
 }

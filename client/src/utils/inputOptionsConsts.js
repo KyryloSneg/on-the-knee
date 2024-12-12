@@ -47,14 +47,25 @@ export function getNumberInputOptions({
   return numberInputOptions;
 }
 
+// using only english letters
 export function isOnlyLetters(value) {
   // do not forget that our regex doesn't detect whitespaces, so matches.length might be less than value.length.
   // to prevent that, delete all whitespaces from the value
   const valueWithoutSpaces = value.replaceAll(" ", "");
-  const matches = valueWithoutSpaces.match(/\p{Letter}/gu);
+  // const matches = valueWithoutSpaces.match(/\p{Letter}/gu);
+  const matches = valueWithoutSpaces.match(/[a-zA-Z]/g);
 
   const isOnlyLetters = matches?.length === valueWithoutSpaces.length;
   return isOnlyLetters || "Letters only";
+}
+
+export function isEnglishWithOptionalDigits(value) {
+  const valueWithoutSpaces = value.replaceAll(" ", "");
+
+  return (
+    (/^[a-zA-Z0-9]+$/.test(valueWithoutSpaces) && isNaN(+valueWithoutSpaces)) 
+    || "English chars with digits (or without) only"
+  );
 }
 
 export function isValidEmail(value) {
@@ -139,10 +150,10 @@ export const REQUIRED_BASE_OPTIONS = Object.freeze({
 // we can use it for optional inputs
 export const BASE_OPTIONS = Object.freeze({
   validate: {
-    // validate by isTooShort field only if user have typed anything in an input
-    // (useful for optional inputs)
-    isTooShort: value => (value.trim().length === 0 || value.trim().length >= 3) || "This field must contain more than or equal to 3 characters",
-    isTooLarge: value => value.trim().length <= 1000 || "This field must contain less than or equal to 1000 characters",
+    // validate by isNotTooShort field only if user have typed anything in an input
+    // (used for optional inputs to be optional)
+    isNotTooShort: value => (value.trim().length === 0 || value.trim().length >= 3) || "This field must contain more than or equal to 3 characters",
+    isNotTooLong: value => value.trim().length <= 1000 || "This field must contain less than or equal to 1000 characters",
   }
 });
 
@@ -194,3 +205,22 @@ export const PASSWORD_INPUT_OPTIONS = {
     ...PASSWORD_VALIDATION_OBJ,
   }
 };
+
+export const REQUIRED_TEXTAREA_OPTIONS = Object.freeze({
+  ...REQUIRED_BASE_OPTIONS,
+  validate: {
+    ...REQUIRED_BASE_OPTIONS.validate,
+    isNotTooShort: (
+      value => value.trim().length >= 3 || "This field must contain more than or equal to 3 characters"
+    ),
+    isNotTooLong: value => value.trim().length <= 3000 || "This field must contain less than or equal to 3000 characters",
+  }
+});
+
+export const TEXTAREA_OPTIONS = Object.freeze({
+  ...BASE_OPTIONS,
+  validate: {
+    ...BASE_OPTIONS.validate,
+    isNotTooLong: value => value.trim().length <= 3000 || "This field must contain less than or equal to 3000 characters",
+  }
+});

@@ -6,3 +6,10 @@
   border-radius: 8px;
   border: 1px solid #dfdfdf;
 }
+
+.seller-cant-ask-question-error-msg {
+  max-width: 143px;
+  color: #a10e0e;
+  font-size: 1.3rem;
+  margin-top: 12px;
+}

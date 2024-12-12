@@ -14,7 +14,7 @@ const DeviceSellerBlock = ({ seller }) => {
         <Link to={sellerPageTo} className="link-colors">{seller.name}</Link>
       </p>
       <div className="device-seller-block-rating-wrap">
-        <StarRating readOnlyValue={1} maxValue={1} width={20} height={20} />
+        <StarRating readOnlyValue={1} maxValue={1} size={20} />
         <p>{seller.rating}</p>
         <Link to={sellerFeedbacksPageTo} className="link-colors">
           ({seller.rating === 0 ? "write a feedback" : "feedbacks"})

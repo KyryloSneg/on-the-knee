@@ -7,7 +7,7 @@ module.exports = (desiredListDevices, desiredListId, devices, deviceCombinations
     const thisDeviceCombos = deviceCombinations.filter(combo => combo.deviceId === device.id);
 
     const desiredListDevice = {
-      "id": desiredListDevices.length + 1,
+      "id": faker.string.uuid(),
       "desired-listId": desiredListId,
       "deviceId": device.id,
       "device-combinationId": thisDeviceCombos[faker.number.int({ min: 0, max: thisDeviceCombos.length - 1 })].id,

@@ -24,8 +24,12 @@ module.exports = (feedbacks, feedbackReplies, deviceId) => {
     let userId = null;
     const isAnonymously = faker.datatype.boolean(0.6);
 
+    if (!isAnonymously) {
+      userId = MOCK_USER._id;
+    }
+
     const feedback = {
-      "id": feedbacks.length + 1,
+      "id": faker.string.uuid(),
       "deviceId": deviceId,
       "userId": userId,
       "isAnonymously": isAnonymously,
@@ -35,17 +39,19 @@ module.exports = (feedbacks, feedbackReplies, deviceId) => {
       "disadvantages": faker.lorem.text(),
       "rate": rate,
       "date": faker.date.recent(),
+      "isEdited": false,
     }
 
     for (let j = 0; j < faker.number.int({ min: 2, max: 5 }); j++) {
       const userId = MOCK_USER._id;
 
       const reply = {
-        "id": feedbackReplies.length + 1,
+        "id": faker.string.uuid(),
         "device-feedbackId": feedback.id,
         "userId": userId,
         "message": faker.lorem.text(),
         "date": faker.date.recent(),
+        "isEdited": false,
       }
 
       feedbackReplies.push(reply);

@@ -20,7 +20,7 @@ module.exports = () => {
     }
 
     const receivent = {
-      "id": receivents.length + 1,
+      "id": faker.string.uuid(),
       "userId": userId,
       "name": faker.person.firstName(),
       "surname": faker.person.lastName(),

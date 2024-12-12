@@ -17,10 +17,13 @@ import useNavigateToEncodedURL from "../hooks/useNavigateToEncodedURL";
 import DeviceComboActions from "../utils/DeviceComboActions";
 import getPreparedForMockServerStr from "../utils/getPreparedForMockServerStr";
 import LocalStorageActions from "../utils/LocalStorageActions";
+import { useLocation } from "react-router-dom";
 
 const SearchProductsForm = observer(({ navbarRef }) => {
   const { app, isTest, isEmptySearchResults } = useContext(Context);
   const navigate = useNavigateToEncodedURL();
+  const location = useLocation();
+
   const [stocks, setStocks] = useState([]);
   const [value, setValue] = useState(""); // the value that will be submitted to the form
   // the value that user can return to (it renders as the first search option if the input value isn't empty)
@@ -160,48 +163,75 @@ const SearchProductsForm = observer(({ navbarRef }) => {
 
   async function onSubmit(e) {
     e.preventDefault();
-    if (!!value.trim().length) {
+    if (!!value.trim().length || selectedId !== minId.current) {
       try {
-        // we can't store array in localStorage, so we save it as string and getting with JSON.parse(...) method
-        let storageHistoryResults = LocalStorageActions.getItem("historyResults") || [];
-        let newHistoryResult = { value: value.trim() };
-
-        let newHistoryResults = [...storageHistoryResults];
-        const isAlreadyExists = !!storageHistoryResults.find(result => result.value === newHistoryResult.value);
-
-        if (!isAlreadyExists) {
-          if (storageHistoryResults.length >= HISTORY_SEARCH_RESULTS_MAX_AMOUNT) {
-            newHistoryResults = [...storageHistoryResults, newHistoryResult];
-            newHistoryResults = newHistoryResults.slice(1);
+        function updateHistoryResults(newHistoryResultValue) {
+          // we can't store array in localStorage, so we save it as string and getting with JSON.parse(...) method
+          let storageHistoryResults = LocalStorageActions.getItem("historyResults") || [];
+          let newHistoryResult = { value: newHistoryResultValue };
+  
+          let newHistoryResults = [...storageHistoryResults];
+          const isAlreadyExists = !!storageHistoryResults.find(result => result.value === newHistoryResult.value);
+  
+          if (isAlreadyExists) {
+            // move the already existing result to the end of the array
+            newHistoryResults = newHistoryResults.filter(result => result.value !== newHistoryResult.value);
+            newHistoryResults.push(newHistoryResult);
           } else {
-            newHistoryResults = [...storageHistoryResults, newHistoryResult];
+            if (storageHistoryResults.length >= HISTORY_SEARCH_RESULTS_MAX_AMOUNT) {
+              newHistoryResults = [...storageHistoryResults, newHistoryResult];
+              newHistoryResults = newHistoryResults.slice(1);
+            } else {
+              newHistoryResults = [...storageHistoryResults, newHistoryResult];
+            }
+          }
+  
+          localStorage.setItem("historyResults", JSON.stringify(newHistoryResults));
+        }
+
+        if (selectedId !== minId.current) {
+          const selectedSearchResult = document.getElementById(`search-result-${selectedId}`);
+
+          if (selectedSearchResult) {
+            if (
+              selectedSearchResult.dataset.type === "hint" 
+              || selectedSearchResult.dataset.type === "history"
+            ) {
+              updateHistoryResults(selectedSearchResult.dataset.value.trim());
+            }
+
+            navigate(selectedSearchResult.dataset.to, { 
+              replace: selectedSearchResult.dataset.to === location.pathname + location.search 
+            });
+          }
+        } else {
+          updateHistoryResults(value.trim());
+
+          // add hint search result only if the result links to not empty catalog page
+          const preparedValue = getPreparedForMockServerStr(backupValue);
+          const fetchStringQueryParams = `name_like=${encodeURIComponent(preparedValue.trim().toLowerCase())}`.replaceAll(`"`, "");
+          const { devices: devicesBySearchQuery } = await getDevicesBySearchQuery(fetchStringQueryParams);
+  
+          if (devicesBySearchQuery.length === 1) {
+            // navigating directly to device page
+            const {
+              defaultCombinationInStock: defaultCombo
+            } = DeviceComboActions.findDefaultCombination(devicesBySearchQuery[0], stocks);
+  
+            const deviceRouteCombo = defaultCombo.combinationString || "default";
+            const to = DEVICE_ROUTE + `${devicesBySearchQuery[0].id}--${deviceRouteCombo}`;
+  
+            navigate(to, { replace: to === location.pathname + location.search });
+          } else {
+            addHintSearchResult({ value: value.trim().toLowerCase() })
+  
+            const hrefValue = value.trim().replaceAll("&", "%2526");
+            const href = `/search/?text=${hrefValue}&page=1&pagesToFetch=1`;
+  
+            navigate(href, { replace: href === location.pathname + location.search });
           }
         }
 
-        localStorage.setItem("historyResults", JSON.stringify(newHistoryResults));
-
-        // add hint search result only if the result links to not empty catalog page
-        const preparedValue = getPreparedForMockServerStr(backupValue);
-        const fetchStringQueryParams = `name_like=${encodeURIComponent(preparedValue.trim().toLowerCase())}`.replaceAll(`"`, "");
-        const devicesBySearchQuery = await getDevicesBySearchQuery(fetchStringQueryParams);
-
-        if (devicesBySearchQuery.length === 1) {
-          // navigating directly to device page
-          const {
-            defaultCombinationInStock: defaultCombo
-          } = DeviceComboActions.findDefaultCombination(devicesBySearchQuery[0], stocks);
-
-          const deviceRouteCombo = defaultCombo.combinationString || "default";
-          const to = DEVICE_ROUTE + `${devicesBySearchQuery[0].id}--${deviceRouteCombo}`;
-
-          navigate(to);
-        } else {
-          addHintSearchResult({ value: value.trim().toLowerCase() })
-
-          const hrefValue = value.trim().replaceAll("&", "%2526");
-          const href = `/search/?text=${hrefValue}&page=1&pagesToFetch=1`;
-          navigate(href);
-        }
       } catch (error) {
         console.log(error.message)
       } finally {

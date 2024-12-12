@@ -1,6 +1,36 @@
 .delivery-section-self-delivery-option {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
+  display: grid;
+  grid-template-columns: 1fr;
   justify-content: center;
+  gap: 10px;
+}
+
+.delivery-section-self-delivery-option > .dropdown > .dropdown-btn {
+  order: 1;
+}
+
+.delivery-section-self-delivery-option > .ui-button {
+  order: -1;
+}
+
+.delivery-section-self-delivery-option .ui-button,
+.delivery-section-self-delivery-option .dropdown-options li button {
+  font-size: 1.2rem;
+}
+
+@media screen and (min-width: 320px) {
+  .delivery-section-self-delivery-option .ui-button,
+  .delivery-section-self-delivery-option .dropdown-options li button {
+    font-size: 1.5rem;
+  }
+}
+
+@media screen and (min-width: 590px) {
+  .delivery-section-self-delivery-option {
+    grid-template-columns: 1fr auto;
+  }
+  
+  .delivery-section-self-delivery-option > .ui-button {
+    order: 2;
+  }
 }

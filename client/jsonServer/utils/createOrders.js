@@ -226,7 +226,7 @@ module.exports = (
   }
 
   for (let orderInfo of allOrderInfos) {
-    const id = orders.length + 1;
+    const id = faker.string.uuid();
     // both authorized and unauthorized users can checkout their order
     const isAuth = faker.datatype.boolean(0.5);
     let user;
@@ -236,7 +236,7 @@ module.exports = (
     const receivent = receivents[faker.number.int({ min: 0, max: receivents.length - 1 })];
 
     const delivery = deliveries[faker.number.int({ min: 0, max: deliveries.length - 1 })];
-    const deliveryType = deliveryTypes[delivery["delivery-typeId"] - 1];
+    const deliveryType = deliveryTypes.find(type => type.id === delivery["delivery-typeId"]);
     const deliveryPrice = delivery.price || deliveryType.price;
 
     const orderCourierDelivery = deliveryType.name === "courier"

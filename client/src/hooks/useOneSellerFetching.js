@@ -2,27 +2,28 @@ import { useContext, useEffect } from "react";
 import useFetching from "./useFetching";
 import { Context } from "../Context";
 import { getOneSeller } from "../http/SellersAPI";
+import useIsGlobalLoadingSetter from "./useIsGlobalLoadingSetter";
+import useLoadingSyncWithGlobalLoading from "./useLoadingSyncWithGlobalLoading";
 
-function useOneSellerFetching(id, setSeller, isToUseGlobalLoading = true) {
-  const { app } = useContext(Context);
+function useOneSellerFetching(
+  id, setSeller, additionalCondition = true, isToUseGlobalLoading = true, isTopDevicePageFetch = false
+) {
+  const { fetchRefStore } = useContext(Context);
+  const isGlobalLoadingSetter = useIsGlobalLoadingSetter();
 
   async function fetchingCallback(propsId) {
     const fetchedSeller = await getOneSeller(propsId);
     setSeller(fetchedSeller);
+
+    if (isTopDevicePageFetch) fetchRefStore.setLastDevicePageFetchSeller(fetchedSeller);
   }
 
   const [fetching, isLoading, error] = useFetching(() => fetchingCallback(id), 0, null, [id]);
-  useEffect(() => {
-    if (isToUseGlobalLoading) app.setIsGlobalLoading(isLoading);
-  }, [app, isLoading, isToUseGlobalLoading]);
+  useLoadingSyncWithGlobalLoading(isLoading, isGlobalLoadingSetter, isToUseGlobalLoading);
 
   useEffect(() => {
-    return () => { if (isToUseGlobalLoading) app.setIsGlobalLoading(false); };
-  }, [app, isToUseGlobalLoading]);
-
-  useEffect(() => {
-    fetching();
-  }, [fetching]);
+    if ((id !== null && id !== undefined) && additionalCondition) fetching();
+  }, [id, fetching, additionalCondition]);
 
   return [fetching, isLoading, error];
 }

@@ -8,11 +8,12 @@ const MainSellerPageRatingDetails = ({ ratingsObj, feedbacksAmount }) => {
       {Object.entries(ratingsObj).map(([name, value]) => 
         <div key={`${name}-${value}`}>
           <dt>
-            <Star starIndex={1} value={1} width={14} height={14} starKey={`${name}-${value}`} />
+            <Star starIndex={1} value={1} size={14} starKey={`${name}-${value}`} />
             <span>{name}</span>
           </dt>
           <dd >
-            <CustomProgressBar progress={value / feedbacksAmount * 100} />
+            {/* do not show Infinity if we have no feedbacks, show zero instead */}
+            <CustomProgressBar progress={feedbacksAmount === 0 ? 0 : (value / feedbacksAmount) * 100} />
             <span>{value}</span>
           </dd>
         </div>

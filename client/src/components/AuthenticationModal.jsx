@@ -1,7 +1,7 @@
 import "./styles/AuthentificationModal.css";
 import ModalWindow from './UI/modalWindow/ModalWindow';
 import { Context } from '../Context';
-import { useContext } from 'react';
+import { useCallback, useContext } from 'react';
 import { observer } from 'mobx-react-lite';
 import AuthentificationModalContent from "./AuthentificationModalContent";
 import setAuthentificationModalVisibility from "../utils/setAuthentificationModalVisibility";
@@ -9,19 +9,19 @@ import setAuthentificationModalVisibility from "../utils/setAuthentificationModa
 const AuthentificationModal = observer(() => {
   const { app } = useContext(Context);
 
-  function setIsAuthentificationModalVisible(isVisible) {
+  const setIsAuthentificationModalVisible = useCallback(isVisible => {
     setAuthentificationModalVisibility(isVisible, app);
-  }
+  }, [app]);
+
+  const closeModal = useCallback(() => {
+    setIsAuthentificationModalVisible(false)
+  }, [setIsAuthentificationModalVisible]);
 
   return (
     <ModalWindow
       isVisible={app.isVisibleAuthentificationModal}
       setIsVisible={setIsAuthentificationModalVisible}
-      children={
-        <AuthentificationModalContent 
-          closeModal={() => setIsAuthentificationModalVisible(false)}
-        />
-      }
+      children={<AuthentificationModalContent closeModal={closeModal} />}
       headerText="Authentification"
       id="authentification-modal"
       triggerElemRef={app.authentificationModalBtnRef}

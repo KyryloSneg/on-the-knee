@@ -1,7 +1,16 @@
-.original-comment {
+.comment-item {
   border: 1px #dfdfdf solid;
   border-radius: 10px;
   padding: 12px 14px;
+}
+
+.comment-item.with-options {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.comment-content-wrap {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -20,10 +29,27 @@
   word-break: break-word;
 }
 
+.comment-seller-name {
+  color: #3c3cd5;
+}
+
 .comment-date {
   font-size: 1.2rem;
   color: rgb(90, 90, 90);
   height: 100%;
+}
+
+.comment-msg-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.comment-edited-msg {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: rgb(90, 90, 90);
+  text-align: end;
 }
 
 .original-comment-message {
@@ -86,6 +112,7 @@
 }
 
 .original-comment-rate-btn-group > button {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 4px;
@@ -95,14 +122,9 @@
   cursor: pointer;
 }
 
-.original-comment-rate-btn-group > button > svg {
-  transition: color 0.2s, fill 0.2s;
-}
-
-.original-comment-rate-btn-group > button:hover > svg,
-.original-comment-rate-btn-group > button:active > svg,
-.original-comment-rate-btn-group > button:focus-visible > svg {
-  fill: #3348E6;
+.original-comment-rate-btn-group > button:disabled {
+  color: black;
+  cursor: auto;
 }
 
 .original-comment-rate-btn-group > button > span {
@@ -110,9 +132,9 @@
   transition: color 0.2s;
 }
 
-.original-comment-rate-btn-group > button:hover > span,
-.original-comment-rate-btn-group > button:active > span,
-.original-comment-rate-btn-group > button:focus-visible > span {
+.original-comment-rate-btn-group > button:enabled:hover > span,
+.original-comment-rate-btn-group > button:enabled:active > span,
+.original-comment-rate-btn-group > button:enabled:focus-visible > span {
   color: #bd5e10;
 }
 
@@ -126,5 +148,11 @@
     margin: 0;
     margin-left: auto;
     justify-content: end;
+  }
+}
+
+@media screen and (min-width: 480px) {
+  .comment-item.with-options {
+    grid-template-columns: 1fr auto;
   }
 }

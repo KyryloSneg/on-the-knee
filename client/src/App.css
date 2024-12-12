@@ -14,20 +14,27 @@ html * {
   transition: outline 0s;
 }
 
+/* making the page consume at least one height of viewport */
+#root > div {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr auto;
+}
+
 body {
   margin: 0;
 }
 
 /* every page must start with the <main /> element */
 main {
-  min-height: 100vh;
+  min-height: 100%;
 }
 
 /* implementing the scroll blocking like this, so the scroll bar doesn't disappear */
 .global-blocked-scroll {
   position: fixed;
   width: 100%;
-  overflow-y: scroll;
 }
 
 ::selection {
@@ -281,11 +288,17 @@ ul {
   fill: #bd5e10;
 }
 
+.scroll-y {
+  overflow-y: scroll;
+}
+
 /* navigation header */
 
 #root > div > header {
   padding: 10px;
   background-color: #333333;
+  height: max-content;
+  align-self: flex-start;
 }
 
 #root > div > header {
@@ -394,13 +407,13 @@ ul {
   transition: background 0.2s, border 0.2s, outline 0s;
 }
 
-*:hover > .checkbox-div,
-  *:focus > .checkbox-div {
+*:hover:enabled > .checkbox-div,
+  *:focus:enabled > .checkbox-div {
   border: 1px solid black;
 }
 
-*:hover > .checkbox-div.checked,
-  *:focus > .checkbox-div.checked {
+*:hover:enabled > .checkbox-div.checked,
+  *:focus:enabled > .checkbox-div.checked {
   border: 1px solid #7e95fa;
 }
 
@@ -423,13 +436,13 @@ ul {
   transition: background 0.2s, border 0.2s, outline 0s;
 }
 
-*:hover > .radio-div,
-  *:focus > .radio-div {
+*:hover:enabled > .radio-div,
+  *:focus:enabled > .radio-div {
   border: 1px solid black;
 }
 
-*:hover > .radio-div.checked,
-  *:focus > .radio-div.checked {
+*:hover:enabled > .radio-div.checked,
+  *:focus:enabled > .radio-div.checked {
   border: 1px solid #7e95fa;
 }
 
@@ -481,7 +494,7 @@ ul {
   background-color: #1e47ff;
   width: 25%;
   height: 100%;
-  animation: 0.35s linear infinite app-global-loading;
+  animation: 0.5s linear infinite app-global-loading;
 }
 
 /* device categories modal */
@@ -512,6 +525,12 @@ ul {
   }
 }
 
+@media screen and (min-width: 640px) {
+  .app-global-loading-bar-rect {
+    animation: 0.4s linear infinite app-global-loading;
+  }
+}
+
 @media screen and (min-width: 730px) {
   #categories-modal {
     max-width: 700px;
@@ -526,9 +545,9 @@ ul {
   }
 }
 
-@media screen and (min-width: 1000px) {
+@media screen and (min-width: 880px) {
   .app-global-loading-bar-rect {
-    animation: 0.3s linear infinite app-global-loading;
+    animation: 0.5s linear infinite app-global-loading;
   }
 }
 

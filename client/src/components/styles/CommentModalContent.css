@@ -4,6 +4,10 @@
   padding: 22px;
 }
 
+.comment-modal-content.editing-comment-version {
+  padding: 12px;
+}
+
 .comment-modal-form {
   display: grid;
   grid-template-rows: 1fr auto;

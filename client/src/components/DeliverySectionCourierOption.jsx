@@ -32,11 +32,13 @@ const DeliverySectionCourierOption = observer(({
     selectedShift = selectedSchedule?.shifts?.[selectedCourierScheduleShift];
   
     if (selectedSchedule && selectedShift) {
-      selectedScheduleDateStr = getDateStr(new Date(selectedSchedule?.date), "MMM Do");
-      startTimeDateStr = getDateStr(new Date(selectedShift?.startTime), "hh:mm A", false);
-      endTimeDateStr = getDateStr(new Date(selectedShift?.endTime), "hh:mm A", false);
+      const selectedScheduleDate = new Date(selectedSchedule?.date);
+
+      selectedScheduleDateStr = getDateStr(selectedScheduleDate, "MMM Do");
+      startTimeDateStr = getDateStr(new Date(selectedShift?.startTime), "hh:mm A");
+      endTimeDateStr = getDateStr(new Date(selectedShift?.endTime), "hh:mm A");
   
-      weekDay = getWeekDay(new Date(selectedSchedule?.date));
+      weekDay = getWeekDay(selectedScheduleDate);
     }
   }
 

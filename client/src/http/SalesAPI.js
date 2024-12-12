@@ -11,7 +11,12 @@ export async function getSaleTypeNames() {
   return data;
 }
 
-export async function getOneDeviceSaleDevices(deviceId) {
-  const { data } = await $mockApi.get(`/sale-devices?deviceId=${deviceId}`);
+export async function getOneDeviceSaleDevices(deviceId, isWithExpandedDevice = false) {
+  let url = `/sale-devices?deviceId=${deviceId}`;
+  if (isWithExpandedDevice) {
+    url += "&_expand=devices";
+  }
+
+  const { data } = await $mockApi.get(url);
   return data;
 }

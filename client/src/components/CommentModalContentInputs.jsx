@@ -4,12 +4,13 @@ import StarRating from "./UI/starRating/StarRating";
 import useWindowWidth from "../hooks/useWindowWidth";
 import FilePickerSection from "./UI/filePicker/FilePickerSection";
 import ReactHookFormInput from "./UI/reactHookFormInput/ReactHookFormInput";
-import { BASE_OPTIONS, REQUIRED_BASE_OPTIONS } from "../utils/inputOptionsConsts";
+import { BASE_OPTIONS, REQUIRED_TEXTAREA_OPTIONS } from "../utils/inputOptionsConsts";
+import ReactHookFormTextarea from "./UI/reactHookFormTextarea/ReactHookFormTextarea";
 
 const CommentModalContentInputs = ({
   type, register, errors, areInputsBlocked, errorsBeforeBlock, isToShowErrors, setIsToShowErrors, clearErrors, setError,
   settedStarRating, setSettedStarRating, isToShowStarError, setIsToShowStarError, openLoginModal,
-  files, setFiles
+  files, setFiles, isEditCommentForm
 }) => {
   const windowWidth = useWindowWidth();
 
@@ -38,15 +39,34 @@ const CommentModalContentInputs = ({
     // eslint-disable-next-line
   }, [areInputsBlocked, clearErrors, setError]);
 
-  let starSize = 24;
+  const commentTextareaName = "comment"
+  const commentRegisterResult = register(commentTextareaName, REQUIRED_TEXTAREA_OPTIONS);
+
+  let starSize = 16;
   let isWithStarText = false;
 
-  if (windowWidth >= 480) {
-    starSize = 40;
-    isWithStarText = true;
-  } else if (windowWidth >= 380) {
-    starSize = 32;
-    isWithStarText = true;
+  if (isEditCommentForm) {
+    starSize = 20;
+
+    if (windowWidth >= 700) {
+      starSize = 40;
+      isWithStarText = true;
+    } else if (windowWidth >= 670) {
+      starSize = 32;
+      isWithStarText = true;
+    } else if (windowWidth >= 320) {
+      starSize = 24;
+    }
+  } else {
+    starSize = 24;
+
+    if (windowWidth >= 480) {
+      starSize = 40;
+      isWithStarText = true;
+    } else if (windowWidth >= 380) {
+      starSize = 32;
+      isWithStarText = true;
+    }
   }
 
   return (
@@ -57,8 +77,7 @@ const CommentModalContentInputs = ({
             <h3>Rate device</h3>
             <StarRating
               id="comments-modal-content-star-rating"
-              width={starSize}
-              height={starSize}
+              size={starSize}
               isWithText={isWithStarText}
               isReadOnly={false}
               areBtnsBlocked={areInputsBlocked}
@@ -90,31 +109,14 @@ const CommentModalContentInputs = ({
           />
         </>
       }
-      <div>
-        <label>
-          Comment
-          <textarea
-            disabled={areInputsBlocked}
-            className={
-              (!areInputsBlocked && errors?.comment && isToShowErrors) ? "invalid" : ""
-            }
-            {...register("comment", {
-              ...REQUIRED_BASE_OPTIONS,
-              validate: {
-                ...REQUIRED_BASE_OPTIONS.validate,
-                isNotTooShort: (
-                  value => value.trim().length >= 3 || "This field must contain more than or equal to 3 characters"
-                )
-              }
-            })}
-          />
-        </label>
-        {(!areInputsBlocked && errors?.comment && isToShowErrors) &&
-          <p className="comment-modal-form-error-msg" aria-live="polite">
-            {errors?.comment?.message || "Error!"}
-          </p>
-        }
-      </div>
+      <ReactHookFormTextarea 
+        labelText="Comment"
+        textareaName={commentTextareaName}
+        errors={errors}
+        registerFnResult={commentRegisterResult}
+        isDisabled={areInputsBlocked}
+        isErrorCondition={!areInputsBlocked && errors?.[commentTextareaName] && isToShowErrors}
+      />
       {(type === "feedback" || type === "question") &&
         <FilePickerSection files={files} setFiles={setFiles} isDisabled={areInputsBlocked} />
       }

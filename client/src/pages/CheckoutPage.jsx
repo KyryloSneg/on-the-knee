@@ -1,5 +1,5 @@
 import "./styles/CheckoutPage.css";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import useGettingCartData from "../hooks/useGettingCartData";
 import { Context } from "../Context";
 import _ from "lodash";
@@ -18,23 +18,28 @@ import { getOneDeviceSaleDevices } from "../http/SalesAPI";
 import StringActions from "../utils/StringActions";
 import { parsePhoneNumber } from "libphonenumber-js";
 import { createOrder, createOrderCourierDelivery, createOrderDeviceCombination, createOrderSelectedAdditionalServices, createReceivent } from "../http/OrderAPI";
-import useLodashDebounce from "../hooks/useLodashDebounce";
 import { deleteCartDeviceCombination, patchCartSelectedAdditionalServices } from "../http/CartAPI";
 import { getOneStock, patchStock } from "../http/StocksAPI";
 import { getDeviceCombination } from "../http/DeviceApi";
 import setCartModalVisibility from "../utils/setCartModalVisibility";
 import setWrongCartComboAmountsModalVisibility from "../utils/setWrongCartComboAmountsVisibility";
+import useLodashThrottle from "hooks/useLodashThrottle";
+import deleteFetchWithTryCatch from "utils/deleteFetchWithTryCatch";
+import useGettingOneUserOrders from "hooks/useGettingOneUserOrders";
+import getAddServicesDataOfDevice from "utils/getAddServicesDataOfDevice";
 
 const CheckoutPage = observer(() => {
-  const { app, deviceStore, user } = useContext(Context);
+  const { app, deviceStore, user, fetchRefStore } = useContext(Context);
   const navigate = useNavigateToEncodedURL();
   const senderPhoneNumberInputRef = useRef(null);
   const isAlreadySubmittingRef = useRef(false);
 
   const [isSenderPhoneInputDirty, setIsSenderPhoneInputDirty] = useState(false);
   const [senderPhoneInputValue, setSenderPhoneInputValue] = useState(user.userAddress?.phoneNumber?.replaceAll(" ", "") || "");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const orders = useGettingOrders();
+  const [userOrdersFetching] = useGettingOneUserOrders(user.user?.id, null, true, false);
 
   // auto-fill sender data inputs with user data if he / she logged in
   const {
@@ -58,7 +63,7 @@ const CheckoutPage = observer(() => {
     }
   });
 
-  const fetching = useGettingCartData(user.cart?.id, null, true, true, true);
+  const fetching = useGettingCartData(user.cart?.id, null, true, true);
   function getCartData() {
     fetching(user.cart?.id, null, true);
   }
@@ -81,14 +86,12 @@ const CheckoutPage = observer(() => {
     (user.isAuth && !_.isEqual(user.user, {})) && _.isEqual(user.cart, {})
   ) || !Object.keys(user.cartSelectedAdditionalServices)?.length || !deviceStore.hasTriedToFetchSales;
 
-
-  // using isAlreadySubmittingRef and a small delay to make not possible to submit the same order a couple times in a row 
-  const debouncedSubmitCallback = useLodashDebounce(submitCallback, 500);
-
-  async function submitCallback(value) {
+  const submitCallback = useCallback(async value => {
     try {
-      if (isAlreadySubmittingRef.current) { isAlreadySubmittingRef.current = false; return };
+      if (isAlreadySubmittingRef.current) return;
       isAlreadySubmittingRef.current = true;
+
+      setIsSubmitting(true);
 
       for (let cartCombo of user.cartDeviceCombinations) {
         const totalStockToUse = cartCombo.device.isPreOrder
@@ -130,6 +133,17 @@ const CheckoutPage = observer(() => {
           "selected-additional-services": {}
         };
 
+        const orderDevices = order?.value?.map(orderCombo => {
+          return orderCombo?.device;
+        }) || [];
+
+        let orderAdditionalServices = [];
+
+        for (let deviceItem of orderDevices) {
+          const addServiceDevices = await getAddServicesDataOfDevice(deviceItem);
+          orderAdditionalServices.push(addServiceDevices);
+        }
+        
         if (user.isAuth && (user.user?.id !== null && user.user?.id !== undefined)) {
           orderResult.userId = user.user.id;
         } else {
@@ -146,11 +160,15 @@ const CheckoutPage = observer(() => {
         let additionalServicesPrice = 0;
 
         for (let cartCombo of order.value) {
+          // if dev combo is deleted we can still show the order properly to user 
+          const devComboOfCartCombo = await getDeviceCombination(cartCombo["device-combinationId"]);
+
           const orderDeviceCombo = {
             "id": v4(),
             "orderId": orderResult.id,
             "deviceId": cartCombo.deviceId,
             "device-combinationId": cartCombo["device-combinationId"],
+            "device-combination": devComboOfCartCombo,
             "amount": cartCombo.amount,
             "isPreOrder": cartCombo.device.isPreOrder
           };
@@ -166,7 +184,13 @@ const CheckoutPage = observer(() => {
           }
 
           orderDeviceCombinationsResult.push(orderDeviceCombo);
-          saleDevices.push(await getOneDeviceSaleDevices(cartCombo.device.id));
+
+          try {
+            const orderSaleDevices = await getOneDeviceSaleDevices(cartCombo.device.id, true);
+            if (orderSaleDevices?.length) saleDevices.push(orderSaleDevices);
+          } catch {
+            // do nothing (there's no sales for a device)
+          }
         }
 
         const { deviceAmount, devicePrice } = CartComboActions.getDeviceAmountAndTotalPrice(
@@ -231,13 +255,15 @@ const CheckoutPage = observer(() => {
         orderResult["order-courier-deliveryId"] = orderCourierDeliveryResult?.id || null;
 
         orderResult.saleDevices = saleDevices;
+        // if one of add services is deleted, we would still show them to user without any struggles 
+        orderResult["additional-services"] = orderAdditionalServices;
 
         const result = {
           order: orderResult,
           receivent: receiventResult,
           orderCourierDelivery: orderCourierDeliveryResult,
           orderDeviceCombinations: orderDeviceCombinationsResult,
-          orderSelectedAdditionalServices: orderSelectedAdditionalServicesResult
+          orderSelectedAdditionalServices: orderSelectedAdditionalServicesResult,
         };
 
         ordersToPost.push(result);
@@ -253,8 +279,7 @@ const CheckoutPage = observer(() => {
           await createOrderDeviceCombination(combo);
 
           if (!combo.isPreOrder) {
-            const deviceCombination = await getDeviceCombination(combo["device-combinationId"]);
-            const stock = deviceCombination.stock;
+            const stock = combo["device-combination"].stock;
 
             const newTotalStock = (stock.totalStock - combo.amount) || 0;
             let stockStatus;
@@ -288,11 +313,7 @@ const CheckoutPage = observer(() => {
           );
 
           for (let cartCombo of user.cartDeviceCombinations) {
-            try {
-              await deleteCartDeviceCombination(cartCombo.id);
-            } catch (e) {
-              if (e.response.status !== 500) console.log(e.message);
-            }
+            await deleteFetchWithTryCatch(async () => await deleteCartDeviceCombination(cartCombo.id), false);
           }
         } else {
           const newCartSelectedAdditionalServices = {
@@ -311,12 +332,20 @@ const CheckoutPage = observer(() => {
         console.log(e.message);
       }
 
+      // updating user orders in the user store if (he / she) is auth and the orders
+      // have already been fetched earlier
+      if (user.isAuth && fetchRefStore.hasAlreadyFetchedUserOrders) {
+        // (possible error in the fetching is handled inside try ... catch block in the definition of it,
+        // so it won't prevent navigation to the main page if an error occurs)
+        await userOrdersFetching();
+      }
+
       navigate(ROOT_ROUTE);
     } catch (e) {
       console.log(e.message);
 
       const errorModalInfoChildren = (
-        <p className="checkout-page-error-modal">
+        <p className="error-modal-p">
           Submitting the form leaded to the error. Try a bit later
         </p>
       );
@@ -325,14 +354,24 @@ const CheckoutPage = observer(() => {
       setErrorModalVisibility(true, app);
     } finally {
       isAlreadySubmittingRef.current = false;
+      setIsSubmitting(false);
     }
-  }
+  }, [
+    app, deviceStore.hasTriedToFetchSales, deviceStore.saleTypeNames, deviceStore.sales,
+    fetching, navigate, orders, senderPhoneInputValue, user.cart?.id, user.cartDeviceCombinations,
+    user.cartSelectedAdditionalServices, user.isAuth, user.user?.id, userOrdersFetching,
+    fetchRefStore.hasAlreadyFetchedUserOrders
+  ]);
+
+  // using isAlreadySubmittingRef and a small delay to make not possible to submit the same order a couple times in a row 
+  const throttledSubmitCallback = useLodashThrottle(submitCallback, 500, { "trailing": false });
 
   if (isLoadingContent) return <div />;
   if (!user.cartDeviceCombinations?.length) {
     // using timeout to prevent this error to appear:
     // https://stackoverflow.com/questions/62336340/cannot-update-a-component-while-rendering-a-different-component-warning
     setTimeout(() => navigate(ROOT_ROUTE, { replace: true }, 0));
+    return <div />;
   };
 
   function checkInputsValidAndHandleInvalidInputFocus(isErrorHandler, errorsFromHandler = null) {
@@ -391,16 +430,7 @@ const CheckoutPage = observer(() => {
   async function onSubmit(value) {
     if (!checkInputsValidAndHandleInvalidInputFocus(false)) return;
 
-    debouncedSubmitCallback(value);
-  }
-
-  // disabling enter key in the form
-  function onFormKeyDown(e) {
-    if (e.key !== "Enter" || e.target.tagName === "TEXTAREA" || e.target.tagName === "BUTTON") {
-      return;
-    }
-
-    e.preventDefault()
+    throttledSubmitCallback(value);
   }
 
   return (
@@ -413,7 +443,6 @@ const CheckoutPage = observer(() => {
           onSubmit={handleSubmit(
             onSubmit, (errors) => checkInputsValidAndHandleInvalidInputFocus(true, errors))
           }
-          onKeyDown={onFormKeyDown}
         >
           <CheckoutPageMainContent
             register={register}
@@ -429,7 +458,7 @@ const CheckoutPage = observer(() => {
             senderPhoneNumberInputRef={senderPhoneNumberInputRef}
             cartDataFetching={getCartData}
           />
-          <CheckoutPageAside />
+          <CheckoutPageAside isSubmitting={isSubmitting} />
         </form>
       </div>
       {/* <DevTool control={control} /> */}

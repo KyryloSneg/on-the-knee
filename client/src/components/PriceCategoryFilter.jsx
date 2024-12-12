@@ -34,9 +34,11 @@ const PriceCategoryFilter = observer(() => {
     if (currentPrice === `${minPriceValue}-${maxPriceValue}`
       || (minPriceValue === deviceStore.initialMinPrice && maxPriceValue === deviceStore.initialMaxPrice && !currentPrice)) return;
 
-    const nextUrl = URLActions.setNewParam("price", `${minPriceValue}-${maxPriceValue}`);
+    let nextUrl = URLActions.setNewParam("price", `${minPriceValue}-${maxPriceValue}`);
+    nextUrl = URLActions.getURLWithResettedPageRelatedParams(nextUrl);
+    
     const basename = process.env.REACT_APP_CLIENT_URL;
-    navigate(nextUrl.replaceAll(basename, ""));
+    navigate(nextUrl.replaceAll(basename, ""), { preventScrollReset: true });
   }
 
   return (

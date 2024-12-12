@@ -5,6 +5,7 @@ import { Context } from "../Context";
 import { deleteViewedDevice, getOneViewedDevicesListDevs } from "../http/ViewedDevicesAPI";
 import Loader from "./UI/loader/Loader";
 import trashCanIcon from "../assets/delete_24x24_434343.svg";
+import deleteFetchWithTryCatch from "utils/deleteFetchWithTryCatch";
 
 const ViewedDeviceHistoryDeletionBtn = observer(({ deviceId, deviceCombinationId }) => {
   const { user } = useContext(Context);
@@ -27,13 +28,7 @@ const ViewedDeviceHistoryDeletionBtn = observer(({ deviceId, deviceCombinationId
         user.viewedDevices?.find(viewedDev => viewedDev["device-combinationId"] === deviceCombinationId);
 
       if (existingViewedDevice) {
-        try {
-          await deleteViewedDevice(existingViewedDevice.id);
-        } catch (e) {
-          if (e.response.status !== 500) {
-            throw e
-          }
-        }
+        await deleteFetchWithTryCatch(async () => await deleteViewedDevice(existingViewedDevice.id));
       }
 
       const updatedViewedDevices = await getOneViewedDevicesListDevs(user.viewedDevicesList?.id);

@@ -1,6 +1,6 @@
 import "./styles/ReportOrderProblemModalContent.css";
 import { useForm } from "react-hook-form";
-import { REQUIRED_BASE_OPTIONS } from "../utils/inputOptionsConsts";
+import { REQUIRED_TEXTAREA_OPTIONS } from "../utils/inputOptionsConsts";
 import UIButton from "./UI/uiButton/UIButton";
 import FilePickerSection from "./UI/filePicker/FilePickerSection";
 import { useContext, useState } from "react";
@@ -10,6 +10,7 @@ import { createOrderProblem, getOrderProblemByUserAndOrderId } from "../http/Ord
 import { Context } from "../Context";
 import { observer } from "mobx-react-lite";
 import setErrorModalVisibility from "../utils/setErrorModalVisibility";
+import ReactHookFormTextarea from "./UI/reactHookFormTextarea/ReactHookFormTextarea";
 
 const ReportOrderProblemModalContent = observer(({ closeModal }) => {
   const { app, user } = useContext(Context);
@@ -30,7 +31,7 @@ const ReportOrderProblemModalContent = observer(({ closeModal }) => {
 
       if (Array.isArray(existingOrderProblem) ? existingOrderProblem.length > 0 : existingOrderProblem) {
         const errorModalInfoChildren = (
-          <p className="report-order-problem-submit-error-modal">
+          <p className="error-modal-p">
             You have already sent the problem. Wait for the response.
           </p>
         );
@@ -70,7 +71,7 @@ const ReportOrderProblemModalContent = observer(({ closeModal }) => {
     } catch (e) {
       console.log(e.message);
       const errorModalInfoChildren = (
-        <p className="report-order-problem-submit-error-modal">
+        <p className="error-modal-p">
           Something has gone wrong while sending the problem. Try a bit later.
         </p>
       );
@@ -83,6 +84,9 @@ const ReportOrderProblemModalContent = observer(({ closeModal }) => {
     }
   }
 
+  const problemTextareaName = "problem";
+  const problemRegisterResult = register(problemTextareaName, REQUIRED_TEXTAREA_OPTIONS);
+
   const areErrors = !!Object.keys(errors).length;
 
   return (
@@ -91,28 +95,12 @@ const ReportOrderProblemModalContent = observer(({ closeModal }) => {
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="report-order-problem-modal-content-inputs">
-        <div>
-          <label>
-            Problem
-            <textarea
-              className={errors?.problem ? "invalid" : ""}
-              {...register("problem", {
-                ...REQUIRED_BASE_OPTIONS,
-                validate: {
-                  ...REQUIRED_BASE_OPTIONS.validate,
-                  isNotTooShort: (
-                    value => value.trim().length >= 3 || "This field must contain more than or equal to 3 characters"
-                  )
-                }
-              })}
-            />
-          </label>
-          {errors?.problem &&
-            <p className="report-order-problem-error-msg" aria-live="polite">
-              {errors?.problem?.message || "Error!"}
-            </p>
-          }
-        </div>
+        <ReactHookFormTextarea 
+          labelText="Problem"
+          textareaName={problemTextareaName}
+          errors={errors}
+          registerFnResult={problemRegisterResult}
+        />
         <FilePickerSection files={files} setFiles={setFiles} />
       </div>
       <div className="report-order-problem-modal-btn-group">

@@ -4,7 +4,7 @@ import fileIcon from "../../../assets/file_24x24_434343.svg";
 import trashCanIcon from "../../../assets/delete_24x24_434343.svg";
 import refreshIcon from "../../../assets/refresh_24x24_434343.svg";
 
-const AddedFile = ({ file, filesArray, setFiles, isImage, isDisabled }) => {
+const AddedFile = ({ file, filesArray, setFiles, isImage, isDisabled, setIsTooManyFilesError = null }) => {
   const fileIndex = filesArray.indexOf(file);
 
   function deleteFile() {
@@ -12,6 +12,8 @@ const AddedFile = ({ file, filesArray, setFiles, isImage, isDisabled }) => {
 
     let nextFiles = filesArray.filter(fileItem => fileItem !== file);
     setFiles(nextFiles);
+
+    setIsTooManyFilesError?.(false);
   }
 
   function rotateFile() {
@@ -33,7 +35,15 @@ const AddedFile = ({ file, filesArray, setFiles, isImage, isDisabled }) => {
   }
 
   const fileObj = isImage ? file.fileObj : file;
-  const src = isImage ? URL.createObjectURL(fileObj) : fileIcon;
+
+  let src = "#";
+  try {
+    // fileObj could be base64 format file sometimes
+    // (for example, when using file picker in the editing user comment)
+    src = isImage ? URL.createObjectURL(fileObj) : fileIcon;
+  } catch (e) {
+    src = isImage ? fileObj : fileIcon;
+  }
 
   return (
     <div className="added-file">

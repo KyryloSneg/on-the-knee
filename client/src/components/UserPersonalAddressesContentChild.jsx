@@ -63,7 +63,7 @@ const UserPersonalAddressesContentChild = observer(({ id }) => {
 
   function openErrorModal() {
     const errorModalInfoChildren = (
-      <p className="changing-personal-data-error-modal">
+      <p className="error-modal-p">
         Unfortunately, changing phone number or email has failed. Try a bit later
       </p>
     );
@@ -99,7 +99,7 @@ const UserPersonalAddressesContentChild = observer(({ id }) => {
       if (!callbackPossibleError?.response && callbackPossibleError?.code === AxiosError.ERR_NETWORK) {
         isToSetEmailsToConfirmOnSuccess = false;
         openErrorModal();
-      } else {
+      } else if (!callbackPossibleError) {
         setIsEditing(false);
       }
 

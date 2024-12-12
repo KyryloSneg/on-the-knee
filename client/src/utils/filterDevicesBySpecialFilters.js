@@ -1,3 +1,4 @@
+import DeviceComboActions from "./DeviceComboActions";
 import filterDeviceCombosWithFilters from "./filterDeviceCombosWithFilters";
 import { getDiscountedPriceOrDefaultOne } from "./getDiscountedPrice";
 
@@ -58,4 +59,50 @@ export function filterDevicesByBrands(devices, brands, usedFilters) {
   });
 
   return filteredDevices;
+}
+
+export function filterDevicesBySpecialFilters(
+  devices, stocks = null, sellers = null, brands = null, sales = null, 
+  saleTypeNames = null, minQueryPrice = null, maxQueryPrice = null, usedFilters = null
+) {
+  const toFilterByPrice = minQueryPrice && maxQueryPrice;
+  const toFilterByStock = !!usedFilters["stock"]?.length;
+  const toFilterBySellers = !!usedFilters["seller"]?.length;
+  const toFilterByBrand = !!usedFilters["brand"]?.length;
+
+  // TODO: add there other "special" filters (that requires separate implementation) later on
+  const isSpecialFilters = toFilterByPrice || toFilterByStock || toFilterBySellers || toFilterByBrand;
+
+  if (toFilterByStock) {
+    devices = filterDevicesByStock(devices, stocks, usedFilters);
+  }
+
+  if (toFilterBySellers) {
+    devices = filterDevicesBySellers(devices, sellers, usedFilters);
+  }
+
+  if (toFilterByBrand) {
+    devices = filterDevicesByBrands(devices, brands, usedFilters);
+  }
+
+  let minPrice;
+  let maxPrice;
+
+  if (sales && saleTypeNames) {
+    // finding min / max prices before filtering by device's cost
+    const priceInfo = DeviceComboActions.getDeviceMinMaxPrices(
+      devices, sales, saleTypeNames, true
+    );
+
+    minPrice = priceInfo.minPrice;
+    maxPrice = priceInfo.maxPrice;
+  }
+  
+  if (toFilterByPrice) {
+    devices = filterDevicesByPrice(
+      devices, sales, saleTypeNames, true, minQueryPrice, maxQueryPrice
+    );
+  }
+
+  return { devices, minPrice, maxPrice, isSpecialFilters };
 }

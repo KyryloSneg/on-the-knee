@@ -18,7 +18,12 @@ const RemainASellerOrDeviceFeedbackModal = observer(() => {
     <ModalWindow
       isVisible={app.isVisibleRemainSellerDeviceFeedbackModal}
       setIsVisible={setIsRemainSellerDevFeedbackModalVisible}
-      children={<RemainSellerDevFeedback type="modal" />}
+      children={
+        <RemainSellerDevFeedback 
+          type="modal" 
+          closeModal={() => setIsRemainSellerDevFeedbackModalVisible(false)}
+        />
+      }
       headerText="Remain a feedback"
       id="remain-seller-dev-feedback-modal"
       triggerElemRef={app.remainSellerDeviceFeedbackBtnRef}

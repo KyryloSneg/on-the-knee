@@ -1,23 +1,23 @@
+import "./styles/DeviceSection.css";
 import { useContext, useEffect, useRef } from "react";
 import { Context } from "../Context";
 import { observer } from "mobx-react-lite";
 import getTotalPages from "../utils/getTotalPages";
-import DeviceList from "./DeviceList";
-import "./styles/DeviceSection.css";
 import ButtonPagination from "./UI/pagination/ButtonPagination";
 import PagesPagination from "./UI/pagination/PagesPagination";
 import isCanLoadMoreContent from "../utils/isCanLoadMoreContent";
 import useGettingPaginationParams from "../hooks/useGettingPaginationParams";
 import Loader from "./UI/loader/Loader";
+import DevicePageList from "./DevicePageList";
 
-const DeviceSection = observer(({ isLoading, retryDevicesFetch, error }) => {
+const DeviceSection = observer(({ isLoading, retryDevicesFetch, error, isInitialRenderRef }) => {
   const { app, deviceStore } = useContext(Context);
   const deviceSectionRef = useRef(null);
   const totalPages = getTotalPages(deviceStore.totalCount, deviceStore.limit);
   const canLoadMore = isCanLoadMoreContent(
     deviceStore.totalCount,
     deviceStore.devices.length,
-    (deviceStore.page - 1) * deviceStore._limit
+    (deviceStore.page - 1) * deviceStore.limit
   );
 
   useEffect(() => {
@@ -32,16 +32,14 @@ const DeviceSection = observer(({ isLoading, retryDevicesFetch, error }) => {
 
   return (
     <main className="device-section-main" ref={deviceSectionRef}>
-      {/* <DevicePageList /> */}
       {deviceStore.devices.length
-        ? <DeviceList devices={deviceStore.devices} />
-        : (!error && !!Object.keys(deviceStore.usedFilters).length && !isLoading) && (
+        ? <DevicePageList />
+        : (!isInitialRenderRef.current && !error && !!Object.keys(deviceStore.usedFilters).length && !isLoading) && (
           <p className="no-devices-message">
             We haven't found devices with such filters {":("}
           </p>
         )
       }
-
       {/* spinner on "retry" fetch */}
       {(error && isLoading) &&
         <Loader className="error-retry-spinner" />
@@ -66,19 +64,12 @@ const DeviceSection = observer(({ isLoading, retryDevicesFetch, error }) => {
           isLoading={isLoading}
         />
       }
-      
-      {/* i don't really remember what is this */}
-      {/* {(!canLoadMore && isLoading) &&
-        <div className="visually-hidden" tabIndex={0} />
-      } */}
-
       {/* if devices are fetched and we've got totalCount (usually these conditions returns true at the same moment) */}
       {(!!(+deviceStore.totalCount) && !!deviceStore.devices.length) &&
         <PagesPagination
           totalPages={totalPages}
           currentPage={deviceStore.page}
           pagesToFetch={deviceStore.pagesToFetch}
-          scrollElem={deviceSectionRef.current}
           ariaLabel="Device pages"
         />
       }

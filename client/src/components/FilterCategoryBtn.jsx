@@ -1,6 +1,6 @@
-import dropdownArrowIcon from "../assets/expand_more.svg";
-import StringActions from "../utils/StringActions";
 import "./styles/FilterCategoryBtn.css";
+import StringActions from "../utils/StringActions";
+import DropdownArrow from "./UI/dropdownArrow/DropdownArrow";
 
 const FilterCategoryBtn = ({ filter, visible, setVisible }) => {
   const filterName = StringActions.capitalize(StringActions.splitByUpperCaseLetters(filter));
@@ -13,9 +13,10 @@ const FilterCategoryBtn = ({ filter, visible, setVisible }) => {
   return (
     <button 
       onClick={onClick}
-      data-testid={`CategoryBlockBtn: ${filter}`}>
+      data-testid={`CategoryBlockBtn: ${filter}`}
+    >
       <p>{filterName}</p>
-      <img src={dropdownArrowIcon} alt="" className={visible ? "rotated" : ""} draggable="false" />
+      <DropdownArrow isExpanded={visible} />
     </button>
   );
 }

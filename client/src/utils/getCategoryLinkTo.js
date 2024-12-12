@@ -11,7 +11,7 @@ function getCategoryLinkTo(category, parentCategoryId = null, categories = null)
     let relativeURL = "";
     // if we want to just set query params without finding parent category
     if (category.queryParams && !category.isVariation) {
-      relativeURL = CATEGORY_CATALOG_ROUTE + `${category.id}-${category.slug}`;
+      relativeURL = CATEGORY_CATALOG_ROUTE + `${category.id}--${category.slug}`;
     } else if (category.isVariation && parentCategoryId && categories) {
       const parentCategory = categories.find(cat => cat.id === parentCategoryId);
       // when there's no more parentCategoryId then start ending the recursion below
@@ -31,7 +31,7 @@ function getCategoryLinkTo(category, parentCategoryId = null, categories = null)
 
     to = encodeUrl(newUrl.replace(basename, ""));
   } else {
-    to = CATEGORY_CATALOG_ROUTE + `${category.id}-${category.slug}?page=1&pagesToFetch=1`;
+    to = CATEGORY_CATALOG_ROUTE + `${category.id}--${category.slug}?page=1&pagesToFetch=1`;
   }
   
   return to;

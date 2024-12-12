@@ -12,7 +12,7 @@ function useDeletingRedundantCategoryId(type) {
         const nextUrl = URLActions.deleteParamValue("categoryId", categoryIdParam);
         const basename = process.env.REACT_APP_CLIENT_URL;
 
-        navigate(nextUrl.replaceAll(basename, ""));
+        navigate(nextUrl.replaceAll(basename, ""), { preventScrollReset: true });
       }
     }
   }, [type, navigate]);
