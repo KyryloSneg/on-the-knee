@@ -268,6 +268,8 @@ class UserService {
         // we can find the user device (we were doing this with just ips but they're 
         // not the best way to do this because of existing of dynamic ones, system-wide ips etc.,
         // but when we combine this method with the check of refreshToken, it becomes very useful)
+
+        // maybe in the future we must add more device info in user devices 
         let userDevice = null;
         if (tokenFromDb) {
             userDevice = await UserDeviceModel.findById(tokenFromDb.userDevice);
