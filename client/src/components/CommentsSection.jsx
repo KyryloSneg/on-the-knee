@@ -1,5 +1,5 @@
 import "./styles/CommentsSection.css";
-import { useContext, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Context } from "../Context";
 import { observer } from "mobx-react-lite";
 import CommentsList from "./CommentsList";
@@ -11,8 +11,17 @@ import UIButton from "./UI/uiButton/UIButton";
 
 const POSSIBLE_TYPES = ["deviceFeedbacks", "deviceQuestions", "sellerFeedbacks"];
 const CommentsSection = observer(({ type, comments, isFullVersion = true, device = null, seller = null }) => {
-  const { app, deviceStore } = useContext(Context);
+  const { app, deviceStore, user } = useContext(Context);
   const createCommentBtnRef = useRef(null);
+  const [isToShowSellerCantRemainComment, setIsToShowSellerCantRemainComment] = useState(false);
+
+  // we can't determine is user the seller of THIS device (or THIS seller) 
+  // because sellers are not implemented on the real server
+  const isUserASellerOrManager = user.user?.roles?.includes("SELLER") || user.user?.roles?.includes("SELLER-MANAGER");
+
+  useEffect(() => {
+    if (!isUserASellerOrManager) setIsToShowSellerCantRemainComment(false);
+  }, [isUserASellerOrManager]);
 
   if (!POSSIBLE_TYPES.includes(type)) throw Error("type of Comments Section is not defined or incorrect");
   if (
@@ -22,6 +31,11 @@ const CommentsSection = observer(({ type, comments, isFullVersion = true, device
   ) return <div />;
 
   function createComment() {
+    if (isUserASellerOrManager) {
+      setIsToShowSellerCantRemainComment(true);
+      return;
+    }
+
     deviceStore.setSelectedDeviceId(device.id);
 
     if (type === "deviceFeedbacks") {
@@ -96,8 +110,7 @@ const CommentsSection = observer(({ type, comments, isFullVersion = true, device
           <StarRating
             readOnlyValue={device?.rating || seller?.rating}
             id={`comments-section-${type}-comments-section-rating`}
-            width={20}
-            height={20}
+            size={20}
           />
           <p>{commentsAmount} {commentWord}</p>
         </div>
@@ -112,6 +125,11 @@ const CommentsSection = observer(({ type, comments, isFullVersion = true, device
             onClick={createComment} 
             ref={createCommentBtnRef}
           />
+          {isToShowSellerCantRemainComment && (
+            <p className="seller-cant-remain-comment-error-msg">
+              A seller or a seller manager can't remain a {singularCommentWord}
+            </p>
+          )}
         </>
       }
       <CommentsList type={type} comments={comments} singularCommentWord={singularCommentWord} />

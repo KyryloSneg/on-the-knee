@@ -23,24 +23,26 @@ module.exports = (questions, answers, deviceId) => {
     }
 
     const question = {
-      "id": questions.length + 1,
+      "id": faker.string.uuid(),
       "deviceId": deviceId,
       "userId": userId,
       "isAnonymously": isAnonymously,
       "images": images,
       "message": faker.lorem.text(),
       "date": faker.date.recent(),
+      "isEdited": false,
     }
 
     for (let j = 0; j < faker.number.int({ min: 2, max: 5 }); j++) {
       const userId = MOCK_USER._id;
 
       const answer = {
-        "id": answers.length + 1,
+        "id": faker.string.uuid(),
         "device-questionId": question.id,
         "userId": userId,
         "message": faker.lorem.text(),
         "date": faker.date.recent(),
+        "isEdited": false,
       }
 
       answers.push(answer);

@@ -15,6 +15,7 @@ import useGettingSortedUserPageOrders from "../hooks/useGettingSortedUserPageOrd
 import _ from "lodash";
 import useOrdersListSellersFetching from "../hooks/useOrdersListSellersFetching";
 import useUserDevicesFeedbacksFetching from "hooks/useUserDevicesFeedbacksFetching";
+import getUserOrderDeviceCombinations from "utils/getUserOrderDeviceCombinations";
 
 // icon from the assets doesn't scale properly with changing width / height through css
 const accountIcon = (
@@ -47,45 +48,62 @@ const feedbacksIcon = (
 
 const POSSIBLE_TYPES = ["personal-data", "orders", "desired-list", "viewed-devices", "devicesFeedbacks", "sellersFeedbacks"];
 const UserPage = observer(({ type }) => {
-  const { user, deviceStore } = useContext(Context);
+  const { user, fetchRefStore } = useContext(Context);
   const windowWidth = useWindowWidth();
-  const [orders, setOrders] = useState([]);
-  const [ordersSellerFeedbacksObjArray, setOrdersSellerFeedbacksObjArray] = useState([]);
 
   // using state instead of a ref, because sometimes 
   // the user orders page starts infinitely loading, and with the setter 
   // we re-render the component
   const [isInitialRender, setIsInitialRender] = useState(true);
-  const areOrdersLoading = useGettingOneUserOrders(user.user?.id, setOrders);
-  const [, areOrdersListSellersLoading] = useOrdersListSellersFetching(orders, setOrdersSellerFeedbacksObjArray, deviceStore);
   
-  const orderDeviceCombinations = useMemo(() => {
-    let result = [];
+  const hasUserChangedAcc = fetchRefStore.userPagePrevUserIdRef !== user.user?.id
+  const haveOrdersChanged = !_.isEqual(fetchRefStore.userPagePrevOrdersRef, user.orders);
+  
+  const isToFetchUserOrders = (
+    !fetchRefStore.hasAlreadyFetchedUserOrders
+    || hasUserChangedAcc
+  );
 
-    for (let order of orders) {
-      const oneOrderDevCombos = order?.["order-device-combinations"]?.map(orderCombo => {
-        return orderCombo?.["device-combination"];
-      }) || [];
+  const [, areOrdersLoading] = useGettingOneUserOrders(user.user?.id, null, true, isToFetchUserOrders);
+  
+  const isToFetchOrdersListSellers = (
+    !fetchRefStore.hasAlreadyFetchedOrdersListSellers
+    || hasUserChangedAcc
+    || haveOrdersChanged
+  );
 
-      if (Array.isArray(oneOrderDevCombos)) result = result.concat(oneOrderDevCombos);
-    };
+  const [, areOrdersListSellersLoading] = useOrdersListSellersFetching(
+    user.orders, null, true, isToFetchOrdersListSellers
+  );
+  
+  const orderDeviceCombinations = useMemo(() => getUserOrderDeviceCombinations(user.orders), [user.orders]);
 
-    return result;
-  }, [orders]);
+  const isToFetchUserDevsFeedbacks = (
+    !fetchRefStore.hasAlreadyFetchedUserDevsFeedbacks
+    || hasUserChangedAcc
+    || haveOrdersChanged
+  );
 
-  useUserDevicesFeedbacksFetching(orderDeviceCombinations, null, deviceStore);
+  useUserDevicesFeedbacksFetching(
+    orderDeviceCombinations, null, true, true, true, isToFetchUserDevsFeedbacks
+  );
+
   const userDeviceFeedbacksObjArray = useMemo(() => {
     let result = [];
 
-    if (Array.isArray(deviceStore.devicesFeedbacks)) {
+    if (Array.isArray(user.userDevicesFeedbacks)) {
       for (let combination of orderDeviceCombinations) {
-        const correspondingUserFeedbacks = deviceStore.devicesFeedbacks.filter(feedback => {
+        const correspondingUserFeedbacks = user.userDevicesFeedbacks.filter(feedback => {
           return feedback.deviceId === combination.deviceId
         });
+
+        const sortedByDateUserFeedbacks = [...correspondingUserFeedbacks].sort(
+          (a, b) => b.date.localeCompare(a.date)
+        );
         
         const userFeedbackObj = {
           deviceCombination: combination,
-          feedbacks: correspondingUserFeedbacks 
+          feedbacks: sortedByDateUserFeedbacks 
         };
 
         result.push(userFeedbackObj);
@@ -93,16 +111,24 @@ const UserPage = observer(({ type }) => {
     };
 
     return result;
-  }, [deviceStore.devicesFeedbacks, orderDeviceCombinations]);
+  }, [user.userDevicesFeedbacks, orderDeviceCombinations]);
 
   const [desiredSelectedOptionId, setDesiredSelectedOptionId] = useState(DESIRED_LIST_PAGE_OPTIONS[0].id);
+
+  useEffect(() => {
+    fetchRefStore.setUserPagePrevOrdersRef(user.orders);
+  }, [user.orders, fetchRefStore]);
+  
+  useEffect(() => {
+    fetchRefStore.setUserPagePrevUserIdRef(user.user?.id);
+  }, [user.user?.id, fetchRefStore]);
 
   useEffect(() => {
     setIsInitialRender(false);
   }, []);
 
   // from new orders to old ones
-  let sortedByDateOrders = _.cloneDeep(orders);
+  let sortedByDateOrders = _.cloneDeep(user.orders);
   sortedByDateOrders.sort((a, b) => b.date.localeCompare(a.date));
   const sortedByQueryOrders = useGettingSortedUserPageOrders(sortedByDateOrders);
 
@@ -116,7 +142,6 @@ const UserPage = observer(({ type }) => {
         <UserOrdersPage 
           orders={sortedByQueryOrders} 
           initialOrders={sortedByDateOrders} 
-          ordersSellerFeedbacksObjArray={ordersSellerFeedbacksObjArray}
           userDeviceFeedbacksObjArray={userDeviceFeedbacksObjArray}
           isLoading={areOrdersLoading} 
           isInitialRender={isInitialRender} 
@@ -130,12 +155,12 @@ const UserPage = observer(({ type }) => {
       return (
         <UserFeedbacksPage 
           type={type}
-          orders={orders}
-          ordersSellerFeedbacksObjArray={ordersSellerFeedbacksObjArray}
+          orders={user.orders}
           isInitialRender={isInitialRender} 
           areOrdersLoading={areOrdersLoading} 
           areOrdersListSellersLoading={areOrdersListSellersLoading}
           userDeviceFeedbacksObjArray={userDeviceFeedbacksObjArray}
+          orderDeviceCombinations={orderDeviceCombinations}
         />
       );
     };

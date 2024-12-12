@@ -5,7 +5,7 @@ import { v4 } from "uuid";
 import { Link } from "react-router-dom";
 import UIDetails from "./UI/uiDetails/UIDetails";
 
-const RemainSellerFeedbackSectionItem = ({ sellerFeedbacksObj }) => {
+const RemainSellerFeedbackSectionItem = ({ type, sellerFeedbacksObj }) => {
   const sellerIdSlug = `${sellerFeedbacksObj.seller.id}--${sellerFeedbacksObj.seller.slug}`;
   const sellerRoute = SELLER_ROUTE + sellerIdSlug;
 
@@ -30,6 +30,9 @@ const RemainSellerFeedbackSectionItem = ({ sellerFeedbacksObj }) => {
             type="sellerFeedbacks" 
             comments={sellerFeedbacksObj.feedbacks} 
             singularCommentWord="feedback" 
+            isInModal={type === "modal"}
+            isInUserFeedbacksModal={type === "modal"}
+            areUserFeedbacks={type === "userFeedbacks"}
             id={commentsListId}
           />
         }
@@ -52,6 +55,6 @@ const RemainSellerFeedbackSectionItem = ({ sellerFeedbacksObj }) => {
       </UIButton>
     </section>
   );
-}
+};
 
 export default RemainSellerFeedbackSectionItem;

@@ -1,5 +1,5 @@
 import "./styles/CommentGalleryModal.css";
-import { useContext } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import { Context } from '../Context';
 import { observer } from "mobx-react-lite";
 import ModalWindow from "./UI/modalWindow/ModalWindow";
@@ -9,6 +9,8 @@ import setCommentGalleryModalVisibility from "../utils/setCommentGalleryModalVis
 const POSSIBLE_TYPES = ["deviceFeedbacks", "deviceQuestions", "sellerFeedbacks"];
 const CommentGalleryModal = observer(() => {
   const { app } = useContext(Context);
+  const prevBtnRef = useRef(app.lastWindowBtnRef);
+
   const type = app.commentGalleryModalType;
 
   if (!POSSIBLE_TYPES.includes(type)) throw Error("type of CommentGalleryModal is not defined or incorrect");
@@ -21,9 +23,26 @@ const CommentGalleryModal = observer(() => {
   }
 
   function setIsCommentGalleryVisible(isVisible, isToKeepDarkBg = false) {
-    setCommentGalleryModalVisibility(isVisible, app, isToKeepDarkBg);
+    if (
+      app.commentGalleryIsOpenedFromRemainFeedbackModal
+      && !isVisible && prevBtnRef.current
+    ) app.setLastWindowBtnRef(prevBtnRef.current);
+
+    setCommentGalleryModalVisibility(isVisible, app, isToKeepDarkBg, app.commentGalleryModalBtnRef);
   }
 
+  useEffect(() => {
+    return () => {
+      if (!app.isVisibleCommentGalleryModal) {
+        // resetting global states
+        app.setCommentModalGetCommentsQueryParamsStr("");
+        app.setCommentGalleryModalType("deviceFeedbacks");
+        app.setCommentGallerySelectedImageId(null);
+        app.setCommentGalleryIsOpenedFromRemainFeedbackModal(false);
+      }
+    }
+  }, [app]);
+  
   return (
     <ModalWindow
       isVisible={app.isVisibleCommentGalleryModal}
@@ -38,6 +57,7 @@ const CommentGalleryModal = observer(() => {
       headerText={`Photos of ${singularCommentWord}`}
       id="comment-gallery-modal"
       triggerElemRef={app.commentGalleryModalBtnRef}
+      isToFocusTriggerElem={!app.commentGalleryIsOpenedFromRemainFeedbackModal}
     />
   );
 });

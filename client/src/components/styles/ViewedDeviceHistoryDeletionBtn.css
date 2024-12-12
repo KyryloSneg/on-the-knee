@@ -18,6 +18,8 @@
 .viewed-device-history-deletion-btn > img {
   font-size: 1rem;
   color: #fff;
+  width: 24px;
+  height: 24px;
 }
 
 .main-device-item.out-of-stock .viewed-device-history-deletion-btn {

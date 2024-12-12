@@ -38,7 +38,7 @@ module.exports = (device, attributeValues, deviceCombinations, stocks, isPreOrde
         images.push(newImg);
       }
 
-      const id = deviceCombinations.length + 1;
+      const id = faker.string.uuid();
 
       const dollars = Number(faker.commerce.price({ min: 5, max: 4000 }).split(".")[0]);
       const cents = faker.number.int({ min: 0, max: 9 }) / 10;
@@ -48,7 +48,7 @@ module.exports = (device, attributeValues, deviceCombinations, stocks, isPreOrde
       const maxPreOrderAmount = isPreOrder ? faker.number.int({ min: 1, max: 50 }) : null;
 
       const deviceCombination = {
-        "id": deviceCombinations.length + 1,
+        "id": id,
         "combinationString": combo,
         "deviceId": deviceId,
         "sku": faker.string.alphanumeric({ length: { min: 8, max: 15 } }),
@@ -77,7 +77,7 @@ module.exports = (device, attributeValues, deviceCombinations, stocks, isPreOrde
       images.push(newImg);
     }
 
-    const id = deviceCombinations.length + 1;
+    const id = faker.string.uuid();
 
     const stock = createStock(device, id, stocks, isPreOrder);
     const maxPreOrderAmount = isPreOrder ? faker.number.int({ min: 1, max: 50 }) : null;

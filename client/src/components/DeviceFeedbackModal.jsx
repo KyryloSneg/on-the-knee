@@ -20,6 +20,8 @@ const DeviceFeedbackModal = observer(() => {
         <CommentModalContent 
           type="feedback" 
           closeModal={() => setIsDeviceFeedbackVisible(false)} 
+          isModalVisible={app.isVisibleDeviceFeedbackModal}
+          areUserFeedbacks={app.commentModalContentAreUserFeedbacks}
         />
       }
       headerText="Send feedback"

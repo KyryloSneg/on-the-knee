@@ -8,49 +8,17 @@
   background-color: #fff;
 }
 
-.write-seller-feedback-form label,
 .write-seller-feedback-error-msg,
 .write-seller-feedback-star-rating-wrap > div > p {
   font-size: 1.3rem;
 }
 
-.write-seller-feedback-form label,
-.write-seller-feedback-star-rating-wrap > div > p {
-  color: rgb(90, 90, 90);
-}
-
-.write-seller-feedback-form label {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.write-seller-feedback-form textarea {
-  resize: vertical;
-  box-sizing: border-box;
-  width: 100%;
-  height: 112px;
-  padding: 6px;
-  border: 1px solid rgb(130, 130, 130);
-  border-radius: 8px;
-  background-color: #e9e9e9;
-  font-size: 1.3rem;
-  font-family: 'Montserrat', sans-serif;
-  transition: border-color 0.2s, background-color 0.2s;
-  outline: none;
-}
-
-.write-seller-feedback-form textarea:focus-visible {
-  background-color: #fff;
-  border: 1px solid #c1c1c1;
-}
-
-.write-seller-feedback-form textarea.invalid {
-  border: 1px solid #e41515;
-}
-
 .write-seller-feedback-error-msg {
   color: #a10e0e;
+}
+
+.write-seller-feedback-star-rating-wrap > div > p {
+  color: rgb(90, 90, 90);
 }
 
 .write-seller-feedback-form-items {
@@ -59,12 +27,6 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-}
-
-.write-seller-feedback-form-items > div:not(.write-seller-feedback-star-rating-wrap) {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
 }
 
 .write-seller-feedback-star-rating-wrap {
@@ -83,11 +45,20 @@
   padding-left: 4px;
 }
 
-.write-seller-feedback-submit-btn {
+.write-seller-feedback-btn-group {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.write-seller-feedback-btn-group > button {
+  width: 100%;
+}
+
+/* default and the isLoading btn states have different widths and heights, fix it */
+.write-seller-feedback-submit-btn, .write-seller-feedback-deny-btn {
   width: max-content;
-  /* default and the isLoading btn states have different widths and heights, fix it */
-  min-width: 129px;
-  height: 35px;
+  height: 37px;
 }
 
 @media screen and (min-width: 280px) {
@@ -100,5 +71,20 @@
 
   .write-seller-feedback-star-rating-wrap > .write-seller-feedback-error-msg {
     padding-left: 0;
+  }
+}
+
+@media screen and (min-width: 320px) {
+  .write-seller-feedback-btn-group {
+    grid-template-columns: auto auto;
+    justify-content: start;
+  }
+
+  .write-seller-feedback-btn-group > button {
+    width: max-content;
+  }
+
+  .write-seller-feedback-submit-btn {
+    min-width: 129px;
   }
 }

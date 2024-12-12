@@ -6,20 +6,18 @@ import CommentsSection from "../components/CommentsSection";
 import DeviceSalesActions from "../utils/DeviceSalesActions";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Context } from "../Context";
-import useGettingSalesAndTypeNames from "../hooks/useGettingSalesAndTypeNames";
 import { observer } from "mobx-react-lite";
 import DeviceComboActions from "../utils/DeviceComboActions";
-import useGettingSellers from "../hooks/useGettingSellers";
-import useGettingAddServicesRelatedData from "../hooks/useGettingAddServicesRelatedData";
 import PurchaseDeviceFooter from "../components/PurchaseDeviceFooter";
 import useWindowWidth from "../hooks/useWindowWidth";
 import { WIDTH_TO_SHOW_PURCHASE_DEVICE_FOOTER } from "../utils/consts";
-import useGettingCartData from "../hooks/useGettingCartData";
 import useSynchronizingAdditionalServices from "../hooks/useSynchronizingAdditionalServices";
 import useChangingServerAddServicesOnChange from "../hooks/useChangingServerAddServicesOnChange";
-import useAddingViewedDeviceOnVisit from "../hooks/useAddingViewedDeviceOnVisit";
 
-const MainDevicePage = observer(({ device, combinationString, feedbacks, prevViewedDeviceComboIdRef }) => {
+const MainDevicePage = observer(({ 
+  device, combinationString, feedbacks, seller, additionalServicesObj, 
+  selectedCombination, cartDataFetching, isToRenderPage 
+}) => {
   const { deviceStore, user } = useContext(Context);
   const windowWidth = useWindowWidth();
 
@@ -27,19 +25,8 @@ const MainDevicePage = observer(({ device, combinationString, feedbacks, prevVie
   const observer = useRef(null);
   const rightDescRef = useRef(null);
 
-  const [sellers, setSellers] = useState([]);
-  const [additionalServicesObj, setAdditionalServicesObj] = useState([]);
   const [selectedAddServices, setSelectedAddServices] = useState([]);
   const [isRightDescScrolled, setIsRightDescScrolled] = useState(false);
-  // theoretically setting sales and sale type names would not lead to bugs in the catalog page
-  useGettingSalesAndTypeNames(deviceStore);
-  useGettingSellers(setSellers);
-  useGettingAddServicesRelatedData(device, setAdditionalServicesObj);
-
-  const fetching = useGettingCartData(user.cart?.id, null, true, true, true);
-  function cartDataFetching() {
-    fetching(user.cart?.id, null, true);
-  }
 
   // i think we can implement it without the observer but i already did it
   useEffect(() => {
@@ -73,24 +60,16 @@ const MainDevicePage = observer(({ device, combinationString, feedbacks, prevVie
 
   const devCombos = device?.["device-combinations"];
   const defaultCombo = devCombos?.find(combo => combo.default);
-  let selectedCombination;
-
-  if (devCombos?.length > 1) {
-    selectedCombination = devCombos?.find(combo => combo.combinationString === combinationString);
-  } else {
-    selectedCombination = devCombos?.[0];
-  }
 
   const combinationInCart = user.cartDeviceCombinations?.find(cartCombo => 
     cartCombo?.["device-combination"]?.id === selectedCombination?.id
   );
 
-  useAddingViewedDeviceOnVisit(device?.id, selectedCombination?.id, prevViewedDeviceComboIdRef)
   useSynchronizingAdditionalServices(setSelectedAddServices, combinationInCart?.id);
   useChangingServerAddServicesOnChange(selectedAddServices, combinationInCart?.id, cartDataFetching, isInitialRender);
 
-  if (!device || !deviceStore.hasTriedToFetchSales || !deviceStore.stocks.length || !sellers.length || !selectedCombination) {
-    return <div />
+  if (!isToRenderPage) {
+    return <div aria-hidden="true" />
   }
 
   let deviceSaleTypes = [];
@@ -143,7 +122,6 @@ const MainDevicePage = observer(({ device, combinationString, feedbacks, prevVie
   const selectedComboColorHrefObjects =
     DeviceComboActions.getComboColorHrefObjects(selectedComboColorHrefs, device, deviceStore.stocks);
 
-  const seller = sellers.find(sellerItem => sellerItem.id === device.sellerId);
   const price = selectedCombination.price;
   const { discountPercentage } =
     DeviceSalesActions.getSaleTypesAndDiscount(device, sales, deviceStore.saleTypeNames, deviceStore.hasTriedToFetchSales)

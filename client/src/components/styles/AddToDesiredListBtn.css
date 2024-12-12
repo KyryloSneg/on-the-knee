@@ -22,6 +22,8 @@
 .add-to-desired-list > img {
   font-size: 1rem;
   color: #fff;
+  width: 24px;
+  height: 24px;
 }
 
 .main-device-item.out-of-stock .add-to-desired-list {

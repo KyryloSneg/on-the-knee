@@ -1,9 +1,10 @@
 import "./styles/ErrorModal.css";
-import { useContext, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { Context } from "../Context";
 import ModalWindow from "./UI/modalWindow/ModalWindow";
 import { observer } from "mobx-react-lite";
 import setErrorModalVisibility from "../utils/setErrorModalVisibility";
+import { ERROR_MODAL_INITIAL_INFO } from "utils/consts";
 
 const ErrorModal = observer(() => {
   const { app } = useContext(Context);
@@ -19,11 +20,28 @@ const ErrorModal = observer(() => {
     className += ` ${app.errorModalInfo.className}`;
   }
 
+  useEffect(() => {
+    return () => {
+      if (!app.isVisibleErrorModal) {
+        // resetting states to the initial ones
+        app.setErrorModalInfo(ERROR_MODAL_INITIAL_INFO);
+        app.setErrorModalBtnRef(null);
+        app.setIsToFocusErrorModalPrevModalTriggerElem(true);
+      }
+    }
+  }, [app, app.isVisibleErrorModal]);
+  
+  const children = (
+    typeof app.errorModalInfo.children === "string"
+      ? <p className="error-modal-p">{app.errorModalInfo.children}</p>
+      : app.errorModalInfo.children
+  );
+
   return (
     <ModalWindow
       isVisible={app.isVisibleErrorModal}
       setIsVisible={setIsErrorModalVisible}
-      children={app.errorModalInfo.children}
+      children={children}
       headerText="Error has occured"
       propsClassName={className}
       id={app.errorModalInfo.id}

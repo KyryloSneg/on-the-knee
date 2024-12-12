@@ -16,7 +16,14 @@ const CartModalBtnGroup = observer(({ closeModal }) => {
 
   function onSubmitClick(e) {
     if (isBlockedSubmit) e.preventDefault();
-    else closeModal();
+    else {
+      closeModal();
+
+      // scrolling to the top of the checkout page
+      setTimeout(() => {
+        window.scroll(0, 0);
+      }, 0);
+    }
   }
 
   return (

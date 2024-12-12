@@ -181,4 +181,11 @@ export default class URLActions {
     return newUrl;
   }
 
+  static getURLWithResettedPageRelatedParams(href = window.location.href) {
+    let result = this.setNewParam("page", "1", href);
+    result = this.setNewParam("pagesToFetch", "1", result);
+
+    return result;
+  }
+
 }

@@ -8,6 +8,7 @@ import setAuthentificationModalVisibility from "../utils/setAuthentificationModa
 import { createDesiredListDevice, deleteDesiredListDevice, getOneDesiredListDevices } from "../http/DesiredListAPI";
 import { v4 } from "uuid";
 import Loader from "./UI/loader/Loader";
+import deleteFetchWithTryCatch from "utils/deleteFetchWithTryCatch";
 
 const AddToDesiredListBtn = observer(({ deviceId, deviceCombinationId }) => {
   const { app, user } = useContext(Context);
@@ -37,13 +38,7 @@ const AddToDesiredListBtn = observer(({ deviceId, deviceCombinationId }) => {
 
       // after the first async operation the BATCH STACK is empty and invokes a re-render
       if (existingDesiredListDev) {
-        try {
-          await deleteDesiredListDevice(existingDesiredListDev.id);
-        } catch (e) {
-          if (e.response.status !== 500) {
-            throw e
-          }
-        }
+        await deleteFetchWithTryCatch(async () => await deleteDesiredListDevice(existingDesiredListDev.id));
       } else {
         const desiredListCombo = {
           "id": v4(),

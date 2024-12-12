@@ -7,7 +7,7 @@ module.exports = (brandNames) => {
 
   for (let name of brandNames) {
     const brand = {
-      "id": brands.length + 1,
+      "id": faker.string.uuid(),
       "name": name,
       "slug": StringActions.nameToSlug(name),
       "logo": faker.image.url({ width: LOGO_WIDTH, height: LOGO_HEIGHT }),

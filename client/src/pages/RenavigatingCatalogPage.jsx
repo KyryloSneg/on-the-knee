@@ -16,8 +16,8 @@ const RenavigatingCatalogPage = observer(({ type }) => {
   if (!deviceStore.categories.length && !deviceStore.brands.length) return <main />;
   if (type === "search" && !categoryIdSlug && !brandIdSlug) return <CatalogPage type={type} />;
   
-  const brandId = +brandIdSlug?.split("-")[0] || null;
-  const categoryId = +categoryIdSlug?.split("-")[0] || null;
+  const brandId = brandIdSlug?.split("--")[0] || null;
+  const categoryId = categoryIdSlug?.split("--")[0] || null;
   const childCategories = deviceStore.categories.filter(cat => !cat.isVariation && cat.parentCategoryId === categoryId);
 
   // "!location.search" means that that query params like "brand" were not passed

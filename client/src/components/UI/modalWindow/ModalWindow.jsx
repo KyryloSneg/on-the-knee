@@ -7,6 +7,7 @@ import { observer } from "mobx-react-lite";
 import useWindowInvisibleFocus from "../../../hooks/useWindowInvisibleFocus";
 import CustomScrollbar from "../customScrollbar/CustomScrollbar";
 import useWindowTriggerElemHandle from "../../../hooks/useWindowTriggerElemHandle";
+import getIsVisibleMultipleWindows from "utils/getIsVisibleMultipleWindows";
 
 const ModalWindow = observer(({ 
   isVisible, setIsVisible, children, headerText, id, 
@@ -46,8 +47,7 @@ const ModalWindow = observer(({
   useEffect(() => {
     app.setModalVisible(isVisible);
     return () => {
-      // there can't be multiple modal windows on the site
-      app.setModalVisible(false);
+      if (!getIsVisibleMultipleWindows()) app.setModalVisible(false);
     };
   }, [app, isVisible]);
 

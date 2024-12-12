@@ -26,6 +26,11 @@
   font-size: 1.2rem;
 }
 
+.seller-cant-remain-comment-error-msg {
+  color: #a10e0e;
+  font-size: 1.3rem;
+}
+
 button.original-comment-reply-btn, 
 button.create-comment-btn {
   font-size: 1.2rem;

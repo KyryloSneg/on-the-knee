@@ -1,10 +1,11 @@
 import "./styles/DeliverySectionCourierOptionInputs.css";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import Dropdown from "./UI/dropdown/Dropdown";
 import ReactHookFormInput from "./UI/reactHookFormInput/ReactHookFormInput";
 import { useWatch } from "react-hook-form";
 import { CHECKOUT_PAGE_INPUT_SERVICE_CLASS, TO_LIFT_ON_THE_FLOOR_PRICE } from "../utils/consts";
-import { getNumberInputOptions } from "../utils/inputOptionsConsts";
+import { getNumberInputOptions, isEnglishWithOptionalDigits, REQUIRED_TEXT_INPUT_OPTIONS } from "../utils/inputOptionsConsts";
+import _ from "lodash";
 
 const OPTIONS = Object.freeze([
   {
@@ -44,11 +45,21 @@ const DeliverySectionCourierOptionInputs = ({
     maxLength: 5
   });
 
-  // we must define the values below only once
   const streetInputName = "street-" + inputsId;
   const houseNumberInputName = "houseNumber-" + inputsId;
   const flatNumberInputName = "flatNumber-" + inputsId;
   const floorInputName = "floor-" + inputsId;
+
+  const streetInputRegisterOptions = useMemo(() => {
+    let options = _.cloneDeep(REQUIRED_TEXT_INPUT_OPTIONS);
+
+    delete options.validate.isOnlyLetters;
+    options.validate.isEnglish = value => isEnglishWithOptionalDigits(value);
+
+    return options;
+  }, []);
+
+  const streetInputRegisterResult = register(streetInputName, streetInputRegisterOptions);
 
   useEffect(() => {
     // trigger validation to show errors on inputs appear only if there are ones
@@ -113,17 +124,7 @@ const DeliverySectionCourierOptionInputs = ({
           labelText="Street"
           inputName={streetInputName}
           errors={errors}
-          registerFnResult={register(streetInputName, {
-            validate: {
-              required: value => value.trim().length > 0 || "Required",
-              isTooLong: value => value.trim().length <= 1000 || "Can't be more than 1000 characters",
-              isEnglish: value => {
-                const valueWithoutSpaces = value.replaceAll(" ", "");
-                return (/^[a-zA-Z0-9]+$/.test(valueWithoutSpaces) && isNaN(+valueWithoutSpaces)) 
-                  || "English chars with digits (or without) only";
-              },
-            }
-          })}
+          registerFnResult={streetInputRegisterResult}
           className={CHECKOUT_PAGE_INPUT_SERVICE_CLASS}
         />
         <ReactHookFormInput

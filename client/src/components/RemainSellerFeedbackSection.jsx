@@ -7,13 +7,13 @@ const RemainSellerFeedbackSection = ({ type, sellersFeedbacksObjArray }) => {
         <h3>Rate a seller</h3>
       </header>
       {type === "modal"
-        ? <RemainSellerFeedbackSectionItem sellerFeedbacksObj={sellersFeedbacksObjArray[0]} />
+        ? <RemainSellerFeedbackSectionItem type={type} sellerFeedbacksObj={sellersFeedbacksObjArray[0]} />
         : (
           <ul className="remain-seller-dev-feedback-list">
             {sellersFeedbacksObjArray?.map(sellerFeedbacksObj => {
               return (
                 <li key={sellerFeedbacksObj.seller.id}>
-                  <RemainSellerFeedbackSectionItem sellerFeedbacksObj={sellerFeedbacksObj} />
+                  <RemainSellerFeedbackSectionItem type={type} sellerFeedbacksObj={sellerFeedbacksObj} />
                 </li>
               );
             })}

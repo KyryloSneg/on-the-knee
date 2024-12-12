@@ -5,7 +5,7 @@ import { useContext, useEffect, useRef } from "react";
 import { Context } from "../Context";
 import { observer } from "mobx-react-lite";
 
-const CommentImagesSection = observer(({ imagesObjs, type }) => {
+const CommentImagesSection = observer(({ imagesObjs, type, isInUserFeedbacksModal = false }) => {
   const { app, deviceStore } = useContext(Context);
   const btnRefs = useRef([]);
 
@@ -32,6 +32,11 @@ const CommentImagesSection = observer(({ imagesObjs, type }) => {
     app.setCommentGalleryModalBtnRef({ current: btnRefs.current[btnRefIndex] });
     app.setCommentGalleryModalType(type);
     app.setCommentGallerySelectedImageId(index);
+
+    if (isInUserFeedbacksModal) {
+      app.setCommentGalleryIsOpenedFromRemainFeedbackModal(true);
+    }
+
     setCommentGalleryModalVisibility(true, app);
   }
 

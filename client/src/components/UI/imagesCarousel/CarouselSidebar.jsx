@@ -1,9 +1,10 @@
 import "./CarouselSidebar.css";
+import { forwardRef } from "react";
 import CarouselSidebarItem from "./CarouselSidebarItem";
 
-const CarouselSidebar = ({ images, selectedId, setSelectedId }) => {
+const CarouselSidebar = forwardRef(({ images, selectedId, setSelectedId }, ref) => {
   return (
-    <nav className="carousel-sidebar">
+    <nav className="carousel-sidebar" ref={ref}>
       <ul>
         {images.map((image, index) => 
           <li key={index}>
@@ -18,6 +19,6 @@ const CarouselSidebar = ({ images, selectedId, setSelectedId }) => {
       </ul>
     </nav>
   );
-}
+});
 
 export default CarouselSidebar;

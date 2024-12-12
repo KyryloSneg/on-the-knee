@@ -36,6 +36,11 @@
   margin-top: 1px;
 }
 
+.modal-seller-cant-remain-comment-error-msg {
+  color: #a10e0e;
+  font-size: 1.3rem;
+}
+
 @media screen and (min-width: 200px) {
   .comment-modal-form-btn-group {
     grid-template-columns: 1fr 1fr;

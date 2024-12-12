@@ -5,12 +5,21 @@ import UserPageOrderList from "../components/UserPageOrderList";
 import URLActions from "../utils/URLActions";
 import UIButton from "../components/UI/uiButton/UIButton";
 import { ROOT_ROUTE } from "../utils/consts";
+import { useContext } from "react";
+import { Context } from "Context";
+import { observer } from "mobx-react-lite";
 
-const UserOrdersPage = ({ 
-  orders, initialOrders, ordersSellerFeedbacksObjArray, 
-  userDeviceFeedbacksObjArray, isLoading, isInitialRender 
+const UserOrdersPage = observer(({ 
+  orders, initialOrders, userDeviceFeedbacksObjArray, 
+  isLoading, isInitialRender 
 }) => {
-  if (isLoading || isInitialRender) return (
+  const { fetchRefStore } = useContext(Context);
+
+  const isToShowLoaderOnInitialRender = (
+    isInitialRender && !fetchRefStore.hasAlreadyFetchedUserOrders
+  );
+
+  if (isLoading || isToShowLoaderOnInitialRender) return (
     <section className="user-page-section">
       <header>
         <h2>
@@ -26,11 +35,7 @@ const UserOrdersPage = ({
       return (
         <>
           <UserOrdersSearchInput sortedOrders={orders} initialOrders={initialOrders} />
-          <UserPageOrderList 
-            orders={orders} 
-            ordersSellerFeedbacksObjArray={ordersSellerFeedbacksObjArray} 
-            userDeviceFeedbacksObjArray={userDeviceFeedbacksObjArray}
-          />
+          <UserPageOrderList orders={orders} userDeviceFeedbacksObjArray={userDeviceFeedbacksObjArray} />
         </>
       );
     } else {
@@ -82,6 +87,6 @@ const UserOrdersPage = ({
       {getChildren()}
     </section>
   );
-}
+});
 
 export default UserOrdersPage;

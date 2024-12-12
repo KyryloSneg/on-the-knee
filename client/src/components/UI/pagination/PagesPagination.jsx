@@ -1,15 +1,10 @@
+import "./PagesPagination.css";
 import { Link, useLocation } from "react-router-dom";
 import URLActions from "../../../utils/URLActions";
-import "./PagesPagination.css";
-import { useContext } from "react";
-import { Context } from "../../../Context";
 
 const PagesPagination = ({
-  totalPages, currentPage, pagesToFetch, className = "", ariaLabel = "Pages",
-  scrollElem = null, scrollTop = true,
-  scrollToX = null, scrollToY = null
+  totalPages, currentPage, pagesToFetch, className = "", ariaLabel = "Pages"
 }) => {
-  const { app } = useContext(Context);
   // re-rendering component on location changes
   useLocation();
 
@@ -69,18 +64,6 @@ const PagesPagination = ({
     return pages;
   }
 
-  function scrollIntoElemView() {
-    if (scrollElem) {
-      scrollElem.scrollIntoView(scrollTop);
-
-      // scrolling up by header's height (plus some additional space to make it look better)
-      const headerRect = app.headerRef.current.getBoundingClientRect();
-      window.scrollBy(0, -(headerRect.height + 20))
-    } else if (scrollToX && scrollToY) {
-      window.scrollTo(scrollToX, scrollToY)
-    };
-  }
-
   const pages = calculatePages();
   return (
     <ul
@@ -134,7 +117,6 @@ const PagesPagination = ({
                 <Link
                   to={to}
                   className={isActive ? "page-pagination-link active" : "page-pagination-link"}
-                  onClick={scrollIntoElemView}
                   aria-selected={isSelected}
                   {...(pg.name === "..." && { "aria-label": pg.value })}
                 >
@@ -142,15 +124,6 @@ const PagesPagination = ({
                 </Link>
               )
             }
-            {/* <Link
-              to={to}
-              className={isActive ? "page-pagination-link active" : "page-pagination-link"}
-              onClick={() => scrollIntoElemView(pg.value)}
-              aria-selected={isSelected}
-              {...(pg.name === "..." && { "aria-label": pg.value })}
-            >
-              {pg.name}
-            </Link> */}
           </li>
         );
       })}

@@ -19,6 +19,11 @@ class UserStore {
     this._viewedDevicesList = {};
     this._viewedDevices = [];
 
+    this._orders = [];
+
+    this._userDevicesFeedbacks = [];
+    this._ordersListSellers = [];
+
     this._cartDataFetching = null;
     makeAutoObservable(this);
   }
@@ -183,6 +188,18 @@ class UserStore {
     this._viewedDevices = viewedDevices;
   }
 
+  setOrders(orders) {
+    this._orders = orders;
+  }
+  
+  setUserDevicesFeedbacks(userDevicesFeedbacks) {
+    this._userDevicesFeedbacks = userDevicesFeedbacks;
+  }
+
+  setOrdersListSellers(ordersListSellers) {
+    this._ordersListSellers = ordersListSellers;
+  }
+
   setCartDataFetching(fn) {
     this._cartDataFetching = fn;
   }
@@ -233,6 +250,18 @@ class UserStore {
 
   get viewedDevices() {
     return this._viewedDevices;
+  }
+
+  get orders() {
+    return this._orders;
+  }
+
+  get userDevicesFeedbacks() {
+    return this._userDevicesFeedbacks;
+  }
+
+  get ordersListSellers() {
+    return this._ordersListSellers;
   }
 
   get cartDataFetching() {

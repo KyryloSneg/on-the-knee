@@ -21,6 +21,7 @@ import setWrongCartComboAmountsModalVisibility from "../utils/setWrongCartComboA
 import setAuthentificationModalVisibility from "../utils/setAuthentificationModalVisibility";
 import setReportOrderProblemModalVisibility from "../utils/setReportOrderProblemModalVisibility";
 import setRemainSellerDevFeedbackModalVisibility from "../utils/setRemainSellerDevFeedbackModalVisibility";
+import setUserChangePasswordModalVisibility from "utils/setUserChangePasswordModalVisibility";
 
 function useClosingAllWindows() {
   const location = useLocation();
@@ -50,6 +51,7 @@ function useClosingAllWindows() {
     setAuthentificationModalVisibility(false, app);
     setReportOrderProblemModalVisibility(false, app);
     setRemainSellerDevFeedbackModalVisibility(false, app);
+    setUserChangePasswordModalVisibility(false, app);
 
     app.setDarkBgVisible(false, app);
     app.setIsBlockedScroll(false, app);

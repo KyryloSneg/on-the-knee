@@ -28,7 +28,7 @@ module.exports = (feedbacks, sellerId) => {
 
     const userId = MOCK_USER._id;
     const feedback = {
-      "id": feedbacks.length + 1,
+      "id": faker.string.uuid(),
       "sellerId": sellerId,
       "userId": userId,
       "images": images,
@@ -37,6 +37,7 @@ module.exports = (feedbacks, sellerId) => {
       "delivery-speed-rate": deliverySpeedRate,
       "service-quality-rate": serviceQualityRate,
       "date": faker.date.recent(),
+      "isEdited": false,
     }
 
     feedbacks.push(feedback);

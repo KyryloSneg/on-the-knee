@@ -12,12 +12,17 @@ export async function getDevice(id, stringQueryParams = "") {
   return res.data;
 }
 
-export async function getDeviceCombination(id) {
-  const res = await $mockApi.get(`/device-combinations/${id}?_expand=stock`);
+export async function getDeviceCombination(id, stringQueryParams = "") {
+  const res = await $mockApi.get(`/device-combinations/${id}?_expand=stock&${stringQueryParams}`);
   return res.data;
 }
 
 export async function getOneDeviceCombinations(deviceId) {
   const res = await $mockApi.get(`/device-combinations?deviceId=${deviceId}&_expand=stock`);
+  return res.data;
+}
+
+export async function patchDevice(id, contentToReplaceWith) {
+  const res = await $mockApi.patch("/devices/" + id, contentToReplaceWith);
   return res.data;
 }

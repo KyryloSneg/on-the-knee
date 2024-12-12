@@ -54,6 +54,7 @@
 .file-picker-error-msg {
   color: #a10e0e;
   font-size: 1.3rem;
+  padding-top: 1px;
 }
 
 .file-picker-section-main .file-picker-btn-wrapper {

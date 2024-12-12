@@ -16,10 +16,10 @@ function useSynchronizingAdditionalServices(setSelectedAddServices, combinationI
         let nextValue = argSelectedAddServices;
         // adding the first condition to make sure it's not undefined
         if (
-          !!user.cartSelectedAdditionalServices["selected-additional-services"][combinationId] 
+          !!user.cartSelectedAdditionalServices?.["selected-additional-services"]?.[combinationId] 
           && !_.isEqual(
             argSelectedAddServices, 
-            user.cartSelectedAdditionalServices["selected-additional-services"][combinationId]
+            user.cartSelectedAdditionalServices?.["selected-additional-services"]?.[combinationId]
           )
         ) {
           nextValue = user.cartSelectedAdditionalServices["selected-additional-services"][combinationId];

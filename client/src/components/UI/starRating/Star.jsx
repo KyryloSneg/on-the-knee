@@ -1,4 +1,4 @@
-const Star = ({ starIndex, value, width, height, starKey, ...props }) => {
+const Star = ({ starIndex, value, size, starKey, ...props }) => {
   // indexes for 5-star rating: 1,2,3,4,5
   const gradId = `${starKey}-grad`.trim().split(" ").join("");  
   let yellowFillPercent;
@@ -15,7 +15,7 @@ const Star = ({ starIndex, value, width, height, starKey, ...props }) => {
 
   return (
     <svg xmlns="http://www.w3.org/2000/svg"
-      width={width} height={height}
+      width={size} height={size}
       viewBox="0 0 32 32"
       key={starKey}
       {...props}

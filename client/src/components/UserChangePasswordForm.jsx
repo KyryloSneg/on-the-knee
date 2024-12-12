@@ -47,7 +47,7 @@ const UserChangePasswordForm = observer(({ closeModal }) => {
 
   const openErrorModal = useCallback(() => {
     const errorModalInfoChildren = (
-      <p className="changing-password-error-modal">
+      <p className="error-modal-p">
         Unfortunately, changing password has failed. Try a bit later
       </p>
     );
@@ -76,7 +76,7 @@ const UserChangePasswordForm = observer(({ closeModal }) => {
       // if we get ERR_NETWORK from the server (it has crashed for example), open the error modal
       if (!callbackPossibleError?.response && callbackPossibleError?.code === AxiosError.ERR_NETWORK) {
         openErrorModal();
-      } else {
+      } else if (!callbackPossibleError) {
         closeModal();
       }
     } catch (e) {
@@ -84,7 +84,7 @@ const UserChangePasswordForm = observer(({ closeModal }) => {
     } finally {
       if (
         (callbackPossibleError?.response && callbackPossibleError?.code !== AxiosError.ERR_NETWORK) 
-        || callbackPossibleError === null
+        || !callbackPossibleError
       ) {
         setPossibleError(callbackPossibleError);
       };

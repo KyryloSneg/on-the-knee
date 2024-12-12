@@ -77,9 +77,11 @@ module.exports = async () => {
   createSales(sales, saleTypes, saleTypeNames);
 
   let categoriesLeft = [...categories];
-  let brandsLeft = [...categories];
+  let brandsLeft = [...brands];
 
   dummyDevices.map((dev, i) => {
+    dev.id = faker.string.uuid();
+
     let category;
     if (categoriesLeft.length) {
       category = categoriesLeft[faker.number.int({ min: 0, max: categoriesLeft.length - 1 })];
@@ -172,16 +174,16 @@ module.exports = async () => {
     let parentId = category.parentCategoryId;
     let parentMainCategory = categories.find(cat => cat.id === parentId);
 
-    while (parentId !== null) {
+    while (parentId !== null && parentId !== undefined) {
       parentMainCategory = categories.find(cat => cat.id === parentId);
-      parentId = parentMainCategory.parentCategoryId;
+      parentId = parentMainCategory?.parentCategoryId;
     }
 
     return parentMainCategory || category;
   }
 
   for (let dev of devices) {
-    const category = categories.find(cat => +cat.id === +dev.categoryId);
+    const category = categories.find(cat => cat.id === dev.categoryId);
 
     // only main categories can have main brands
     const parentMainCategory = findParentMainCategory(category);

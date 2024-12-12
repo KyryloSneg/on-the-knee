@@ -46,7 +46,7 @@ module.exports = (deliveries, deliveryTypes) => {
       }
 
       const schedule = {
-        "id": schedules.length + 1,
+        "id": faker.string.uuid(),
         "deliveryId": delivery.id,
         "date": date,
         "shifts": shifts,
