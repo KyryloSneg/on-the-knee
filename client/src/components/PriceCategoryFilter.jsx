@@ -38,7 +38,7 @@ const PriceCategoryFilter = observer(() => {
     nextUrl = URLActions.getURLWithResettedPageRelatedParams(nextUrl);
     
     const basename = process.env.REACT_APP_CLIENT_URL;
-    navigate(nextUrl.replaceAll(basename, ""));
+    navigate(nextUrl.replaceAll(basename, ""), { preventScrollReset: true });
   }
 
   return (

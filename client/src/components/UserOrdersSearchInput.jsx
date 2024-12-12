@@ -23,7 +23,7 @@ const UserOrdersSearchInput = ({ sortedOrders, initialOrders }) => {
         const url = URLActions.deleteParamValue("orderQuery", orderQuery);
         const basename = process.env.REACT_APP_CLIENT_URL;
 
-        navigate(url.replace(basename, ""));
+        navigate(url.replace(basename, ""), { preventScrollReset: true });
       };
     };
   }
@@ -47,7 +47,7 @@ const UserOrdersSearchInput = ({ sortedOrders, initialOrders }) => {
 
       if (hrefQuery !== queryFromURL) {
         const href = USER_ORDERS_ROUTE + `?orderQuery=${hrefQuery}`;
-        navigate(href);
+        navigate(href, { preventScrollReset: true });
       }
     };
   };

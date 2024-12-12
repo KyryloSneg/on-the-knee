@@ -90,7 +90,7 @@ const CatalogPage = observer(({ type, seller = null }) => {
     const currentUrl = basename + location.pathname + location.search;
 
     if (currentUrl !== url && !isTest) {
-      navigate(url.replace(basename, ""), { replace: true });
+      navigate(url.replace(basename, ""), { replace: true, preventScrollReset: true });
     }
 
   }, [location.search, deviceStore, deviceStore.filters, location.pathname, navigate, isTest]);
