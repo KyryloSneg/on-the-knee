@@ -48,7 +48,7 @@ function useGettingPaginationParams(deviceStore, totalPages) {
         url = URLActions.setNewParam("pagesToFetch", nextPagesToFetch);
       };
 
-      if (url) navigate(url.replace(basename, ""), { replace: true });
+      if (url) navigate(url.replace(basename, ""), { replace: true, preventScrollReset: true });
     }
 
     let nextPage = URLActions.getParamValue("page");

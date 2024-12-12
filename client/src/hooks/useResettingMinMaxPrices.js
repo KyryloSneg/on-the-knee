@@ -32,7 +32,7 @@ function useResettingMinMaxPrices(initialMinPrice, initialMaxPrice, minPriceValu
         const basename = process.env.REACT_APP_CLIENT_URL;
         const nextURL = URLActions.deleteParamValue("price", `${minPriceValue}-${maxPriceValue}`);
         
-        navigate(nextURL.replace(basename, ""), { replace: true });
+        navigate(nextURL.replace(basename, ""), { replace: true, preventScrollReset: true });
       }
     }
 
