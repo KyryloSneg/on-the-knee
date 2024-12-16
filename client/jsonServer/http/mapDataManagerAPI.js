@@ -19,7 +19,7 @@ async function getLocationCoords(country, region, district, city, street, houseN
   let response;
   try {
     const { data } = await axios.get(
-      `https://api.opencagedata.com/geocode/v1/json?key=${process.env.OPENCAGE_API_KEY}&q=${query}&pretty=1&no_annotations=1`
+      `https://api.opencagedata.com/geocode/v1/json?key=${process.env.MOCK_SERVER_OPENCAGE_API_KEY}&q=${query}&pretty=1&no_annotations=1`
     );
 
     response = data;
