@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const createCarts = require("./utils/createCarts");
 const createCourierSchedules = require("./utils/createCourierSchedules");
 const createDeliveries = require("./utils/createDeliveries");
@@ -6,7 +8,6 @@ const createDevices = require("./utils/createDevices");
 const createLocations = require("./utils/createLocations");
 const createOrders = require("./utils/createOrders");
 const createViewedDevicesList = require("./utils/createViewedDevicesList");
-const initializeEnvVars = require("./utils/initializeJsonServerEnvVars");
 
 module.exports = function createData () {
   const data = {
@@ -76,8 +77,6 @@ module.exports = function createData () {
     "hint-search-results": [],
   };
 
-  initializeEnvVars();
-  
   const locationsPromise = createLocations().then(result => {
     data["countries"] = result.countries;
     data["regions"] = result.regions;
