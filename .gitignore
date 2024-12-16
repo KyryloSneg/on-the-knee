@@ -399,3 +399,6 @@ FodyWeavers.xsd
 
 # node-modules folder
 node_modules
+
+# environment files
+.env
