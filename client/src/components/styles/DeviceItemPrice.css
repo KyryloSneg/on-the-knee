@@ -1,5 +1,7 @@
 .main-device-price-wrap {
   gap: 6px;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .main-device-price,
@@ -16,6 +18,7 @@
 
 .main-device-old-price {
   color: #797878;
+  max-width: 50%;
 }
 
 .main-device-old-price span:first-of-type {
