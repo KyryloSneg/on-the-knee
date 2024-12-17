@@ -16,7 +16,7 @@ export default async function updateSellerRating(updatedSellerFeedbacks, sellerI
       feedbacksRatings.push(feedback["service-quality-rate"]);
     }
 
-    if (!feedbacksRatingSum.length) {
+    if (!feedbacksRatings.length) {
       await patchOneSeller(sellerId, { rating: "0.0" });
       return;
     }
