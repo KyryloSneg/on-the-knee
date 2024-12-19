@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx";
-import { changeUserEmail, changeUserNameSurname, changeUserPassword, changeUserPhoneNumber, getUserEmailsToConfirm, isAuthFetch, login, logout, registerUser } from "../http/UserAPI";
+import { changeUserEmail, changeUserNameSurname, changeUserPassword, changeUserPhoneNumber, getUserEmailsToConfirm, isAuthFetch, login, logout, registerUser, sendShortTermActivationEmail } from "../http/UserAPI";
 
 class UserStore {
   constructor() {
@@ -154,6 +154,15 @@ class UserStore {
     try {
       const emailsToConfirm = await getUserEmailsToConfirm();
       return emailsToConfirm;
+    } catch(e) {
+      console.log(e.response?.data?.message);
+      return e;
+    }
+  }
+
+  async sendShortTermActivationEmail() {
+    try {
+      await sendShortTermActivationEmail();
     } catch(e) {
       console.log(e.response?.data?.message);
       return e;

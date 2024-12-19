@@ -13,11 +13,12 @@ const RoleModel = require('../models/role-model');
 const ActivationInfoDto = require('../dtos/activation-info-dto');
 const UserAddressDto = require('../dtos/user-address-dto');
 const { parsePhoneNumber } = require('libphonenumber-js');
-const { MAX_USER_DEVICES_AMOUNT } = require("../consts");
+const { MAX_USER_DEVICES_AMOUNT, SHORT_TERM_EMAIL_EXPIRES_AFTER_S } = require("../consts");
 const tokenModel = require("../models/token-model");
 const EmailToConfirmModel = require("../models/email-to-confirm-model");
 const DocumentNotFoundError = require("mongoose/lib/error/notFound");
 const EmailToConfirmDto = require("../dtos/email-to-confirm-dto");
+const ShortTermActivationEmailModel = require("../models/short-term-activation-model");
 
 class UserService {
     async registration(name, surname, password, email, phoneNumber, ip) {
@@ -60,10 +61,12 @@ class UserService {
         return {...tokens, user: userDto, address: addressDto, activationInfo: infoDto, device: userDeviceDto};
     }
 
-    async activate(activationLink, isChangingEmail = false) {
+    async activate(activationLink, type = "default") {
         let info;
-        if (isChangingEmail) {
+        if (type === "changeEmail") {
             info = await EmailToConfirmModel.findOne({confirmationLink: activationLink});
+        } else if (type === "shortTermEmail") {
+            info = await ShortTermActivationEmailModel.findOne({activationLink})
         } else {
             info = await ActivationInfoModel.findOne({activationLink});
         }
@@ -72,7 +75,7 @@ class UserService {
             throw ApiError.BadRequest('Incorrect activation link')
         }
 
-        if (isChangingEmail) {
+        if (type === "changeEmail") {
             info.isConfirmed = true;
 
             const address = await UserAddressModel.findOne({user: info.user})
@@ -103,6 +106,23 @@ class UserService {
                     await EmailToConfirmModel.deleteMany({user: info.user});
                 }
             }
+        } else if (type === "shortTermEmail") {
+            // if the email's email and user one aren't the same, throw an error
+            // else activate user email and delete short term email
+            const address = await UserAddressModel.findOne({user: info.user})
+            if (info.email !== address.email) {
+                throw ApiError.BadRequest("The email had already been changed at the time of this mail's existence");
+            }
+
+            const activationInfo = await ActivationInfoModel.findOne({user: info.user});
+            // just in case
+            if (!activationInfo.isActivated) {
+                activationInfo.isActivated = true;
+                await activationInfo.save();
+            }
+
+            // there could be only one short term mail at the time
+            await ShortTermActivationEmailModel.deleteOne({user: info.user});
         } else {
             info.isActivated = true;
         }
@@ -115,6 +135,23 @@ class UserService {
                 throw e;
             }
         }
+    }
+
+    async sendShortTermActivationEmail(user) {
+        const existingShortTermEmail = await ShortTermActivationEmailModel.findOne({ user: user.id });
+        if (existingShortTermEmail) {
+            throw ApiError.BadRequest('The email has already been sent');
+        }
+
+        const userAddress = await UserAddressModel.findOne({ user: user.id });
+
+        const activationLink = uuid.v4();
+        const linkForEmail = `${process.env.API_URL}/api/activate/${activationLink}?type=shortTermEmail`;
+
+        const expireDurationString = `${SHORT_TERM_EMAIL_EXPIRES_AFTER_S} seconds`;
+
+        await ShortTermActivationEmailModel.create({ user: user.id, email: userAddress.email, activationLink: activationLink });
+        await mailService.sendActivationMail(userAddress.email, linkForEmail, expireDurationString);
     }
 
     async login(address, password, ip) {

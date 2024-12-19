@@ -45,6 +45,7 @@ import ReportOrderProblemModal from "./components/ReportOrderProblemModal";
 import RemainASellerOrDeviceFeedbackModal from "./components/RemainASellerOrDeviceFeedbackModal";
 import UserChangePasswordModal from "components/UserChangePasswordModal";
 import useGettingCartData from "hooks/useGettingCartData";
+import HeaderSendActivationEmail from "components/HeaderSendActivationEmail";
  
 const App = observer(() => {
   const { app, deviceStore, user } = useContext(Context);
@@ -180,6 +181,7 @@ const App = observer(() => {
       {(app.isVisibleRemainSellerDeviceFeedbackModal && user.isAuth) && <RemainASellerOrDeviceFeedbackModal />}
       {(app.isVisibleUserChangePasswordModal && user.isAuth) && <UserChangePasswordModal />}
       <header ref={headerRef}>
+        {user.isAuth && !user.isEmailActivated && <HeaderSendActivationEmail />}
         <Navbar elemToFocus={pageElemToFocus} navCategoryBtnRef={navCategoryBtnRef} />
         {(app.isVisibleCategoriesMenu && !!Object.keys(deviceStore.categories).length) && 
           <CategoriesMenu navCategoryBtnRef={navCategoryBtnRef} />

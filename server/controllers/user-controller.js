@@ -75,10 +75,22 @@ class UserController {
     async activate(req, res, next) {
         try {
             const activationLink = req.params.link;
-            const isChangingEmail = !!req.query.isChangingEmail;
+            const type = req.query.type;
 
-            await userService.activate(activationLink, isChangingEmail);
+            await userService.activate(activationLink, type);
             return res.redirect(process.env.CLIENT_URL);
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    async sendShortTermActivationEmail(req, res, next) {
+        try {
+            const user = req.user;
+            await userService.sendShortTermActivationEmail(user);
+            
+            // returning null in order to not get 404 on the client side
+            return res.json(null);
         } catch (e) {
             next(e);
         }
