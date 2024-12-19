@@ -92,7 +92,12 @@ const UserPersonalAddressesContentChild = observer(({ id }) => {
 
       if (email !== user.userAddress.email) {
         const emailsToConfirmOrError = await user.changeEmail(email);
-        emailsToConfirm = callbackPossibleError = emailsToConfirmOrError;
+
+        if (Array.isArray(emailsToConfirmEmails)) {
+          emailsToConfirm = emailsToConfirmOrError;
+        } else {
+          callbackPossibleError = emailsToConfirmOrError;
+        }
       }
       
       // if we get ERR_NETWORK from the server (it has crashed for example), open the error modal

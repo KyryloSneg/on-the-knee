@@ -18,6 +18,11 @@ export async function logout() {
   return data;
 }
 
+export async function sendShortTermActivationEmail() {
+  const { data } = await $authApi.post("/send-short-term-activation-email");
+  return data;
+}
+
 export async function isAuthFetch() {
   const ip = await getUserIp();
 

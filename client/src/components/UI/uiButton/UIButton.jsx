@@ -3,7 +3,7 @@ import { forwardRef } from "react";
 import { Link } from "react-router-dom";
 import Loader from "../loader/Loader";
 
-const POSSIBLE_VARIANTS = ["primary1", "primary2", "primary3", "modal-submit", "modal-deny"];
+const POSSIBLE_VARIANTS = ["primary1", "primary2", "primary3", "secondary1", "modal-submit", "modal-deny"];
 
 const UIButton = forwardRef(({ 
   variant = "primary1", children="Test children", isLink = false, to = "#", hasIcon = false, isLoading = false, ...props 

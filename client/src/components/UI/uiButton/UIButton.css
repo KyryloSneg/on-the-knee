@@ -1,6 +1,6 @@
 .ui-button {
   font-size: 1.5rem;
-  transition: background 0.2s, border 0.2s !important; 
+  transition: background 0.2s, border 0.2s, color 0.2s !important; 
   cursor: pointer;
 }
 
@@ -112,6 +112,31 @@ a.ui-button {
   background-color: #e0e0e0;
 }
 
+.secondary1 {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  /* there can't be more than 2 lines of text */
+  padding: 3px 8px;
+  border: 1px solid white;
+  border-radius: 5px;
+  background-color: #676767;
+  color: white;
+  outline: none;
+}
+
+.secondary1:disabled, a.secondary1.disabled {
+  background-color: #676767;
+}
+
+.secondary1:enabled:hover, a.secondary1:not(.disabled):hover,
+.secondary1:enabled:active, a.secondary1:not(.disabled):active,
+.secondary1:enabled:focus-visible, a.secondary1:not(.disabled):focus-visible,
+.secondary1.active {
+  background-color: white;
+  color: black;
+}
+
 .ui-button > .custom-loader {
   width: 15px;
   height: 15px;
@@ -119,7 +144,8 @@ a.ui-button {
   border-right: 0.3rem solid #0000;
 }
 
-.ui-button.primary1 > .custom-loader {
+.ui-button.primary1 > .custom-loader,
+.ui-button.secondary1 > .custom-loader {
   border: 0.3rem solid rgb(255, 255, 255);
   border-right: 0.3rem solid #0000;
 }

@@ -20,6 +20,10 @@ router.post('/registration',
 
 router.post('/login', userController.login);
 router.post('/logout', userController.logout);
+router.post('/send-short-term-activation-email', 
+    authMiddleware,
+    userController.sendShortTermActivationEmail
+);
 
 router.get('/refresh/:ip', userController.refresh);
 router.get('/activate/:link', userController.activate);

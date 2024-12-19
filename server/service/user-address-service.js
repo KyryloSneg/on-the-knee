@@ -55,8 +55,8 @@ class UserAddressService {
           expireAt: new Date() 
       });
 
-      const linkForCurrEmailMail = `${process.env.API_URL}/api/activate/${currentEmailConfirmationLink}?isChangingEmail=true`;
-      const linkForNewEmailMail = `${process.env.API_URL}/api/activate/${newEmailConfirmationLink}?isChangingEmail=true`;
+      const linkForCurrEmailMail = `${process.env.API_URL}/api/activate/${currentEmailConfirmationLink}?type=changeEmail`;
+      const linkForNewEmailMail = `${process.env.API_URL}/api/activate/${newEmailConfirmationLink}?type=changeEmail`;
 
       const expiresAfterHours = Math.round(EMAIL_TO_CONFIRM_EXPIRES_AFTER_S / 3600);
       const expireDurationString = `${expiresAfterHours} hour${expiresAfterHours > 1 ? "s" : ""}`;

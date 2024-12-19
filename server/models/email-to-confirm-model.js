@@ -8,6 +8,7 @@ const EmailToConfirmSchema = new Schema({
   confirmationLink: {type: String},
   expireAt: { 
     type: Date,  
+    default: Date.now,
     // 3 days to expire
     expires: EMAIL_TO_CONFIRM_EXPIRES_AFTER_S 
   }

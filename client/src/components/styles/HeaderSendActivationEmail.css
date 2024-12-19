@@ -1,0 +1,48 @@
+.header-send-activation-email {
+  width: 100%;
+  padding: 4px 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background-color: #7373ff;
+  position: relative;
+  top: -10px;
+  left: -5px;
+}
+
+.header-send-activation-email > button,
+.header-send-activation-email > p {
+  font-size: 1rem;
+}
+
+.header-send-activation-email > button {
+  width: 100%;
+}
+
+.header-send-activation-email > p {
+  color: white;
+}
+
+.header-send-activation-email > button.ui-button > .custom-loader {
+  width: 9px;
+  height: 9px;
+  border: 0.2rem solid white;
+  border-right: 0.2rem solid #0000;
+}
+
+@media screen and (min-width: 280px) {
+  .header-send-activation-email > button {
+    width: 238px;
+  }
+
+  .header-send-activation-email > button,
+  .header-send-activation-email > p {
+    font-size: 1.1rem;
+  }
+
+  .header-send-activation-email > button.ui-button > .custom-loader {
+    width: 10px;
+    height: 10px;
+  }
+}
