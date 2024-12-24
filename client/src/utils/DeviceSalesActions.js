@@ -15,9 +15,9 @@ class DeviceSalesActions {
         if (deviceSale) {
           for (let type of deviceSale["sale-types"]) {
             // searching for type's name
-            const name = saleTypeNames?.find(typeName => typeName.id === type.saleTypeNameId)?.name;
+            const name = saleTypeNames?.find(typeName => typeName.id === type["sale-type-nameId"])?.name;
             if (name) {
-              let existingSaleType = deviceSaleTypes.find(saleType => saleType.saleTypeNameId === type.saleTypeNameId);
+              let existingSaleType = deviceSaleTypes.find(saleType => saleType["sale-type-nameId"] === type["sale-type-nameId"]);
 
               if (existingSaleType) {
                 const existingTypeTimestamp = Date.parse(existingSaleType.createdAt);

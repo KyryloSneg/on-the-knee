@@ -1,15 +1,11 @@
+import "./ButtonPagination.css";
 import Spinner from 'react-bootstrap/Spinner';
 import { Link } from 'react-router-dom';
 import URLActions from '../../../utils/URLActions';
-import { observer } from 'mobx-react-lite';
-import { useContext } from 'react';
-import { Context } from '../../../Context';
-import "./ButtonPagination.css";
 import useWindowWidth from '../../../hooks/useWindowWidth';
 import { WIDTH_TO_SHOW_LOADING_BTN_PAGINATION } from '../../../utils/consts';
 
-const ButtonPagination = observer(({ isLoading, className = "" }) => {
-  const { deviceStore } = useContext(Context);
+const ButtonPagination = ({ isLoading, pagesToFetch, className = "" }) => {
   const screenWidth = useWindowWidth();
 
   if (screenWidth < WIDTH_TO_SHOW_LOADING_BTN_PAGINATION && isLoading) {
@@ -24,7 +20,7 @@ const ButtonPagination = observer(({ isLoading, className = "" }) => {
     );
   }
 
-  const to = !isLoading ? URLActions.setNewParam("pagesToFetch", deviceStore.pagesToFetch + 1) : null;
+  const to = !isLoading ? URLActions.setNewParam("pagesToFetch", pagesToFetch + 1) : null;
   const disabledClassName = !to ? "disabled-link" : "";
   const spinnerClassName = isLoading ? "no-select" : "no-select placeholder";
 
@@ -43,6 +39,6 @@ const ButtonPagination = observer(({ isLoading, className = "" }) => {
       <p>Show more devices?</p>
     </Link>
   );
-})
+}
 
 export default ButtonPagination;

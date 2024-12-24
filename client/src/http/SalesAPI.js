@@ -6,6 +6,12 @@ export async function getSales() {
   return data;
 }
 
+// fetchStringQueryParams must start with "?"
+export async function getSaleTypes(fetchStringQueryParams = "") {
+  const { data } = await $mockApi.get("/sale-types" + fetchStringQueryParams);
+  return data;
+}
+
 export async function getSaleTypeNames() {
   const { data } = await $mockApi.get("/sale-type-names");
   return data;

@@ -1,0 +1,40 @@
+.sales-list {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+@media screen and (min-width: 480px) {
+  .sales-list {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media screen and (min-width: 720px) {
+  .sales-list {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+@media screen and (min-width: 960px) {
+  .sales-list {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .sales-list {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .sales-list {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  }
+}

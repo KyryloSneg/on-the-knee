@@ -1,8 +1,7 @@
+import "./styles/CatalogPage.css";
 import Dropdown from "../components/UI/dropdown/Dropdown";
 import TopFilterBar from "../components/TopFilterBar";
-import "./styles/CatalogPage.css";
 import useWindowWidth from "../hooks/useWindowWidth";
-import DeviceSection from "../components/DeviceSection";
 import { WIDTH_TO_SHOW_ASIDE, sortingOptions } from "../utils/consts";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Context } from "../Context";
@@ -12,10 +11,13 @@ import URLActions from "../utils/URLActions";
 import { observer } from "mobx-react-lite";
 import useNavigateToEncodedURL from "../hooks/useNavigateToEncodedURL";
 import { useLocation, useParams } from "react-router-dom";
-import ChildCategoriesBar from "../components/ChildCategoriesBar";
 import CustomScrollbar from "../components/UI/customScrollbar/CustomScrollbar";
 import useDeletingRedundantCategoryId from "../hooks/useDeletingRedundantCategoryId";
 import _ from "lodash";
+import ChildItemGroupsBar from "../components/ChildItemGroupsBar";
+import DeviceOrSalesSection from "components/DeviceOrSalesSection";
+import useGettingPaginationParams from "hooks/useGettingPaginationParams";
+import getTotalPages from "utils/getTotalPages";
 
 const POSSIBLE_TYPES = ["category", "search", "seller"];
 
@@ -36,6 +38,9 @@ const CatalogPage = observer(({ type, seller = null }) => {
   const categoryId = categoryIdSlug?.split("--")[0] || undefined;
   const category = deviceStore.categories.find(cat => cat.id === categoryId);
   const childCategories = deviceStore.categories.filter(cat => !cat.isVariation && cat.parentCategoryId === categoryId);
+
+  const totalPages = getTotalPages(deviceStore.totalCount, deviceStore.limit);
+  useGettingPaginationParams(deviceStore, totalPages);
   
   // some boilerplate that is used for optimization
   const hasAlreadyFetchedDevsWithTheseUsedFilters = _.isEqual(
@@ -147,9 +152,8 @@ const CatalogPage = observer(({ type, seller = null }) => {
       </div>
       {(type === "category" && !!childCategories.length) &&
         <CustomScrollbar
-          children={<ChildCategoriesBar
-            childCategories={childCategories} />}
-          className="child-categories-scrollbar"
+          children={<ChildItemGroupsBar type="categories" childItemGroups={childCategories} />}
+          className="child-item-groups-scrollbar"
         />
       }
       {(
@@ -160,12 +164,13 @@ const CatalogPage = observer(({ type, seller = null }) => {
           {isToRenderFilters &&
             <CatalogAside key={"aside"} />
           }
-          <DeviceSection 
-            isLoading={isLoading} 
-            retryDevicesFetch={deviceFetching} 
-            error={error} 
+          <DeviceOrSalesSection 
+            type="devices"
+            retryFetching={deviceFetching}
+            isLoading={isLoading}
+            error={error}
             isInitialRenderRef={isInitialRenderRef}
-            key={"devSection"} 
+            key={"devSection"}
           />
         </div>
       }

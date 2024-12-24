@@ -18,11 +18,11 @@ module.exports = (saleId, saleTypes, saleTypeNames) => {
     if (name.name === "discount") {
       dataToRender["text"] = `${discountPercentage}%`;
     }
-
+    
     const saleType = {
       "id": faker.string.uuid(),
       "saleId": saleId,
-      "saleTypeNameId": name.id,
+      "sale-type-nameId": name.id,
       "discountPercentage": discountPercentage,
       ...dataToRender,
     }

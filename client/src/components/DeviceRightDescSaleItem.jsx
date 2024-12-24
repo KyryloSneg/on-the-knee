@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 import "./styles/DeviceRightDescSaleItem.css";
-import { SALES_ROUTE } from "../utils/consts";
+import { SALE_ROUTE } from "../utils/consts";
 import getDateStr from "../utils/getDateStr";
 import getDatetime from "utils/getDatetime";
 
 const DeviceRightDescSaleItem = ({ sale, saleTypes }) => {
-  const to = SALES_ROUTE + `/${sale.id}--${sale.slug}`;
+  const to = SALE_ROUTE + `${sale.id}--${sale.slug}`;
 
   const createdAtDate = new Date(sale.createdAt);
   const expiresAtDate = new Date(sale.expiresAt);

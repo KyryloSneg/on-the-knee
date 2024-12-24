@@ -1,4 +1,4 @@
-main.device-section-main {
+main.device-or-sales-section-main {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -6,20 +6,20 @@ main.device-section-main {
   gap: 22px;
 }
 
-.device-section-error, .no-devices-message {
+.device-or-sales-section-error, .no-devices-or-sales-message {
   margin-top: 24px;
 }
 
-.no-devices-message {
+.no-devices-or-sales-message {
   font-size: 1.5rem;
 }
 
-.device-section-error > p {
+.device-or-sales-section-error > p {
   font-size: 1.5rem;
   font-family: 'Montserrat', sans-serif;
 }
 
-.device-section-error button {
+.device-or-sales-section-error button {
   font-size: 1.5rem;
   color: #4444ef;
   cursor: pointer;
@@ -37,9 +37,9 @@ main .spinner-border.error-retry-spinner {
 }
 
 @media screen and (min-width: 600px) {
-  .device-section-error > p,
-  .device-section-error button,
-  .no-devices-message  {
+  .device-or-sales-section-error > p,
+  .device-or-sales-section-error button,
+  .no-devices-or-sales-message  {
     font-size: 2.2rem;
   }
 

@@ -36,6 +36,9 @@ class FetchRefStore {
 
     this._userPagePrevUserIdRef = createRef(null);
     this._userPagePrevOrdersRef = createRef(null);
+
+    this._lastSalesPageSlug = createRef(null);
+    this._lastSalesPageFetchPageFiltersObj = createRef(null);
   }
 
   get globalLoadingChangesObj() {
@@ -130,6 +133,16 @@ class FetchRefStore {
     return this._userPagePrevOrdersRef.current;
   }
 
+  get lastSalesPageSlug() {
+    return this._lastSalesPageSlug.current;
+  }
+
+  get lastSalesPageFetchPageFiltersObj() {
+    // setting the initial value on the first call of this getter
+    if (this._lastSalesPageFetchPageFiltersObj.current === null) this._lastSalesPageFetchPageFiltersObj.current = {};
+    return this._lastSalesPageFetchPageFiltersObj.current;
+  }
+
   setGlobalLoadingChangesObj(globalLoadingChangesObj) {
     this._globalLoadingChangesObj.current = globalLoadingChangesObj;
   }
@@ -208,6 +221,14 @@ class FetchRefStore {
 
   setUserPagePrevOrdersRef(userPagePrevOrdersRef) {
     this._userPagePrevOrdersRef.current = userPagePrevOrdersRef;
+  }
+
+  setLastSalesPageSlug(lastSalesPageSlug) {
+    this._lastSalesPageSlug.current = lastSalesPageSlug;
+  }
+
+  setLastSalesPageFetchPageFiltersObj(lastSalesPageFetchPageFiltersObj) {
+    this._lastSalesPageFetchPageFiltersObj.current = lastSalesPageFetchPageFiltersObj;
   }
 }
 
