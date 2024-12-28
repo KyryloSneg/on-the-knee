@@ -17,9 +17,7 @@ const WrongCartComboAmountsModalContent = observer(({ closeModal, isLoadedCombos
           <>
             {!!Object.keys(oldCartComboAmounts)?.length && (
               <section className="wrong-cart-combo-amounts-changes-section">
-                <header>
-                  <h3>Changed amount{Object.keys(oldCartComboAmounts)?.length > 1 ? "s" : ""}</h3>
-                </header>
+                <h3>Changed amount{Object.keys(oldCartComboAmounts)?.length > 1 ? "s" : ""}</h3>
                 <CartModalDeviceList
                   type="wrongCartComboAmounts"
                   oldCartComboAmounts={oldCartComboAmounts}
@@ -29,9 +27,7 @@ const WrongCartComboAmountsModalContent = observer(({ closeModal, isLoadedCombos
             )}
             {!!deletedCartCombos?.length && (
               <section className="wrong-cart-combo-amounts-deletion-section">
-                <header>
-                  <h3>Deleted device{deletedCartCombos?.length > 1 ? "s" : ""}</h3>
-                </header>
+                <h3>Deleted device{deletedCartCombos?.length > 1 ? "s" : ""}</h3>
                 <WrongCartComboAmountsDeletedList deletedCartCombos={deletedCartCombos} />
               </section>
             )}

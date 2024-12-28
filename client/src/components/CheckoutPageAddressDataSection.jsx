@@ -80,9 +80,7 @@ const CheckoutPageAddressDataSection = ({
 
   return (
     <section className="checkout-page-address-data-section">
-      <header>
-        {headerContent}
-      </header>
+      {headerContent}
       <div>
         <div className="checkout-address-data-section-inputs">
           <ReactHookFormInput

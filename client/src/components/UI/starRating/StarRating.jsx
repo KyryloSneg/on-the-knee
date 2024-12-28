@@ -1,6 +1,7 @@
 import "./StarRating.css";
 import Star from "./Star";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { v4 } from "uuid";
 
 // isWithText works only for 5-star rating
 const StarRating = ({ 
@@ -8,16 +9,22 @@ const StarRating = ({
   isReadOnly = true, areBtnsBlocked = false, settedValue = null, setSettedValue = null, onSetCb = null, ...props 
 }) => {
   const [hoveredValue, setHoveredValue] = useState(settedValue);
+  const starRatingInvisibleAltTextId = useMemo(() => v4(), []);
 
   let divProps = {};
-  if (!isReadOnly) {
-    divProps.role = "radiogroup";
+  if (isReadOnly) {
+    divProps["aria-labelledby"] = starRatingInvisibleAltTextId;
   } else {
-    divProps["aria-label"] = `${readOnlyValue} star${readOnlyValue !== 1 ? "s" : ""}`;
+    divProps.role = "radiogroup";
   }
 
   return (
     <div className="display-flex star-rating" {...divProps} {...props}>
+      {isReadOnly && (
+        <p className="visually-hidden" id={starRatingInvisibleAltTextId}>
+          {readOnlyValue} {readOnlyValue === 1 ? "star" : "stars"} of {maxValue}
+        </p>
+      )}
       {[...Array(maxValue)].map((val, index) => {
         const starIndex = index + 1;
         const star = (

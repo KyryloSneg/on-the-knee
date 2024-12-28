@@ -4,11 +4,9 @@ import paymentIcon from "../assets/payments_24x24_434343.svg";
 const CheckoutPagePaymentSection = () => {
   return (
     <section className="checkout-page-payment-section">
-      <header>
-        <h3>
-          Payment
-        </h3>
-      </header>
+      <h3>
+        Payment
+      </h3>
       {
        /* 
         * i won't implement "Pay immediately" option because i don't want to sign 

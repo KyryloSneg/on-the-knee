@@ -14,7 +14,7 @@ const ChildItemGroupsBar = ({ type, childItemGroups }) => {
   if (!POSSIBLE_TYPES.includes(type)) throw Error("type of ChildItemGroupsBar is incorrect");
 
   return (
-    <section className="child-categories-bar">
+    <nav className="child-categories-bar">
       <ul className="child-item-groups-bar">
         {childItemGroups.map(itemGroup =>
           <li key={itemGroup.id}>
@@ -22,7 +22,7 @@ const ChildItemGroupsBar = ({ type, childItemGroups }) => {
           </li>  
         )}
       </ul>
-    </section>
+    </nav>
   );
 }
 

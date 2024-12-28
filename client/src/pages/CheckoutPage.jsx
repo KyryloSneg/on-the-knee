@@ -436,9 +436,7 @@ const CheckoutPage = observer(() => {
   return (
     <>
       <div className="checkout-page">
-        <header>
-          <h2>Checkout order</h2>
-        </header>
+        <h2>Checkout order</h2>
         <form
           onSubmit={handleSubmit(
             onSubmit, (errors) => checkInputsValidAndHandleInvalidInputFocus(true, errors))

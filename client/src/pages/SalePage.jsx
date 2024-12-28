@@ -32,7 +32,7 @@ const SalePage = observer(() => {
   return (
     <div className="sale-page">
       <SalePageBanner sale={oneSalePageStore.sale} />
-      <CatalogPage type="saleDevices" sale={oneSalePageStore.sale} isTopElemMain={true} />
+      <CatalogPage type="saleDevices" sale={oneSalePageStore.sale} />
     </div>
   );
 });

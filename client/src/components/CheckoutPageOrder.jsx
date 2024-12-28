@@ -62,9 +62,7 @@ const CheckoutPageOrder = observer(({
 
   return (
     <section className="checkout-page-order">
-      <header>
-        <h3>Order{isMultiple ? ` №${id}` : ""}</h3>
-      </header>
+      <h3>Order{isMultiple ? ` №${id}` : ""}</h3>
       <CheckoutPageOrderDeviceList order={order} orderId={id} cartDataFetching={cartDataFetching} />
       {app.isToShowDeliveryChangeMessageValues?.[id]?.value &&
         <MessageToUser 

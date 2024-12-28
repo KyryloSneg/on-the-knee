@@ -30,11 +30,9 @@ const WriteSellerFeedbackPage = observer(() => {
 
   return (
     <main className="write-seller-feedback-page">
-      <header>
-        <h2 className="top-h2">
-          Rate {seller?.name || sellerPlaceHolderName}
-        </h2>
-      </header>
+      <h2 className="top-h2">
+        Rate {seller?.name || sellerPlaceHolderName}
+      </h2>
       <WriteSellerFeedbackForm 
         sellerId={id} 
         sellerSlug={slug} 

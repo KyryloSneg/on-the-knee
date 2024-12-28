@@ -99,7 +99,7 @@ const SellerPage = observer(({ type }) => {
   ];
 
   return (
-    <main className="seller-page">
+    <div className="seller-page">
       {seller && (
         <>
           <h2 className="top-h2">
@@ -123,7 +123,7 @@ const SellerPage = observer(({ type }) => {
           />
         </>
       )}
-    </main>
+    </div>
   );
 });
 

@@ -21,7 +21,7 @@ import getTotalPages from "utils/getTotalPages";
 
 const POSSIBLE_TYPES = ["category", "search", "seller", "saleDevices"];
 
-const CatalogPage = observer(({ type, seller = null, sale = null, isTopElemMain = false }) => {
+const CatalogPage = observer(({ type, seller = null, sale = null }) => {
   if (!POSSIBLE_TYPES.includes(type)) throw Error("type of Catalog Page is not defined or incorrect");
 
   const location = useLocation();
@@ -158,13 +158,14 @@ const CatalogPage = observer(({ type, seller = null, sale = null, isTopElemMain 
     option.value === lastSortFilter
   )?.id || null;
 
-  const topElemContent = (
-    <>
+  return (
+    <div className="display-grid">
       {(!!storeToUse.devices.length && type === "search")
         ? <p className="spell-checked-query-p">Devices by query «<span>{spellCheckedQuery}</span>»</p>
         : (type === "search") && <div className="spell-checked-p-placeholder" />
       }
       {type === "category" && <h2 className="top-h2">{category.name}</h2>}
+      {/* maybe it should be semantically in the main, but we can't do it for the sake of design :( */}
       <div className="sort-and-filter-bar-wrap">
         {(windowWidth < WIDTH_TO_SHOW_ASIDE && isToRenderFilters) &&
           <TopFilterBar storeToUse={storeToUse} />
@@ -188,7 +189,7 @@ const CatalogPage = observer(({ type, seller = null, sale = null, isTopElemMain 
         || hasAlreadyFetchedThisSearch || hasAlreadyFetchedThisSeller
         || hasAlreadyFetchedThisSale
       ) &&
-        <div id="wrapper" className={wrapperClassName}>
+        <section id="wrapper" className={wrapperClassName}>
           {isToRenderFilters &&
             <CatalogAside storeToUse={storeToUse} key={"aside"} />
           }
@@ -198,25 +199,10 @@ const CatalogPage = observer(({ type, seller = null, sale = null, isTopElemMain 
             isLoading={isLoading}
             error={error}
             isInitialRenderRef={isInitialRenderRef}
-            isTopElemMain={type !== "seller"}
             key={"devSection"}
           />
-        </div>
+        </section>
       }
-    </>
-  );
-
-  if (isTopElemMain) {
-    return (
-      <main className="display-grid">
-        {topElemContent}
-      </main>
-    ); 
-  }
-
-  return (
-    <div className="display-grid">
-      {topElemContent}
     </div>
   );
 });

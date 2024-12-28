@@ -38,9 +38,9 @@ const RemainSellerDevFeedback = observer(({
       )}
       {!!devCombosFeedbacksObjArray?.length && (
         <section className="remain-dev-feedback-section">
-          <header>
+          <div>
             <h3>Leave a device feedback</h3>
-          </header>
+          </div>
           <RemainSellerDevFeedbackDevList 
             type={type} 
             devCombosFeedbacksObjArray={devCombosFeedbacksObjArray} 

@@ -24,11 +24,9 @@ const UserFeedbacksPage = observer(({
 
   if (areOrdersLoading || areOrdersListSellersLoading || isToShowLoaderOnInitialRender) return (
     <section className="user-page-section">
-      <header>
-        <h2>
-          Your feedbacks
-        </h2>
-      </header>
+      <h2>
+        Your feedbacks
+      </h2>
       <Loader className="user-page-loader" />
     </section>
   );
@@ -53,11 +51,9 @@ const UserFeedbacksPage = observer(({
 
   return (
     <section className="user-page-section">
-      <header>
-        <h2>
-          Your feedbacks
-        </h2>
-      </header>
+      <h2>
+        Your feedbacks
+      </h2>
       {(!!orders?.length || !!user.ordersListSellers?.length)
         ? (
           <TabsPageLayout
@@ -69,11 +65,9 @@ const UserFeedbacksPage = observer(({
         )
         : (
           <section className="user-page-no-data-msg-section">
-            <header>
-              <h3>
-                You haven't bought anything to remain a feedback
-              </h3>
-            </header>
+            <h3>
+              You haven't bought anything to remain a feedback
+            </h3>
             <p className="user-page-no-data-msg">
               Find your dream devices
             </p>

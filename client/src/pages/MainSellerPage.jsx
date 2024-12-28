@@ -39,7 +39,7 @@ const MainSellerPage = ({ seller, feedbacks }) => {
     + feedbacksAmountObj["service-quality-rate"].length;
 
   return (
-    <section className="main-seller-page">
+    <div className="main-seller-page">
       <MainSellerPageRatingSection 
         seller={seller} 
         ratingsObj={ratingsObj}
@@ -47,7 +47,7 @@ const MainSellerPage = ({ seller, feedbacks }) => {
         feedbacksAmountObj={feedbacksAmountObj}
       />
       <SellerScheduleSection seller={seller} />
-    </section>
+    </div>
   );
 }
 
