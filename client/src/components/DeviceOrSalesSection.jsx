@@ -10,14 +10,15 @@ import SalesPageList from "./SalesPageList";
 import getTotalPages from "utils/getTotalPages";
 import isCanLoadMoreContent from "utils/isCanLoadMoreContent";
 
-const POSSIBLE_TYPES = ["devices", "sales"];
+const POSSIBLE_TYPES = ["devices", "sales", "saleDevices"];
 
+// isTopElemMain ? main element is used as the top one in the jsx : section elem is used;
 const DeviceOrSalesSection = observer(({ 
-  type, retryFetching, isLoading, error, isInitialRenderRef, ...props 
+  type, retryFetching, isLoading, error, isInitialRenderRef, isTopElemMain = true, ...props 
 }) => {
   if (!POSSIBLE_TYPES.includes(type)) throw Error("type of DeviceOrSalesSection is not defined or incorrect");
 
-  const { app, deviceStore, salesPageStore } = useContext(Context);
+  const { app, deviceStore, salesPageStore, oneSalePageStore } = useContext(Context);
   const sectionRef = useRef(null);
 
   async function onRetryFetch() {
@@ -31,10 +32,17 @@ const DeviceOrSalesSection = observer(({
   function renderItemsRelatedJsx() {
     let content = <div />;
 
-    if (type === "devices") {
+    if (type === "devices" || type === "saleDevices") {
+      let storeToUse;
+      if (type === "devices") {
+        storeToUse = deviceStore;
+      } else if (type === "saleDevices") {
+        storeToUse = oneSalePageStore;
+      }
+
       if (allItems.length) {
-        content = <DevicePageList />;
-      } else if (!isInitialRenderRef.current && !error && !!Object.keys(deviceStore.usedFilters).length && !isLoading) {
+        content = <DevicePageList storeToUse={storeToUse} />;
+      } else if (!isInitialRenderRef.current && !error && !!Object.keys(storeToUse.usedFilters).length && !isLoading) {
         content = (
           <p className="no-devices-or-sales-message">
             We haven't found devices with such filters {":("}
@@ -57,16 +65,26 @@ const DeviceOrSalesSection = observer(({
   }
 
   let allItems = [];
+  let itemsNameToRender = "";
   let paginationInfoStore = null;
   let pagesPaginationAriaLabel = "Pages";
 
-  if (type === "devices") {
-    allItems = deviceStore.devices;
+  if (type === "devices" || type === "saleDevices") {
+    let storeToUse;
+    if (type === "devices") {
+      storeToUse = deviceStore;
+    } else if (type === "saleDevices") {
+      storeToUse = oneSalePageStore;
+    }
 
-    paginationInfoStore = deviceStore;
+    allItems = storeToUse.devices;
+    itemsNameToRender = "devices"
+
+    paginationInfoStore = storeToUse;
     pagesPaginationAriaLabel = "Device pages";
   } else if (type === "sales") {
     allItems = salesPageStore.filteredSales;
+    itemsNameToRender = "sales"
 
     paginationInfoStore = salesPageStore;
     pagesPaginationAriaLabel = "Sale pages";
@@ -78,9 +96,9 @@ const DeviceOrSalesSection = observer(({
     allItems.length,
     (paginationInfoStore.page - 1) * paginationInfoStore.limit
   );
-
-  return (
-    <main className="device-or-sales-section-main" ref={sectionRef} {...props}>
+  
+  const topElemContent = (
+    <>
       {renderItemsRelatedJsx()}
       {/* spinner on "retry" fetch */}
       {(error && isLoading) &&
@@ -90,7 +108,7 @@ const DeviceOrSalesSection = observer(({
       {(!!error && !isLoading) &&
         <div className="device-or-sales-section-error">
           <p>
-            Oops! Something went wrong while getting devices.
+            Oops! Something went wrong while getting {itemsNameToRender}.
           </p>
           <p>
             <button className="link-colors" onClick={onRetryFetch}>
@@ -116,7 +134,21 @@ const DeviceOrSalesSection = observer(({
           ariaLabel={pagesPaginationAriaLabel}
         />
       }
-    </main>
+    </>
+  );
+
+  if (isTopElemMain) {
+    return (
+      <main className="device-or-sales-section-main" ref={sectionRef} {...props}>
+        {topElemContent}
+      </main>
+    );
+  }
+
+  return (
+    <section className="device-or-sales-section-main" ref={sectionRef} {...props}>
+      {topElemContent}
+    </section>
   );
 });
 

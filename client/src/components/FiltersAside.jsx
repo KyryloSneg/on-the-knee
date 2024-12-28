@@ -7,8 +7,9 @@ import { Context } from "../Context";
 import SkipToNextPageContent from "./UI/skipToNextPageContent/SkipToNextPageContent";
 import getAllFocusableElements from "../utils/getAllFocusableElements";
 
-const FiltersAside = observer(() => {
-  const { deviceStore, app } = useContext(Context);
+// type from the catalog page
+const FiltersAside = observer(({ storeToUse }) => {
+  const { app } = useContext(Context);
   const asideRef = useRef(null);
 
   let deviceSectionElemToFocus;
@@ -26,7 +27,7 @@ const FiltersAside = observer(() => {
 
   useEffect(() => {
     app.setFiltersAsideRef(asideRef);
-  }, [app, deviceStore.filters, deviceStore.usedFilters]);
+  }, [app, storeToUse.filters, storeToUse.usedFilters]);
 
   return (
     <aside className="filters-aside" ref={asideRef}>
@@ -36,13 +37,13 @@ const FiltersAside = observer(() => {
         testId="skip-to-the-next-page-btn aside start"
         className="w-100"
       />
-      {Object.keys(deviceStore.usedFilters).length > 0
+      {Object.keys(storeToUse.usedFilters).length > 0
         ? [
-          <UsedFilters key={"usedFiltersSection"} />,
-          <FilterCategories key={"filterCategoriesSection"} />
+          <UsedFilters key={"usedFiltersSection"} storeToUse={storeToUse} />,
+          <FilterCategories key={"filterCategoriesSection"} storeToUse={storeToUse} />
         ]
         : (
-          <FilterCategories />
+          <FilterCategories storeToUse={storeToUse} />
         )
       }
       <SkipToNextPageContent

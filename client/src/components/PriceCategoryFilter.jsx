@@ -1,24 +1,22 @@
-import { useContext, useState } from "react";
 import "./styles/PriceCategoryFilter.css";
+import { useState } from "react";
 import MinMaxPrice from "./MinMaxPrice";
-import { Context } from "../Context";
 import { observer } from "mobx-react-lite";
 import URLActions from "../utils/URLActions";
 import useResettingMinMaxPrices from "../hooks/useResettingMinMaxPrices";
 import useNavigateToEncodedURL from "../hooks/useNavigateToEncodedURL";
 import UIButton from "./UI/uiButton/UIButton";
 
-const PriceCategoryFilter = observer(() => {
-  const { deviceStore } = useContext(Context);
+const PriceCategoryFilter = observer(({ storeToUse }) => {
   const navigate = useNavigateToEncodedURL();
 
-  const [minPriceValue, setMinPriceValue] = useState(deviceStore.initialMinPrice);
-  const [maxPriceValue, setMaxPriceValue] = useState(deviceStore.initialMaxPrice);
+  const [minPriceValue, setMinPriceValue] = useState(storeToUse.initialMinPrice);
+  const [maxPriceValue, setMaxPriceValue] = useState(storeToUse.initialMaxPrice);
 
   const [isValid, setIsValid] = useState(true);
 
   useResettingMinMaxPrices(
-    deviceStore.initialMinPrice, deviceStore.initialMaxPrice,
+    storeToUse.initialMinPrice, storeToUse.initialMaxPrice,
     minPriceValue, maxPriceValue,
     setMinPriceValue, setMaxPriceValue,
   );
@@ -32,7 +30,7 @@ const PriceCategoryFilter = observer(() => {
 
     const currentPrice = URLActions.getParamValue("price");
     if (currentPrice === `${minPriceValue}-${maxPriceValue}`
-      || (minPriceValue === deviceStore.initialMinPrice && maxPriceValue === deviceStore.initialMaxPrice && !currentPrice)) return;
+      || (minPriceValue === storeToUse.initialMinPrice && maxPriceValue === storeToUse.initialMaxPrice && !currentPrice)) return;
 
     let nextUrl = URLActions.setNewParam("price", `${minPriceValue}-${maxPriceValue}`);
     nextUrl = URLActions.getURLWithResettedPageRelatedParams(nextUrl);
@@ -53,6 +51,7 @@ const PriceCategoryFilter = observer(() => {
             setIsValid={setIsValid}
             minPriceValue={minPriceValue}
             maxPriceValue={maxPriceValue}
+            storeToUse={storeToUse}
           />
           <span className="price-divider no-select"> - </span>
           <MinMaxPrice
@@ -63,6 +62,7 @@ const PriceCategoryFilter = observer(() => {
             setIsValid={setIsValid}
             minPriceValue={minPriceValue}
             maxPriceValue={maxPriceValue}
+            storeToUse={storeToUse}
           />
         </div>
 

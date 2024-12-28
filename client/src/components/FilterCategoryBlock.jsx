@@ -4,7 +4,7 @@ import CategoryFilterList from "./CategoryFilterList";
 import PriceCategoryFilter from "./PriceCategoryFilter";
 import "./styles/FilterCategoryBlock.css";
 
-const FilterCategoryBlock = ({ filter, variant = "default", isInitiallyVisible }) => {
+const FilterCategoryBlock = ({ filter, variant = "default", storeToUse, isInitiallyVisible }) => {
   const [visible, setVisible] = useState(isInitiallyVisible);
 
   const elemToFocusRef = useRef(null);
@@ -25,13 +25,14 @@ const FilterCategoryBlock = ({ filter, variant = "default", isInitiallyVisible }
           <CategoryFilterList
             filter={filter}
             variant={variant}
+            storeToUse={storeToUse}
             elemToFocusRef={elemToFocusRef}
             key={filter}
           />
         );
       } else {
         return (
-          <PriceCategoryFilter />
+          <PriceCategoryFilter storeToUse={storeToUse} />
         );
       }
 

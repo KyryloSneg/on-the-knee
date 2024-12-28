@@ -158,6 +158,10 @@ ul {
   padding: 0;
 }
 
+figure {
+  margin: 0;
+}
+
 /* dark app's bg that appears on certain events */
 
 #app-dark-bg {

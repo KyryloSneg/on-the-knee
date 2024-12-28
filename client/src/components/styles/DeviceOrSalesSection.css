@@ -1,4 +1,4 @@
-main.device-or-sales-section-main {
+main.device-or-sales-section-main, section.device-or-sales-section-main {
   position: relative;
   display: flex;
   flex-direction: column;

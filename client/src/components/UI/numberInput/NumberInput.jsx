@@ -10,10 +10,12 @@ const POSSIBLE_TYPES = ["default", "price"];
 const NumberInput = observer(({ 
   type = "default", value, setValue, isValid, setIsValid, 
   minValue = -Infinity, isToUseNegativeIntegers = true, isToUseFloatNumbers = true, onSetValueCb = null, 
-  isMin = null, minPriceValue = null, maxPriceValue = null, ...props 
+  isMin = null, minPriceValue = null, maxPriceValue = null, propsStoreToUse = null, ...props 
 }) => {
   const { deviceStore } = useContext(Context);
   if (!POSSIBLE_TYPES.includes(type)) throw Error("type of Catalog Page is not defined or incorrect");
+
+  let storeToUse = propsStoreToUse || deviceStore;
 
   function onChange(e) {
     const { addedChar } = findAddedCharAndIndex(value.toString(), e.target.value);
@@ -37,8 +39,8 @@ const NumberInput = observer(({
         nextIsValid = validateMinMaxPrice(
           isMin,
           nextValue,
-          deviceStore.initialMinPrice,
-          deviceStore.initialMaxPrice,
+          storeToUse.initialMinPrice,
+          storeToUse.initialMaxPrice,
           minPriceValue,
           maxPriceValue
         ).nextIsValid;
@@ -73,7 +75,7 @@ const NumberInput = observer(({
         if (type === "price") {
           priceFilterOnKeyDown(
             e, type, value, setValue, setIsValid, minValue, onSetValueCb, isMin, 
-            deviceStore.initialMinPrice, deviceStore.initialMaxPrice,
+            storeToUse.initialMinPrice, storeToUse.initialMaxPrice,
             minPriceValue, maxPriceValue, setIsValid, setValue
           );
         } else if (type === "default") {

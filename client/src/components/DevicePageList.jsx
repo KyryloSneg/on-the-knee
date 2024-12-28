@@ -1,13 +1,10 @@
 import "./styles/DevicePageList.css";
-import { useContext } from "react";
-import { Context } from "../Context";
 import DeviceList from "./DeviceList";
 import { observer } from "mobx-react-lite";
 import useGettingPagesObj from "hooks/useGettingPagesObj";
 
-const DevicePageList = observer(() => {
-  const { deviceStore } = useContext(Context);
-  const pagesObj = useGettingPagesObj(deviceStore.devices, deviceStore.page, deviceStore.pagesToFetch, deviceStore.limit);
+const DevicePageList = observer(({ storeToUse }) => {
+  const pagesObj = useGettingPagesObj(storeToUse.devices, storeToUse.page, storeToUse.pagesToFetch, storeToUse.limit);
 
   return (
     <ul className="main-device-page-list">

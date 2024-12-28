@@ -33,10 +33,15 @@ export const SALES_ROUTE = "/sales/" // + ":slug" (freeDelivery for example)
 export const SALE_ROUTE = "/sale/" // + ":saleIdSlug (1--freeDelivery for example)"
 
 const deviceAPIUrlQueryParams = "_embed=device-combinations&_embed=device-feedbacks&_embed=device-infos&_embed=sale-devices&_embed=additional-service-devices"
+
 export const DEVICE_API_URL = "/devices?" + deviceAPIUrlQueryParams;
 export const ONE_DEVICE_API_URL = "/devices/ID_TO_REPLACE?" + deviceAPIUrlQueryParams;
+
 export const SALES_API_URL = "/sales?_embed=sale-types";
+export const SALE_API_URL = "/sales/ID_TO_REPLACE?_embed=sale-types";
+
 export const ATRIBUTES_API_URL = "/attributes?_expand=attribute-value&_expand=attribute-name";
+
 export const ONE_ADDITIONAL_SERVICES_API_URL = "/additional-services/ID_TO_REPLACE";
 export const ONE_DEV_ADDITIONAL_SERVICE_DEVICES_API_URL = "/additional-service-devices?deviceId=ID_TO_REPLACE";
 
