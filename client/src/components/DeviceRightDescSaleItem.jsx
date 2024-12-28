@@ -4,7 +4,7 @@ import { SALE_ROUTE } from "../utils/consts";
 import TimeRange from "./TimeRange";
 
 const DeviceRightDescSaleItem = ({ sale, saleTypes }) => {
-  const to = SALE_ROUTE + `${sale.id}--${sale.slug}`;
+  const to = SALE_ROUTE + `${sale.id}--${sale.slug}?page=1&pagesToFetch=1`;
 
   const createdAtDate = new Date(sale.createdAt);
   const expiresAtDate = new Date(sale.expiresAt);

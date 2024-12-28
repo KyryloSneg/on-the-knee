@@ -187,7 +187,7 @@ const CheckoutPage = observer(() => {
 
           try {
             const orderSaleDevices = await getOneDeviceSaleDevices(cartCombo.device.id, true);
-            if (orderSaleDevices?.length) saleDevices.push(orderSaleDevices);
+            if (orderSaleDevices?.length) saleDevices = saleDevices.concat(orderSaleDevices);
           } catch {
             // do nothing (there's no sales for a device)
           }

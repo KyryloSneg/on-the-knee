@@ -23,19 +23,28 @@ export async function getSaleTypeNames() {
 }
 
 export async function getOneDeviceSaleDevices(deviceId, isWithExpandedDevice = false) {
-  let url = `/sale-devices?deviceId=${deviceId}`;
+  let url = `/sale-devices?deviceId=${deviceId}&_expand=sale`;
   if (isWithExpandedDevice) {
-    url += "&_expand=devices";
+    url += "&_expand=device";
   }
 
   const { data } = await $mockApi.get(url);
-  return data;
+  // get sale devices only of not ended sales
+  let result = [];
+
+  for (let saleDev of data) {
+    if (!saleDev.sale.hasEnded) {
+      result.push(saleDev);
+    }
+  }
+
+  return result;
 }
 
 export async function getOneSaleSaleDevices(saleId, isWithExpandedDevice = false) {
   let url = `/sale-devices?saleId=${saleId}`;
   if (isWithExpandedDevice) {
-    url += "&_expand=devices";
+    url += "&_expand=device";
   }
 
   const { data } = await $mockApi.get(url);
