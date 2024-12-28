@@ -247,7 +247,7 @@ module.exports = (
       orderDeviceCombinations, orderInfo.combos, id, devices, deviceCombinations, saleDevices, sales, saleTypes
     );
     // const orderName = createOrderName(id, additionalInfo.names);
-    let orderName = Math.random().toString().slice(2, 12);
+    let orderName = String(Math.random()).slice(2, 12);
     orderName = `${orderName.slice(0, 3)} ${orderName.slice(3, 6)} ${orderName.slice(6)}`
 
     const status = POSSIBLE_ORDER_STATUSES[faker.number.int({ min: 0, max: POSSIBLE_ORDER_STATUSES.length - 1 })];
@@ -272,7 +272,7 @@ module.exports = (
     }
     
     // const info = faker.lorem.word({ length: { min: 8, max: 14 } });
-    let info = Math.random().toString().slice(2, 12);
+    let info = String(Math.random()).slice(2, 12);
     info = `${info.slice(0, 3)} ${info.slice(3, 6)} ${info.slice(6)}`
     let storePickupPointId = null
 
