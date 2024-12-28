@@ -1,22 +1,16 @@
 import "./ButtonPagination.css";
-import Spinner from 'react-bootstrap/Spinner';
 import { Link } from 'react-router-dom';
 import URLActions from '../../../utils/URLActions';
 import useWindowWidth from '../../../hooks/useWindowWidth';
 import { WIDTH_TO_SHOW_LOADING_BTN_PAGINATION } from '../../../utils/consts';
+import Loader from "../loader/Loader";
 
 const ButtonPagination = ({ isLoading, pagesToFetch, className = "" }) => {
   const screenWidth = useWindowWidth();
 
   if (screenWidth < WIDTH_TO_SHOW_LOADING_BTN_PAGINATION && isLoading) {
     return (
-      <Spinner
-        animation="border"
-        variant="primary"
-        size="sm"
-        role="status"
-        className="no-select pagination-btn-mobile-loader"
-      />
+      <Loader className="no-select pagination-btn-mobile-loader" />
     );
   }
 
@@ -27,15 +21,7 @@ const ButtonPagination = ({ isLoading, pagesToFetch, className = "" }) => {
   return (
     <Link to={to} className={`btn-pagination ${disabledClassName} ${className}`} preventScrollReset={true}>
       {/* turning on animation on click */}
-      <Spinner
-        animation="border"
-        variant="primary"
-        size="sm"
-        role="status"
-        className={spinnerClassName}
-      >
-        <span className="visually-hidden">Loading...</span>
-      </Spinner>
+      <Loader className={spinnerClassName} />
       <p>Show more devices?</p>
     </Link>
   );

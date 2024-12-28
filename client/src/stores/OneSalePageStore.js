@@ -14,7 +14,7 @@ class OneSalePageStore {
     this._page = 1;
     this._pagesToFetch = 1;
     this._totalCount = 0;
-    this._limit = 60;
+    this._limit = 1;
 
     makeAutoObservable(this);
   }

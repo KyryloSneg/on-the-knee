@@ -15,9 +15,9 @@
   font-size: 1.5rem;
 }
 
-.btn-pagination .spinner-border,
-.btn-pagination .spinner-border.placeholder,
-.pagination-btn-mobile-loader {
+.btn-pagination .custom-loader.spinner-border,
+.btn-pagination .custom-loader.spinner-border.placeholder,
+.custom-loader.pagination-btn-mobile-loader {
   width: 2rem;
   height: 2rem;
   border-width: 0.6rem;
@@ -29,7 +29,7 @@
   color: #004cf1;
 }
 
-.pagination-btn-mobile-loader {
+.custom-loader.pagination-btn-mobile-loader {
   margin-top: 18px;
 }
 
@@ -39,8 +39,8 @@
     height: 44px;
   }
 
-  .btn-pagination .spinner-border,
-  .btn-pagination .spinner-border.placeholder {
+  .btn-pagination .custom-loader.spinner-border,
+  .btn-pagination .custom-loader.spinner-border.placeholder {
     width: 2.8rem;
     height: 2.8rem;
     border-width: 0.8rem;
