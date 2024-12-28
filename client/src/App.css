@@ -26,11 +26,6 @@ body {
   margin: 0;
 }
 
-/* every page must start with the <main /> element */
-main {
-  min-height: 100%;
-}
-
 /* implementing the scroll blocking like this, so the scroll bar doesn't disappear */
 .global-blocked-scroll {
   position: fixed;
@@ -161,6 +156,10 @@ select {
 ul {
   list-style-type: none;
   padding: 0;
+}
+
+figure {
+  margin: 0;
 }
 
 /* dark app's bg that appears on certain events */
@@ -511,6 +510,15 @@ ul {
   font-size: 2rem;
   text-align: start;
   padding: 0 28px;
+}
+
+/* scrollbar of the bar */
+
+.child-item-groups-scrollbar {
+  box-sizing: border-box;
+  margin: 0 10px;
+  /* making it not overflow the whole page */
+  width: calc(100% - 20px);
 }
 
 @media screen and (min-width: 400px) {

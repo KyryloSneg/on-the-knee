@@ -13,6 +13,8 @@ function useGettingSalesAndTypeNames(additionalCondition = true) {
     
     deviceStore.setSales(sales);
     deviceStore.setSaleTypeNames(saleTypeNames);
+
+    return { sales, saleTypeNames };
   }
 
   const [fetching, isLoading, error] = useFetching(fetchingCallback);

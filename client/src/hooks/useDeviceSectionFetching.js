@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { useContext, useEffect, useRef } from "react";
 import { getStocks } from "../http/StocksAPI";
-import { getSaleTypeNames, getSales } from "../http/SalesAPI";
+import { getOneSaleSaleDevices, getSaleTypeNames, getSales } from "../http/SalesAPI";
 import useFetching from "./useFetching";
 import { useLocation, useParams } from "react-router-dom";
 import { getSellers } from "../http/SellersAPI";
@@ -18,21 +18,32 @@ import getPreparedForMockServerStr from "../utils/getPreparedForMockServerStr";
 import { Context } from "Context";
 import useIsGlobalLoadingSetter from "./useIsGlobalLoadingSetter";
 import getUsedFiltersWithoutSpecial from "utils/getUsedFiltersWithoutSpecial";
+import { getDevice } from "http/DeviceApi";
 
 // query params without pagination ones
 function useDeviceSectionFetching(
-  originalType, setIsFoundDevicesByQuery = null, 
-  setSpellCheckedQuery = null, seller = null, 
+  originalType, setIsFoundDevicesByQuery = null,
+  setSpellCheckedQuery = null, seller = null, sale = null,
   additionalCondition = true
 ) {
-  const { deviceStore, fetchRefStore } = useContext(Context);
-  
+  const { deviceStore, oneSalePageStore, fetchRefStore } = useContext(Context);
+
   const location = useLocation();
   const { categoryIdSlug } = useParams();
   const navigate = useNavigateToEncodedURL();
   const isGlobalLoadingSetter = useIsGlobalLoadingSetter();
-  
-  const prevUsedFilters = useRef(deviceStore.usedFilters);
+
+  // store to use for some setters below
+  let storeToUse;
+  if (originalType !== "saleDevices") {
+    // TODO: create separate stores for different types of CatalogPage
+    // (sellerStore for sure)
+    storeToUse = deviceStore;
+  } else {
+    storeToUse = oneSalePageStore;
+  }
+
+  const prevUsedFilters = useRef(storeToUse.usedFilters);
   const prevLocationPathname = useRef(location.pathname);
 
   const hasChangedURL = prevLocationPathname.current !== location.pathname;
@@ -49,48 +60,75 @@ function useDeviceSectionFetching(
   // useEffect(() => disaLoxRemastered(), [location]);
 
   async function fetchingCallback(location, categoryIdSlug, hasChangedURL, type) {
-    const isInitialFetch = !deviceStore.devices.length || !_.isEqual(deviceStore.usedFilters, prevUsedFilters.current) || hasChangedURL;
-    
+    const isInitialFetch = !storeToUse.devices.length || !_.isEqual(storeToUse.usedFilters, prevUsedFilters.current) || hasChangedURL;
+
     try {
       if (isInitialFetch) {
         isGlobalLoadingSetter(true);
       }
-      
+
       const [minQueryPrice, maxQueryPrice] =
         URLActions.getParamValue("price")?.split("-").map(price => +price) || [];
-  
-      const start = deviceStore.limit * (deviceStore.page - 1);
-      const limit = deviceStore.limit * deviceStore.pagesToFetch;
-      
+
+      const start = storeToUse.limit * (storeToUse.page - 1);
+      const limit = storeToUse.limit * storeToUse.pagesToFetch;
+
       const toFilterByOneSeller = type === "seller" && seller;
-  
+
       const categoryIdParam = URLActions.getParamValue("categoryId");
       const searchQuery = URLActions.getParamValue("text");
       const sortFilter = URLActions.getParamValue("sort");
-  
+
       // device's name_like="check spelled user's search query" param
       let fetchStringQueryParams = ``;
       const splittedSortFilter = sortFilter?.split(",");
-  
+
       if (!splittedSortFilter) {
         fetchStringQueryParams = `_sort=rating&_order=desc`;
       } else if (splittedSortFilter?.[1] === "rating") {
         fetchStringQueryParams = `_sort=rating&_order=${splittedSortFilter[0]}`;
       }
-  
+
       const preparedSearchQuery = typeof searchQuery === "string" ? getPreparedForMockServerStr(searchQuery) : searchQuery;
       if (type === "search") fetchStringQueryParams += `&name_like=${preparedSearchQuery}`.replaceAll(`"`, "");
       if (categoryIdParam && type !== "category") fetchStringQueryParams += `&categoryId=${categoryIdParam}`.replaceAll(`"`, "");
 
+      let argDevices = [];
+      if (type === "saleDevices") {
+        // get sale-devices of certain sale and then push 
+        // every device got from getDevice(saleDevice.deviceId) in the loop
+        const saleDevices = await getOneSaleSaleDevices(sale.id);
+
+        for (let saleDev of saleDevices) {
+          const dev = await getDevice(saleDev.deviceId);
+          argDevices.push(dev);
+        }
+
+        // sort by rating ("desc" param is the default one)
+        argDevices.sort((a, b) => {
+          let isDescending = true;
+
+          if (splittedSortFilter?.[1] === "rating" && splittedSortFilter?.[0] === "asc") {
+            isDescending = false;
+          }
+
+          if (isDescending) {
+            return +b.rating - +a.rating;
+          } else {
+            return +a.rating - +b.rating;
+          }
+        });
+      }
+      
       let { devices, spellCheckedSearchQuery } = await getDevicesBySearchQuery(
-        fetchStringQueryParams, type === "search", setIsFoundDevicesByQuery, setSpellCheckedQuery, navigate
+        fetchStringQueryParams, type === "search", setIsFoundDevicesByQuery, setSpellCheckedQuery, navigate, argDevices
       );
 
       if (type === "category") {
         const categoryId = categoryIdSlug?.split("--")[0];
         let descendantCategories = getDescendantCategories(categoryId, deviceStore.categories);
         descendantCategories.push(categoryId);
-  
+
         devices = devices.filter(dev => descendantCategories.includes(dev.categoryId));
       }
 
@@ -101,26 +139,26 @@ function useDeviceSectionFetching(
         // (idk why)
         isGlobalLoadingSetter(true);
       }
-  
+
       const stocks = await getStocks();
       const sales = await getSales();
       const saleTypeNames = await getSaleTypeNames();
-  
+
       const sellers = await getSellers();
       const brands = deviceStore.brands;
 
       if (toFilterByOneSeller) {
         devices = filterDevicesByOneSeller(devices, sellers, seller);
       }
-  
-      // we clone devices array deeply to prevent changing of a device combos
+
+      // we clone devices array deeply to prevent changing of device combos
       // (it's important for stock filter because it doesn't change on using it)
       let filteredDevices = _.cloneDeep(devices);
       let pageFilteredDevices = [];
-  
+
       const filterBySpecialFiltersResult = filterDevicesBySpecialFilters(
         filteredDevices, stocks, sellers, brands, sales, saleTypeNames,
-        minQueryPrice, maxQueryPrice, deviceStore.usedFilters
+        minQueryPrice, maxQueryPrice, storeToUse.usedFilters
       );
 
       const { minPrice, maxPrice, isSpecialFilters } = filterBySpecialFiltersResult;
@@ -128,61 +166,74 @@ function useDeviceSectionFetching(
 
       const attributes = await getDeviceStructuredAttributes(isSpecialFilters, filteredDevices);
 
-      const filtersWithoutSpecial = getUsedFiltersWithoutSpecial(deviceStore.usedFilters);
+      const filtersWithoutSpecial = getUsedFiltersWithoutSpecial(storeToUse.usedFilters);
       if (Object.keys(filtersWithoutSpecial).length) {
         // if we have used filters, do filtration
         filteredDevices = filteredDevices.filter(
           dev => filterDevicesWithCommonFilters(dev, attributes, filtersWithoutSpecial)
         );
       }
-  
+
       let filters = getDeviceFiltersObj(
-        devices, stocks, sellers, brands, sales, 
-        saleTypeNames, minQueryPrice, maxQueryPrice, attributes, 
-        deviceStore.usedFilters, !toFilterByOneSeller
+        devices, stocks, sellers, brands, sales,
+        saleTypeNames, minQueryPrice, maxQueryPrice, attributes,
+        storeToUse.usedFilters, !toFilterByOneSeller
       );
-  
+
       if (splittedSortFilter?.[1] === "price") {
         sortDevicesByPrice(filteredDevices, stocks, sales, saleTypeNames, true, splittedSortFilter[0] === "desc");
       }
-  
+
       // getting devices for the current page
       pageFilteredDevices = filteredDevices.slice(start, (start + limit));
-  
-      if (minPrice !== deviceStore.initialMinPrice) {
+      
+      const lastFetchUsedFilters = storeToUse.usedFilters || null;
+      const lastFetchSortFilter = sortFilter || null;
+      const lastFetchPageFiltersObj = { page: storeToUse.page, pagesToFetch: storeToUse.pagesToFetch } || null;
+      
+      if (type !== "saleDevices") {
+        fetchRefStore.setLastDevicesFetchUsedFilters(lastFetchUsedFilters);
+        fetchRefStore.setLastDevicesFetchSortFilter(lastFetchSortFilter);
+        fetchRefStore.setLastDevicesFetchPageFiltersObj(lastFetchPageFiltersObj);
+
+        fetchRefStore.setLastDevicesFetchCategoryId(type === "category" ? categoryIdSlug?.split("--")?.[0] || null : null);
+        fetchRefStore.setLastDevicesFetchSearch(type === "search" ? spellCheckedSearchQuery || preparedSearchQuery || null : null);
+        fetchRefStore.setLastDevicesFetchSellerId(type === "seller" ? seller?.id || null : null);
+      } else {
+        fetchRefStore.setLastSaleDevicesFetchUsedFilters(lastFetchUsedFilters);
+        fetchRefStore.setLastSaleDevicesFetchSortFilter(lastFetchSortFilter);
+        fetchRefStore.setLastSaleDevicesFetchPageFiltersObj(lastFetchPageFiltersObj);
+
+        fetchRefStore.setLastDevicesFetchSaleId(sale?.id || null);
+      }
+
+      if (minPrice !== storeToUse.initialMinPrice) {
         // rounding min and max numbers up to 2 digits after comma
-        deviceStore.setInitialMinPrice((Math.round(minPrice * 100) / 100).toFixed(2));
+        storeToUse.setInitialMinPrice((Math.round(minPrice * 100) / 100).toFixed(2));
       }
-  
-      if (maxPrice !== deviceStore.initialMaxPrice) {
-        deviceStore.setInitialMaxPrice((Math.round(maxPrice * 100) / 100).toFixed(2));
+
+      if (maxPrice !== storeToUse.initialMaxPrice) {
+        storeToUse.setInitialMaxPrice((Math.round(maxPrice * 100) / 100).toFixed(2));
       }
-  
-      deviceStore.setDevices(pageFilteredDevices);
+      
+      storeToUse.setDevices(pageFilteredDevices);
       // filters are almost just the same as device infos but later on they will have device attributes
-      deviceStore.setFilters(filters);
-      deviceStore.setTotalCount(filteredDevices.length);
-  
+      storeToUse.setFilters(filters);
+      storeToUse.setTotalCount(filteredDevices.length);
+
       if (!_.isEqual(deviceStore.stocks.slice(), stocks)) {
         deviceStore.setStocks(stocks);
       }
-  
+
       if (!_.isEqual(deviceStore.sales.slice(), sales)) {
         deviceStore.setSales(sales);
       }
-  
+
       if (!_.isEqual(deviceStore.saleTypeNames.slice(), saleTypeNames)) {
         deviceStore.setSaleTypeNames(saleTypeNames);
       }
 
-      fetchRefStore.setLastDevicesFetchCategoryId(type === "category" ? categoryIdSlug?.split("--")?.[0] || null : null);
-      fetchRefStore.setLastDevicesFetchUsedFilters(deviceStore.usedFilters || null);
-      fetchRefStore.setLastDevicesFetchSortFilter(sortFilter || null);
-      fetchRefStore.setLastDevicesFetchPageFiltersObj({ page: deviceStore.page, pagesToFetch: deviceStore.pagesToFetch } || null);
-      fetchRefStore.setLastDevicesFetchSearch(type === "search" ? spellCheckedSearchQuery || preparedSearchQuery || null : null);
-      fetchRefStore.setLastDevicesFetchSellerId(type === "seller" ? seller?.id || null : null);
-  
-      prevUsedFilters.current = deviceStore.usedFilters;
+      prevUsedFilters.current = storeToUse.usedFilters;
       prevLocationPathname.current = location.pathname;
     } finally {
       if (isInitialFetch) {
@@ -199,10 +250,10 @@ function useDeviceSectionFetching(
     // do not use fetching, stocks, sales and saleTypeNames in dependency list
     // eslint-disable-next-line
   }, [
-    deviceStore.limit,
-    deviceStore.page, 
-    deviceStore.pagesToFetch,
-    // deviceStore.usedFilters,
+    storeToUse.limit,
+    storeToUse.page,
+    storeToUse.pagesToFetch,
+    // storeToUse.usedFilters,
     // if param queries or pathname have changed, re-fetch devices
     location.search,
     location.pathname,

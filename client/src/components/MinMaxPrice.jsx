@@ -1,7 +1,7 @@
 import "./styles/MinMaxPrice.css";
 import NumberInput from "./UI/numberInput/NumberInput";
 
-const MinMaxPrice = ({ variant, value, setValue, isValid, setIsValid, minPriceValue, maxPriceValue }) => {
+const MinMaxPrice = ({ variant, value, setValue, isValid, setIsValid, minPriceValue, maxPriceValue, storeToUse }) => {
   const isMin = variant === "min";
 
   const inputIdName = isMin ? "min-price" : "max-price";
@@ -20,6 +20,7 @@ const MinMaxPrice = ({ variant, value, setValue, isValid, setIsValid, minPriceVa
         isMin={isMin} 
         minPriceValue={minPriceValue} 
         maxPriceValue={maxPriceValue} 
+        propsStoreToUse={storeToUse}
         name={inputIdName}
         id={inputIdName}
         data-testid={testId}

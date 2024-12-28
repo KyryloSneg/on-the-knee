@@ -7,8 +7,8 @@ import setFiltersSidebarVisibility from "../utils/setFiltersSidebarVisibility";
 import setUsedFiltersBarVisibility from "../utils/setUsedFiltersBarVisibility";
 import { observer } from "mobx-react-lite";
 
-const TopFilterBar = observer(() => {
-  const { app, deviceStore } = useContext(Context);
+const TopFilterBar = observer(({ storeToUse }) => {
+  const { app } = useContext(Context);
   const filtersShortcutRef = useRef(null);
   const usedFiltersShortcutRef = useRef(null);
 
@@ -31,14 +31,16 @@ const TopFilterBar = observer(() => {
   }, []);
 
   function showCategories() {
-    if (!Object.keys(deviceStore.filters).length) return;
+    if (!Object.keys(storeToUse.filters).length) return;
 
     // open sidebar that contains various categories filters with simple animation
+    app.setFiltersRelatedSidebarsStoreToUse(storeToUse);
     setFiltersSidebarVisibility(true, app);
   }
 
   function showUsedFilters() {
     // open sidebar that contains used filters with simple animation
+    app.setFiltersRelatedSidebarsStoreToUse(storeToUse);
     setUsedFiltersBarVisibility(true, app);
   }
 
@@ -52,7 +54,7 @@ const TopFilterBar = observer(() => {
         <img src={showCategoriesIcon} alt="" />
         Filter selection
       </button>
-      {!!Object.keys(deviceStore.usedFilters).length &&
+      {!!Object.keys(storeToUse.usedFilters).length &&
         <button 
           className="used-filters-shortcut" 
           onClick={showUsedFilters}

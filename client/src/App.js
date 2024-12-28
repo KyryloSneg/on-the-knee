@@ -97,8 +97,13 @@ const App = observer(() => {
   useClosingCategoriesMenuWidth(windowWidth, app.isVisibleCategoriesMenu, app);
   useClosingCategoriesModalWidth(windowWidth, app.isVisibleCategoriesModal, app);
 
-  useClosingFiltersBarEmptyValue(deviceStore.filters, app.isVisibleFiltersSidebar, closeFiltersSidebar);
-  useClosingUsedFiltersBarValue(deviceStore.usedFilters, app.isVisibleUsedFiltersSidebar, closeUsedFiltersSidebar);
+  useClosingFiltersBarEmptyValue(
+    app.filtersRelatedSidebarsStoreToUse?.filters, app.isVisibleFiltersSidebar, closeFiltersSidebar
+  );
+  
+  useClosingUsedFiltersBarValue(
+    app.filtersRelatedSidebarsStoreToUse?.usedFilters, app.isVisibleUsedFiltersSidebar, closeUsedFiltersSidebar
+  );
 
   useBlockingScroll(app.isBlockedScroll);
 
@@ -139,7 +144,13 @@ const App = observer(() => {
       }
       {app.isVisibleFiltersSidebar &&
         <Sidebar
-          children={<FilterCategories areInitiallyVisible={false} isSidebarVersion={true} />}
+          children={
+            <FilterCategories 
+              storeToUse={app.filtersRelatedSidebarsStoreToUse} 
+              areInitiallyVisible={false} 
+              isSidebarVersion={true} 
+            />
+          }
           closeSidebar={closeFiltersSidebar}
           shortcutRef={app.filtersShortcutRef}
           headerText="Filters"
@@ -148,7 +159,7 @@ const App = observer(() => {
       }
       {app.isVisibleUsedFiltersSidebar &&
         <Sidebar
-          children={<UsedFilters isSidebarVersion={true} />}
+          children={<UsedFilters storeToUse={app.filtersRelatedSidebarsStoreToUse} isSidebarVersion={true} />}
           closeSidebar={closeUsedFiltersSidebar}
           shortcutRef={app.usedFiltersShortcutRef}
           headerText="Used filters"

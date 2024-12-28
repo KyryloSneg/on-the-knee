@@ -3,7 +3,7 @@ import URLActions from "../utils/URLActions";
 import { useLocation } from "react-router-dom";
 import useNavigateToEncodedURL from "./useNavigateToEncodedURL";
 
-function useGettingPaginationParams(deviceStore, totalPages) {
+function useGettingPaginationParams(storeWithPagination, totalPages) {
   const location = useLocation();
   const navigate = useNavigateToEncodedURL();
 
@@ -55,9 +55,9 @@ function useGettingPaginationParams(deviceStore, totalPages) {
     let nextPagesToFetch = URLActions.getParamValue("pagesToFetch");
     replaceInvalidParams(nextPage, nextPagesToFetch);
 
-    deviceStore.setPage(+nextPage);
-    deviceStore.setPagesToFetch(+nextPagesToFetch);
-  }, [location.search, totalPages, deviceStore, navigate]);
+    storeWithPagination.setPage(+nextPage);
+    storeWithPagination.setPagesToFetch(+nextPagesToFetch);
+  }, [location.search, totalPages, storeWithPagination, navigate]);
 }
 
 export default useGettingPaginationParams;

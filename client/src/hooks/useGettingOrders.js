@@ -32,7 +32,7 @@ export default function useGettingOrders() {
         if (deviceSaleTypes) {
           for (let saleType of deviceSaleTypes) {
             const saleTypeName = deviceStore.saleTypeNames?.find(
-              typeName => typeName.id === saleType.saleTypeNameId
+              typeName => typeName.id === saleType["sale-type-nameId"]
             );
 
             if (isDefault && !!saleTypeName?.name && saleTypeName?.name !== "discount") {

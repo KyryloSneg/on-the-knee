@@ -58,9 +58,9 @@ module.exports = (
         if (deviceSale) {
           for (let type of currDeviceSaleTypes) {
             // searching for type's name
-            const name = saleTypeNames?.find(typeName => typeName.id === type.saleTypeNameId)?.name;
+            const name = saleTypeNames?.find(typeName => typeName.id === type["sale-type-nameId"])?.name;
             if (name) {
-              let existingSaleType = deviceSaleTypes.find(saleType => saleType.saleTypeNameId === type.saleTypeNameId);
+              let existingSaleType = deviceSaleTypes.find(saleType => saleType["sale-type-nameId"] === type["sale-type-nameId"]);
 
               if (existingSaleType) {
                 const existingTypeTimestamp = Date.parse(existingSaleType.createdAt);
@@ -86,7 +86,7 @@ module.exports = (
       if (deviceSaleTypes) {
         for (let saleType of deviceSaleTypes) {
           const saleTypeName = saleTypeNames?.find(
-            typeName => typeName.id === saleType.saleTypeNameId
+            typeName => typeName.id === saleType["sale-type-nameId"]
           );
 
           if (isDefault && !!saleTypeName?.name && saleTypeName?.name !== "discount") {

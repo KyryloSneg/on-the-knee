@@ -1,7 +1,6 @@
-import { useContext, useEffect, useRef, useState } from "react";
-import { Context } from "../Context";
-import CategoryFilter from "./CategoryFilter";
 import "./styles/CategoryFilterList.css";
+import { useEffect, useRef, useState } from "react";
+import CategoryFilter from "./CategoryFilter";
 import { observer } from "mobx-react-lite";
 import SearchField from "./UI/searchField/SearchField";
 import ArrayActions from "../utils/ArrayActions";
@@ -9,8 +8,7 @@ import { FILTERS_OPTIONS_LENGTH_LIMIT } from "../utils/consts";
 import getAllFocusableElements from "../utils/getAllFocusableElements";
 import useWindowInvisibleFocus from "../hooks/useWindowInvisibleFocus";
 
-const CategoryFilterList = observer(({ filter, variant, elemToFocusRef = null }) => {
-  const { deviceStore } = useContext(Context);
+const CategoryFilterList = observer(({ filter, variant, storeToUse, elemToFocusRef = null }) => {
   const isWithSearchField = variant === "withSearchField";
 
   const invisibleFocusElem = useRef(null);
@@ -20,7 +18,7 @@ const CategoryFilterList = observer(({ filter, variant, elemToFocusRef = null })
   const [isToShowMore, setIsToShowMore] = useState(false);
   const [query, setQuery] = useState("");
 
-  const [filteredValues, setFilteredValues] = useState(deviceStore.filters[filter]);
+  const [filteredValues, setFilteredValues] = useState(storeToUse.filters[filter]);
   let testId = `CategoryFilterList: ${filter.toLowerCase()}`;
 
   function showMoreFilters() {
@@ -29,8 +27,8 @@ const CategoryFilterList = observer(({ filter, variant, elemToFocusRef = null })
 
   useEffect(() => {
     setQuery("");
-    setFilteredValues(deviceStore.filters[filter])
-  }, [deviceStore.filters, filter]);
+    setFilteredValues(storeToUse.filters[filter])
+  }, [storeToUse.filters, filter]);
 
   useEffect(() => {
     if (document.activeElement === showMoreBtnRef.current && document.activeElement !== null) {
@@ -53,9 +51,9 @@ const CategoryFilterList = observer(({ filter, variant, elemToFocusRef = null })
     // info contains such fields as "value" and "count"
     function pushFilter(info) {
       let active = false;
-      if (deviceStore.usedFilters?.[filter]) {
+      if (storeToUse.usedFilters?.[filter]) {
         const valueToCheck = filter === "color" ? info.value.split("_")[0] : info.value;
-        active = deviceStore.usedFilters[filter].includes(valueToCheck);
+        active = storeToUse.usedFilters[filter].includes(valueToCheck);
       }
 
       const testId = `${filter}: ${info.value} checked=${active}`;
@@ -91,7 +89,7 @@ const CategoryFilterList = observer(({ filter, variant, elemToFocusRef = null })
           setQuery={setQuery}
           setFilteredValues={setFilteredValues}
           filter={filter}
-          initialFilters={deviceStore.filters[filter]}
+          initialFilters={storeToUse.filters[filter]}
           ref={elemToFocusRef}
         />
         {filteredValues.length !== 0
@@ -127,7 +125,7 @@ const CategoryFilterList = observer(({ filter, variant, elemToFocusRef = null })
 
   return (
     <div>
-      {deviceStore.filters[filter].length !== 0
+      {storeToUse.filters[filter].length !== 0
         ? (
           <ul
             className="filters"
@@ -143,7 +141,7 @@ const CategoryFilterList = observer(({ filter, variant, elemToFocusRef = null })
           </p>
         )
       }
-      {deviceStore.filters[filter].length > FILTERS_OPTIONS_LENGTH_LIMIT &&
+      {storeToUse.filters[filter].length > FILTERS_OPTIONS_LENGTH_LIMIT &&
         <button
           className="filters-show-more-btn link-colors"
           onClick={showMoreFilters}

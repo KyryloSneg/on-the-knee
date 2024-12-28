@@ -1,0 +1,12 @@
+.sales-page-return-to-all-link {
+  height: max-content;
+  margin: 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 1.6rem;
+}
+
+.sales-page-return-to-all-link-placeholder {
+  height: 20px;
+}

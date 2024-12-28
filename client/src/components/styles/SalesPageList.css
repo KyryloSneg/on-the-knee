@@ -1,0 +1,8 @@
+.sales-page-list {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 15px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}

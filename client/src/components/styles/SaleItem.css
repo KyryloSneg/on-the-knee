@@ -1,0 +1,93 @@
+.sale-item-wrapper, .sale-item {
+  border-radius: 8px;
+}
+
+.sale-item {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  /* it works somehow without display: grid; rule on the wrapper */
+  justify-self: center;
+  background-color: #ffffff;
+  border: 1px solid #dfdfdf;
+  height: 100%;
+  max-width: 280px;
+  -webkit-box-shadow: 1px 1px 2px 0px rgba(0, 0, 0, 0.1), -1px 1px 2px 0px rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 1px 1px 2px 0px rgba(0, 0, 0, 0.1), -1px 1px 2px 0px rgba(0, 0, 0, 0.1);
+  box-shadow: 1px 1px 2px 0px rgba(0, 0, 0, 0.1), -1px 1px 2px 0px rgba(0, 0, 0, 0.1);
+  transition: 0.2s;
+}
+
+.sale-item:hover,
+.sale-item:active, 
+.sale-item:focus-visible {
+  -webkit-box-shadow: 1px 1px 2px 0px rgba(0, 0, 0, 0.2), -1px 1px 2px 0px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 1px 1px 2px 0px rgba(0, 0, 0, 0.2), -1px 1px 2px 0px rgba(0, 0, 0, 0.2);
+  box-shadow: 1px 1px 2px 0px rgba(0, 0, 0, 0.2), -1px 1px 2px 0px rgba(0, 0, 0, 0.2);
+}
+
+.sale-item > img {
+  max-width: 100%;
+  max-height: 85%;
+  border-radius: 8px 8px 0 0;
+  object-fit: cover;
+  aspect-ratio: 1;
+}
+
+.sale-item-bottom-bar {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 6px;
+  height: 100%;
+  border-radius: 0 0 8px 8px;
+}
+
+.sale-item-bottom-bar > div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 0 8px 14px;
+}
+
+.sale-item-time-range {
+  font-size: 1.2rem;
+}
+
+.sale-item-header > h3 {
+  margin: 0;
+  color: #7373ff;
+  font-size: 1.3rem;
+  font-weight: 400;
+  word-break: break-all;
+  transition: 0.2s;
+}
+
+.sale-item:hover .sale-item-header > h3,
+.sale-item:active .sale-item-header > h3, 
+.sale-item:focus-visible .sale-item-header > h3 {
+  color: #bd5e10;
+}
+
+.sale-item-remaining-time-p {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  height: 100%;
+  padding: 8px 2px;
+  border-radius: 0 0 8px 0;
+  font-size: 1.2rem;
+  background-color: #f7f7ff;
+}
+
+.sale-item-remaining-time-p.only-today {
+  color: #a10e0e;
+}
+
+.sale-item-remaining-time-p > span:first-of-type {
+  color: #7373ff;
+  font-size: 2.4rem;
+  font-weight: 600;
+}

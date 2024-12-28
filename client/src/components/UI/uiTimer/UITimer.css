@@ -1,0 +1,31 @@
+.ui-timer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ui-timer-time-part {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 4px 0;
+}
+
+.ui-timer-time-part-number,
+.ui-timer-separator {
+  font-weight: 600;
+  font-size: 1.8rem;
+}
+
+.ui-timer-time-part-number {
+  text-align: center;
+  background-color: #f1f1f1;
+  min-width: 24px;
+  border-radius: 8px;
+  padding: 8px 16px;
+}
+
+.ui-timer-time-part-word {
+  font-size: 1rem;
+}

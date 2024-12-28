@@ -8,6 +8,8 @@ import AppRouterProvider from './components/AppRouterProvider';
 import 'overlayscrollbars/overlayscrollbars.css';
 import withAuth from "./hocs/withAuth";
 import FetchRefStore from "stores/FetchRefStore";
+import SalesPageStore from "stores/SalesPageStore";
+import OneSalePageStore from "stores/OneSalePageStore";
 
 const AppRouterProviderWithAuth = withAuth(AppRouterProvider);
 
@@ -19,6 +21,8 @@ root.render(
       user: new UserStore(),
       deviceStore: new DeviceStore(),
       fetchRefStore: new FetchRefStore(),
+      salesPageStore: new SalesPageStore(),
+      oneSalePageStore: new OneSalePageStore(),
       isTest: false,
     }}>
       <AppRouterProviderWithAuth />

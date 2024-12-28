@@ -79,7 +79,7 @@ class AppStore {
     this._isToShowUserLocationNotification = false;
     this._isUserLocationDeterminedCorrectly = true;
 
-    // we use these states in modals that are related to the info below
+    // we use these states in (modals / sidebars) that are related to the info below
     this._commentModalGetCommentsQueryParamsStr = "";
     this._commentGalleryModalType = "deviceFeedbacks";
     this._commentGallerySelectedImageId = null;
@@ -87,6 +87,7 @@ class AppStore {
     this._reportOrderProblemOrderId = null;
     this._modalRemainSellerFeedbacksObj = null;
     this._modalRemainDevCombosFeedbacksObj = null;
+    this._filtersRelatedSidebarsStoreToUse = null;
 
     this._storePickupPoints = [];
     this._selectedStorePickupPointIdValues = {};
@@ -380,6 +381,10 @@ class AppStore {
 
   setModalRemainDevCombosFeedbacksObj(modalRemainDevCombosFeedbacksObj) {
     this._modalRemainDevCombosFeedbacksObj = modalRemainDevCombosFeedbacksObj;
+  }
+
+  setFiltersRelatedSidebarsStoreToUse(filtersRelatedSidebarsStoreToUse) {
+    this._filtersRelatedSidebarsStoreToUse = filtersRelatedSidebarsStoreToUse;
   }
 
   setStorePickupPoints(storePickupPoints) {
@@ -716,6 +721,10 @@ class AppStore {
 
   get modalRemainDevCombosFeedbacksObj() {
     return this._modalRemainDevCombosFeedbacksObj;
+  }
+
+  get filtersRelatedSidebarsStoreToUse() {
+    return this._filtersRelatedSidebarsStoreToUse;
   }
 
   get storePickupPoints() {

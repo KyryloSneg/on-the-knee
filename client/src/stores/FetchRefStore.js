@@ -27,8 +27,15 @@ class FetchRefStore {
     this._lastDevicesFetchPageFiltersObj = createRef({});
     this._lastDevicesFetchSearch = createRef(null);
     this._lastDevicesFetchSellerId = createRef(null);
+    this._lastDevicesFetchSaleId = createRef(null);
     // { deviceId: ..., data: [...] }
     this._lastDevicesFetchAddServicesObj = createRef(null);
+
+    this._lastSaleDevicesFetchUsedFilters = createRef(null);
+    this._lastSaleDevicesFetchSortFilter = createRef(null);
+    this._lastSaleDevicesFetchPageFiltersObj = createRef({});
+
+    this._lastSalePageSaleFetchResult = createRef(null);
 
     this._hasAlreadyFetchedUserOrders = createRef(false)
     this._hasAlreadyFetchedUserDevsFeedbacks = createRef(false)
@@ -36,6 +43,9 @@ class FetchRefStore {
 
     this._userPagePrevUserIdRef = createRef(null);
     this._userPagePrevOrdersRef = createRef(null);
+
+    this._lastSalesPageSlug = createRef(null);
+    this._lastSalesPageFetchPageFiltersObj = createRef(null);
   }
 
   get globalLoadingChangesObj() {
@@ -100,8 +110,30 @@ class FetchRefStore {
     return this._lastDevicesFetchSellerId.current;
   }
 
+  get lastDevicesFetchSaleId() {
+    return this._lastDevicesFetchSaleId.current;
+  }
+
   get lastDevicesFetchAddServicesObj() {
     return this._lastDevicesFetchAddServicesObj.current;
+  }
+
+  get lastSaleDevicesFetchUsedFilters() {
+    return this._lastSaleDevicesFetchUsedFilters.current;
+  }
+
+  get lastSaleDevicesFetchSortFilter() {
+    return this._lastSaleDevicesFetchSortFilter.current;
+  }
+
+  get lastSaleDevicesFetchPageFiltersObj() {
+    // setting the initial value on the first call of this getter
+    if (this._lastSaleDevicesFetchPageFiltersObj.current === null) this._lastSaleDevicesFetchPageFiltersObj.current = {};
+    return this._lastSaleDevicesFetchPageFiltersObj.current;
+  }
+
+  get lastSalePageSaleFetchResult() {
+    return this._lastSalePageSaleFetchResult.current;
   }
 
   get hasAlreadyFetchedUserOrders() {
@@ -128,6 +160,16 @@ class FetchRefStore {
 
   get userPagePrevOrdersRef() {
     return this._userPagePrevOrdersRef.current;
+  }
+
+  get lastSalesPageSlug() {
+    return this._lastSalesPageSlug.current;
+  }
+
+  get lastSalesPageFetchPageFiltersObj() {
+    // setting the initial value on the first call of this getter
+    if (this._lastSalesPageFetchPageFiltersObj.current === null) this._lastSalesPageFetchPageFiltersObj.current = {};
+    return this._lastSalesPageFetchPageFiltersObj.current;
   }
 
   setGlobalLoadingChangesObj(globalLoadingChangesObj) {
@@ -186,8 +228,28 @@ class FetchRefStore {
     this._lastDevicesFetchSellerId.current = lastDevicesFetchSellerId;
   }
 
+  setLastDevicesFetchSaleId(lastDevicesFetchSaleId) {
+    this._lastDevicesFetchSaleId.current = lastDevicesFetchSaleId;
+  }
+
   setLastDevicesFetchAddServicesObj(lastDevicesFetchAddServicesObj) {
     this._lastDevicesFetchAddServicesObj.current = lastDevicesFetchAddServicesObj;
+  }
+
+  setLastSaleDevicesFetchUsedFilters(lastSaleDevicesFetchUsedFilters) {
+    this._lastSaleDevicesFetchUsedFilters.current = lastSaleDevicesFetchUsedFilters;
+  }
+
+  setLastSaleDevicesFetchSortFilter(lastSaleDevicesFetchSortFilter) {
+    this._lastSaleDevicesFetchSortFilter.current = lastSaleDevicesFetchSortFilter;
+  }
+
+  setLastSaleDevicesFetchPageFiltersObj(lastSaleDevicesFetchPageFiltersObj) {
+    this._lastSaleDevicesFetchPageFiltersObj.current = lastSaleDevicesFetchPageFiltersObj;
+  }
+
+  setLastSalePageSaleFetchResult(lastSalePageSaleFetchResult) {
+    this._lastSalePageSaleFetchResult.current = lastSalePageSaleFetchResult;
   }
   
   setHasAlreadyFetchedUserOrders(hasAlreadyFetchedUserOrders) {
@@ -208,6 +270,14 @@ class FetchRefStore {
 
   setUserPagePrevOrdersRef(userPagePrevOrdersRef) {
     this._userPagePrevOrdersRef.current = userPagePrevOrdersRef;
+  }
+
+  setLastSalesPageSlug(lastSalesPageSlug) {
+    this._lastSalesPageSlug.current = lastSalesPageSlug;
+  }
+
+  setLastSalesPageFetchPageFiltersObj(lastSalesPageFetchPageFiltersObj) {
+    this._lastSalesPageFetchPageFiltersObj.current = lastSalesPageFetchPageFiltersObj;
   }
 }
 

@@ -25,17 +25,23 @@ export const USER_VIEWED_DEVICES_ROUTE = "/user/viewed-devices";
 export const USER_FEEDBACKS_ROUTE = "/user/my-feedbacks";
 export const USER_SELLERS_FEEDBACKS_ROUTE = "/user/my-feedbacks/sellers";
 
-export const CATEGORY_CATALOG_ROUTE = "/categories/"; // + ":categoryIdSlug" (1-smartphones for example)
-export const BRAND_CATALOG_ROUTE = "/brand/" // + ":brandIdSlug" (2-asus for example);
+export const CATEGORY_CATALOG_ROUTE = "/categories/"; // + ":categoryIdSlug" (1--smartphones for example)
+export const BRAND_CATALOG_ROUTE = "/brand/" // + ":brandIdSlug" (2--asus for example);
 export const SEARCH_CATALOG_ROUTE = "/search" // + ?text=value;
 
-export const SALES_ROUTE = "/sales" // SALE_ROUTE is the same but + :saleIdSlug (slug is a sale type name);
+export const SALES_ROUTE = "/sales/" // + ":slug" (freeDelivery for example)
+export const SALE_ROUTE = "/sale/" // + ":saleIdSlug (1--freeDelivery for example)"
 
 const deviceAPIUrlQueryParams = "_embed=device-combinations&_embed=device-feedbacks&_embed=device-infos&_embed=sale-devices&_embed=additional-service-devices"
+
 export const DEVICE_API_URL = "/devices?" + deviceAPIUrlQueryParams;
 export const ONE_DEVICE_API_URL = "/devices/ID_TO_REPLACE?" + deviceAPIUrlQueryParams;
+
 export const SALES_API_URL = "/sales?_embed=sale-types";
+export const SALE_API_URL = "/sales/ID_TO_REPLACE?_embed=sale-types";
+
 export const ATRIBUTES_API_URL = "/attributes?_expand=attribute-value&_expand=attribute-name";
+
 export const ONE_ADDITIONAL_SERVICES_API_URL = "/additional-services/ID_TO_REPLACE";
 export const ONE_DEV_ADDITIONAL_SERVICE_DEVICES_API_URL = "/additional-service-devices?deviceId=ID_TO_REPLACE";
 
@@ -49,6 +55,8 @@ export const ONE_SELLER_FEEDBACKS_API_URL = "/seller-feedbacks?sellerId=ID_TO_RE
 
 export const ONE_CART_API_URL = "/carts?userId=USER_ID_TO_REPLACE";
 export const ONE_CART_DEVICE_COMBINATIONS_API_URL = "/cart-device-combinations?_expand=device&_expand=device-combination&cartId=CART_ID_TO_REPLACE";
+
+export const ALL_SALES_SLUG = "all";
 
 // value: (asc / desc),(rating / price)
 export const sortingOptions = Object.freeze([
