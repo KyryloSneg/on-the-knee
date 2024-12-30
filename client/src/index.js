@@ -10,6 +10,7 @@ import withAuth from "./hocs/withAuth";
 import FetchRefStore from "stores/FetchRefStore";
 import SalesPageStore from "stores/SalesPageStore";
 import OneSalePageStore from "stores/OneSalePageStore";
+import SellerDevicesPageStore from "stores/SellerDevicesPageStore";
 
 const AppRouterProviderWithAuth = withAuth(AppRouterProvider);
 
@@ -20,13 +21,13 @@ root.render(
       app: new AppStore(),
       user: new UserStore(),
       deviceStore: new DeviceStore(),
-      fetchRefStore: new FetchRefStore(),
+      sellerDevicesPageStore: new SellerDevicesPageStore(),
       salesPageStore: new SalesPageStore(),
       oneSalePageStore: new OneSalePageStore(),
+      fetchRefStore: new FetchRefStore(),
       isTest: false,
     }}>
       <AppRouterProviderWithAuth />
-      {/* <AppRouterProvider /> */}
     </Context.Provider>
   </React.StrictMode>
 );

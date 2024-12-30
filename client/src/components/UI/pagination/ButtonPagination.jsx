@@ -5,7 +5,7 @@ import useWindowWidth from '../../../hooks/useWindowWidth';
 import { WIDTH_TO_SHOW_LOADING_BTN_PAGINATION } from '../../../utils/consts';
 import Loader from "../loader/Loader";
 
-const ButtonPagination = ({ isLoading, pagesToFetch, className = "" }) => {
+const ButtonPagination = ({ isLoading, pagesToFetch, nameToRender = "devices", className = "" }) => {
   const screenWidth = useWindowWidth();
 
   if (screenWidth < WIDTH_TO_SHOW_LOADING_BTN_PAGINATION && isLoading) {
@@ -22,7 +22,7 @@ const ButtonPagination = ({ isLoading, pagesToFetch, className = "" }) => {
     <Link to={to} className={`btn-pagination ${disabledClassName} ${className}`} preventScrollReset={true}>
       {/* turning on animation on click */}
       <Loader className={spinnerClassName} />
-      <p>Show more devices?</p>
+      <p>Show more {nameToRender}?</p>
     </Link>
   );
 }

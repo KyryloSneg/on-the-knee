@@ -3,7 +3,7 @@ import Dropdown from "../components/UI/dropdown/Dropdown";
 import TopFilterBar from "../components/TopFilterBar";
 import useWindowWidth from "../hooks/useWindowWidth";
 import { WIDTH_TO_SHOW_ASIDE, sortingOptions } from "../utils/consts";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { Context } from "../Context";
 import CatalogAside from "../components/CatalogAside";
 import useDeviceSectionFetching from "../hooks/useDeviceSectionFetching";
@@ -27,13 +27,22 @@ const CatalogPage = observer(({ type, seller = null, sale = null }) => {
   const location = useLocation();
   const { categoryIdSlug } = useParams();
   const navigate = useNavigateToEncodedURL();
-  const { deviceStore, oneSalePageStore, fetchRefStore, isTest } = useContext(Context);
+  const { deviceStore, sellerDevicesPageStore, oneSalePageStore, fetchRefStore, isTest } = useContext(Context);
   const windowWidth = useWindowWidth();
 
   const isInitialRenderRef = useRef(true);
+  const currentSpellCheckedQuery = useMemo(
+    // we have to use location.search in the dependencies, so shut up
+    // eslint-disable-next-line
+    () => type === "search" ? URLActions.getParamValue("text") : null, [type, location.search]
+  );
 
   const [isFoundDevicesByQuery, setIsFoundDevicesByQuery] = useState(true);
-  const [spellCheckedQuery, setSpellCheckedQuery] = useState(type === "search" ? URLActions.getParamValue("text") : null);
+  const [spellCheckedQuery, setSpellCheckedQuery] = useState(currentSpellCheckedQuery);
+
+  useEffect(() => {
+    setSpellCheckedQuery(currentSpellCheckedQuery)
+  }, [currentSpellCheckedQuery]);
 
   const categoryId = categoryIdSlug?.split("--")[0] || undefined;
   const category = deviceStore.categories.find(cat => cat.id === categoryId);
@@ -46,14 +55,21 @@ const CatalogPage = observer(({ type, seller = null, sale = null }) => {
   let lastPageFiltersObj;
   let lastSortFilter;
 
-  if (type !== "saleDevices") {
+  if (type !== "seller" && type !== "saleDevices") {
     storeToUse = deviceStore;
     deviceOrSalesSectionType = "devices";
 
     lastUsedFilters = fetchRefStore.lastDevicesFetchUsedFilters;
     lastSortFilter = fetchRefStore.lastDevicesFetchSortFilter;
     lastPageFiltersObj = fetchRefStore.lastDevicesFetchPageFiltersObj;
-  } else {
+  } else if (type === "seller") {
+    storeToUse = sellerDevicesPageStore;
+    deviceOrSalesSectionType = "seller";
+
+    lastUsedFilters = fetchRefStore.lastSellerDevicesFetchUsedFilters;
+    lastSortFilter = fetchRefStore.lastSellerDevicesFetchSortFilter;
+    lastPageFiltersObj = fetchRefStore.lastSellerDevicesFetchPageFiltersObj;
+  } else if (type === "saleDevices") {
     storeToUse = oneSalePageStore;
     deviceOrSalesSectionType = "saleDevices";
 

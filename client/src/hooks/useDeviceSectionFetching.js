@@ -26,7 +26,7 @@ function useDeviceSectionFetching(
   setSpellCheckedQuery = null, seller = null, sale = null,
   additionalCondition = true
 ) {
-  const { deviceStore, oneSalePageStore, fetchRefStore } = useContext(Context);
+  const { deviceStore, oneSalePageStore, sellerDevicesPageStore, fetchRefStore } = useContext(Context);
 
   const location = useLocation();
   const { categoryIdSlug } = useParams();
@@ -35,11 +35,11 @@ function useDeviceSectionFetching(
 
   // store to use for some setters below
   let storeToUse;
-  if (originalType !== "saleDevices") {
-    // TODO: create separate stores for different types of CatalogPage
-    // (sellerStore for sure)
+  if (originalType !== "seller" && originalType !== "saleDevices") {
     storeToUse = deviceStore;
-  } else {
+  } else if (originalType === "seller") {
+    storeToUse = sellerDevicesPageStore;
+  } else if (originalType === "saleDevices") {
     storeToUse = oneSalePageStore;
   }
 
@@ -191,15 +191,20 @@ function useDeviceSectionFetching(
       const lastFetchSortFilter = sortFilter || null;
       const lastFetchPageFiltersObj = { page: storeToUse.page, pagesToFetch: storeToUse.pagesToFetch } || null;
       
-      if (type !== "saleDevices") {
+      if (type !== "seller" && type !== "saleDevices") {
         fetchRefStore.setLastDevicesFetchUsedFilters(lastFetchUsedFilters);
         fetchRefStore.setLastDevicesFetchSortFilter(lastFetchSortFilter);
         fetchRefStore.setLastDevicesFetchPageFiltersObj(lastFetchPageFiltersObj);
 
         fetchRefStore.setLastDevicesFetchCategoryId(type === "category" ? categoryIdSlug?.split("--")?.[0] || null : null);
         fetchRefStore.setLastDevicesFetchSearch(type === "search" ? spellCheckedSearchQuery || preparedSearchQuery || null : null);
+      } else if (type === "seller") {
+        fetchRefStore.setLastSellerDevicesFetchUsedFilters(lastFetchUsedFilters);
+        fetchRefStore.setLastSellerDevicesFetchSortFilter(lastFetchSortFilter);
+        fetchRefStore.setLastSellerDevicesFetchPageFiltersObj(lastFetchPageFiltersObj);
+
         fetchRefStore.setLastDevicesFetchSellerId(type === "seller" ? seller?.id || null : null);
-      } else {
+      } else if (type === "saleDevices") {
         fetchRefStore.setLastSaleDevicesFetchUsedFilters(lastFetchUsedFilters);
         fetchRefStore.setLastSaleDevicesFetchSortFilter(lastFetchSortFilter);
         fetchRefStore.setLastSaleDevicesFetchPageFiltersObj(lastFetchPageFiltersObj);
