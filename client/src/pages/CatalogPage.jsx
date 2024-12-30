@@ -144,7 +144,7 @@ const CatalogPage = observer(({ type, seller = null, sale = null }) => {
   }, [location.search, storeToUse, storeToUse.filters, location.pathname, navigate, isTest]);
 
   const [isLoading, error, deviceFetching] = useDeviceSectionFetching(
-    type, setIsFoundDevicesByQuery, setSpellCheckedQuery, seller, sale, isToFetchDevices
+    type, lastPageFiltersObj, setIsFoundDevicesByQuery, setSpellCheckedQuery, seller, sale, isToFetchDevices
   );
 
   useEffect(() => {
