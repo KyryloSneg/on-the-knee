@@ -7,7 +7,7 @@
   padding: 8px;
   background: none;
   border: none;
-  transition: color 0.2s, outline 0s;
+  transition: color 0.2s, background 0.2s, outline 0s;
 }
 
 .user-location-btn:hover,
@@ -40,4 +40,30 @@
 .user-location-btn.sender-section-version:hover,
 .user-location-btn.sender-section-version:active {
   background-color: #dfdfdf;
+}
+
+.user-location-btn.menu-location-btn {
+  width: 100%;
+  padding: 11px 18px;
+  font-size: 1.6rem;
+  justify-content: flex-start;
+  gap: 16px;
+  outline: none;
+}
+
+.user-location-btn.menu-location-btn > img {
+  display: block;
+  width: 24px;
+  height: 24px;
+  padding: 6px;
+  border-radius: 50%;
+  background-color: rgb(205, 205, 205);
+  box-shadow: 1px 1px 2px 0px rgba(0, 0, 0, 0.1), -1px 1px 2px 0px rgba(0, 0, 0, 0.1);
+}
+
+.user-location-btn.menu-location-btn:hover,
+.user-location-btn.menu-location-btn:active,
+.user-location-btn.menu-location-btn:focus-visible {
+  background-color: #ffe0cc;
+  color: #4444ef;
 }

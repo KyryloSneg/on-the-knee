@@ -1,4 +1,5 @@
 .menu-icon-button {
+  box-sizing: border-box;
   width: 100%;
   padding: 10px 18px;
   border: none;
@@ -10,14 +11,18 @@
   outline: none;
 }
 
-.menu-icon-button > img {
-  display: block;
-  width: 24px;
-  height: 24px;
-  padding: 6px;
+.menu-icon-btn-img-wrapper {
+  padding: 2px;
   border-radius: 50%;
   background-color: rgb(205, 205, 205);
   box-shadow: 1px 1px 2px 0px rgba(0, 0, 0, 0.1), -1px 1px 2px 0px rgba(0, 0, 0, 0.1);
+}
+
+.menu-icon-btn-img-wrapper > img {
+  display: block;
+  width: 24px;
+  height: 24px;
+  padding: 4px;
 }
 
 .menu-icon-button > span {

@@ -2,10 +2,10 @@ import "./styles/MenuAccountBtn.css";
 import MenuIconBtn from "./UI/menuIconBtn/MenuIconBtn";
 import accBtnIcon from "../assets/acc-button-black.svg";
 import { useContext, useRef } from "react";
-import onAccountBtnClick from "../utils/onAccountBtnClick";
 import { Context } from "../Context";
 import { observer } from "mobx-react-lite";
-import { USER_ORDERS_ROUTE } from "../utils/consts";
+import { USER_PERSONAL_DATA_ROUTE } from "../utils/consts";
+import onAuthBtnClick from "../utils/onAuthBtnClick";
 
 const MenuAccountBtn = observer(() => {
   const { user, app } = useContext(Context);
@@ -29,10 +29,10 @@ const MenuAccountBtn = observer(() => {
       }
       src={accBtnIcon}
       isLink={user.isAuth}
-      route={USER_ORDERS_ROUTE}
+      route={USER_PERSONAL_DATA_ROUTE}
       aria-label="Your account"
       aria-controls="authentification-modal"
-      onClick={() => onAccountBtnClick(user.isAuth, app, btnRef)}
+      onClick={() => onAuthBtnClick(user.isAuth, app, btnRef)}
       className="menu-account-btn"
       ref={btnRef}
     />
