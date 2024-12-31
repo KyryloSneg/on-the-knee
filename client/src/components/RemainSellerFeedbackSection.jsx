@@ -3,9 +3,9 @@ import RemainSellerFeedbackSectionItem from "./RemainSellerFeedbackSectionItem";
 const RemainSellerFeedbackSection = ({ type, sellersFeedbacksObjArray }) => {
   return (
     <section className="remain-dev-feedback-section">
-      <header>
+      <div>
         <h3>Rate a seller</h3>
-      </header>
+      </div>
       {type === "modal"
         ? <RemainSellerFeedbackSectionItem type={type} sellerFeedbacksObj={sellersFeedbacksObjArray[0]} />
         : (

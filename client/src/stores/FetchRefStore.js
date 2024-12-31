@@ -31,6 +31,10 @@ class FetchRefStore {
     // { deviceId: ..., data: [...] }
     this._lastDevicesFetchAddServicesObj = createRef(null);
 
+    this._lastSellerDevicesFetchUsedFilters = createRef(null);
+    this._lastSellerDevicesFetchSortFilter = createRef(null);
+    this._lastSellerDevicesFetchPageFiltersObj = createRef({});
+
     this._lastSaleDevicesFetchUsedFilters = createRef(null);
     this._lastSaleDevicesFetchSortFilter = createRef(null);
     this._lastSaleDevicesFetchPageFiltersObj = createRef({});
@@ -116,6 +120,20 @@ class FetchRefStore {
 
   get lastDevicesFetchAddServicesObj() {
     return this._lastDevicesFetchAddServicesObj.current;
+  }
+
+  get lastSellerDevicesFetchUsedFilters() {
+    return this._lastSellerDevicesFetchUsedFilters.current;
+  }
+
+  get lastSellerDevicesFetchSortFilter() {
+    return this._lastSellerDevicesFetchSortFilter.current;
+  }
+
+  get lastSellerDevicesFetchPageFiltersObj() {
+    // setting the initial value on the first call of this getter
+    if (this._lastSellerDevicesFetchPageFiltersObj.current === null) this._lastSellerDevicesFetchPageFiltersObj.current = {};
+    return this._lastSellerDevicesFetchPageFiltersObj.current;
   }
 
   get lastSaleDevicesFetchUsedFilters() {
@@ -234,6 +252,18 @@ class FetchRefStore {
 
   setLastDevicesFetchAddServicesObj(lastDevicesFetchAddServicesObj) {
     this._lastDevicesFetchAddServicesObj.current = lastDevicesFetchAddServicesObj;
+  }
+
+  setLastSellerDevicesFetchUsedFilters(lastSellerDevicesFetchUsedFilters) {
+    this._lastSellerDevicesFetchUsedFilters.current = lastSellerDevicesFetchUsedFilters;
+  }
+
+  setLastSellerDevicesFetchSortFilter(lastSellerDevicesFetchSortFilter) {
+    this._lastSellerDevicesFetchSortFilter.current = lastSellerDevicesFetchSortFilter;
+  }
+
+  setLastSellerDevicesFetchPageFiltersObj(lastSellerDevicesFetchPageFiltersObj) {
+    this._lastSellerDevicesFetchPageFiltersObj.current = lastSellerDevicesFetchPageFiltersObj;
   }
 
   setLastSaleDevicesFetchUsedFilters(lastSaleDevicesFetchUsedFilters) {

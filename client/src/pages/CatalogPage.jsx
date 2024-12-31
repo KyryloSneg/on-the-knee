@@ -3,7 +3,7 @@ import Dropdown from "../components/UI/dropdown/Dropdown";
 import TopFilterBar from "../components/TopFilterBar";
 import useWindowWidth from "../hooks/useWindowWidth";
 import { WIDTH_TO_SHOW_ASIDE, sortingOptions } from "../utils/consts";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { Context } from "../Context";
 import CatalogAside from "../components/CatalogAside";
 import useDeviceSectionFetching from "../hooks/useDeviceSectionFetching";
@@ -21,19 +21,28 @@ import getTotalPages from "utils/getTotalPages";
 
 const POSSIBLE_TYPES = ["category", "search", "seller", "saleDevices"];
 
-const CatalogPage = observer(({ type, seller = null, sale = null, isTopElemMain = false }) => {
+const CatalogPage = observer(({ type, seller = null, sale = null }) => {
   if (!POSSIBLE_TYPES.includes(type)) throw Error("type of Catalog Page is not defined or incorrect");
 
   const location = useLocation();
   const { categoryIdSlug } = useParams();
   const navigate = useNavigateToEncodedURL();
-  const { deviceStore, oneSalePageStore, fetchRefStore, isTest } = useContext(Context);
+  const { deviceStore, sellerDevicesPageStore, oneSalePageStore, fetchRefStore, isTest } = useContext(Context);
   const windowWidth = useWindowWidth();
 
   const isInitialRenderRef = useRef(true);
+  const currentSpellCheckedQuery = useMemo(
+    // we have to use location.search in the dependencies, so shut up
+    // eslint-disable-next-line
+    () => type === "search" ? URLActions.getParamValue("text") : null, [type, location.search]
+  );
 
   const [isFoundDevicesByQuery, setIsFoundDevicesByQuery] = useState(true);
-  const [spellCheckedQuery, setSpellCheckedQuery] = useState(type === "search" ? URLActions.getParamValue("text") : null);
+  const [spellCheckedQuery, setSpellCheckedQuery] = useState(currentSpellCheckedQuery);
+
+  useEffect(() => {
+    setSpellCheckedQuery(currentSpellCheckedQuery)
+  }, [currentSpellCheckedQuery]);
 
   const categoryId = categoryIdSlug?.split("--")[0] || undefined;
   const category = deviceStore.categories.find(cat => cat.id === categoryId);
@@ -46,14 +55,21 @@ const CatalogPage = observer(({ type, seller = null, sale = null, isTopElemMain 
   let lastPageFiltersObj;
   let lastSortFilter;
 
-  if (type !== "saleDevices") {
+  if (type !== "seller" && type !== "saleDevices") {
     storeToUse = deviceStore;
     deviceOrSalesSectionType = "devices";
 
     lastUsedFilters = fetchRefStore.lastDevicesFetchUsedFilters;
     lastSortFilter = fetchRefStore.lastDevicesFetchSortFilter;
     lastPageFiltersObj = fetchRefStore.lastDevicesFetchPageFiltersObj;
-  } else {
+  } else if (type === "seller") {
+    storeToUse = sellerDevicesPageStore;
+    deviceOrSalesSectionType = "seller";
+
+    lastUsedFilters = fetchRefStore.lastSellerDevicesFetchUsedFilters;
+    lastSortFilter = fetchRefStore.lastSellerDevicesFetchSortFilter;
+    lastPageFiltersObj = fetchRefStore.lastSellerDevicesFetchPageFiltersObj;
+  } else if (type === "saleDevices") {
     storeToUse = oneSalePageStore;
     deviceOrSalesSectionType = "saleDevices";
 
@@ -128,7 +144,7 @@ const CatalogPage = observer(({ type, seller = null, sale = null, isTopElemMain 
   }, [location.search, storeToUse, storeToUse.filters, location.pathname, navigate, isTest]);
 
   const [isLoading, error, deviceFetching] = useDeviceSectionFetching(
-    type, setIsFoundDevicesByQuery, setSpellCheckedQuery, seller, sale, isToFetchDevices
+    type, lastPageFiltersObj, setIsFoundDevicesByQuery, setSpellCheckedQuery, seller, sale, isToFetchDevices
   );
 
   useEffect(() => {
@@ -158,13 +174,14 @@ const CatalogPage = observer(({ type, seller = null, sale = null, isTopElemMain 
     option.value === lastSortFilter
   )?.id || null;
 
-  const topElemContent = (
-    <>
+  return (
+    <div className="display-grid">
       {(!!storeToUse.devices.length && type === "search")
         ? <p className="spell-checked-query-p">Devices by query «<span>{spellCheckedQuery}</span>»</p>
         : (type === "search") && <div className="spell-checked-p-placeholder" />
       }
       {type === "category" && <h2 className="top-h2">{category.name}</h2>}
+      {/* maybe it should be semantically in the main, but we can't do it for the sake of design :( */}
       <div className="sort-and-filter-bar-wrap">
         {(windowWidth < WIDTH_TO_SHOW_ASIDE && isToRenderFilters) &&
           <TopFilterBar storeToUse={storeToUse} />
@@ -188,7 +205,7 @@ const CatalogPage = observer(({ type, seller = null, sale = null, isTopElemMain 
         || hasAlreadyFetchedThisSearch || hasAlreadyFetchedThisSeller
         || hasAlreadyFetchedThisSale
       ) &&
-        <div id="wrapper" className={wrapperClassName}>
+        <section id="wrapper" className={wrapperClassName}>
           {isToRenderFilters &&
             <CatalogAside storeToUse={storeToUse} key={"aside"} />
           }
@@ -198,25 +215,10 @@ const CatalogPage = observer(({ type, seller = null, sale = null, isTopElemMain 
             isLoading={isLoading}
             error={error}
             isInitialRenderRef={isInitialRenderRef}
-            isTopElemMain={type !== "seller"}
             key={"devSection"}
           />
-        </div>
+        </section>
       }
-    </>
-  );
-
-  if (isTopElemMain) {
-    return (
-      <main className="display-grid">
-        {topElemContent}
-      </main>
-    ); 
-  }
-
-  return (
-    <div className="display-grid">
-      {topElemContent}
     </div>
   );
 });

@@ -22,11 +22,11 @@ import { getDevice } from "http/DeviceApi";
 
 // query params without pagination ones
 function useDeviceSectionFetching(
-  originalType, setIsFoundDevicesByQuery = null,
+  originalType, originalLastPageFiltersObj, setIsFoundDevicesByQuery = null,
   setSpellCheckedQuery = null, seller = null, sale = null,
   additionalCondition = true
 ) {
-  const { deviceStore, oneSalePageStore, fetchRefStore } = useContext(Context);
+  const { deviceStore, oneSalePageStore, sellerDevicesPageStore, fetchRefStore } = useContext(Context);
 
   const location = useLocation();
   const { categoryIdSlug } = useParams();
@@ -35,11 +35,11 @@ function useDeviceSectionFetching(
 
   // store to use for some setters below
   let storeToUse;
-  if (originalType !== "saleDevices") {
-    // TODO: create separate stores for different types of CatalogPage
-    // (sellerStore for sure)
+  if (originalType !== "seller" && originalType !== "saleDevices") {
     storeToUse = deviceStore;
-  } else {
+  } else if (originalType === "seller") {
+    storeToUse = sellerDevicesPageStore;
+  } else if (originalType === "saleDevices") {
     storeToUse = oneSalePageStore;
   }
 
@@ -48,6 +48,7 @@ function useDeviceSectionFetching(
 
   const hasChangedURL = prevLocationPathname.current !== location.pathname;
 
+  // JUST USE useEffect(s) WITH useRef(s) TO SAVE CURRENT VALUE OF SOMETHING (like type) INSTEAD OF THIS WORKAROUND
   // it works if you make these steps right (type is the example of outer param 
   // (or inner if it doesn't work even without the method below)):
 
@@ -59,11 +60,13 @@ function useDeviceSectionFetching(
 
   // useEffect(() => disaLoxRemastered(), [location]);
 
-  async function fetchingCallback(location, categoryIdSlug, hasChangedURL, type) {
+  async function fetchingCallback(location, categoryIdSlug, hasChangedURL, type, lastPageFiltersObj) {
     const isInitialFetch = !storeToUse.devices.length || !_.isEqual(storeToUse.usedFilters, prevUsedFilters.current) || hasChangedURL;
+    const hasPageChanged = storeToUse.page !== lastPageFiltersObj?.page;
+    const isToUseGlobalLoading = isInitialFetch || hasPageChanged;
 
     try {
-      if (isInitialFetch) {
+      if (isToUseGlobalLoading) {
         isGlobalLoadingSetter(true);
       }
 
@@ -132,7 +135,7 @@ function useDeviceSectionFetching(
         devices = devices.filter(dev => descendantCategories.includes(dev.categoryId));
       }
 
-      if (isInitialFetch) {
+      if (isToUseGlobalLoading) {
         // something causes the global loading to not appear
         // and setting it here alongstead with the of the action
         // at the start of the try ... catch block fixes the problem
@@ -191,15 +194,20 @@ function useDeviceSectionFetching(
       const lastFetchSortFilter = sortFilter || null;
       const lastFetchPageFiltersObj = { page: storeToUse.page, pagesToFetch: storeToUse.pagesToFetch } || null;
       
-      if (type !== "saleDevices") {
+      if (type !== "seller" && type !== "saleDevices") {
         fetchRefStore.setLastDevicesFetchUsedFilters(lastFetchUsedFilters);
         fetchRefStore.setLastDevicesFetchSortFilter(lastFetchSortFilter);
         fetchRefStore.setLastDevicesFetchPageFiltersObj(lastFetchPageFiltersObj);
 
         fetchRefStore.setLastDevicesFetchCategoryId(type === "category" ? categoryIdSlug?.split("--")?.[0] || null : null);
         fetchRefStore.setLastDevicesFetchSearch(type === "search" ? spellCheckedSearchQuery || preparedSearchQuery || null : null);
+      } else if (type === "seller") {
+        fetchRefStore.setLastSellerDevicesFetchUsedFilters(lastFetchUsedFilters);
+        fetchRefStore.setLastSellerDevicesFetchSortFilter(lastFetchSortFilter);
+        fetchRefStore.setLastSellerDevicesFetchPageFiltersObj(lastFetchPageFiltersObj);
+
         fetchRefStore.setLastDevicesFetchSellerId(type === "seller" ? seller?.id || null : null);
-      } else {
+      } else if (type === "saleDevices") {
         fetchRefStore.setLastSaleDevicesFetchUsedFilters(lastFetchUsedFilters);
         fetchRefStore.setLastSaleDevicesFetchSortFilter(lastFetchSortFilter);
         fetchRefStore.setLastSaleDevicesFetchPageFiltersObj(lastFetchPageFiltersObj);
@@ -236,14 +244,18 @@ function useDeviceSectionFetching(
       prevUsedFilters.current = storeToUse.usedFilters;
       prevLocationPathname.current = location.pathname;
     } finally {
-      if (isInitialFetch) {
+      if (isToUseGlobalLoading) {
         isGlobalLoadingSetter(false);
       }
     }
     
   }
 
-  const [fetching, isLoading, error] = useFetching((location, categoryIdSlug, hasChangedURL) => fetchingCallback(location, categoryIdSlug, hasChangedURL, originalType), 0, null, [originalType]);
+  const [fetching, isLoading, error] = useFetching(
+    (location, categoryIdSlug, hasChangedURL) => 
+      fetchingCallback(location, categoryIdSlug, hasChangedURL, originalType, originalLastPageFiltersObj), 
+    0, null, [originalType, originalLastPageFiltersObj]
+  );
 
   useEffect(() => {
     if (additionalCondition) fetching(location, categoryIdSlug, hasChangedURL);

@@ -187,7 +187,7 @@ const CheckoutPage = observer(() => {
 
           try {
             const orderSaleDevices = await getOneDeviceSaleDevices(cartCombo.device.id, true);
-            if (orderSaleDevices?.length) saleDevices.push(orderSaleDevices);
+            if (orderSaleDevices?.length) saleDevices = saleDevices.concat(orderSaleDevices);
           } catch {
             // do nothing (there's no sales for a device)
           }
@@ -209,13 +209,13 @@ const CheckoutPage = observer(() => {
         orderResult.totalDeviceAmount = deviceAmount;
         orderResult.status = "Pending";
         // order's name is just a random number as i understood
-        let orderName = Math.random().toString().slice(2, 12);
+        let orderName = String(Math.random()).slice(2, 12);
         orderName = `${orderName.slice(0, 3)} ${orderName.slice(3, 6)} ${orderName.slice(6)}`;
 
         orderResult.orderName = orderName;
         orderResult.date = new Date().toISOString();
         // BOL number, the same as before
-        let info = Math.random().toString().slice(2, 12);
+        let info = String(Math.random()).slice(2, 12);
         info = `${info.slice(0, 3)} ${info.slice(3, 6)} ${info.slice(6)}`;
 
         orderResult.info = info;
@@ -436,9 +436,7 @@ const CheckoutPage = observer(() => {
   return (
     <>
       <div className="checkout-page">
-        <header>
-          <h2>Checkout order</h2>
-        </header>
+        <h2>Checkout order</h2>
         <form
           onSubmit={handleSubmit(
             onSubmit, (errors) => checkInputsValidAndHandleInvalidInputFocus(true, errors))

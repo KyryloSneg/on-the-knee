@@ -12,7 +12,12 @@ function useSalesPageFetching(slug, isToFetch = false) {
   const isGlobalLoadingSetter = useIsGlobalLoadingSetter();
 
   const [unfilteredSalesDataFetching] = useGettingSalesAndTypeNames(false);
+
+  const hasAlreadyFetchedRef = useRef(false);
   const slugRef = useRef(slug);
+
+  const prevPageRef = useRef(salesPageStore.page);
+  const prevSlugRef = useRef(slugRef.current);
 
   useEffect(() => {
     slugRef.current = slug;
@@ -56,14 +61,27 @@ function useSalesPageFetching(slug, isToFetch = false) {
   }
 
   function finallyCb() {
+    prevPageRef.current = salesPageStore.page;
+    prevSlugRef.current = slugRef.current;
+
     fetchRefStore.setLastSalesPageSlug(slugRef.current)
     fetchRefStore.setLastSalesPageFetchPageFiltersObj(
       { page: salesPageStore.page, pagesToFetch: salesPageStore.pagesToFetch } || null
     );
+
+    hasAlreadyFetchedRef.current = true;
   }
+  
+  // for some reason i couldn't do the same with condition that checks is pagesToFetch stale between renders
+  // (bad naming)
+  const isToSetGlobalLoading = (
+    !hasAlreadyFetchedRef.current
+    || prevPageRef.current !== salesPageStore.page
+    || prevSlugRef.current !== slugRef.current
+  );
 
   const [fetching, isLoading, error] = useFetching(fetchingCallback, 0, finallyCb);
-  useLoadingSyncWithGlobalLoading(isLoading, isGlobalLoadingSetter);
+  useLoadingSyncWithGlobalLoading(isLoading, isGlobalLoadingSetter, isToSetGlobalLoading || !isLoading);
 
   useEffect(() => {
     if (slug && isToFetch) fetching();

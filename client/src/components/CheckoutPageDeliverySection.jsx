@@ -58,9 +58,7 @@ const CheckoutPageDeliverySection = observer(({
 
   return (
     <section className="checkout-page-delivery-section">
-      <header>
-        <h4>Delivery</h4>
-      </header>
+      <h4>Delivery</h4>
       {isSelected
         ? (
           <CheckoutPageDeliveryRadiogroup

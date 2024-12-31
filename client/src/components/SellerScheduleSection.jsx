@@ -16,7 +16,7 @@ const SellerScheduleSection = observer(({ seller }) => {
   }, [isUserASellerOrManager]);
 
   return (
-    <section className="seller-schedule-section">
+    <aside className="seller-schedule-section">
       <h3>Schedule</h3>
       <SellerSchedule seller={seller} />
       {isToShowSellerAskQuestion && (
@@ -29,7 +29,7 @@ const SellerScheduleSection = observer(({ seller }) => {
         isUserASellerOrManager={isUserASellerOrManager}
         setIsToShowSellerAskQuestion={setIsToShowSellerAskQuestion}
       />
-    </section>
+    </aside>
   );
 });
 

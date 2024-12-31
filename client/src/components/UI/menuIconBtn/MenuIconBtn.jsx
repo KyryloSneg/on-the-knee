@@ -14,7 +14,7 @@ const MenuIconBtn = forwardRef(({ children = "Test", src, alt = "", isLink = fal
   if (isLink) {
     return (
       <Link to={route} className={className} {...params} ref={ref}>
-        <img src={src} alt={alt} className="no-select" draggable="false"/>
+        <img src={src} alt={alt} draggable="false"/>
         {typeof children === "string"
           ? <span>{children}</span>
           : children
@@ -25,7 +25,7 @@ const MenuIconBtn = forwardRef(({ children = "Test", src, alt = "", isLink = fal
 
   return (
     <button className={className} ref={ref} {...params} >
-      <img src={src} alt={alt} className="no-select" draggable="false"/>
+      <img src={src} alt={alt} draggable="false"/>
       {typeof children === "string"
         ? <span>{children}</span>
         : children

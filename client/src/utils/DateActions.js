@@ -14,7 +14,7 @@ export default class DateActions {
   static getDatePartWithPossibleZeros(datePart, requiredStrLength) {
     let result = datePart;
 
-    const lengthsDifference = requiredStrLength - datePart.toString().length
+    const lengthsDifference = requiredStrLength - String(datePart).length
     if (lengthsDifference > 0) {
       const additionalZeros = "0".repeat(lengthsDifference);
       result = additionalZeros + result;

@@ -10,7 +10,7 @@ import SalesPageList from "./SalesPageList";
 import getTotalPages from "utils/getTotalPages";
 import isCanLoadMoreContent from "utils/isCanLoadMoreContent";
 
-const POSSIBLE_TYPES = ["devices", "sales", "saleDevices"];
+const POSSIBLE_TYPES = ["devices", "seller", "sales", "saleDevices"];
 
 // isTopElemMain ? main element is used as the top one in the jsx : section elem is used;
 const DeviceOrSalesSection = observer(({ 
@@ -18,7 +18,7 @@ const DeviceOrSalesSection = observer(({
 }) => {
   if (!POSSIBLE_TYPES.includes(type)) throw Error("type of DeviceOrSalesSection is not defined or incorrect");
 
-  const { app, deviceStore, salesPageStore, oneSalePageStore } = useContext(Context);
+  const { app, deviceStore, sellerDevicesPageStore, salesPageStore, oneSalePageStore } = useContext(Context);
   const sectionRef = useRef(null);
 
   async function onRetryFetch() {
@@ -29,17 +29,21 @@ const DeviceOrSalesSection = observer(({
     if (type === "devices") app.setDeviceSectionRef(sectionRef);
   }, [app, deviceStore.devices, type]);
 
+  let storeToUse;
+  if (type !== "seller" && type !== "sales" && type !== "saleDevices") {
+    storeToUse = deviceStore;
+  } else if (type === "sales") {
+    storeToUse = salesPageStore;
+  } else if (type === "seller") {
+    storeToUse = sellerDevicesPageStore;
+  } else if (type === "saleDevices") {
+    storeToUse = oneSalePageStore;
+  }
+  
   function renderItemsRelatedJsx() {
     let content = <div />;
 
-    if (type === "devices" || type === "saleDevices") {
-      let storeToUse;
-      if (type === "devices") {
-        storeToUse = deviceStore;
-      } else if (type === "saleDevices") {
-        storeToUse = oneSalePageStore;
-      }
-
+    if (type !== "sales") {
       if (allItems.length) {
         content = <DevicePageList storeToUse={storeToUse} />;
       } else if (!isInitialRenderRef.current && !error && !!Object.keys(storeToUse.usedFilters).length && !isLoading) {
@@ -49,7 +53,7 @@ const DeviceOrSalesSection = observer(({
           </p>
         );
       }
-    } else if (type === "sales") {
+    } else {
       if (allItems.length) {
         content = <SalesPageList />;
       } else if (!isInitialRenderRef.current && !error && !isLoading) {
@@ -66,37 +70,27 @@ const DeviceOrSalesSection = observer(({
 
   let allItems = [];
   let itemsNameToRender = "";
-  let paginationInfoStore = null;
   let pagesPaginationAriaLabel = "Pages";
 
-  if (type === "devices" || type === "saleDevices") {
-    let storeToUse;
-    if (type === "devices") {
-      storeToUse = deviceStore;
-    } else if (type === "saleDevices") {
-      storeToUse = oneSalePageStore;
-    }
-
+  if (type !== "sales") {  
     allItems = storeToUse.devices;
     itemsNameToRender = "devices"
 
-    paginationInfoStore = storeToUse;
     pagesPaginationAriaLabel = "Device pages";
-  } else if (type === "sales") {
+  } else {
     allItems = salesPageStore.filteredSales;
     itemsNameToRender = "sales"
 
-    paginationInfoStore = salesPageStore;
     pagesPaginationAriaLabel = "Sale pages";
   }
 
-  const totalPages = getTotalPages(paginationInfoStore.totalCount, paginationInfoStore.limit);
+  const totalPages = getTotalPages(storeToUse.totalCount, storeToUse.limit);
   const canLoadMore = isCanLoadMoreContent(
-    paginationInfoStore.totalCount,
+    storeToUse.totalCount,
     allItems.length,
-    (paginationInfoStore.page - 1) * paginationInfoStore.limit
+    (storeToUse.page - 1) * storeToUse.limit
   );
-  
+
   const topElemContent = (
     <>
       {renderItemsRelatedJsx()}
@@ -122,15 +116,17 @@ const DeviceOrSalesSection = observer(({
       {(!!canLoadMore && !!allItems.length) &&
         <ButtonPagination
           isLoading={isLoading}
-          pagesToFetch={paginationInfoStore.pagesToFetch}
+          pagesToFetch={storeToUse.pagesToFetch}
+          nameToRender={itemsNameToRender}
         />
       }
       {/* if devices are fetched and we've got totalCount (usually these conditions returns true at the same moment) */}
-      {(!!(+paginationInfoStore.totalCount) && !!allItems.length) &&
+      {/* besides, show the pagination below only if there's a COUPLE of pages */}
+      {(!!(+storeToUse.totalCount) && !!allItems.length && totalPages > 1) &&
         <PagesPagination
           totalPages={totalPages}
-          currentPage={paginationInfoStore.page}
-          pagesToFetch={paginationInfoStore.pagesToFetch}
+          currentPage={storeToUse.page}
+          pagesToFetch={storeToUse.pagesToFetch}
           ariaLabel={pagesPaginationAriaLabel}
         />
       }

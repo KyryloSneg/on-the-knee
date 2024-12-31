@@ -7,7 +7,7 @@ const SortingFilterBtn = forwardRef(({ value, onClick, visible, dropdownOptionsI
   return (
     <section className="sorting-filter-btn-wrap">
       <div className="sort-paragraph">
-        <img src={sortIcon} alt="" className="no-select" draggable="false" />
+        <img src={sortIcon} alt="" draggable="false" />
         <p>Sort by:</p>
       </div>
       <button 

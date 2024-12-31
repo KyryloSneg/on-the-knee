@@ -2,6 +2,11 @@ import "./PagesPagination.css";
 import { Link, useLocation } from "react-router-dom";
 import URLActions from "../../../utils/URLActions";
 
+// idk how to name it properly
+const MIN_DISTANCE_FROM_CURRENT_PAGE_TO_BOUNDARY = 5;
+const DISTANCE_FROM_CURRENT_PAGE_TO_BOUNDARY_SHIFT = -1;
+const MIN_ITEMS_AMOUNT_TO_HIDE = 2;
+
 const PagesPagination = ({
   totalPages, currentPage, pagesToFetch, className = "", ariaLabel = "Pages"
 }) => {
@@ -25,22 +30,35 @@ const PagesPagination = ({
 
     // HINT: "[some name]" is a page button
     if (totalPages > 1) {
-      if (currentPage - 5 > 0 && currentPage + 5 <= totalPages) {
-        // [1] [...] [4] [5] [6 *selected*] [7] [8] [...] [60 *total pages*]
+      // conditions to render the "..." (more) pages buttons
+      const canRenderMore = totalPages > (
+        // "+ 1" means: do not include the first (the last) page (don't ask)
+        MIN_DISTANCE_FROM_CURRENT_PAGE_TO_BOUNDARY - DISTANCE_FROM_CURRENT_PAGE_TO_BOUNDARY_SHIFT + MIN_ITEMS_AMOUNT_TO_HIDE + 1
+      );
 
-        pushPages(currentPage - 2, currentPage + 2);
-        pages.unshift({ name: "...", value: currentPage - 3 });
-        pages.push({ name: "...", value: currentPage + 3 });
-      } else if (currentPage - 5 > 0) {
-        // [1] [...] [4] [5] [6 *selected*] [7] [8] [9] [10 *total pages*]
+      if (canRenderMore) {
+        const canRenderLeftMore = currentPage - MIN_DISTANCE_FROM_CURRENT_PAGE_TO_BOUNDARY > 0;
+        const canRenderRightMore = (
+          currentPage + MIN_DISTANCE_FROM_CURRENT_PAGE_TO_BOUNDARY + DISTANCE_FROM_CURRENT_PAGE_TO_BOUNDARY_SHIFT < totalPages
+        );
 
-        pushPages(totalPages - 6, totalPages - 1);
-        pages.unshift({ name: "...", value: totalPages - 7 });
-      } else if (currentPage + 5 <= totalPages) {
-        // [1] [2] [3] [4] [5 *selected*] [6] [7] [...] [10 *total pages*]
-
-        pushPages(2, 7);
-        pages.push({ name: "...", value: 8 });
+        if (canRenderLeftMore && canRenderRightMore) {
+          // [1] [...] [4] [5] [6 *selected*] [7] [8] [...] [60 *total pages*]
+  
+          pushPages(currentPage - 2, currentPage + 2);
+          pages.unshift({ name: "...", value: currentPage - 3 });
+          pages.push({ name: "...", value: currentPage + 3 });
+        } else if (canRenderLeftMore) {
+          // [1] [...] [4] [5] [6 *selected*] [7] [8] [9] [10 *total pages*]
+  
+          pushPages(totalPages - 6, totalPages - 1);
+          pages.unshift({ name: "...", value: totalPages - 7 });
+        } else if (canRenderRightMore) {
+          // [1] [2] [3] [4] [5 *selected*] [6] [7] [...] [10 *total pages*]
+  
+          pushPages(2, 7);
+          pages.push({ name: "...", value: 8 });
+        }
       } else if (totalPages > 2) {
         // [1] [2 *selected*] [3]
         pushPages(2, totalPages - 1);

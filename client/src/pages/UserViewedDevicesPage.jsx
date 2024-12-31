@@ -12,11 +12,9 @@ const UserViewedDevicesPage = observer(() => {
   const { app, user } = useContext(Context);
   if (!app.hasTriedToFetchInitialData) return (
     <section className="user-page-section user-viewed-device-page">
-      <header>
-        <h2>
-          Viewed devices
-        </h2>
-      </header>
+      <h2>
+        Viewed devices
+      </h2>
       <Loader className="user-page-loader" />
     </section>
   );
@@ -34,20 +32,16 @@ const UserViewedDevicesPage = observer(() => {
 
   return (
     <section className="user-page-section user-viewed-device-page">
-      <header>
-        <h2>
-          Viewed devices
-        </h2>
-      </header>
+      <h2>
+        Viewed devices
+      </h2>
       {devices?.length || false
         ? <DeviceList devices={devices} areDevsWithCertainDevComboId={true} withHistoryDeletionBtn={true} />
         : (
           <section className="user-page-no-data-msg-section">
-            <header>
-              <h3>
-                You haven't checked anything out there
-              </h3>
-            </header>
+            <h3>
+              You haven't checked anything out there
+            </h3>
             <p className="user-page-no-data-msg">
               Look at our wonderful devices
             </p>

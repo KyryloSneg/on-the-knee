@@ -53,7 +53,7 @@
   font-size: 1.2rem;
 }
 
-.sale-item-header > h3 {
+.sale-item-heading {
   margin: 0;
   color: #7373ff;
   font-size: 1.3rem;
@@ -62,9 +62,9 @@
   transition: 0.2s;
 }
 
-.sale-item:hover .sale-item-header > h3,
-.sale-item:active .sale-item-header > h3, 
-.sale-item:focus-visible .sale-item-header > h3 {
+.sale-item:hover .sale-item-heading,
+.sale-item:active .sale-item-heading, 
+.sale-item:focus-visible .sale-item-heading {
   color: #bd5e10;
 }
 

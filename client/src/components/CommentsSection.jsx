@@ -10,7 +10,9 @@ import setQuestionCommentModalVisibility from "../utils/setQuestionCommentModalV
 import UIButton from "./UI/uiButton/UIButton";
 
 const POSSIBLE_TYPES = ["deviceFeedbacks", "deviceQuestions", "sellerFeedbacks"];
-const CommentsSection = observer(({ type, comments, isFullVersion = true, device = null, seller = null }) => {
+const CommentsSection = observer(({ 
+  type, comments, isFullVersion = true, device = null, seller = null, isTopElemMain = false 
+}) => {
   const { app, deviceStore, user } = useContext(Context);
   const createCommentBtnRef = useRef(null);
   const [isToShowSellerCantRemainComment, setIsToShowSellerCantRemainComment] = useState(false);
@@ -84,9 +86,8 @@ const CommentsSection = observer(({ type, comments, isFullVersion = true, device
   }
 
   const isToShowRating = type === "deviceFeedbacks" || type === "sellerFeedbacks";
-
-  return (
-    <section className="comments-section device-page-section">
+  const commentsSectionContent = (
+    <>
       <h2>
         {headingTextPart}
         {isFullVersion && (
@@ -133,6 +134,20 @@ const CommentsSection = observer(({ type, comments, isFullVersion = true, device
         </>
       }
       <CommentsList type={type} comments={comments} singularCommentWord={singularCommentWord} />
+    </>
+  );
+
+  if (isTopElemMain) {
+    return (
+      <main className="comments-section device-page-section">
+        {commentsSectionContent}
+      </main>
+    );
+  }
+
+  return (
+    <section className="comments-section device-page-section">
+      {commentsSectionContent}
     </section>
   );
 });

@@ -32,7 +32,7 @@ const FilterBtn = ({ value, paramKey, testId }) => {
       <span aria-hidden={isToRenderPriceInvisibleText}>
         {paramKey !== "price" ? value : `${value}$`}
       </span>
-      <img src={removeIcon} className="no-select" draggable="false" alt="" />
+      <img src={removeIcon} draggable="false" alt="" />
     </Link>
   );
 }

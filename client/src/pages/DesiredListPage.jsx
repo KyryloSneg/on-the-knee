@@ -16,11 +16,9 @@ const DesiredListPage = observer(({ selectedOptionId, setSelectedOptionId }) => 
 
   if (!app.hasTriedToFetchInitialData) return (
     <section className="user-page-section desired-list-page">
-      <header>
-        <h2>
-          Desired list
-        </h2>
-      </header>
+      <h2>
+        Desired list
+      </h2>
       <Loader className="user-page-loader" />
     </section>
   );
@@ -71,11 +69,9 @@ const DesiredListPage = observer(({ selectedOptionId, setSelectedOptionId }) => 
 
   return (
     <section className="user-page-section desired-list-page">
-      <header>
-        <h2>
-          Desired list
-        </h2>
-      </header>
+      <h2>
+        Desired list
+      </h2>
       {sortedDevices?.length
         ? (
           <>
@@ -90,11 +86,9 @@ const DesiredListPage = observer(({ selectedOptionId, setSelectedOptionId }) => 
         )
         : (
           <section className="user-page-no-data-msg-section">
-            <header>
-              <h3>
-                The list is empty
-              </h3>
-            </header>
+            <h3>
+              The list is empty
+            </h3>
             <p className="user-page-no-data-msg">
               Add here some lovely devices
             </p>

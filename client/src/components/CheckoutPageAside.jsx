@@ -69,9 +69,7 @@ const CheckoutPageAside = observer(({ isSubmitting }) => {
 
   return (
     <aside className="checkout-page-aside">
-      <header>
-        <h3>Total</h3>
-      </header>
+      <h3>Total</h3>
       <dl>
         <div>
           <dt>

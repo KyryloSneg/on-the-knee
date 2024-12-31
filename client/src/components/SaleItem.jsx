@@ -19,9 +19,7 @@ const SaleItem = ({ sale }) => {
         <div className="sale-item-bottom-bar">
           <div>
             <TimeRange createdAtDate={createdAtDate} expiresAtDate={expiresAtDate} className="sale-item-time-range" />
-            <header className="sale-item-header">
-              <h3 className="link-colors">{sale.name}</h3>
-            </header>
+            <h3 className="sale-item-heading link-colors">{sale.name}</h3>
           </div>
           <p className={"sale-item-remaining-time-p" + (doesSaleLastOnlyToday ? " only-today" : "")}>
             {doesSaleLastOnlyToday

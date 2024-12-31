@@ -4,14 +4,14 @@ import MainSellerPageSeparateRatingSection from "./MainSellerPageSeparateRatingS
 
 const MainSellerPageRatingSection = ({ seller, ratingsObj, feedbacksAmount, feedbacksAmountObj }) => {
   return (
-    <div className="main-seller-page-rating-section">
+    <main className="main-seller-page-rating-section">
       <MainSellerPageOverallRatingSection 
         seller={seller} 
         ratingsObj={ratingsObj}
         feedbacksAmount={feedbacksAmount} 
       />
       <MainSellerPageSeparateRatingSection feedbacksAmountObj={feedbacksAmountObj} />
-    </div>
+    </main>
   );
 }
 

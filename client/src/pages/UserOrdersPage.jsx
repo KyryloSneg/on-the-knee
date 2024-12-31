@@ -21,11 +21,9 @@ const UserOrdersPage = observer(({
 
   if (isLoading || isToShowLoaderOnInitialRender) return (
     <section className="user-page-section">
-      <header>
-        <h2>
-          Your orders
-        </h2>
-      </header>
+      <h2>
+        Your orders
+      </h2>
       <Loader className="user-page-loader" />
     </section>
   );
@@ -60,11 +58,9 @@ const UserOrdersPage = observer(({
       } else {
         return (
           <section className="user-page-no-data-msg-section">
-            <header>
-              <h3>
-                You have not ordered anything yet
-              </h3>
-            </header>
+            <h3>
+              You have not ordered anything yet
+            </h3>
             <p className="user-page-no-data-msg">
               There could be some beautiful couples of them
             </p>
@@ -79,11 +75,9 @@ const UserOrdersPage = observer(({
 
   return (
     <section className="user-page-section">
-      <header>
-        <h2>
-          Your orders
-        </h2>
-      </header>
+      <h2>
+        Your orders
+      </h2>
       {getChildren()}
     </section>
   );

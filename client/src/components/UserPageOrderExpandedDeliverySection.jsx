@@ -34,11 +34,9 @@ const UserPageOrderExpandedDeliverySection = ({ order }) => {
 
   return (
     <section className="user-page-order-expanded-delivery-section">
-      <header>
-        <h4>
-          Delivery info
-        </h4>
-      </header>
+      <h4>
+        Delivery info
+      </h4>
       <dl className="user-page-order-expanded-delivery-info-list">
         <div>
           <dt>Delivery type</dt>

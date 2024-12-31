@@ -17,7 +17,7 @@ const NavIconBtn = forwardRef(({ src, alt = "", text = "", isLink = false, route
     return (
       <Link to={route} className={className} {...params} ref={ref}>
         {text && <span>{text}</span>}
-        <img src={src} alt={alt} className="no-select" draggable="false"/>
+        <img src={src} alt={alt} draggable="false"/>
       </Link>
     );
   }
@@ -25,7 +25,7 @@ const NavIconBtn = forwardRef(({ src, alt = "", text = "", isLink = false, route
   return (
     <button className={className} ref={ref} {...params} >
       {text && <span>{text}</span>}
-      <img src={src} alt={alt} className="no-select" draggable="false"/>
+      <img src={src} alt={alt} draggable="false"/>
     </button>
   );
 });

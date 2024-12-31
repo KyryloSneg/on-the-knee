@@ -36,14 +36,12 @@ const SalesPage = observer(() => {
 
   return (
     <div className="display-grid">
-      <header>
-        <h2 className="top-h2">
-          {salesPageStore.selectedSaleTypeName
-            ? `${salesPageStore.selectedSaleTypeName.nameToRender} sales`
-            : "Sales"
-          }
-        </h2>
-      </header>
+      <h2 className="top-h2">
+        {salesPageStore.selectedSaleTypeName
+          ? `${salesPageStore.selectedSaleTypeName.nameToRender} sales`
+          : "Sales"
+        }
+      </h2>
       <nav>
         {slug !== ALL_SALES_SLUG
           ? (
