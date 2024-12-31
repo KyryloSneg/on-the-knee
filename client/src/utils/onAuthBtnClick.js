@@ -1,6 +1,7 @@
 import setAuthentificationModalVisibility from "./setAuthentificationModalVisibility";
 
-export default function onAccountBtnClick(isAuth, app, btnRef = null) {
+// auth btn is a btn, a link etc. which logic requires authentification
+export default function onAuthBtnClick(isAuth, app, btnRef = null) {
   if (!isAuth) {
     setAuthentificationModalVisibility(true, app);
     if (btnRef) app.setAuthentificationModalBtnRef(btnRef);
