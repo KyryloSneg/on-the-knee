@@ -22,7 +22,7 @@ const Navbar = observer(({ elemToFocus, navCategoryBtnRef }) => {
   }, [app, btnGroupRef]);
 
   return (
-    <nav ref={navbarRef}>
+    <nav className="navbar" ref={navbarRef}>
       <SkipToNextPageContent title="Skip to the main page" elemToFocus={elemToFocus} />
       <StoreTitle title={"On the knee"} />
       <div ref={btnGroupRef} data-testid="navbar-btn-group">

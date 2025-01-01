@@ -3,6 +3,7 @@ import chevronLeftIcon from "../../../assets/chevron-left_24x24-515151.svg";
 import chevronRightIcon from "../../../assets/chevron-right_24x24-515151.svg";
 import DeviceItemSaleIcons from "../../DeviceItemSaleIcons";
 import { forwardRef, useImperativeHandle, useRef } from "react";
+import { Link } from "react-router-dom";
 
 const CarouselContent = forwardRef(({
   type, images, selectedId, selectPrevImage, selectNextImage,
@@ -53,10 +54,27 @@ const CarouselContent = forwardRef(({
         </button>
       }
       <ul className="carousel-content-list" style={{ transform: `translateX(${translateX})` }}>
-        {images.map((image, index) =>
-          <li key={index} className="carousel-content-img-wrap">
-            <img src={image.src} alt={image.alt} draggable="false" style={image?.style || {}} />
-          </li>
+        {images.map((image, index) => {
+          const isActive = index === selectedId;
+          const img = (
+            <img 
+              src={image.src} 
+              alt={image.alt || ""} 
+              draggable="false" 
+              style={image.style || {}} 
+            />
+          );
+
+          // use no-select to not select image if user is selecting the list item
+          return (
+            <li key={index} className="carousel-content-img-wrap no-select">
+              {image.to
+                ? <Link to={image.to} tabIndex={isActive ? 0 : -1}>{img}</Link>
+                : img
+              }
+            </li>
+          );
+        }
         )}
       </ul>
       {(images.length > 1 && selectedId !== images.length - 1) &&

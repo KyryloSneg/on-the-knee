@@ -1,8 +1,8 @@
+import "./ImagesCarousel.css";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import CustomScrollbar from "../customScrollbar/CustomScrollbar";
 import CarouselContent from "./CarouselContent";
 import CarouselSidebar from "./CarouselSidebar";
-import "./ImagesCarousel.css";
 import useWindowWidth from "../../../hooks/useWindowWidth";
 import { WIDTH_TO_SHOW_DEVICE_CAROUSEL_SIDEBAR } from "../../../utils/consts";
 import CarouselBottomSelectBar from "./CarouselBottomSelectBar";

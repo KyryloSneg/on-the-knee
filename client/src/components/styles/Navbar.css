@@ -1,4 +1,4 @@
-header nav {
+header .navbar {
   display: grid;
   grid-template-columns: 1fr;
   align-items: center;
@@ -7,15 +7,15 @@ header nav {
   padding: 0 4px;
 }
 
-nav > * {
+.navbar > *:not(.skip-to-next-page-content) {
   height: 100%;
 }
 
-nav img {
+.navbar img {
   font-size: 1rem;
 }
 
-nav > div {
+.navbar > div {
   display: grid;
   width: 100%;
   gap: 5px;
@@ -27,80 +27,80 @@ nav > div {
 
 /* if search bar is focused: */
 
-nav > div.focusedSearch {
+.navbar > div.focusedSearch {
   grid-template-columns: 1fr;
 }
 
-nav > div.focusedSearch > button,
- nav > div.focusedSearch > a {
+.navbar > div.focusedSearch > button,
+ .navbar > div.focusedSearch > a {
   display: none;
 }
 
 /* Skip to next page content */
  
-nav > .skip-to-next-page-content:focus {
+.navbar > .skip-to-next-page-content:focus {
   position: absolute;
   height: 36px;
   top: 5px;
 }
 
-nav > .skip-to-next-page-content p {
+.navbar > .skip-to-next-page-content p {
   font-size: 1rem;
 }
 
 @media screen and (min-width: 230px) {
-  nav > div {
+  .navbar > div {
     gap: 10px;
   }
 }
 
 @media screen and (min-width: 250px) {
-  nav > .skip-to-next-page-content p {
+  .navbar > .skip-to-next-page-content p {
     font-size: 1.5rem;
   }
 }
 
 @media screen and (min-width: 395px) {
-  nav > div {
+  .navbar > div {
     grid-template-columns: auto 1fr auto auto;
   }
 }
 
 @media screen and (min-width: 425px) {
-  nav > div {
+  .navbar > div {
     gap: 22px;
   }
 
-  header nav {
+  header .navbar {
     padding: 0 10px;
   }
 }
 
 @media screen and (min-width: 550px) {
-  nav > div {
+  .navbar > div {
     grid-template-columns: auto 1fr auto auto;
   }
 
-  header nav {
+  header .navbar {
     padding: 0 12px;
   }
 }
 
 @media screen and (min-width: 700px) {
-  nav > div {
+  .navbar > div {
     grid-template-columns: auto 1fr auto auto auto;
   }
 }
 
 @media screen and (min-width: 900px) {
-  header nav {
+  header .navbar {
     grid-template-columns: auto 1fr;
     grid-template-rows: 1fr;
     gap: 40px;
     padding: 0 40px;
   }
 
-  nav > .skip-to-next-page-content:focus {
+  .navbar > .skip-to-next-page-content:focus {
     top: auto;
     align-self: center;
     left: 40px;
@@ -109,53 +109,53 @@ nav > .skip-to-next-page-content p {
 }
 
 @media screen and (min-width: 1000px) {
-  nav > .skip-to-next-page-content:focus {
+  .navbar > .skip-to-next-page-content:focus {
     min-width: 221px;
   }
 }
 
 @media screen and (min-width: 1080px) {
-  nav > div {
+  .navbar > div {
     grid-template-columns: auto auto 1fr auto auto auto;
   }
 }
 
 @media screen and (min-width: 1200px) {
-  header nav {
+  header .navbar {
     padding: 0 100px;
   }
 
-  nav > .skip-to-next-page-content:focus {
+  .navbar > .skip-to-next-page-content:focus {
     left: 100px;
   }
 }
 
 @media screen and (min-width: 1500px) {
-  header nav {
+  header .navbar {
     padding: 0 200px;
   }
 
-  nav > .skip-to-next-page-content:focus {
+  .navbar > .skip-to-next-page-content:focus {
     left: 200px;
   }
 }
 
 @media screen and (min-width: 1800px) {
-  header nav {
+  header .navbar {
     padding: 0 300px;
   }
 
-  nav > .skip-to-next-page-content:focus {
+  .navbar > .skip-to-next-page-content:focus {
     left: 300px;
   }
 }
 
 @media screen and (min-width: 2000px) {
-  header nav {
+  header .navbar {
     padding: 0 400px;
   }
 
-  nav > .skip-to-next-page-content:focus {
+  .navbar > .skip-to-next-page-content:focus {
     left: 400px;
   }
 }

@@ -1,0 +1,17 @@
+.sales-carousel-section {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  padding: 12px 18px;
+  border: 1px solid rgb(205, 205, 205);
+  border-radius: 18px;
+  background-color: #fff;
+}
+
+.sales-carousel-section > a {
+  width: max-content;
+  align-self: flex-end;
+  font-size: 1.6rem;
+}
