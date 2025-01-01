@@ -1,0 +1,32 @@
+.main-page-aside {
+  box-sizing: border-box;
+  display: none;
+  /* fallback */
+  width: 100%;
+  /* matching the right border with the border between the main and nested categories in the corresponding menu */
+  width: calc(100% + 2px);
+  min-width: 320px;
+  height: max-content;
+  min-height: 100%;
+  padding: 10px 0 16px 0;
+  border: 1px solid rgb(205, 205, 205);
+  border-radius: 20px;
+  background-color: #ffffff;
+  position: relative;
+}
+
+.main-page-aside.main-page-viewed-devices-rendered {
+  /* 100% - margin-bottom of the device list */
+  min-height: calc(100% - 36px);
+}
+
+.main-page-aside > nav > ul {
+  margin: 0;
+  margin-bottom: 14px;
+}
+
+@media screen and (min-width: 960px) {
+  .main-page-aside {
+    display: block;
+  }
+}

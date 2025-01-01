@@ -1,7 +1,7 @@
+import "./styles/CategoriesMenuMain.css"
 import { forwardRef, useContext, useRef } from "react";
 import { Context } from "../Context";
 import CategoriesMenuMainItem from "./CategoriesMenuMainItem";
-import "./styles/categoriesMenuMain.css"
 import SkipToNextPageContent from "./UI/skipToNextPageContent/SkipToNextPageContent";
 import useFocusTraps from "../hooks/useFocusTraps";
 import returnBackIcon from "../assets/arrow_left_alt_24x24-white.svg";
@@ -31,6 +31,7 @@ const CategoriesMenuMain = forwardRef(({ setSelectedId, navCategoryBtnRef, first
         {mainCategories.map(category => 
           <li key={category.id}>
             <CategoriesMenuMainItem 
+              type="categoriesMenu"
               category={category} 
               setSelectedId={setSelectedId}
               firstSecCategoryRef={firstSecCategoryRef}

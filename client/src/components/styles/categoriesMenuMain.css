@@ -9,6 +9,7 @@
 .categories-menu-main > ul  {
   display: flex;
   flex-direction: column;
+  margin: 22px 0;
 }
 
 .categories-menu-main > .skip-to-next-page-content:focus {

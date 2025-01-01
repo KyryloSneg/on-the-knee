@@ -48,6 +48,13 @@
   max-height: 220px;
 }
 
+.images-carousel.sales-images-carousel .carousel-content-list li img {
+  /* make it as width as possible (but keep the same height) */
+  width: 100%;
+  max-width: max-content;
+  max-height: 100%;
+}
+
 .select-prev-image, .select-next-image {
   border: none;
   display: flex;

@@ -1,3 +1,8 @@
 .user-location-btn-notification {
   position: relative;
 }
+
+.user-location-btn-notification.menu-location-btn-notification {
+  box-sizing: border-box;
+  width: 100%;
+}

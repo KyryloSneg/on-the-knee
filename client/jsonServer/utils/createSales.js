@@ -45,6 +45,7 @@ module.exports = (sales, saleTypes, saleTypeNames) => {
       "name": faker.lorem.sentence(),
       "description": description,
       "thumbnail": faker.image.url({ width, height }),
+      "alt": faker.lorem.sentence(),
       "slug": slug,
       "expiresAt": expiresAt,
       // idk what is this field for (because code comments are for stupid men)

@@ -1,10 +1,12 @@
-import UserLocationBtnNotification from "../components/UserLocationBtnNotification";
+import "./styles/MainPage.css";
+import MainPageAside from "components/MainPageAside";
+import MainPageMainContent from "components/MainPageMainContent";
 
 const MainPage = () => {
   return (
-    <div>
-      MainPage
-      <UserLocationBtnNotification />
+    <div className="main-page">
+      <MainPageAside /> 
+      <MainPageMainContent />
     </div>
   );
 };

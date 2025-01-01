@@ -15,6 +15,7 @@ const SaleItem = ({ sale }) => {
   return (
     <Link to={to} className="sale-item-wrapper">
       <section className="sale-item">
+        {/* don't use sale.alt because we already have sale.name in h3 below */}
         <img src={sale.thumbnail} alt="" draggable="false" />
         <div className="sale-item-bottom-bar">
           <div>
