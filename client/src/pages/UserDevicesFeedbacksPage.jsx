@@ -2,7 +2,7 @@ import "./styles/UserDevicesFeedbacksPage.css";
 import RemainSellerDevFeedback from "components/RemainSellerDevFeedback";
 
 const UserDevicesFeedbacksPage = ({ userDeviceFeedbacksObjArray, orderDeviceCombinations }) => {
-  if (!userDeviceFeedbacksObjArray?.length) return <div aria-hidden="true" />;
+  if (!userDeviceFeedbacksObjArray?.length) return;
 
   return (
     <RemainSellerDevFeedback 

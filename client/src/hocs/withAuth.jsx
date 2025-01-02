@@ -28,10 +28,8 @@ const withAuth = (Component) => {
       // eslint-disable-next-line
     }, []);
     
-    if (!isCheckedAuth) {
-      return <div />;
-    }
-
+    if (!isCheckedAuth) return;
+    
     return <Component {...props} />;
   }
 

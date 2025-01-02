@@ -25,7 +25,7 @@ const ViewedDevicesList = observer(({ withHistoryDeletionBtn = true, devicesMaxA
     }
   }
 
-  if (!devices.length) return false;
+  if (!devices.length) return;
 
   return (
     <DeviceList

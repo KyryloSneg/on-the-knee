@@ -6,7 +6,7 @@ import DeviceInfoSectionList from "./DeviceInfoSectionList";
 const DeviceInfoSection = ({ device, combinationString = null }) => {
   const [categoryDevices, setCategoryDevices] = useState([]);
   useGettingDevicesByCategory(device?.categoryId, setCategoryDevices);
-  if (!device) return <div />; 
+  if (!device) return; 
 
   // {
   //   "nameSample1": ["valueSample1", "valueSample2"],

@@ -1,7 +1,7 @@
 import CatalogPage from './CatalogPage';
 
 const SellerDevicesPage = (({ seller }) => {
-  if (!seller) return <div />;
+  if (!seller) return;
   
   return (
     <CatalogPage 

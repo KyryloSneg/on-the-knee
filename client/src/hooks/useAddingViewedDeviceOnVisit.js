@@ -4,6 +4,7 @@ import { createViewedDevice, deleteViewedDevice, getOneViewedDevicesListDevs } f
 import _ from "lodash";
 import { v4 } from "uuid";
 import deleteFetchWithTryCatch from "utils/deleteFetchWithTryCatch";
+import setOneViewedDevAdditionalFields from "utils/setOneViewedDevAdditionalFields";
 
 // passing prevDeviceCombinationIdRef to use it properly in tabs page layout 
 // without unnecessary ref.current resets on tab switches
@@ -50,6 +51,8 @@ export default function useAddingViewedDeviceOnVisit(deviceId, deviceCombination
         const viewedDev = createViewedDevObj();
         // the new viewed device must always be the first one
         newNonAuthViewedDevices.unshift(viewedDev);
+
+        return viewedDev;
       };
 
       let newNonAuthViewedDevices = _.cloneDeep(user.viewedDevices);
@@ -71,8 +74,10 @@ export default function useAddingViewedDeviceOnVisit(deviceId, deviceCombination
             user.setViewedDevices(updatedViewedDevices);
           } else {
             newNonAuthViewedDevices = newNonAuthViewedDevices.filter(viewedDev => viewedDev.id !== existingViewedDevice.id);
-            nonAuthAddViewedDeviceLogic();
-
+            
+            const updatedViewedDev = nonAuthAddViewedDeviceLogic();
+            await setOneViewedDevAdditionalFields(updatedViewedDev);
+            
             let newLocalStorageViewedDevices = _.cloneDeep(newNonAuthViewedDevices);
             for (let newLocalViewedDev of newLocalStorageViewedDevices) {
               delete newLocalViewedDev.device;
@@ -90,7 +95,8 @@ export default function useAddingViewedDeviceOnVisit(deviceId, deviceCombination
             const updatedViewedDevices = await getOneViewedDevicesListDevs(user.viewedDevicesList?.id);
             user.setViewedDevices(updatedViewedDevices);
           } else {
-            nonAuthAddViewedDeviceLogic();
+            const updatedViewedDev = nonAuthAddViewedDeviceLogic();
+            await setOneViewedDevAdditionalFields(updatedViewedDev);
 
             let newLocalStorageViewedDevices = _.cloneDeep(newNonAuthViewedDevices);
             for (let newLocalViewedDev of newLocalStorageViewedDevices) {

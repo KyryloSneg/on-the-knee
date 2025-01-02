@@ -23,7 +23,7 @@ const CheckoutPageOrderDeviceListItem = observer(({ combination, cartDataFetchin
   
   useGettingAddServicesRelatedData(combination.device, setAdditionalServicesObj);
 
-  if (!deviceStore.hasTriedToFetchSales) return <div aria-hidden="true" />;
+  if (!deviceStore.hasTriedToFetchSales) return;
   if (isInitialRender.current) isInitialRender.current = false;
 
   return (

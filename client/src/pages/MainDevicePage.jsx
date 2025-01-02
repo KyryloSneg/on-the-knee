@@ -68,9 +68,7 @@ const MainDevicePage = observer(({
   useSynchronizingAdditionalServices(setSelectedAddServices, combinationInCart?.id);
   useChangingServerAddServicesOnChange(selectedAddServices, combinationInCart?.id, cartDataFetching, isInitialRender);
 
-  if (!isToRenderPage) {
-    return <div aria-hidden="true" />
-  }
+  if (!isToRenderPage) return;
 
   let deviceSaleTypes = [];
   let textSaleTypes = [];

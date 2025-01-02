@@ -66,6 +66,8 @@ const AddToDesiredListBtn = observer(({ deviceId, deviceCombinationId }) => {
     if (!user.isAuth) {
       app.setAuthentificationModalBtnRef(btnRef);
       setAuthentificationModalVisibility(true, app);
+
+      return;
     }
 
     addDeleteDesiredListDev();

@@ -44,7 +44,7 @@ const CommentsListItem = observer(({
   );
 
   // just in case
-  if (!comment) return <div />;
+  if (!comment) return;
   
   let replies;
   if (type === "deviceFeedbacks") {

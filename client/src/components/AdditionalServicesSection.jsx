@@ -83,7 +83,7 @@ const AdditionalServicesSection = ({ additionalServices, selectedItems, setSelec
     isDataLoaded = !!additionalServices[0]["additional-service"];
   }
   // let isDataLoaded = additionalServices?.length;
-  if (!isDataLoaded) return <div />;
+  if (!isDataLoaded) return;
 
   let totalPrice = 0;
   if (selectedItems?.length) {
