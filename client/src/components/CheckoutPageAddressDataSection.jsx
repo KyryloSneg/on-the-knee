@@ -25,7 +25,7 @@ const CheckoutPageAddressDataSection = ({
     "checkout-phone-number-" + ((orderId !== null && orderId !== undefined) ? orderId : v4()), 
   [orderId]);
 
-  if (type === "receivent" && orderId === null && orderId !== undefined) return <div />;
+  if (type === "receivent" && orderId === null && orderId !== undefined) return;
 
   function onPhoneInputChange(value) {
     setPhoneInputValue(value);

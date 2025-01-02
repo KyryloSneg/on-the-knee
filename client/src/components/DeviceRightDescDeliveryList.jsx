@@ -6,7 +6,7 @@ import DeviceRightDescDeliveryListItem from "./DeviceRightDescDeliveryListItem";
 
 const DeviceRightDescDeliveryList = observer(({ deviceSaleTypes }) => {
   const { app } = useContext(Context)
-  if (!app.deliveries?.length) return <div />;
+  if (!app.deliveries?.length) return;
 
   return (
     <ul className="device-right-desc-delivery-list">

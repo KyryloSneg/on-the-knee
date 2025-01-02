@@ -2,7 +2,7 @@ import "./styles/DeviceImagesCarousel.css";
 import ImagesCarousel from "./UI/imagesCarousel/ImagesCarousel";
 
 const DeviceImagesCarousel = ({ device, selectedCombination, textSaleTypes = [], logoSaleTypes = [] }) => {
-  if (!textSaleTypes || !logoSaleTypes) return <div />;
+  if (!textSaleTypes || !logoSaleTypes) return;
   const images = selectedCombination.images;
 
   return (

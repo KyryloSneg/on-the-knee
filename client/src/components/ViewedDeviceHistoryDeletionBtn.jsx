@@ -46,7 +46,7 @@ const ViewedDeviceHistoryDeletionBtn = observer(({ deviceId, deviceCombinationId
   });
 
   // device must be viewed by user before he could see this button
-  if (!isAdded) return <div className="display-none" />;
+  if (!isAdded) return;
 
   return (
     <button className="viewed-device-history-deletion-btn" onClick={deleteDeviceHistory}>

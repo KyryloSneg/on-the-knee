@@ -27,10 +27,7 @@ const UserPageOrderExpandedDeliverySection = ({ order }) => {
     }
   }
 
-  if (!type) {
-    console.log("the passed order prop is incorrect!");
-    return <div />;
-  }
+  if (!type) return;
 
   return (
     <section className="user-page-order-expanded-delivery-section">

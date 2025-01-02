@@ -13,6 +13,7 @@ const DeviceSearchResultItem = observer(({ device, defaultCombo }) => {
     ) || { discountPercentage: 0 };
 
   const image = defaultCombo.images[0];
+  // returning div instead of nothing just in case
   if (!deviceStore.hasTriedToFetchSales) return <div />;
 
   return (

@@ -30,7 +30,7 @@ const CommentsSection = observer(({
     ((type === "deviceFeedbacks" || type === "deviceQuestions") && !device)
     || (type === "sellerFeedbacks" && !seller)
     || !comments
-  ) return <div />;
+  ) return;
 
   function createComment() {
     if (isUserASellerOrManager) {

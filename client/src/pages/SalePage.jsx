@@ -23,10 +23,10 @@ const SalePage = observer(() => {
   );
 
   useOneSaleFetching(id, { isToFetch: !hasAlreadyFetchedThisSale, isSalePageFetch: true });
-  if (!oneSalePageStore.sale) return <div />;
+  if (!oneSalePageStore.sale) return;
   if (oneSalePageStore.sale?.hasEnded) {
     setTimeout(() => navigate(ROOT_ROUTE, { replace: true }, 0));
-    return <div />;
+    return;
   };
 
   return (

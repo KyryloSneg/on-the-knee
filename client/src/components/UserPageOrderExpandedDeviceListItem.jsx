@@ -1,18 +1,12 @@
-import { useContext, useState } from "react";
-import { Context } from "../Context";
-import { observer } from "mobx-react-lite";
+import { useState } from "react";
 import SlimDeviceCombinationInfo from "./SlimDeviceCombinationInfo";
 
-const UserPageOrderExpandedDeviceListItem = observer(({ 
+const UserPageOrderExpandedDeviceListItem = ({ 
   orderCombo, orderSelectedAdditionalServices, additionalServicesObj 
 }) => {
-  const { deviceStore } = useContext(Context);
-
   const [selectedAddServices, setSelectedAddServices] = useState(
     orderSelectedAdditionalServices?.["selected-additional-services"]?.[orderCombo.id] || []
   );
-
-  if (!deviceStore.hasTriedToFetchSales) return <div aria-hidden="true" />;
 
   return (
     <SlimDeviceCombinationInfo 
@@ -24,6 +18,6 @@ const UserPageOrderExpandedDeviceListItem = observer(({
       isReadOnlyAddServices={true}
     />
   );
-});
+};
 
 export default UserPageOrderExpandedDeviceListItem;

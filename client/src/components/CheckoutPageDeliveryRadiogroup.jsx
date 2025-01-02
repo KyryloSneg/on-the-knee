@@ -63,7 +63,7 @@ const CheckoutPageDeliveryRadiogroup = observer(({
     // eslint-disable-next-line
   }, [app, app.deliveries, setSelectedDeliveryId]);
 
-  if (!app.deliveries?.length) return <div />;
+  if (!app.deliveries?.length) return;
 
   function checkItem(index) {
     const nextSelectedId = app.deliveries[index]?.id;

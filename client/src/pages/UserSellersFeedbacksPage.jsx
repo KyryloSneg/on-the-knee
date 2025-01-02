@@ -6,7 +6,7 @@ import { observer } from "mobx-react-lite";
 
 const UserSellersFeedbacksPage = observer(() => {
   const { user } = useContext(Context);
-  if (!user.ordersListSellers?.length) return <div aria-hidden="true" />;
+  if (!user.ordersListSellers?.length) return;
   
   return (
     <RemainSellerDevFeedback type="userFeedbacks" propsSellersFeedbacksObjArray={user.ordersListSellers} />
