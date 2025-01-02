@@ -6,6 +6,7 @@ import { deleteViewedDevice, getOneViewedDevicesListDevs } from "../http/ViewedD
 import Loader from "./UI/loader/Loader";
 import trashCanIcon from "../assets/delete_24x24_434343.svg";
 import deleteFetchWithTryCatch from "utils/deleteFetchWithTryCatch";
+import _ from "lodash";
 
 const ViewedDeviceHistoryDeletionBtn = observer(({ deviceId, deviceCombinationId }) => {
   const { user } = useContext(Context);
@@ -27,11 +28,29 @@ const ViewedDeviceHistoryDeletionBtn = observer(({ deviceId, deviceCombinationId
       const existingViewedDevice =
         user.viewedDevices?.find(viewedDev => viewedDev["device-combinationId"] === deviceCombinationId);
 
-      if (existingViewedDevice) {
-        await deleteFetchWithTryCatch(async () => await deleteViewedDevice(existingViewedDevice.id));
+      let updatedViewedDevices;
+      if (user.isAuth) {
+        if (existingViewedDevice) {
+          await deleteFetchWithTryCatch(async () => await deleteViewedDevice(existingViewedDevice.id));
+        }
+
+        updatedViewedDevices = await getOneViewedDevicesListDevs(user.viewedDevicesList?.id);
+      } else {
+        if (existingViewedDevice) {
+          updatedViewedDevices = user.viewedDevices?.filter(viewedDev => viewedDev.id !== existingViewedDevice.id) || [];
+
+          let newLocalStorageViewedDevices = _.cloneDeep(updatedViewedDevices);
+          for (let newLocalViewedDev of newLocalStorageViewedDevices) {
+            delete newLocalViewedDev.device;
+            delete newLocalViewedDev["device-combination"];
+          };
+
+          localStorage.setItem("viewedDevices", JSON.stringify(newLocalStorageViewedDevices));
+        } else {
+          updatedViewedDevices = user.viewedDevices;
+        }
       }
 
-      const updatedViewedDevices = await getOneViewedDevicesListDevs(user.viewedDevicesList?.id);
       user.setViewedDevices(updatedViewedDevices);
     } catch (e) {
       console.log(e.message);
