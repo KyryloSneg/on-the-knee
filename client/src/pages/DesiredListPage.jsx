@@ -10,10 +10,12 @@ import _ from "lodash";
 import sortDevicesByPrice from "../utils/sortDevicesByPrice";
 import compareNumbers from "../utils/compareNumbers";
 import Loader from "../components/UI/loader/Loader";
+import useSettingDocumentTitle from "hooks/useSettingDocumentTitle";
 
 const DesiredListPage = observer(({ selectedOptionId, setSelectedOptionId }) => {
+  useSettingDocumentTitle("Desired list");
+  
   const { app, user, deviceStore } = useContext(Context);
-
   if (!app.hasTriedToFetchInitialData) return (
     <section className="user-page-section desired-list-page">
       <h2>

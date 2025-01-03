@@ -8,13 +8,15 @@ import { ROOT_ROUTE } from "../utils/consts";
 import { useContext } from "react";
 import { Context } from "Context";
 import { observer } from "mobx-react-lite";
+import useSettingDocumentTitle from "hooks/useSettingDocumentTitle";
 
 const UserOrdersPage = observer(({ 
   orders, initialOrders, userDeviceFeedbacksObjArray, 
   isLoading, isInitialRender 
 }) => {
-  const { fetchRefStore } = useContext(Context);
+  useSettingDocumentTitle("Your orders");
 
+  const { fetchRefStore } = useContext(Context);
   const isToShowLoaderOnInitialRender = (
     isInitialRender && !fetchRefStore.hasAlreadyFetchedUserOrders
   );

@@ -4,6 +4,7 @@ import { Context } from "Context";
 import useOneSellerFeedbacksFetching from "hooks/useOneSellerFeedbacksFetching";
 import useOneSellerFetching from "hooks/useOneSellerFetching";
 import useOrdersListSellersFetching from "hooks/useOrdersListSellersFetching";
+import useSettingDocumentTitle from "hooks/useSettingDocumentTitle";
 import useUpdatingFeedbacksCbs from "hooks/useUpdatingFeedbacksCbs";
 import { observer } from "mobx-react-lite";
 import { useContext, useState } from "react";
@@ -18,6 +19,7 @@ const WriteSellerFeedbackPage = observer(() => {
   let [id, slug] = sellerIdSlug.split("--");
 
   useOneSellerFetching(id, setSeller, true, false);
+  useSettingDocumentTitle(`Write feedback about ${seller?.name || "..."}`);
 
   const [sellerFeedbacksFetching] = useOneSellerFeedbacksFetching(id, null, true, false);  
   const [userSellersFeedbacksFetching] = useOrdersListSellersFetching(user.orders, null, true, true, true);

@@ -10,6 +10,7 @@ import { Link, useParams } from "react-router-dom";
 import { ALL_SALES_SLUG, SALES_ROUTE } from "utils/consts";
 import getTotalPages from "utils/getTotalPages";
 import DeviceOrSalesSection from "components/DeviceOrSalesSection";
+import useSettingDocumentTitle from "hooks/useSettingDocumentTitle";
 
 const SalesPage = observer(() => {
   const { salesPageStore, deviceStore, fetchRefStore } = useContext(Context);
@@ -30,6 +31,13 @@ const SalesPage = observer(() => {
   const [fetching, isLoading, error] = useSalesPageFetching(slug, isToFetchSales);
   const saleTypeNamesWithoutCurrentOne = deviceStore.saleTypeNames?.filter(item => item.name !== slug);
 
+  const headingContent = (
+    salesPageStore.selectedSaleTypeName
+      ? `${salesPageStore.selectedSaleTypeName.nameToRender} sales`
+      : "Sales"
+  );
+
+  useSettingDocumentTitle(headingContent);
   useEffect(() => {
     isInitialRenderRef.current = false;
   }, []);
@@ -37,10 +45,7 @@ const SalesPage = observer(() => {
   return (
     <div className="display-grid">
       <h2 className="top-h2">
-        {salesPageStore.selectedSaleTypeName
-          ? `${salesPageStore.selectedSaleTypeName.nameToRender} sales`
-          : "Sales"
-        }
+        {headingContent}
       </h2>
       <nav>
         {slug !== ALL_SALES_SLUG

@@ -18,6 +18,7 @@ import ChildItemGroupsBar from "../components/ChildItemGroupsBar";
 import DeviceOrSalesSection from "components/DeviceOrSalesSection";
 import useGettingPaginationParams from "hooks/useGettingPaginationParams";
 import getTotalPages from "utils/getTotalPages";
+import useSettingDocumentTitle from "hooks/useSettingDocumentTitle";
 
 const POSSIBLE_TYPES = ["category", "search", "seller", "saleDevices"];
 
@@ -146,6 +147,16 @@ const CatalogPage = observer(({ type, seller = null, sale = null }) => {
   const [isLoading, error, deviceFetching] = useDeviceSectionFetching(
     type, lastPageFiltersObj, setIsFoundDevicesByQuery, setSpellCheckedQuery, seller, sale, isToFetchDevices
   );
+
+  let documentTitle = null;
+  if (type === "category") {
+    documentTitle = category?.name || null;
+  } else if (type === "search") {
+    documentTitle = `Search for devices: "${spellCheckedQuery}"`;
+  }
+
+  // documentTitle for other types is already set in the corresponding pages
+  useSettingDocumentTitle(documentTitle);
 
   useEffect(() => {
     isInitialRenderRef.current = false;

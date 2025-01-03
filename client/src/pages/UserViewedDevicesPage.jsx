@@ -7,8 +7,11 @@ import UIButton from "../components/UI/uiButton/UIButton";
 import { ROOT_ROUTE } from "../utils/consts";
 import ViewedDevicesList from "components/ViewedDevicesList";
 import checkIsToRenderViewedDevicesList from "utils/checkIsToRenderViewedDevicesList";
+import useSettingDocumentTitle from "hooks/useSettingDocumentTitle";
 
 const UserViewedDevicesPage = observer(() => {
+  useSettingDocumentTitle("Viewed devices");
+
   const { app, user } = useContext(Context);
   if (!app.hasTriedToFetchInitialData) return (
     <section className="user-page-section user-viewed-device-page">
