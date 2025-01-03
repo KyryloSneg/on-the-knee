@@ -1,50 +1,96 @@
-footer {
+.my-footer {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-self: end;
+  height: max-content;
   padding: 10px;
-  background-color: #333333;
+  margin: 20px 0 0 0;
   color: white;
-  font-size: 1rem;
+  background-color: #333333;
   z-index: 15;
 }
 
-footer {
-  height: max-content;
-  margin: 20px 0 0 0;
-  align-self: end;
-}
-
-footer li {
-  display: block;
-  text-align: right;
-  font-size: 1rem;
-}
-
-footer p {
-  font-size: 1.2rem;
+.my-footer > p {
+  font-size: 0.9rem;
   text-align: right;
 }
 
-footer a {
-  text-decoration: none;
-  transition: 0.2s;
+.my-footer a {
+  font-size: 1.4rem;
+  padding: 2px 0;
+  transition: color 0.2s, outline 0s;
 }
 
-footer a:hover {
-  background: none;
+.my-footer > nav section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-@media screen and (min-width: 220px) {
-  /* footer ul li {
-    font-size: 1.8rem;
-  } */
+.my-footer > nav section > h2 {
+  color: #e1e1e1;
+  font-size: 1.5rem;
+  margin: 12px 0 0 0;
 }
 
-@media screen and (min-width: 360px) {
-  footer p {
-    font-size: 1.5rem;
+.my-footer > nav section > ul {
+  display: flex;
+  flex-direction: column;
+  padding: 0 20%;
+  gap: 6px;
+}
+
+.my-footer-cols {
+  max-width: 1420px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+.footer-copyright-symbol {
+  margin-right: 2px;
+}
+
+@media screen and (min-width: 280px) {
+  .my-footer > nav section {
+    align-items: center;
   }
 
-  footer ul li {
+  .my-footer > nav section > ul {
+    padding: 0;
+  }
+
+  .my-footer-cols {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media screen and (min-width: 330px) {
+  .my-footer > p {
+    font-size: 1rem;
+  }
+}
+
+@media screen and (min-width: 390px) {
+  .my-footer > p {
     font-size: 1.2rem;
+  }
+}
+
+@media screen and (min-width: 820px) {
+  .my-footer > nav section {
+    align-items: normal;
+  }
+
+  .my-footer > nav section > ul {
+    padding: 0 20%;
+  }
+
+  .my-footer-cols {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 14px;
   }
 }
