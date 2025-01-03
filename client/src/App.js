@@ -16,6 +16,7 @@ import useDeliveriesFetching from "./hooks/useDeliveriesFetching";
 import useGettingCartData from "hooks/useGettingCartData";
 import HeaderSendActivationEmail from "components/HeaderSendActivationEmail";
 import AppTopLevelModalsAndSidebars from "components/AppTopLevelModalsAndSidebars";
+import ScrollToTopBtn from "components/ScrollToTopBtn";
  
 const App = observer(() => {
   const { app, deviceStore, user } = useContext(Context);
@@ -85,6 +86,7 @@ const App = observer(() => {
       <div ref={pageRef}>
         <Outlet />
       </div>
+      <ScrollToTopBtn />
       <MyFooter />
     </div>
   );
