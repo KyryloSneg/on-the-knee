@@ -8,6 +8,7 @@ import { Context } from "Context";
 import CatalogPage from "./CatalogPage";
 import { ROOT_ROUTE } from "utils/consts";
 import useNavigateToEncodedURL from "hooks/useNavigateToEncodedURL";
+import useSettingDocumentTitle from "hooks/useSettingDocumentTitle";
 
 const SalePage = observer(() => {
   const { oneSalePageStore, fetchRefStore } = useContext(Context);
@@ -23,6 +24,9 @@ const SalePage = observer(() => {
   );
 
   useOneSaleFetching(id, { isToFetch: !hasAlreadyFetchedThisSale, isSalePageFetch: true });
+  // i don't want to show the name of the previously fetched sale in the title
+  useSettingDocumentTitle(hasAlreadyFetchedThisSale ? oneSalePageStore.sale?.name || "..." : "...");
+
   if (!oneSalePageStore.sale) return;
   if (oneSalePageStore.sale?.hasEnded) {
     setTimeout(() => navigate(ROOT_ROUTE, { replace: true }, 0));

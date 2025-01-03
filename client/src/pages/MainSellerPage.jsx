@@ -1,8 +1,10 @@
 import "./styles/MainSellerPage.css";
 import SellerScheduleSection from "../components/SellerScheduleSection";
 import MainSellerPageRatingSection from "../components/MainSellerPageRatingSection";
+import useSettingDocumentTitle from "hooks/useSettingDocumentTitle";
 
 const MainSellerPage = ({ seller, feedbacks }) => {
+  useSettingDocumentTitle(seller?.name || "...");
   if (!seller) return;
 
   let feedbacksAmountObj = {

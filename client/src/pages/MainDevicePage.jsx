@@ -13,11 +13,14 @@ import useWindowWidth from "../hooks/useWindowWidth";
 import { WIDTH_TO_SHOW_PURCHASE_DEVICE_FOOTER } from "../utils/consts";
 import useSynchronizingAdditionalServices from "../hooks/useSynchronizingAdditionalServices";
 import useChangingServerAddServicesOnChange from "../hooks/useChangingServerAddServicesOnChange";
+import useSettingDocumentTitle from "hooks/useSettingDocumentTitle";
 
 const MainDevicePage = observer(({ 
   device, combinationString, feedbacks, seller, additionalServicesObj, 
   selectedCombination, cartDataFetching, isToRenderPage 
 }) => {
+  useSettingDocumentTitle(device?.name || "...");
+
   const { deviceStore, user } = useContext(Context);
   const windowWidth = useWindowWidth();
 

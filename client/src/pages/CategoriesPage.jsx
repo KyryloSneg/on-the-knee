@@ -5,8 +5,18 @@ import useBrandDevicesFetching from "../hooks/useBrandDevicesFetching";
 import CategoriesPageItem from "../components/CategoriesPageItem";
 import './styles/CategoriesPage.css';
 import { observer } from "mobx-react-lite";
+import useSettingDocumentTitle from "hooks/useSettingDocumentTitle";
 
 const CategoriesPage = observer(({ type, categoryId = null, brandId = null }) => {
+  let documentTitle = null;
+  if (type === "category") {
+    documentTitle = "Categories";
+  } else if (type === "brand") {
+    documentTitle = "Brands";
+  }
+
+  useSettingDocumentTitle(documentTitle);
+
   const { deviceStore } = useContext(Context);
   const [, , , brandDevices] = useBrandDevicesFetching(brandId) || [];
 

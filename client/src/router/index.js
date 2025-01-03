@@ -4,14 +4,14 @@ import { ROOT_ROUTE } from "../utils/consts";
 import App from "../App";
 
 export default function routerConfig(isAuth) {
-  const childrenRoutes = isAuth
+  const childrenRoutes = (
+    isAuth
       ? [
           ...PUBLIC_ROUTES.map(route => route),
           ...PRIVATE_ROUTES.map(route => route),
       ]
-      : [
-          ...PUBLIC_ROUTES.map(route => route),
-      ];
+      : PUBLIC_ROUTES.map(route => route)
+  );
 
   const result = [
     {

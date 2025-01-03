@@ -27,8 +27,11 @@ import useLodashThrottle from "hooks/useLodashThrottle";
 import deleteFetchWithTryCatch from "utils/deleteFetchWithTryCatch";
 import useGettingOneUserOrders from "hooks/useGettingOneUserOrders";
 import getAddServicesDataOfDevice from "utils/getAddServicesDataOfDevice";
+import useSettingDocumentTitle from "hooks/useSettingDocumentTitle";
 
 const CheckoutPage = observer(() => {
+  useSettingDocumentTitle("Checkout");
+
   const { app, deviceStore, user, fetchRefStore } = useContext(Context);
   const navigate = useNavigateToEncodedURL();
   const senderPhoneNumberInputRef = useRef(null);
