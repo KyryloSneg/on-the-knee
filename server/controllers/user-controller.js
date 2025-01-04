@@ -10,9 +10,12 @@ class UserController {
             if (!errors.isEmpty()) {
                 return next(ApiError.BadRequest('Validation error', errors.array()));
             }
-            const {name, surname, password, email, phoneNumber, ip} = req.body;
-            const userData = await userService.registration(name, surname, password, email, phoneNumber, ip);
+            const { name, surname, password, email, phoneNumber } = req.body;
+            const { userData, userDeviceInfos } = await userService.registration(name, surname, password, email, phoneNumber);
+
             res.cookie('refreshToken', userData.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
+            res.cookie('userDeviceInfos', JSON.stringify(userDeviceInfos), {httpOnly: true})
+
             return res.json(userData);
         } catch (e) {
             next(e);
@@ -21,10 +24,16 @@ class UserController {
 
     async login(req, res, next) {
         try {
-            const {address, password, ip} = req.body; // address = email || phoneNumber
-            const userData = await userService.login(address, password, ip);
+            const { userDeviceInfos } = req.cookies;
+            const parsedUserDeviceInfos = userDeviceInfos ? JSON.parse(userDeviceInfos) : null;
+            console.log("login", parsedUserDeviceInfos);
+
+            const { address, password } = req.body; // address = email || phoneNumber
+            const { userData, newUserDeviceInfos } = await userService.login(address, password, parsedUserDeviceInfos);
             
             res.cookie('refreshToken', userData.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
+            res.cookie('userDeviceInfos', JSON.stringify(newUserDeviceInfos), {httpOnly: true})
+
             return res.json(userData);
         } catch (e) {
             next(e);
@@ -35,6 +44,7 @@ class UserController {
         try {
             const {refreshToken} = req.cookies;
             const token = await userService.logout(refreshToken);
+
             res.clearCookie('refreshToken');
             return res.json(token);
         } catch (e) {
@@ -98,14 +108,11 @@ class UserController {
 
     async refresh(req, res, next) {
         try {
-            const { refreshToken } = req.cookies;
-            const ip = req.params.ip;
+            const { refreshToken, userDeviceInfos } = req.cookies;
+            const parsedUserDeviceInfos = userDeviceInfos ? JSON.parse(userDeviceInfos) : null;
+            console.log("refresh", parsedUserDeviceInfos, refreshToken);
+            const userData = await userService.refresh(refreshToken, parsedUserDeviceInfos);
 
-            if (!ip) {
-                return next(ApiError.BadRequest("ip param query is not setted"));
-            }
-
-            const userData = await userService.refresh(refreshToken, ip);
             res.cookie('refreshToken', userData.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
             return res.json(userData);
         } catch (e) {
