@@ -1,19 +1,17 @@
 const UserModel = require('../models/user-model');
-const UserDeviceModel = require("../models/user-device-model");
 const bcrypt = require('bcrypt');
 const uuid = require('uuid');
 const mailService = require('./mail-service');
 const tokenService = require('./token-service');
 const UserDto = require('../dtos/user-dto');
 const ApiError = require('../exceptions/api-error');
-const UserDeviceDto = require('../dtos/user-device-dto');
 const UserAddressModel = require('../models/user-address-model');
 const ActivationInfoModel = require('../models/activation-info-model');
 const RoleModel = require('../models/role-model');
 const ActivationInfoDto = require('../dtos/activation-info-dto');
 const UserAddressDto = require('../dtos/user-address-dto');
 const { parsePhoneNumber } = require('libphonenumber-js');
-const { MAX_USER_DEVICES_AMOUNT, SHORT_TERM_EMAIL_EXPIRES_AFTER_S } = require("../consts");
+const { SHORT_TERM_EMAIL_EXPIRES_AFTER_S } = require("../consts");
 const tokenModel = require("../models/token-model");
 const EmailToConfirmModel = require("../models/email-to-confirm-model");
 const DocumentNotFoundError = require("mongoose/lib/error/notFound");
@@ -21,7 +19,7 @@ const EmailToConfirmDto = require("../dtos/email-to-confirm-dto");
 const ShortTermActivationEmailModel = require("../models/short-term-activation-model");
 
 class UserService {
-    async registration(name, surname, password, email, phoneNumber, ip) {
+    async registration(name, surname, password, email, phoneNumber) {
         const numberObj = parsePhoneNumber(phoneNumber);
         const internationalNumber = numberObj.formatInternational();
 
@@ -43,22 +41,21 @@ class UserService {
         const user = await UserModel.create({ name: name, surname: surname, password: hashPassword, roles: [userRole.value]});
 
         const userAddress = await UserAddressModel.create({ user: user._id, email: email, phoneNumber: internationalNumber });
-
         const activationInfo = await ActivationInfoModel.create({ user: user._id, isActivated: false, activationLink: activationLink });
 
-        const hashedIp = await bcrypt.hash(ip, 3);
-        const userDevice = await UserDeviceModel.create({ user: user._id, ip: hashedIp });
-        const userDeviceDto = new UserDeviceDto(userDevice);
         await mailService.sendActivationMail(email, `${process.env.API_URL}/api/activate/${activationLink}`);
 
         const userDto = new UserDto(user); // id, name, surname, roles
         const tokens = tokenService.generateTokens({...userDto});
-        await tokenService.saveToken(userDevice._id, tokens.refreshToken);
+        const token = await tokenService.saveToken(tokens.refreshToken, true);
 
         const infoDto = new ActivationInfoDto(activationInfo);
         const addressDto = new UserAddressDto(userAddress);
 
-        return {...tokens, user: userDto, address: addressDto, activationInfo: infoDto, device: userDeviceDto};
+        const userData = { ...tokens, user: userDto, address: addressDto, activationInfo: infoDto };
+        const userDeviceInfos = [{ user: user._id, token: token._id }];
+
+        return { userData, userDeviceInfos };
     }
 
     async activate(activationLink, type = "default") {
@@ -154,7 +151,7 @@ class UserService {
         await mailService.sendActivationMail(userAddress.email, linkForEmail, expireDurationString);
     }
 
-    async login(address, password, ip) {
+    async login(address, password, userDeviceInfos) {
         let userPhone;
         const userEmail = await UserAddressModel.findOne({ email: address });
 
@@ -178,36 +175,7 @@ class UserService {
             throw ApiError.BadRequest('Incorrect password');
         }
 
-        const userDevices = await UserDeviceModel.find({user: user._id});
-        let userDevice = null;
-
-        for (let dev of userDevices) {
-            if (await bcrypt.compare(ip, dev.ip)) {
-                userDevice = {...dev};
-                break;
-            }
-        }
-
-        if (!userDevice) {
-            async function createNewUserDevice() {
-                const hashedIp = await bcrypt.hash(ip, 3);
-                userDevice = await UserDeviceModel.create({ user: user._id, ip: hashedIp });
-            }
-
-            if (userDevices.length >= MAX_USER_DEVICES_AMOUNT) {
-                // delete one user device before creating a new one
-                const toBeDeletedUserDevice = await UserDeviceModel.findOne({ user: user._id });
-
-                await UserDeviceModel.deleteOne({ user: user._id });
-                await tokenModel.deleteOne({ userDevice: toBeDeletedUserDevice._id });
-                await createNewUserDevice();
-            } else {
-                await createNewUserDevice();
-            }
-        }
-
         const userDto = new UserDto(user);
-        const userDeviceDto = new UserDeviceDto(userDevice);
         const tokens = tokenService.generateTokens({...userDto});
 
         // we could login without account activation, so give activation info dto to client
@@ -217,12 +185,36 @@ class UserService {
 
         const addressDto = new UserAddressDto(userAddress);
 
-        await tokenService.saveToken(userDevice._doc._id, tokens.refreshToken);
-        return {...tokens, user: userDto, address: addressDto, activationInfo: activationInfoDto, userDevice: userDeviceDto};
+        let token;
+        // i can't trust the cookies i think
+        const userDeviceInfo = userDeviceInfos?.find?.(info => info?.user === user.id);
+        const hasFoundDeviceInfoToUse = !!userDeviceInfo?.token;
+
+        if (hasFoundDeviceInfoToUse) {
+            // it's easier to use these methods manually rather than from the tokenService
+            // in this case
+            const tokenData = await tokenModel.findById(userDeviceInfo.token);
+            if (tokenData) {
+                token = await tokenModel.findByIdAndUpdate(tokenData._id, { refreshToken: tokens.refreshToken });
+            }
+        } else {
+            token = await tokenService.saveToken(tokens.refreshToken, true);
+        }
+
+        const userData = { ...tokens, user: userDto, address: addressDto, activationInfo: activationInfoDto };
+        const possibleNewUserDeviceInfo = { user: user._id, token: token._id };
+
+        const newUserDeviceInfos = (
+            hasFoundDeviceInfoToUse 
+                ? userDeviceInfos 
+                : Array.isArray(userDeviceInfos) ? [...userDeviceInfos, possibleNewUserDeviceInfo] : [possibleNewUserDeviceInfo]
+        );
+
+        return { userData, newUserDeviceInfos };
     }
 
     async logout(refreshToken) {
-        const token = await tokenService.removeToken(refreshToken);
+        const token = await tokenService.findToken(refreshToken);
         return token;
     }
 
@@ -289,38 +281,18 @@ class UserService {
         return value;
     }
 
-    async refresh(refreshToken, ip) {
+    async refresh(refreshToken, userDeviceInfos) {
         if (!refreshToken) {
             throw ApiError.UnauthorizedError();
         }
         const userData = tokenService.validateRefreshToken(refreshToken);
         const tokenFromDb = await tokenService.findToken(refreshToken);
+
         if (!userData || !tokenFromDb) {
             throw ApiError.UnauthorizedError();
         }
 
         const user = await UserModel.findById(userData.id);
-
-        // refreshToken is unique, so if the given token exists in the DB,
-        // we can find the user device (we were doing this with just ips but they're 
-        // not the best way to do this because of existing of dynamic ones, system-wide ips etc.,
-        // but when we combine this method with the check of refreshToken, it becomes very useful)
-
-        // maybe in the future we must add more device info in user devices 
-        let userDevice = null;
-        if (tokenFromDb) {
-            userDevice = await UserDeviceModel.findById(tokenFromDb.userDevice);
-        }
-
-        if (!userDevice) {
-            throw ApiError.UnauthorizedError();
-        }
-
-        const isOldIpTheSame = await bcrypt.compare(ip, userDevice.ip);
-        if (isOldIpTheSame) {
-            userDevice.ip = await bcrypt.hash(ip, 3);
-            await userDevice.save();
-        }
 
         const userDto = new UserDto(user);
         const addressDto = new UserAddressDto(await UserAddressModel.findOne({ user: user._id }));
@@ -332,7 +304,21 @@ class UserService {
         const emailToConfirmDtos = emailsToConfirm.map(email => new EmailToConfirmDto(email));
 
         const tokens = tokenService.generateTokens({...userDto});
-        await tokenService.saveToken(userDevice._id, tokens.refreshToken);
+
+        // i can't trust the cookies i think
+        const userDeviceInfo = userDeviceInfos?.find?.(info => info?.user === user.id);
+        const hasFoundDeviceInfoToUse = !!userDeviceInfo?.token;
+
+        // we can skip the "if" statement only if user has modified cookies and they're incorrect
+        // (which is preety unlikely)
+        if (hasFoundDeviceInfoToUse) {
+            const tokenData = await tokenModel.findById(userDeviceInfo.token);
+
+            if (tokenData) {
+                tokenData.refreshToken = tokens.refreshToken;
+                await tokenData.save();
+            }
+        }
 
         return {
             ...tokens, 

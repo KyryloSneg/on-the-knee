@@ -29,12 +29,15 @@ class TokenService {
         }
     }
 
-    async saveToken(userDeviceId, refreshToken) {
-        const tokenData = await tokenModel.findOne({userDevice: userDeviceId})
-        if (tokenData) {
-            return await tokenModel.updateOne({userDevice: userDeviceId}, { refreshToken: refreshToken });
+    async saveToken(refreshToken, isToCreateNewOne = false) {
+        if (!isToCreateNewOne) {
+            const tokenData = await this.findToken(refreshToken);
+            if (tokenData) {
+                return await tokenModel.updateOne({ refreshToken }, { refreshToken: refreshToken });
+            }
         }
-        const token = await tokenModel.create({userDevice: userDeviceId, refreshToken})
+
+        const token = await tokenModel.create({ refreshToken })
         return token;
     }
 
