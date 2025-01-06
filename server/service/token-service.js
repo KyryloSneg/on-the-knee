@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const tokenModel = require('../models/token-model');
+const { MAX_TOKENS_AMOUNT_PER_USER } = require("../consts");
 
 class TokenService {
     generateTokens(payload) {
@@ -29,15 +30,25 @@ class TokenService {
         }
     }
 
-    async saveToken(refreshToken, isToCreateNewOne = false) {
+    async saveToken(refreshToken, userId, isToCreateNewOne = false) {
         if (!isToCreateNewOne) {
             const tokenData = await this.findToken(refreshToken);
             if (tokenData) {
-                return await tokenModel.updateOne({ refreshToken }, { refreshToken: refreshToken });
+                return await tokenModel.updateOne({ user: userId, refreshToken }, { refreshToken: refreshToken });
             }
         }
 
-        const token = await tokenModel.create({ refreshToken })
+        let token;
+        const allTokens = await tokenModel.find({ user: userId });
+
+        if (allTokens.length >= MAX_TOKENS_AMOUNT_PER_USER) {
+            // delete one token and create a new one
+            await tokenModel.deleteOne({ user: userId });
+            token = await tokenModel.create({ user: userId, refreshToken });
+        } else {
+            token = await tokenModel.create({ user: userId, refreshToken });
+        }
+
         return token;
     }
 

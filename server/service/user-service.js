@@ -17,6 +17,7 @@ const EmailToConfirmModel = require("../models/email-to-confirm-model");
 const DocumentNotFoundError = require("mongoose/lib/error/notFound");
 const EmailToConfirmDto = require("../dtos/email-to-confirm-dto");
 const ShortTermActivationEmailModel = require("../models/short-term-activation-model");
+const { Error } = require("mongoose");
 
 class UserService {
     async registration(name, surname, password, email, phoneNumber) {
@@ -47,7 +48,7 @@ class UserService {
 
         const userDto = new UserDto(user); // id, name, surname, roles
         const tokens = tokenService.generateTokens({...userDto});
-        const token = await tokenService.saveToken(tokens.refreshToken, true);
+        const token = await tokenService.saveToken(tokens.refreshToken, user._id, true);
 
         const infoDto = new ActivationInfoDto(activationInfo);
         const addressDto = new UserAddressDto(userAddress);
@@ -189,26 +190,54 @@ class UserService {
         // i can't trust the cookies i think
         const userDeviceInfo = userDeviceInfos?.find?.(info => info?.user === user.id);
         const hasFoundDeviceInfoToUse = !!userDeviceInfo?.token;
+        let isTokenFromCookiesValid = hasFoundDeviceInfoToUse;
 
         if (hasFoundDeviceInfoToUse) {
-            // it's easier to use these methods manually rather than from the tokenService
-            // in this case
-            const tokenData = await tokenModel.findById(userDeviceInfo.token);
+            let tokenData;
+            try {
+                // it's easier to use these methods manually rather than from the tokenService
+                // in this case
+                tokenData = await tokenModel.findById(userDeviceInfo.token);
+            } catch(e) {
+                // we must skip CastError because the token from the cookies could be invalid value
+                if (e instanceof Error.CastError) {
+                    isTokenFromCookiesValid = false;
+                } else {
+                    throw e;
+                }
+            }
+
             if (tokenData) {
                 token = await tokenModel.findByIdAndUpdate(tokenData._id, { refreshToken: tokens.refreshToken });
+            } else {
+                // token could be deleted 'cause of the limit of tokens per user,
+                // so create a new one
+                token = await tokenService.saveToken(tokens.refreshToken, user._id, true);
             }
         } else {
-            token = await tokenService.saveToken(tokens.refreshToken, true);
+            token = await tokenService.saveToken(tokens.refreshToken, user._id, true);
         }
 
         const userData = { ...tokens, user: userDto, address: addressDto, activationInfo: activationInfoDto };
         const possibleNewUserDeviceInfo = { user: user._id, token: token._id };
 
-        const newUserDeviceInfos = (
-            hasFoundDeviceInfoToUse 
-                ? userDeviceInfos 
-                : Array.isArray(userDeviceInfos) ? [...userDeviceInfos, possibleNewUserDeviceInfo] : [possibleNewUserDeviceInfo]
-        );
+        let newUserDeviceInfos;
+        if (isTokenFromCookiesValid) {
+            newUserDeviceInfos = userDeviceInfos;
+        } else {
+            if (Array.isArray(userDeviceInfos)) {
+                // filter user device infos from infos that don't include fields we use
+                // and from the token that we have checked recently
+                const filteredUserDeviceInfos = userDeviceInfos.filter(info => {
+                    const isTheSameTokenThatWeChecked = info?.token === userDeviceInfo?.token;
+                    return info?.user && info?.token && !isTheSameTokenThatWeChecked;
+                });
+
+                newUserDeviceInfos = [...filteredUserDeviceInfos, possibleNewUserDeviceInfo];
+            } else {
+                newUserDeviceInfos = [possibleNewUserDeviceInfo];
+            }
+        }
 
         return { userData, newUserDeviceInfos };
     }
@@ -286,9 +315,9 @@ class UserService {
             throw ApiError.UnauthorizedError();
         }
         const userData = tokenService.validateRefreshToken(refreshToken);
-        const tokenFromDb = await tokenService.findToken(refreshToken);
 
-        if (!userData || !tokenFromDb) {
+        // if we have deleted the related token from DB, handle it later on
+        if (!userData) {
             throw ApiError.UnauthorizedError();
         }
 
@@ -303,30 +332,73 @@ class UserService {
         const emailsToConfirm = await EmailToConfirmModel.find({ user: user._id });
         const emailToConfirmDtos = emailsToConfirm.map(email => new EmailToConfirmDto(email));
 
+        let token;
         const tokens = tokenService.generateTokens({...userDto});
 
         // i can't trust the cookies i think
         const userDeviceInfo = userDeviceInfos?.find?.(info => info?.user === user.id);
         const hasFoundDeviceInfoToUse = !!userDeviceInfo?.token;
+        let isTokenFromCookiesValid = hasFoundDeviceInfoToUse;
 
-        // we can skip the "if" statement only if user has modified cookies and they're incorrect
-        // (which is preety unlikely)
         if (hasFoundDeviceInfoToUse) {
-            const tokenData = await tokenModel.findById(userDeviceInfo.token);
-
-            if (tokenData) {
-                tokenData.refreshToken = tokens.refreshToken;
-                await tokenData.save();
+            try {
+                token = await tokenModel.findById(userDeviceInfo.token);
+            } catch(e) {
+                // we must skip CastError because the token from the cookies could be invalid value
+                if (e instanceof Error.CastError) {
+                    isTokenFromCookiesValid = false;
+                } else {
+                    throw e;
+                }
             }
+
+            if (token) {
+                token.refreshToken = tokens.refreshToken;
+                await token.save();
+            } else {
+                // token could be deleted 'cause of the limit of tokens per user,
+                // so create a new one
+                token = await tokenService.saveToken(tokens.refreshToken, user._id, true);
+            }
+        } else {
+            // i'm not confident in using this condition,
+            // but possibly it improves security a bit
+            const tokenFromDB = await tokenService.findToken(refreshToken);
+            if (tokenFromDB) {
+                token = await tokenService.saveToken(tokens.refreshToken, user._id, true);
+            } 
         }
 
-        return {
+        const returnUserData = {
             ...tokens, 
             user: userDto, 
             address: addressDto, 
             activationInfo: activationInfoDto, 
             emailsToConfirm: emailToConfirmDtos
         };
+
+
+        let newUserDeviceInfos;
+        if (isTokenFromCookiesValid) {
+            newUserDeviceInfos = userDeviceInfos;
+        } else {
+            const possibleNewUserDeviceInfo = token?._id ? { user: user._id, token: token._id } : null;
+
+            if (Array.isArray(userDeviceInfos)) {
+                // filter user device infos from infos that don't include fields we use
+                // and from the token that we have checked recently
+                const filteredUserDeviceInfos = userDeviceInfos.filter(info => {
+                    const isTheSameTokenThatWeChecked = info?.token === userDeviceInfo?.token;
+                    return info?.user && info?.token && !isTheSameTokenThatWeChecked;
+                });
+
+                newUserDeviceInfos = possibleNewUserDeviceInfo ? [...filteredUserDeviceInfos, possibleNewUserDeviceInfo] : [];
+            } else {
+                newUserDeviceInfos = possibleNewUserDeviceInfo ? [possibleNewUserDeviceInfo] : [];
+            }
+        }
+
+        return { userData: returnUserData, newUserDeviceInfos };
     }
 
     async changeNameSurname(name, surname, userId) {
