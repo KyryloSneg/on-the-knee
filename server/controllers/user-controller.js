@@ -26,7 +26,6 @@ class UserController {
         try {
             const { userDeviceInfos } = req.cookies;
             const parsedUserDeviceInfos = userDeviceInfos ? JSON.parse(userDeviceInfos) : null;
-            console.log("login", parsedUserDeviceInfos);
 
             const { address, password } = req.body; // address = email || phoneNumber
             const { userData, newUserDeviceInfos } = await userService.login(address, password, parsedUserDeviceInfos);
@@ -110,10 +109,11 @@ class UserController {
         try {
             const { refreshToken, userDeviceInfos } = req.cookies;
             const parsedUserDeviceInfos = userDeviceInfos ? JSON.parse(userDeviceInfos) : null;
-            console.log("refresh", parsedUserDeviceInfos, refreshToken);
-            const userData = await userService.refresh(refreshToken, parsedUserDeviceInfos);
+            const { userData, newUserDeviceInfos } = await userService.refresh(refreshToken, parsedUserDeviceInfos);
 
             res.cookie('refreshToken', userData.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
+            res.cookie('userDeviceInfos', JSON.stringify(newUserDeviceInfos), {httpOnly: true})
+
             return res.json(userData);
         } catch (e) {
             console.log(e);
