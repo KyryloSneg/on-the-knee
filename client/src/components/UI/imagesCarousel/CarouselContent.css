@@ -41,6 +41,8 @@
   max-height: 100%;
   /* keeping up proportions */
   object-fit: cover;
+  /* preventing overflow of the long alt text */
+  word-break: break-all;
 }
 
 .images-carousel.device-images-carousel .carousel-content-list li img {
