@@ -1,6 +1,6 @@
 .main-page {
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: 1fr;
   gap: 24px;
   /* fallback */
   padding: 0 5%;
@@ -9,6 +9,12 @@
   position: relative;
   /* aligning the page with the opened categories menu */
   bottom: 19px;
+}
+
+@media screen and (min-width: 960px) {
+  .main-page {
+    grid-template-columns: auto 1fr;
+  }
 }
 
 /* the same min-width as in the categories menu at-rule with the width change */
