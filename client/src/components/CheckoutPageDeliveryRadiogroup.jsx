@@ -1,4 +1,3 @@
-import "./styles/CheckoutPageDeliveryRadiogroup.css";
 import CheckoutPageDeliveryRadio from "./CheckoutPageDeliveryRadio";
 import { useContext, useEffect, useReducer, useRef } from 'react';
 import { Context } from "../Context";
@@ -8,9 +7,9 @@ import { getOneDelivery } from "../http/DeliveriesAPI";
 
 const CheckoutPageDeliveryRadiogroup = observer(({
   orderId, order, inputsId, setIsDirty, setIsToShowDeliveryChangeMessage,
-  selectedStorePickupPointId, setSelectedStorePickupPointId, 
+  selectedStorePickupPointId, setSelectedStorePickupPointId,
   selectedDeliveryId, setSelectedDeliveryId, register, errors, trigger, control,
-  hasElevator, setHasElevator, isToLiftOnTheFloor, setIsToLiftOnTheFloor, 
+  hasElevator, setHasElevator, isToLiftOnTheFloor, setIsToLiftOnTheFloor,
   selectedCourierScheduleId, setSelectedCourierScheduleId,
   selectedCourierScheduleShift, setSelectedCourierScheduleShift
 }) => {
@@ -100,14 +99,14 @@ const CheckoutPageDeliveryRadiogroup = observer(({
   let className = "checkout-page-delivery-radiogroup";
   if (
     ((selectedDeliveryId !== null && selectedDeliveryId !== undefined)
-    && (deliveryIds?.length && !deliveryIds?.includes(selectedDeliveryId)))
+      && (deliveryIds?.length && !deliveryIds?.includes(selectedDeliveryId)))
     || (!isInitialRender.current && isCallbackInvoked.current)
   ) {
     className += " display-none";
   }
 
   return (
-    <ul className={className} role="radiogroup">
+    <div className={className} role="radiogroup">
       {app.deliveries?.map((delivery, index) => {
         const isChecked = index === selectedIndex;
 
@@ -144,38 +143,37 @@ const CheckoutPageDeliveryRadiogroup = observer(({
         }
 
         return (
-          <li key={delivery.id}>
-            <CheckoutPageDeliveryRadio
-              delivery={delivery}
-              isChecked={isChecked}
-              onCheck={onCheck}
-              checkPrev={checkPrev}
-              checkNext={checkNext}
-              orderId={orderId}
-              order={order}
-              inputsId={inputsId}
-              setIsDirty={setIsDirty}
-              selectedStorePickupPointId={selectedStorePickupPointId}
-              setSelectedStorePickupPointId={setSelectedStorePickupPointId}
-              selectedDeliveryId={selectedDeliveryId}
-              register={register}
-              errors={errors}
-              trigger={trigger}
-              control={control}
-              hasElevator={hasElevator}
-              setHasElevator={setHasElevator}
-              isToLiftOnTheFloor={isToLiftOnTheFloor}
-              setIsToLiftOnTheFloor={setIsToLiftOnTheFloor}
-              selectedCourierScheduleId={selectedCourierScheduleId}
-              setSelectedCourierScheduleId={setSelectedCourierScheduleId}
-              selectedCourierScheduleShift={selectedCourierScheduleShift}
-              setSelectedCourierScheduleShift={setSelectedCourierScheduleShift}
-              ref={refCb}
-            />
-          </li>
+          <CheckoutPageDeliveryRadio
+            key={delivery.id}
+            delivery={delivery}
+            isChecked={isChecked}
+            onCheck={onCheck}
+            checkPrev={checkPrev}
+            checkNext={checkNext}
+            orderId={orderId}
+            order={order}
+            inputsId={inputsId}
+            setIsDirty={setIsDirty}
+            selectedStorePickupPointId={selectedStorePickupPointId}
+            setSelectedStorePickupPointId={setSelectedStorePickupPointId}
+            selectedDeliveryId={selectedDeliveryId}
+            register={register}
+            errors={errors}
+            trigger={trigger}
+            control={control}
+            hasElevator={hasElevator}
+            setHasElevator={setHasElevator}
+            isToLiftOnTheFloor={isToLiftOnTheFloor}
+            setIsToLiftOnTheFloor={setIsToLiftOnTheFloor}
+            selectedCourierScheduleId={selectedCourierScheduleId}
+            setSelectedCourierScheduleId={setSelectedCourierScheduleId}
+            selectedCourierScheduleShift={selectedCourierScheduleShift}
+            setSelectedCourierScheduleShift={setSelectedCourierScheduleShift}
+            ref={refCb}
+          />
         );
       })}
-    </ul>
+    </div>
   );
 });
 

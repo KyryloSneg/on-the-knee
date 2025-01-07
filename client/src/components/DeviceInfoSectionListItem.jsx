@@ -16,7 +16,7 @@ const DeviceInfoSectionListItem = ({ info, type = "span", to = null, ...props })
         {infoName}
       </dt>
       {windowWidth >= WIDTH_TO_SHOW_DEVICE_INFO_DL_SEPARATOR &&
-        <div className="device-info-section-item-placeholder" />
+        <div className="device-info-section-item-placeholder" aria-hidden="true" />
       } 
       <dd>
         {type === "link"

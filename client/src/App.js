@@ -19,7 +19,7 @@ import AppTopLevelModalsAndSidebars from "components/AppTopLevelModalsAndSidebar
 import ScrollToTopBtn from "components/ScrollToTopBtn";
  
 const App = observer(({ isToRenderPageFromTheRouter, children = null }) => {
-  const { app, deviceStore, user } = useContext(Context);
+  const { app, user } = useContext(Context);
   // ref for the "skip to next page content" btn
   const headerRef = useRef(null);
   const pageRef = useRef(null);
@@ -79,9 +79,7 @@ const App = observer(({ isToRenderPageFromTheRouter, children = null }) => {
       <header ref={headerRef}>
         {user.isAuth && !user.isEmailActivated && <HeaderSendActivationEmail />}
         <Navbar elemToFocus={pageElemToFocus} navCategoryBtnRef={navCategoryBtnRef} />
-        {(app.isVisibleCategoriesMenu && !!Object.keys(deviceStore.categories).length) && 
-          <CategoriesMenu navCategoryBtnRef={navCategoryBtnRef} />
-        }
+        <CategoriesMenu navCategoryBtnRef={navCategoryBtnRef} />
       </header>
       <div ref={pageRef}>
         {isToRenderPageFromTheRouter ? <Outlet /> : children}

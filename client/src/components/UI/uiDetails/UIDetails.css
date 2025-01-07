@@ -25,7 +25,8 @@
   transition: 0.3s;
 }
 
-.ui-details > header + * {
+/* ui details content */
+.ui-details > header + * > * {
   padding: 14px;
   padding-top: 0;
   box-sizing: border-box;

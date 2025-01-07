@@ -1,5 +1,5 @@
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import "./styles/CategoriesMenu.css";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { Context } from "../Context";
 import setCategoriesMenuVisibility from "../utils/setCategoriesMenuVisibility";
 import useClickOnEverything from "../hooks/useClickOnEverything";
@@ -7,8 +7,9 @@ import CategoriesMenuMain from "./CategoriesMenuMain";
 import CategoriesMenuSecondary from "./CategoriesMenuSecondary";
 import useWindowInvisibleFocus from "../hooks/useWindowInvisibleFocus";
 import getAllFocusableElements from "../utils/getAllFocusableElements";
+import { observer } from "mobx-react-lite";
 
-const CategoriesMenu = ({ navCategoryBtnRef }) => {
+const CategoriesMenu = observer(({ navCategoryBtnRef }) => {
   const { app, deviceStore } = useContext(Context);
 
   const categoriesMenuRef = useRef(null);
@@ -18,23 +19,33 @@ const CategoriesMenu = ({ navCategoryBtnRef }) => {
   const firstSecCategoryRef = useRef(null);
   const firstCategoryRef = useRef(null);
 
-  const firstMainCategoryId = deviceStore.categories.find(category => category.treeParentCategoriesIds === null).id;
-  const [selectedId, setSelectedId] = useState(firstMainCategoryId);
+  const getFirstCategoryId = useCallback(() => {
+    const result = deviceStore.categories?.find(category => category.treeParentCategoriesIds === null)?.id || null;
+    return result;
+  }, [deviceStore.categories]);
+
+  const [selectedId, setSelectedId] = useState(getFirstCategoryId());
+
+  useEffect(() => {
+    setSelectedId(getFirstCategoryId())
+  }, [deviceStore.categories, getFirstCategoryId]);
+
+  const isHidden = !app.isVisibleCategoriesMenu || !Object.keys(deviceStore.categories).length;
 
   const closeMenu = useCallback(() => {
     setCategoriesMenuVisibility(false, app);
   }, [app]);
 
   useEffect(() => {
-    firstSecCategoryRef.current = getAllFocusableElements(categoriesMenuSecRef.current)[0];
-  }, [selectedId]);
+    firstSecCategoryRef.current = getAllFocusableElements(categoriesMenuSecRef.current)?.[0] || { current: null };
+  }, [isHidden, selectedId]);
 
   useEffect(() => {
-    firstCategoryRef.current = getAllFocusableElements(categoriesMenuRef.current)[2];
-  }, []);
+    firstCategoryRef.current = getAllFocusableElements(categoriesMenuRef.current)?.[2] || { current: null };
+  }, [isHidden]);
 
-  useWindowInvisibleFocus(firstCategoryRef);
-  useClickOnEverything(closeMenu, categoriesMenuRef);
+  useWindowInvisibleFocus(firstCategoryRef, app.isVisibleCategoriesMenu);
+  useClickOnEverything(isHidden ? null : closeMenu, categoriesMenuRef);
 
   function onBlurCapture(e) {
     // e.relatedTarget sometimes can be null
@@ -50,24 +61,32 @@ const CategoriesMenu = ({ navCategoryBtnRef }) => {
       // (so we can state that user left categories menu by mouse click and we must not focus the button)
       if (document.activeElement !== document.body) navCategoryBtnRef.current.focus();
     }
+  }
 
+  let className = "window";
+  if (isHidden) {
+    className += " display-none";
   }
 
   return (
-    <section id="categories-menu" className="window" ref={categoriesMenuRef} onBlurCapture={onBlurCapture}>
-      <CategoriesMenuMain 
-        setSelectedId={setSelectedId} 
-        navCategoryBtnRef={navCategoryBtnRef} 
-        firstSecCategoryRef={firstSecCategoryRef}  
-        ref={mainCategoriesListRef}
-      />
-      <CategoriesMenuSecondary 
-        selectedId={selectedId} 
-        mainCategoriesListRef={mainCategoriesListRef}
-        ref={categoriesMenuSecRef} 
-      />
+    <section id="categories-menu" className={className} ref={categoriesMenuRef} onBlurCapture={onBlurCapture}>
+      {!isHidden && (
+        <>
+          <CategoriesMenuMain 
+            setSelectedId={setSelectedId} 
+            navCategoryBtnRef={navCategoryBtnRef} 
+            firstSecCategoryRef={firstSecCategoryRef}  
+            ref={mainCategoriesListRef}
+          />
+          <CategoriesMenuSecondary 
+            selectedId={selectedId} 
+            mainCategoriesListRef={mainCategoriesListRef}
+            ref={categoriesMenuSecRef} 
+          />
+        </>
+      )}
     </section>
   );
-}
+});
 
 export default CategoriesMenu;

@@ -40,7 +40,7 @@ const SlimDeviceCombinationInfo = observer(({
         <Link to={to} className="slim-device-combination-info-img-wrap">
           <img
             src={orderCombo["device-combination"].images[0].src}
-            alt=""
+            alt={orderCombo["device-combination"].images[0].alt}
             draggable="false"
           />
         </Link>

@@ -3,10 +3,10 @@ import UserPageOrderExpandedContentLeft from "./UserPageOrderExpandedContentLeft
 import UserPageOrderExpandedContentRight from "./UserPageOrderExpandedContentRight";
 
 const UserPageOrderExpandedContent = ({ 
-  order, sellerFeedbacksObj, additionalServicesObjArray, expandedContentId, userDeviceFeedbacksObjArray 
+  order, sellerFeedbacksObj, additionalServicesObjArray, userDeviceFeedbacksObjArray 
 }) => {
   return (
-    <div className="user-page-order-expanded-content" id={expandedContentId}>
+    <div className="user-page-order-expanded-content">
       <UserPageOrderExpandedContentLeft 
         order={order} 
         sellerFeedbacksObj={sellerFeedbacksObj} 

@@ -1,7 +1,6 @@
 import UIButton from "./UI/uiButton/UIButton";
 import { SELLER_ROUTE, SELLER_WRITE_A_FEEDBACK_ROUTE } from "utils/consts";
 import CommentsList from "./CommentsList";
-import { v4 } from "uuid";
 import { Link } from "react-router-dom";
 import UIDetails from "./UI/uiDetails/UIDetails";
 
@@ -21,7 +20,6 @@ const RemainSellerFeedbackSectionItem = ({ type, sellerFeedbacksObj }) => {
   );
 
   if (hasAnyFeedbackRemained) {
-    const commentsListId = v4();
     return (
       <UIDetails 
         btnChildren={linkWithSellerNameImg}
@@ -33,10 +31,8 @@ const RemainSellerFeedbackSectionItem = ({ type, sellerFeedbacksObj }) => {
             isInModal={type === "modal"}
             isInUserFeedbacksModal={type === "modal"}
             areUserFeedbacks={type === "userFeedbacks"}
-            id={commentsListId}
           />
         }
-        contentId={commentsListId}
         propsClassName="remain-seller-dev-feedback-li-with-comments"
       />
     );

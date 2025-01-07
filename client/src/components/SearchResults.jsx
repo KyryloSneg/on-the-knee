@@ -1,8 +1,8 @@
+import "./styles/SearchResults.css";
 import { useContext, useRef } from "react";
 import useSearchResultControl from "../hooks/useSearchResultControls";
 import useSelectedSearchValue from "../hooks/useSelectedSearchValue";
 import SearchResultItem from "./SearchResultItem";
-import "./styles/SearchResults.css";
 import useChangingMinMaxIds from "../hooks/useChangingMinMaxIds";
 import { Context } from "../Context";
 
@@ -35,7 +35,7 @@ const SearchResults = ({
   const isBackupValue = !!backupValue.trim().length;
 
   return (
-    <ul className="search-product-results" role="radiogroup" ref={searchResultsRef}>
+    <div className="search-product-results" role="radiogroup" ref={searchResultsRef}>
       {!amount
         ? <p className="no-search-results">We haven't found any results. Please clarify your request</p>
         : (
@@ -162,7 +162,7 @@ const SearchResults = ({
           </div>
         )
       }
-    </ul>
+    </div>
   );
 }
 
