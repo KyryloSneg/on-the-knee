@@ -18,7 +18,7 @@ import HeaderSendActivationEmail from "components/HeaderSendActivationEmail";
 import AppTopLevelModalsAndSidebars from "components/AppTopLevelModalsAndSidebars";
 import ScrollToTopBtn from "components/ScrollToTopBtn";
  
-const App = observer(() => {
+const App = observer(({ isToRenderPageFromTheRouter, children = null }) => {
   const { app, deviceStore, user } = useContext(Context);
   // ref for the "skip to next page content" btn
   const headerRef = useRef(null);
@@ -84,7 +84,7 @@ const App = observer(() => {
         }
       </header>
       <div ref={pageRef}>
-        <Outlet />
+        {isToRenderPageFromTheRouter ? <Outlet /> : children}
       </div>
       <ScrollToTopBtn />
       <MyFooter />

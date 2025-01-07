@@ -6,6 +6,7 @@ import CategoriesPageItem from "../components/CategoriesPageItem";
 import './styles/CategoriesPage.css';
 import { observer } from "mobx-react-lite";
 import useSettingDocumentTitle from "hooks/useSettingDocumentTitle";
+import ApiError from "utils/ApiError";
 
 const CategoriesPage = observer(({ type, categoryId = null, brandId = null }) => {
   let documentTitle = null;
@@ -30,6 +31,8 @@ const CategoriesPage = observer(({ type, categoryId = null, brandId = null }) =>
   } else {
     brand = deviceStore.brands.find(brandItem => brandItem.id === brandId);
   }
+
+  if ((!category && deviceStore.categories?.length) && (!brand && deviceStore.brands?.length)) throw ApiError.NotFoundError();
 
   headerText = type === "category"
     ? `${StringActions.capitalize(category.name)}`

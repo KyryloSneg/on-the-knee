@@ -16,7 +16,7 @@ export default function routerConfig(isAuth) {
   const result = [
     {
       path: ROOT_ROUTE,
-      element: <App />,
+      element: <App isToRenderPageFromTheRouter={true} />,
       errorElement: <ErrorPage />,
       children: childrenRoutes
     }

@@ -1,0 +1,41 @@
+.error-page {
+  box-sizing: border-box;
+  max-width: max-content;
+  height: 100vh;
+  padding: 16px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.error-page > section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.error-page h1 {
+  color: #a10e0e;;
+  font-size: 3rem;
+  margin: 0;
+}
+
+.error-page p {
+  font-size: 1.2rem;
+}
+
+.error-page .ui-button {
+  margin-top: 10px;
+}
+
+@media screen and (min-width: 600px) {
+  .error-page p {
+    font-size: 1.5rem;
+  }
+}
+
+@media screen and (min-width: 740px) {
+  .error-page p {
+    font-size: 1.8rem;
+  }
+}

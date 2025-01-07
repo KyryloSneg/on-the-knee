@@ -11,6 +11,7 @@ import { ALL_SALES_SLUG, SALES_ROUTE } from "utils/consts";
 import getTotalPages from "utils/getTotalPages";
 import DeviceOrSalesSection from "components/DeviceOrSalesSection";
 import useSettingDocumentTitle from "hooks/useSettingDocumentTitle";
+import ApiError from "utils/ApiError";
 
 const SalesPage = observer(() => {
   const { salesPageStore, deviceStore, fetchRefStore } = useContext(Context);
@@ -30,6 +31,13 @@ const SalesPage = observer(() => {
 
   const [fetching, isLoading, error] = useSalesPageFetching(slug, isToFetchSales);
   const saleTypeNamesWithoutCurrentOne = deviceStore.saleTypeNames?.filter(item => item.name !== slug);
+
+  // if slug is incorrect, throw a 404 error
+  if (
+    slug !== ALL_SALES_SLUG
+    && (deviceStore.saleTypeNames?.length && saleTypeNamesWithoutCurrentOne?.length) 
+    && (deviceStore.saleTypeNames?.length === saleTypeNamesWithoutCurrentOne?.length)
+  ) throw ApiError.NotFoundError();
 
   const headingContent = (
     salesPageStore.selectedSaleTypeName

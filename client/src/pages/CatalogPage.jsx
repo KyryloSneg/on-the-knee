@@ -19,6 +19,7 @@ import DeviceOrSalesSection from "components/DeviceOrSalesSection";
 import useGettingPaginationParams from "hooks/useGettingPaginationParams";
 import getTotalPages from "utils/getTotalPages";
 import useSettingDocumentTitle from "hooks/useSettingDocumentTitle";
+import ApiError from "utils/ApiError";
 
 const POSSIBLE_TYPES = ["category", "search", "seller", "saleDevices"];
 
@@ -47,6 +48,9 @@ const CatalogPage = observer(({ type, seller = null, sale = null }) => {
 
   const categoryId = categoryIdSlug?.split("--")[0] || undefined;
   const category = deviceStore.categories.find(cat => cat.id === categoryId);
+  // go to the 404 (not found) page even before executing the hooks below
+  if (type === "category" && !category && deviceStore.categories?.length) throw ApiError.NotFoundError();
+
   const childCategories = deviceStore.categories.filter(cat => !cat.isVariation && cat.parentCategoryId === categoryId);
 
   let storeToUse;
@@ -161,8 +165,6 @@ const CatalogPage = observer(({ type, seller = null, sale = null }) => {
   useEffect(() => {
     isInitialRenderRef.current = false;
   }, []);
-
-  if (error) console.log(error);
 
   if (!isFoundDevicesByQuery && type === "search") {
     return (

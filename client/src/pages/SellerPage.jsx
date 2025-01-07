@@ -11,6 +11,7 @@ import SellerDevicesPage from './SellerDevicesPage';
 import { Context } from '../Context';
 import { observer } from 'mobx-react-lite';
 import StarRating from '../components/UI/starRating/StarRating';
+import ApiError from "utils/ApiError";
 
 const POSSIBLE_TYPES = ["main", "feedbacks", "devices"];
 const SellerPage = observer(({ type }) => {
@@ -29,7 +30,9 @@ const SellerPage = observer(({ type }) => {
   
   const [seller, setSeller] = useState(initialSeller);
 
-  useOneSellerFetching(id, setSeller, !seller);
+  const [, , sellerFetchingError] = useOneSellerFetching(id, setSeller, !seller);
+  if (!seller && sellerFetchingError?.response?.status === 404) throw ApiError.NotFoundError();
+
   useOneSellerFeedbacksFetching(seller?.id, null, false, true);
 
   useEffect(() => {

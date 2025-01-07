@@ -99,7 +99,7 @@ const DeviceOrSalesSection = observer(({
         <Loader className="error-retry-spinner" />
       }
       {/* create "try again" btn */}
-      {(!!error && !isLoading) &&
+      {(error && !isLoading) &&
         <div className="device-or-sales-section-error">
           <p>
             Oops! Something went wrong while getting {itemsNameToRender}.

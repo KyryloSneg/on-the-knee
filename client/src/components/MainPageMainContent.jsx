@@ -18,7 +18,6 @@ const MainPageMainContent = observer(() => {
           <h2>
             Viewed devices
           </h2>
-          {/* if you want to use history deletion btn, add their support for non-auth users */}
           <ViewedDevicesList withHistoryDeletionBtn={true} devicesMaxAmount={60} />
         </section>
       )}
