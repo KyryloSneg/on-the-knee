@@ -56,14 +56,16 @@ const CommentImagesSection = observer(({ imagesObjs, type, isInUserFeedbacksModa
                 <li key={`${outerIndex}-${innerIndex}`}>
                   <button 
                     onClick={() => onClick(imageObj.commentId, innerIndex, btnRefIndex)}
+                    aria-label="Open fullscreen comment"
                     ref={ref => {
                       if (btnRefs.current.length === imagesAmount.current && imagesAmount.current) return;
                       btnRefs.current.push(ref);
                     }}
                   >
+                    {/* idk how to name alt text here properly if img hasn't loaded */}
                     <img 
                       src={src} 
-                      alt="Open" 
+                      alt=""
                       draggable="false" 
                       style={{ transform: `rotate(${image?.rotateDegrees || 0}deg)` }} 
                     />

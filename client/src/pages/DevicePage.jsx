@@ -16,6 +16,7 @@ import useAddingViewedDeviceOnVisit from "hooks/useAddingViewedDeviceOnVisit";
 import useGettingCartData from "hooks/useGettingCartData";
 import useOneSellerFetching from "hooks/useOneSellerFetching";
 import _ from "lodash";
+import ApiError from "utils/ApiError";
 
 const POSSIBLE_TYPES = ["main", "info", "comments", "questions"];
 const DevicePage = observer(({ type }) => {
@@ -82,9 +83,10 @@ const DevicePage = observer(({ type }) => {
     // eslint-disable-next-line
   }, [id, initialDevice, initialSeller, initialAddServicesObj]);
 
-  useOneDeviceFetching(id, setDevice, !device, true);
+  const [, , deviceFetchingError] = useOneDeviceFetching(id, setDevice, !device, true);
+  if (!device && deviceFetchingError?.response?.status === 404) throw ApiError.NotFoundError();
+  
   useOneDeviceFeedbacksFetching(device?.id, null, null, false, true, true, "", true);
-
   useEffect(() => {
     if (device) fetchRefStore.setLastDevicePageDeviceFetchResult(device);
   }, [fetchRefStore, device]);

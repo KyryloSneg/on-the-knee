@@ -36,7 +36,7 @@ const UserPageOrderListItemBtnChildren = ({ order, isExpanded }) => {
                 <img
                   loading="lazy"
                   src={orderCombo["device-combination"].images[0].src}
-                  alt={isExpanded ? "Collapse" : "Expand"}
+                  alt={orderCombo["device-combination"].images[0].alt}
                   draggable="false"
                 />
               </li>

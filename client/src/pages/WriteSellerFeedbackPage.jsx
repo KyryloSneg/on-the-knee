@@ -9,6 +9,7 @@ import useUpdatingFeedbacksCbs from "hooks/useUpdatingFeedbacksCbs";
 import { observer } from "mobx-react-lite";
 import { useContext, useState } from "react";
 import { useParams } from "react-router-dom";
+import ApiError from "utils/ApiError";
 import StringActions from "utils/StringActions";
 
 const WriteSellerFeedbackPage = observer(() => {
@@ -18,7 +19,9 @@ const WriteSellerFeedbackPage = observer(() => {
 
   let [id, slug] = sellerIdSlug.split("--");
 
-  useOneSellerFetching(id, setSeller, true, false);
+  const [, , sellerFetchingError] = useOneSellerFetching(id, setSeller, true, false);
+  if (!seller && sellerFetchingError?.response?.status === 404) throw ApiError.NotFoundError();
+
   useSettingDocumentTitle(`Write feedback about ${seller?.name || "..."}`);
 
   const [sellerFeedbacksFetching] = useOneSellerFeedbacksFetching(id, null, true, false);  

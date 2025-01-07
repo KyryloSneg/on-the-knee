@@ -3,7 +3,7 @@ import { useCallback, useRef, useState } from "react";
 function useFetching(callback, settingIsLoadingDelay = 0, finallyCallback = null, dependencies = []) {
   const [fetchResult, setFetchResult] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState(null);
   let fetchResultRef = useRef(null);
 
   const fetching = useCallback(async (...args) => {
@@ -15,10 +15,9 @@ function useFetching(callback, settingIsLoadingDelay = 0, finallyCallback = null
       // if everything is ok and we fetched some data there's no error
       fetchResultRef.current = result;
       setFetchResult(result);
-      setError('');
+      setError(null);
     } catch (e) {
-      setError(e.message);
-      throw e;
+      setError(e);
     } finally {
       if (finallyCallback) finallyCallback();
       setTimeout(() => {
