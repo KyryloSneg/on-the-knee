@@ -6,7 +6,8 @@ import { forwardRef, useImperativeHandle, useRef } from "react";
 import { Link } from "react-router-dom";
 
 const CarouselContent = forwardRef(({
-  type, images, selectedId, selectPrevImage, selectNextImage,
+  type, images, selectedId, selectPrevImage, selectNextImage, 
+  isBottomSelectBarOrSidebarRendered, tabIdWithoutIndex, tabpanelIdWithoutIndex,
   device = null, textSaleTypes = null, logoSaleTypes = null
 }, ref) => {
   const carouselContentRef = useRef(null)
@@ -49,13 +50,26 @@ const CarouselContent = forwardRef(({
         />
       ]}
       {(images.length > 1 && selectedId !== 0) &&
-        <button className="select-prev-image" onClick={selectPrevImage} ref={selectPrevImgBtnRef}>
+        <button 
+          className="select-prev-image" 
+          onClick={selectPrevImage} 
+          aria-label="Zoom in the previous image"
+          ref={selectPrevImgBtnRef}
+        >
           <img src={chevronLeftIcon} alt="" draggable="false" />
         </button>
       }
       <ul className="carousel-content-list" style={{ transform: `translateX(${translateX})` }}>
         {images.map((image, index) => {
           const isActive = index === selectedId;
+
+          let contentAdditionalProps = {};
+          if (isBottomSelectBarOrSidebarRendered) {
+            contentAdditionalProps.role = "tabpanel";
+            contentAdditionalProps.id = `${tabpanelIdWithoutIndex}-${index}`;
+            contentAdditionalProps["aria-labelledby"] = `${tabIdWithoutIndex}-${index}`;
+          }
+
           const img = (
             <img 
               src={image.src} 
@@ -68,17 +82,24 @@ const CarouselContent = forwardRef(({
           // use no-select to not select image if user is selecting the list item
           return (
             <li key={index} className="carousel-content-img-wrap no-select">
-              {image.to
-                ? <Link to={image.to} tabIndex={isActive ? 0 : -1}>{img}</Link>
-                : img
-              }
+              <div {...contentAdditionalProps}>
+                {image.to
+                  ? <Link to={image.to} tabIndex={isActive ? 0 : -1}>{img}</Link>
+                  : img
+                }
+              </div>
             </li>
           );
         }
         )}
       </ul>
       {(images.length > 1 && selectedId !== images.length - 1) &&
-        <button className="select-next-image" onClick={selectNextImage} ref={selectNextImgBtnRef}>
+        <button 
+          className="select-next-image" 
+          onClick={selectNextImage} 
+          aria-label="Zoom in the next image"
+          ref={selectNextImgBtnRef}
+        >
           <img src={chevronRightIcon} alt="" draggable="false" />
         </button>
       }

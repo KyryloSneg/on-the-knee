@@ -34,3 +34,8 @@
   color: white;
   font-size: 1.8rem;
 }
+
+.main-device-add-to-cart > img {
+  width: 24px;
+  height: 24px;
+}

@@ -2,22 +2,21 @@ import "./CarouselSidebar.css";
 import { forwardRef } from "react";
 import CarouselSidebarItem from "./CarouselSidebarItem";
 
-const CarouselSidebar = forwardRef(({ images, selectedId, setSelectedId }, ref) => {
+const CarouselSidebar = forwardRef(({ images, selectedId, setSelectedId, tabIdWithoutIndex, tabpanelIdWithoutIndex }, ref) => {
   return (
-    <nav className="carousel-sidebar" ref={ref}>
-      <ul>
-        {images.map((image, index) => 
-          <li key={index}>
-            <CarouselSidebarItem
-              image={image} 
-              id={index} 
-              selectedId={selectedId}
-              setSelectedId={setSelectedId} 
-            />
-          </li>
-        )}
-      </ul>
-    </nav>
+    <div className="carousel-sidebar" role="tablist" ref={ref}>
+      {images.map((image, index) =>
+        <CarouselSidebarItem
+          key={index}
+          image={image}
+          id={index}
+          selectedId={selectedId}
+          setSelectedId={setSelectedId}
+          tabIdWithoutIndex={tabIdWithoutIndex}
+          tabpanelIdWithoutIndex={tabpanelIdWithoutIndex}
+        />
+      )}
+    </div>
   );
 });
 

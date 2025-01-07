@@ -5,6 +5,7 @@
 }
 
 .user-location-notification {
+  width: max-content;
   flex-direction: column;
   position: relative;
   /* fallback */
