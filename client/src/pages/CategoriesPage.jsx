@@ -7,17 +7,9 @@ import './styles/CategoriesPage.css';
 import { observer } from "mobx-react-lite";
 import useSettingDocumentTitle from "hooks/useSettingDocumentTitle";
 import ApiError from "utils/ApiError";
+import MetaTagsInPublicRoute from "components/MetaTagsInPublicRoute";
 
 const CategoriesPage = observer(({ type, categoryId = null, brandId = null }) => {
-  let documentTitle = null;
-  if (type === "category") {
-    documentTitle = "Categories";
-  } else if (type === "brand") {
-    documentTitle = "Brands";
-  }
-
-  useSettingDocumentTitle(documentTitle);
-
   const { deviceStore } = useContext(Context);
   const [, , , brandDevices] = useBrandDevicesFetching(brandId) || [];
 
@@ -31,6 +23,28 @@ const CategoriesPage = observer(({ type, categoryId = null, brandId = null }) =>
   } else {
     brand = deviceStore.brands.find(brandItem => brandItem.id === brandId);
   }
+
+  let documentTitle = null;
+  let metaDescription = "";
+  let metaKeywords = "";
+  
+  if (type === "category") {
+    documentTitle = "Categories";
+
+    if (category?.name) {
+      metaDescription = `${category.name} in On the knee store. High quality, delivery, favorable prices $, huge discounts %`;
+      metaKeywords = `categories, ${category.name}`;
+    }
+  } else if (type === "brand") {
+    documentTitle = "Brands";
+
+    if (brand?.name) {
+      metaDescription = `${brand.name} in On the knee store. High quality, delivery, favorable prices $, huge discounts %`;
+      metaKeywords = `brands, ${brand.name}`;
+    }
+  }
+
+  useSettingDocumentTitle(documentTitle);
 
   if ((!category && deviceStore.categories?.length) && (!brand && deviceStore.brands?.length)) throw ApiError.NotFoundError();
 
@@ -50,6 +64,11 @@ const CategoriesPage = observer(({ type, categoryId = null, brandId = null }) =>
 
   return (
     <main className="categories-page">
+      <MetaTagsInPublicRoute 
+        description={metaDescription} 
+        keywords={metaKeywords} 
+        isToRender={metaDescription && metaKeywords}
+      />
       <h2>{headerText}</h2>
       <ul className="categories-page-list">
         {categoriesToRender.map(category =>

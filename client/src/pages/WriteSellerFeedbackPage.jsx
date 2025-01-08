@@ -22,7 +22,7 @@ const WriteSellerFeedbackPage = observer(() => {
   const [, , sellerFetchingError] = useOneSellerFetching(id, setSeller, true, false);
   if (!seller && sellerFetchingError?.response?.status === 404) throw ApiError.NotFoundError();
 
-  useSettingDocumentTitle(`Write feedback about ${seller?.name || "..."}`);
+  useSettingDocumentTitle(`Write a feedback about ${seller?.name || "..."}`);
 
   const [sellerFeedbacksFetching] = useOneSellerFeedbacksFetching(id, null, true, false);  
   const [userSellersFeedbacksFetching] = useOrdersListSellersFetching(user.orders, null, true, true, true);

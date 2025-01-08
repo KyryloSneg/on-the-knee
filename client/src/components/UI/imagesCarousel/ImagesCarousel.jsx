@@ -7,6 +7,7 @@ import useWindowWidth from "../../../hooks/useWindowWidth";
 import { WIDTH_TO_SHOW_DEVICE_CAROUSEL_SIDEBAR } from "../../../utils/consts";
 import CarouselBottomSelectBar from "./CarouselBottomSelectBar";
 import { useLocation } from "react-router-dom";
+import { v4 } from "uuid";
 
 const POSSIBLE_TYPES = ["default", "device"];
 const ImagesCarousel = ({ 
@@ -127,6 +128,10 @@ const ImagesCarousel = ({
     return result;
   }, [isInModal, onKeyDown]);
 
+  const tabAndTabpanelIdsUuid = useMemo(() => v4(), []);
+  const tabIdWithoutIndex = "carousel-tab-" + tabAndTabpanelIdsUuid;
+  const tabpanelIdWithoutIndex = "carousel-tabpanel-" + tabAndTabpanelIdsUuid;
+
   return (
     <section className={sectionClassName} {...sectionAdditionalProps}>
       {isToRenderSidebar &&
@@ -137,6 +142,8 @@ const ImagesCarousel = ({
               images={images}
               selectedId={selectedId}
               setSelectedId={setSelectedId}
+              tabIdWithoutIndex={tabIdWithoutIndex}
+              tabpanelIdWithoutIndex={tabpanelIdWithoutIndex}
               ref={sidebarRef}
             />
           }
@@ -148,6 +155,9 @@ const ImagesCarousel = ({
         selectedId={selectedId}
         selectPrevImage={selectPrev}
         selectNextImage={selectNext}
+        isBottomSelectBarOrSidebarRendered={isToRenderSidebar || isToRenderBottomSelectBar}
+        tabIdWithoutIndex={tabIdWithoutIndex}
+        tabpanelIdWithoutIndex={tabpanelIdWithoutIndex}
         device={device}
         textSaleTypes={textSaleTypes}
         logoSaleTypes={logoSaleTypes}
@@ -158,6 +168,8 @@ const ImagesCarousel = ({
           images={images} 
           selectedId={selectedId} 
           setSelectedId={setSelectedId}
+          tabIdWithoutIndex={tabIdWithoutIndex}
+          tabpanelIdWithoutIndex={tabpanelIdWithoutIndex}
           ref={bottomSelectBarRef}
         />
       }

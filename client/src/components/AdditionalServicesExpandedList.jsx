@@ -4,15 +4,15 @@ import { DEVICE_ROUTE } from "../utils/consts";
 import _ from "lodash";
 import { useRef } from "react";
 
-const AdditionalServicesExpandedList = ({ 
-  names, deviceId, additionalServiceOptions, 
-  labelledBy, parentId, 
+const AdditionalServicesExpandedList = ({
+  names, deviceId, additionalServiceOptions,
+  labelledBy, parentId,
   selectedItems, setSelectedItems, isReadOnly
 }) => {
   const optionRefs = useRef([]);
 
   return (
-    <ul 
+    <div
       className="additional-services-expanded-list"
       role="radiogroup"
       aria-labelledby={labelledBy}
@@ -30,7 +30,7 @@ const AdditionalServicesExpandedList = ({
         }
 
         const deviceRouteCombo = option.combinationString
-          ? option.combinationString 
+          ? option.combinationString
           : "default";
         const to = DEVICE_ROUTE + `${deviceId}--${deviceRouteCombo}`;
 
@@ -45,7 +45,7 @@ const AdditionalServicesExpandedList = ({
           });
 
           if (selectedItemWithSameParent) {
-            if (selectedItemWithSameParent.id === optionIndex) return; 
+            if (selectedItemWithSameParent.id === optionIndex) return;
             // REPLACING existing selected item with new one
             selectedItemsCopy[selectedItemIndex] = {
               id: optionIndex,
@@ -59,7 +59,7 @@ const AdditionalServicesExpandedList = ({
             const nextSelectedItems = [
               ...selectedItemsCopy,
               {
-                id: optionIndex ,
+                id: optionIndex,
                 parentId: parentId,
                 price: optionItem.price
               }
@@ -107,25 +107,24 @@ const AdditionalServicesExpandedList = ({
         }
 
         return (
-          <li key={option.id}>
-            <AdditionalServicesExpandedListItem
-              additionalServiceOption={option}
-              isChecked={selectedId === index}
-              onCheck={onCheck}
-              checkNext={checkNext}
-              checkPrev={checkPrev}
-              name={name}
-              ref={ref => {
-                if (optionRefs.current.length === additionalServiceOptions.length) return;
-                optionRefs.current.push(ref)
-              }}
-              to={to}
-              isReadOnly={isReadOnly}
-            />
-          </li>
+          <AdditionalServicesExpandedListItem
+            key={option.id}
+            additionalServiceOption={option}
+            isChecked={selectedId === index}
+            onCheck={onCheck}
+            checkNext={checkNext}
+            checkPrev={checkPrev}
+            name={name}
+            ref={ref => {
+              if (optionRefs.current.length === additionalServiceOptions.length) return;
+              optionRefs.current.push(ref)
+            }}
+            to={to}
+            isReadOnly={isReadOnly}
+          />
         );
       })}
-    </ul>
+    </div>
   );
 }
 

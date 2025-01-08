@@ -1,10 +1,11 @@
-import DropdownArrow from "../dropdownArrow/DropdownArrow";
 import "./UIDetails.css";
-import React, { useState } from 'react';
+import { v4 } from "uuid";
+import DropdownArrow from "../dropdownArrow/DropdownArrow";
+import React, { useMemo, useState } from 'react';
 
 // btnChildren should include heading
 const UIDetails = ({ 
-  btnChildren, contentChildren, contentId, isInitiallyExpanded = false,
+  btnChildren, contentChildren, isInitiallyExpanded = false,
   isToPassBtnChildIsExpandedProp = false, isToPassBtnChildSetIsExpandedProp = false,
   propsClassName = ""
 }) => {
@@ -25,9 +26,16 @@ const UIDetails = ({
     btnChildrenToRender = btnChildren;
   }
 
+  const contentId = useMemo(() => v4(), []);
+
   let className = "ui-details";
   if (propsClassName) {
     className += ` ${propsClassName}`;
+  }
+
+  let contentWrapperClassName = "ui-details-content-wrapper";
+  if (!isExpanded) {
+    contentWrapperClassName += " display-none";
   }
 
   return (
@@ -45,7 +53,10 @@ const UIDetails = ({
           <DropdownArrow isExpanded={isExpanded} />
         </button>
       </header>
-      {isExpanded && contentChildren}
+      {/* this method not as good as the one i used in the categories menu, but it's a LOT easier to maintain */}
+      <div id={contentId} className={contentWrapperClassName}>
+        {isExpanded && contentChildren}
+      </div>
     </section>
   );
 }

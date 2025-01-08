@@ -8,6 +8,9 @@
   display: grid;
   grid-template-columns: auto 1fr;
   width: 90%;
+}
+
+#categories-menu:not(.display-none) {
   animation: menuAnimation 0.35s ease-in;
 }
 

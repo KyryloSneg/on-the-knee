@@ -18,6 +18,11 @@
   background-color: #6d6d6d;
 }
 
+.nav-icon-button > img {
+  width: 24px;
+  height: 24px;
+}
+
 /* if button has some text */
 
 .nav-icon-button-text {

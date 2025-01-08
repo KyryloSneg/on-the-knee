@@ -9,7 +9,7 @@ import setErrorModalVisibility from "utils/setErrorModalVisibility";
 import { AxiosError } from "axios";
 import useLodashThrottle from "hooks/useLodashThrottle";
 
-const UserPersonalNameDetailsContentChild = observer(({ id }) => {
+const UserPersonalNameDetailsContentChild = observer(() => {
   const { app, user } = useContext(Context);
   const [isEditing, setIsEditing] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -88,7 +88,7 @@ const UserPersonalNameDetailsContentChild = observer(({ id }) => {
     }
 
     return (
-      <form onSubmit={handleSubmit(onSubmit)} id={id} className="user-personal-content-child">
+      <form onSubmit={handleSubmit(onSubmit)} className="user-personal-content-child">
         <div className="user-personal-details-inputs">
           <ReactHookFormInput
             labelText="First name"
@@ -121,7 +121,7 @@ const UserPersonalNameDetailsContentChild = observer(({ id }) => {
   }
 
   return (
-    <div className="user-personal-content-child" id={id}>
+    <div className="user-personal-content-child">
       <dl className="user-personal-details-values">
         <div>
           <dt>

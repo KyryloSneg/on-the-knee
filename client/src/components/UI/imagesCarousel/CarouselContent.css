@@ -84,6 +84,11 @@
   right: 8px;
 }
 
+.select-prev-image > img, .select-next-image > img {
+  width: 24px;
+  height: 24px;
+}
+
 ul.carousel-content-text-sale-icons, ul.carousel-content-logo-sale-icons {
   display: none;
   position: absolute;

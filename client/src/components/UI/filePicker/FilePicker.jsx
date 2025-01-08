@@ -37,6 +37,7 @@ const FilePicker = ({
         multiple={isMultiple}
         tabIndex={-1}
         disabled={isDisabled}
+        aria-hidden="true"
         ref={inputFileRef}
       />
       <UIButton

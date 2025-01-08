@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { DEVICE_COMMENTS_ROUTE, DEVICE_ROUTE } from "../utils/consts";
 import UIButton from "./UI/uiButton/UIButton";
 import CommentsList from "./CommentsList";
-import { v4 } from "uuid";
 import UIDetails from "./UI/uiDetails/UIDetails";
 
 const RemainSellerDevFeedbackDevListItem = ({ type, comboFeedbackObj, userOrderDeviceCombinations, closeModal }) => {
@@ -24,7 +23,6 @@ const RemainSellerDevFeedbackDevListItem = ({ type, comboFeedbackObj, userOrderD
   );
 
   if (hasAnyFeedbackRemained) {
-    const commentsListId = v4();
     return (
       <UIDetails 
         btnChildren={linkWithDevNameImg}
@@ -37,11 +35,9 @@ const RemainSellerDevFeedbackDevListItem = ({ type, comboFeedbackObj, userOrderD
             isInUserFeedbacksModal={type === "modal"}
             areUserFeedbacks={type === "userFeedbacks"}
             userOrderDeviceCombinations={userOrderDeviceCombinations}
-            id={commentsListId}
             closeRemainAFeedbackModal={closeModal}
           />
         }
-        contentId={commentsListId}
         propsClassName="remain-seller-dev-feedback-li-with-comments"
       />
     );

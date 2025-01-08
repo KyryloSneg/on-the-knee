@@ -22,9 +22,9 @@ import useInitialDropdownValue from "../../../hooks/useInitialDropdownValue";
 
 // isWithFilterIcon is used with "default-select" type
 const Dropdown = forwardRef((
-  { 
+  {
     variant = "default-select", options, propsSelectedId = null, paramKey = null,
-    hasDefaultValue = true, defaultValue = null, placeHolder = "", onSelectCb = null, isWithFilterIcon = false, ...props 
+    hasDefaultValue = true, defaultValue = null, placeHolder = "", onSelectCb = null, isWithFilterIcon = false, ...props
   },
   ref
 ) => {
@@ -40,7 +40,7 @@ const Dropdown = forwardRef((
       ? propsSelectedId || 0
       : null
   );
-  
+
   const selectedIdToUse = (!hasDefaultValue && selectedId === null)
     ? null
     : (propsSelectedId >= 0 && typeof propsSelectedId === "number") ? propsSelectedId : selectedId;
@@ -73,21 +73,18 @@ const Dropdown = forwardRef((
         ref={ref}
         {...props}
       />
-      {visible && (
-        <DropdownOptions
-          options={options}
-          visible={visible}
-          hide={() => setVisible(false)}
-          setValue={setValue}
-          selectedId={selectedIdToUse}
-          setSelectedId={setSelectedId}
-          paramKey={paramKey}
-          dropdownOptionsId={dropdownOptionsId}
-          variant={variant}
-          onSelectCb={onSelectCb}
-        />
-      )
-      }
+      <DropdownOptions
+        options={options}
+        visible={visible}
+        hide={() => setVisible(false)}
+        setValue={setValue}
+        selectedId={selectedIdToUse}
+        setSelectedId={setSelectedId}
+        paramKey={paramKey}
+        dropdownOptionsId={dropdownOptionsId}
+        variant={variant}
+        onSelectCb={onSelectCb}
+      />
     </div>
   );
 });

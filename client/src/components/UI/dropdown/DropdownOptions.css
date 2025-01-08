@@ -16,6 +16,10 @@
   box-sizing: border-box;
 }
 
+.dropdown-options.display-none {
+  display: none;
+}
+
 .dropdown-options li {
   font-size: 1.5rem;
 }

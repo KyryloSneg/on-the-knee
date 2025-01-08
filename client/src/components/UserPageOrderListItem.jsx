@@ -13,8 +13,6 @@ const UserPageOrderListItem = observer(({ order, userDeviceFeedbacksObjArray }) 
   const sellerToFindId = order?.["order-device-combinations"]?.[0]?.["device-combination"]?.device?.sellerId;
   const sellerFeedbacksObj = user.ordersListSellers?.find(item => item.seller.id === sellerToFindId) || {};
 
-  const expandedContentId = `${order?.orderName.replaceAll(" ", "")}-expanded-content`;
-
   const btnChildren = <UserPageOrderListItemBtnChildren order={order} />;
   const contentChildren = (
     <UserPageOrderExpandedContent 
@@ -22,7 +20,6 @@ const UserPageOrderListItem = observer(({ order, userDeviceFeedbacksObjArray }) 
       sellerFeedbacksObj={sellerFeedbacksObj} 
       userDeviceFeedbacksObjArray={userDeviceFeedbacksObjArray}
       additionalServicesObjArray={additionalServicesObjArray}
-      expandedContentId={expandedContentId}
     />
   );
 
@@ -30,7 +27,6 @@ const UserPageOrderListItem = observer(({ order, userDeviceFeedbacksObjArray }) 
     <UIDetails 
       btnChildren={btnChildren}
       contentChildren={contentChildren} 
-      contentId={expandedContentId}
       isToPassBtnChildIsExpandedProp={true}
     />
   );
