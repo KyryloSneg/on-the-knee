@@ -14,6 +14,7 @@ import { WIDTH_TO_SHOW_PURCHASE_DEVICE_FOOTER } from "../utils/consts";
 import useSynchronizingAdditionalServices from "../hooks/useSynchronizingAdditionalServices";
 import useChangingServerAddServicesOnChange from "../hooks/useChangingServerAddServicesOnChange";
 import useSettingDocumentTitle from "hooks/useSettingDocumentTitle";
+import MetaTagsInPublicRoute from "components/MetaTagsInPublicRoute";
 
 const MainDevicePage = observer(({ 
   device, combinationString, feedbacks, seller, additionalServicesObj, 
@@ -130,6 +131,11 @@ const MainDevicePage = observer(({
 
   return (
     <section className="main-device-page">
+      <MetaTagsInPublicRoute 
+        description={`Purchase ${device?.name} in On the knee store. Warranty, Low price $${discountPercentage ? ", discount %" : ""}`} 
+        keywords={`device, ${device?.name}`} 
+        isToRender={device?.name}
+      />
       <div className="dev-images-description-wrap">
         <DeviceImagesCarousel
           device={device}

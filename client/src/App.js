@@ -17,6 +17,7 @@ import useGettingCartData from "hooks/useGettingCartData";
 import HeaderSendActivationEmail from "components/HeaderSendActivationEmail";
 import AppTopLevelModalsAndSidebars from "components/AppTopLevelModalsAndSidebars";
 import ScrollToTopBtn from "components/ScrollToTopBtn";
+import MetaTagsInPrivateRoutes from "components/MetaTagsInPrivateRoutes";
  
 const App = observer(({ isToRenderPageFromTheRouter, children = null }) => {
   const { app, user } = useContext(Context);
@@ -52,6 +53,7 @@ const App = observer(({ isToRenderPageFromTheRouter, children = null }) => {
   return (
     <div>
       <ScrollRestoration />
+      <MetaTagsInPrivateRoutes />
       {/* our gray bg on global loading */}
       {app.isGlobalLoading &&
         <div id="app-global-loading-bg" />

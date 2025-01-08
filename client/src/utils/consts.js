@@ -58,6 +58,9 @@ export const ONE_CART_DEVICE_COMBINATIONS_API_URL = "/cart-device-combinations?_
 
 export const ALL_SALES_SLUG = "all";
 
+export const META_MAIN_PAGE_DESCRIPTION = "Tech e-shop On the knee with different devices: mobile phones, computers, video game consoles, mouses, keyboards, watches. Favorable prices $, huge discounts % and sales";
+export const META_MAIN_PAGE_KEYWORDS = "On the knee, on the knee, ON THE KNEE, online store, e-shop, tech store";
+
 // value: (asc / desc),(rating / price)
 export const sortingOptions = Object.freeze([
   {

@@ -10,6 +10,7 @@ import { ROOT_ROUTE } from "utils/consts";
 import useNavigateToEncodedURL from "hooks/useNavigateToEncodedURL";
 import useSettingDocumentTitle from "hooks/useSettingDocumentTitle";
 import ApiError from "utils/ApiError";
+import MetaTagsInPublicRoute from "components/MetaTagsInPublicRoute";
 
 const SalePage = observer(() => {
   const { oneSalePageStore, fetchRefStore } = useContext(Context);
@@ -26,7 +27,9 @@ const SalePage = observer(() => {
 
   const [, , saleFetchingError] = useOneSaleFetching(id, { isToFetch: !hasAlreadyFetchedThisSale, isSalePageFetch: true });
   // i don't want to show the name of the previously fetched sale in the title
-  useSettingDocumentTitle(hasAlreadyFetchedThisSale ? oneSalePageStore.sale?.name || "..." : "...");
+
+  const possibleSaleName = oneSalePageStore.sale?.name;
+  useSettingDocumentTitle(hasAlreadyFetchedThisSale ? possibleSaleName || "..." : "...");
 
   if (!oneSalePageStore.sale && saleFetchingError?.response?.status === 404) throw ApiError.NotFoundError();
 
@@ -38,6 +41,11 @@ const SalePage = observer(() => {
 
   return (
     <div className="sale-page">
+      <MetaTagsInPublicRoute 
+        description={`Devices of ${possibleSaleName}. Favorable prices $ in On the knee store`} 
+        keywords={`sale, devices, ${possibleSaleName}`}
+        isToRender={hasAlreadyFetchedThisSale && possibleSaleName}
+      />
       <SalePageBanner sale={oneSalePageStore.sale} />
       <CatalogPage type="saleDevices" sale={oneSalePageStore.sale} />
     </div>

@@ -2,6 +2,7 @@ import "./styles/MainSellerPage.css";
 import SellerScheduleSection from "../components/SellerScheduleSection";
 import MainSellerPageRatingSection from "../components/MainSellerPageRatingSection";
 import useSettingDocumentTitle from "hooks/useSettingDocumentTitle";
+import MetaTagsInPublicRoute from "components/MetaTagsInPublicRoute";
 
 const MainSellerPage = ({ seller, feedbacks }) => {
   useSettingDocumentTitle(seller?.name || "...");
@@ -42,6 +43,11 @@ const MainSellerPage = ({ seller, feedbacks }) => {
 
   return (
     <div className="main-seller-page">
+      <MetaTagsInPublicRoute 
+        description={`Seller ${seller?.name} in On the knee store. Favorable prices $, huge discounts %`} 
+        keywords={`seller, ${seller?.name}`} 
+        isToRender={seller?.name}
+      />
       <MainSellerPageRatingSection 
         seller={seller} 
         ratingsObj={ratingsObj}

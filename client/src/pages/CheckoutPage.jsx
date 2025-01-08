@@ -9,7 +9,7 @@ import CheckoutPageMainContent from "../components/CheckoutPageMainContent";
 import CheckoutPageAside from "../components/CheckoutPageAside";
 import { useForm } from "react-hook-form";
 import isPhoneValidFn from "../utils/isPhoneValid";
-import { CHECKOUT_PAGE_INPUT_SERVICE_CLASS, ROOT_ROUTE } from "../utils/consts";
+import { CHECKOUT_PAGE_INPUT_SERVICE_CLASS, META_MAIN_PAGE_DESCRIPTION, META_MAIN_PAGE_KEYWORDS, ROOT_ROUTE } from "../utils/consts";
 import useGettingOrders from "../hooks/useGettingOrders";
 import setErrorModalVisibility from "../utils/setErrorModalVisibility";
 import { v4 } from "uuid";
@@ -28,6 +28,7 @@ import deleteFetchWithTryCatch from "utils/deleteFetchWithTryCatch";
 import useGettingOneUserOrders from "hooks/useGettingOneUserOrders";
 import getAddServicesDataOfDevice from "utils/getAddServicesDataOfDevice";
 import useSettingDocumentTitle from "hooks/useSettingDocumentTitle";
+import { Helmet } from "react-helmet";
 
 const CheckoutPage = observer(() => {
   useSettingDocumentTitle("Checkout");
@@ -439,6 +440,11 @@ const CheckoutPage = observer(() => {
   return (
     <>
       <div className="checkout-page">
+        <Helmet>
+          <meta name="description" content={META_MAIN_PAGE_DESCRIPTION} />
+          <meta name="keywords" content={META_MAIN_PAGE_KEYWORDS} />
+          <meta name="robots" content="nofollow,noindex" />
+        </Helmet>
         <h2>Checkout order</h2>
         <form
           onSubmit={handleSubmit(

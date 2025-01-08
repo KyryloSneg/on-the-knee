@@ -12,6 +12,7 @@ import getTotalPages from "utils/getTotalPages";
 import DeviceOrSalesSection from "components/DeviceOrSalesSection";
 import useSettingDocumentTitle from "hooks/useSettingDocumentTitle";
 import ApiError from "utils/ApiError";
+import MetaTagsInPublicRoute from "components/MetaTagsInPublicRoute";
 
 const SalesPage = observer(() => {
   const { salesPageStore, deviceStore, fetchRefStore } = useContext(Context);
@@ -50,8 +51,15 @@ const SalesPage = observer(() => {
     isInitialRenderRef.current = false;
   }, []);
 
+  const possibleNameToRender = salesPageStore.selectedSaleTypeName?.nameToRender;
+  const keywords = possibleNameToRender ? `sales, ${possibleNameToRender}` : "sales";
+
   return (
     <div className="display-grid">
+      <MetaTagsInPublicRoute 
+        description={`${headingContent} in On the knee store. Favorable prices $, huge discounts %`} 
+        keywords={keywords}
+      />
       <h2 className="top-h2">
         {headingContent}
       </h2>

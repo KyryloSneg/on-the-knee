@@ -20,6 +20,7 @@ import useGettingPaginationParams from "hooks/useGettingPaginationParams";
 import getTotalPages from "utils/getTotalPages";
 import useSettingDocumentTitle from "hooks/useSettingDocumentTitle";
 import ApiError from "utils/ApiError";
+import MetaTagsInPublicRoute from "components/MetaTagsInPublicRoute";
 
 const POSSIBLE_TYPES = ["category", "search", "seller", "saleDevices"];
 
@@ -153,10 +154,21 @@ const CatalogPage = observer(({ type, seller = null, sale = null }) => {
   );
 
   let documentTitle = null;
+  let metaDescription = "";
+  let metaKeywords = "";
+
   if (type === "category") {
     documentTitle = category?.name || null;
+
+    if (category?.name) {
+      metaDescription = `${category.name} devices in On the knee store. High quality, favorable prices $, huge discounts %`;
+      metaKeywords = `catalog, devices, ${category.name}`;
+    }
   } else if (type === "search") {
     documentTitle = `Search for devices: "${spellCheckedQuery}"`;
+
+    metaDescription = documentTitle;
+    metaKeywords = `catalog, devices, search, "${spellCheckedQuery}"`;
   }
 
   // documentTitle for other types is already set in the corresponding pages
@@ -169,6 +181,11 @@ const CatalogPage = observer(({ type, seller = null, sale = null }) => {
   if (!isFoundDevicesByQuery && type === "search") {
     return (
       <main>
+        <MetaTagsInPublicRoute 
+          description={metaDescription} 
+          keywords={metaKeywords} 
+          isToRender={metaDescription && metaKeywords}
+        />
         <div className="display-grid">
           {/* amazon copy + paste */}
           <p className="wrong-search-query-p">
@@ -189,6 +206,11 @@ const CatalogPage = observer(({ type, seller = null, sale = null }) => {
 
   return (
     <div className="display-grid">
+      <MetaTagsInPublicRoute 
+        description={metaDescription} 
+        keywords={metaKeywords} 
+        isToRender={metaDescription && metaKeywords}
+      />
       {(!!storeToUse.devices.length && type === "search")
         ? <p className="spell-checked-query-p">Devices by query «<span>{spellCheckedQuery}</span>»</p>
         : (type === "search") && <div className="spell-checked-p-placeholder" />
