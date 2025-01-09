@@ -87,9 +87,9 @@ class UserController {
             const type = req.query.type;
 
             await userService.activate(activationLink, type);
-            return res.redirect(process.env.CLIENT_URL);
+            return res.redirect(process.env.CLIENT_URL + process.env.CLIENT_EMAIL_CONFIRMATION_SUCCESS_ROUTE);
         } catch (e) {
-            next(e);
+            return res.redirect(process.env.CLIENT_URL + process.env.CLIENT_EMAIL_CONFIRMATION_FAILURE_ROUTE);
         }
     }
 

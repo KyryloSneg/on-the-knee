@@ -4,10 +4,10 @@ import { observer } from "mobx-react-lite";
 import { useContext } from "react";
 import { Helmet } from "react-helmet";
 import { PRIVATE_ROUTES } from "router/routes";
-import { CHECKOUT_ROUTE, META_MAIN_PAGE_DESCRIPTION, META_MAIN_PAGE_KEYWORDS, SELLER_WRITE_A_FEEDBACK_ROUTE } from "utils/consts";
+import { CHECKOUT_ROUTE, EMAIL_CONFIRMATION_SUCCESS_ROUTE, META_MAIN_PAGE_DESCRIPTION, META_MAIN_PAGE_KEYWORDS, SELLER_WRITE_A_FEEDBACK_ROUTE } from "utils/consts";
 
 // some public routes that shouldn't be analyzed by search engines
-const ROUTE_EXCEPTIONS = [SELLER_WRITE_A_FEEDBACK_ROUTE, CHECKOUT_ROUTE];
+const ROUTE_EXCEPTIONS = [SELLER_WRITE_A_FEEDBACK_ROUTE, CHECKOUT_ROUTE, EMAIL_CONFIRMATION_SUCCESS_ROUTE, EMAIL_CONFIRMATION_SUCCESS_ROUTE];
 
 const MetaTagsInPrivateRoutes = observer(() => {
   const { user } = useContext(Context);

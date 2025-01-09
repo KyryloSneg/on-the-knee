@@ -1,3 +1,4 @@
+import EmailConfirmationStatusPage from "pages/EmailConfirmationStatusPage";
 import CheckoutPage from "../pages/CheckoutPage";
 import DevicePage from "../pages/DevicePage";
 import MainPage from "../pages/MainPage";
@@ -7,7 +8,7 @@ import SalesPage from "../pages/SalesPage";
 import SellerPage from "../pages/SellerPage";
 import UserPage from "../pages/UserPage";
 import WriteSellerFeedbackPage from "../pages/WriteSellerFeedbackPage";
-import { BRAND_CATALOG_ROUTE, CATEGORY_CATALOG_ROUTE, CHECKOUT_ROUTE, DEVICE_COMMENTS_ROUTE, DEVICE_INFO_ROUTE, DEVICE_QUESTIONS_ROUTE, DEVICE_ROUTE, SALE_ROUTE, SALES_ROUTE, SEARCH_CATALOG_ROUTE, SELLER_DEVICES_ROUTE, SELLER_FEEDBACKS_ROUTE, SELLER_ROUTE, SELLER_WRITE_A_FEEDBACK_ROUTE, USER_DESIRED_LIST_ROUTE, USER_FEEDBACKS_ROUTE, USER_ORDERS_ROUTE, USER_PERSONAL_DATA_ROUTE, USER_ROUTE, USER_SELLERS_FEEDBACKS_ROUTE, USER_VIEWED_DEVICES_ROUTE } from "../utils/consts";
+import { BRAND_CATALOG_ROUTE, CATEGORY_CATALOG_ROUTE, CHECKOUT_ROUTE, DEVICE_COMMENTS_ROUTE, DEVICE_INFO_ROUTE, DEVICE_QUESTIONS_ROUTE, DEVICE_ROUTE, EMAIL_CONFIRMATION_FAILURE_ROUTE, EMAIL_CONFIRMATION_SUCCESS_ROUTE, SALE_ROUTE, SALES_ROUTE, SEARCH_CATALOG_ROUTE, SELLER_DEVICES_ROUTE, SELLER_FEEDBACKS_ROUTE, SELLER_ROUTE, SELLER_WRITE_A_FEEDBACK_ROUTE, USER_DESIRED_LIST_ROUTE, USER_FEEDBACKS_ROUTE, USER_ORDERS_ROUTE, USER_PERSONAL_DATA_ROUTE, USER_ROUTE, USER_SELLERS_FEEDBACKS_ROUTE, USER_VIEWED_DEVICES_ROUTE } from "../utils/consts";
 
 export const PUBLIC_ROUTES = [
   {
@@ -68,6 +69,14 @@ export const PUBLIC_ROUTES = [
   {
     path: SALE_ROUTE + ":saleIdSlug",
     element: <SalePage />
+  },
+  {
+    path: EMAIL_CONFIRMATION_SUCCESS_ROUTE,
+    element: <EmailConfirmationStatusPage type="success" />
+  },
+  {
+    path: EMAIL_CONFIRMATION_FAILURE_ROUTE,
+    element: <EmailConfirmationStatusPage type="failure" />
   },
   {
     index: true,

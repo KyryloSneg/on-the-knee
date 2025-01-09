@@ -1,0 +1,85 @@
+.email-confirmation-status-page {
+  height: 100%;
+  margin: auto 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 16px;
+}
+
+.email-confirmation-status-card {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 24px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background-color: #fff;
+  -webkit-box-shadow: 1px 1px 2px 0px rgba(0, 0, 0, 0.1), -1px 1px 2px 0px rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 1px 1px 2px 0px rgba(0, 0, 0, 0.1), -1px 1px 2px 0px rgba(0, 0, 0, 0.1);
+  box-shadow: 1px 1px 2px 0px rgba(0, 0, 0, 0.1), -1px 1px 2px 0px rgba(0, 0, 0, 0.1);
+}
+
+.email-confirmation-status-page.success-variation .email-confirmation-status-card {
+  max-width: 640px;
+}
+
+.email-confirmation-status-page.failure-variation .email-confirmation-status-card {
+  max-width: 640px;
+}
+
+.email-confirmation-status-card > header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.email-confirmation-status-img-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.email-confirmation-status-img-wrapper > img {
+  width: 64px;
+  height: 64px;
+  font-size: 1.6rem;
+}
+
+.email-confirmation-status-page.success-variation .email-confirmation-status-img-wrapper > img {
+  color: #00bc19;
+}
+
+.email-confirmation-status-page.failure-variation .email-confirmation-status-img-wrapper > img {
+  color: #a10e0e;
+}
+
+.email-confirmation-status-card > header > h2 {
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.email-confirmation-status-card > p {
+  text-align: center;
+  color: rgb(60, 60, 60);
+  font-size: 1.3rem;
+}
+
+@media screen and (min-width: 470px) {
+  .email-confirmation-status-card > p {
+    padding: 0 3%;
+  }
+}
+
+@media screen and (min-width: 530px) {
+  .email-confirmation-status-card > p {
+    font-size: 1.5rem;
+  }
+}
+
+@media screen and (min-width: 730px) {
+  .email-confirmation-status-card > header > h2 {
+    font-size: 2.3rem;
+  }
+}
