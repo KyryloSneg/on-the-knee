@@ -188,14 +188,12 @@ export const CATEGORY_SEARCH_RESULTS_MAX_AMOUNT = 3;
 export const HISTORY_SEARCH_RESULTS_MAX_AMOUNT = 6;
 
 // renavigate user to categories page if subcategories amount >= MIN_CATEGORIES_LENGTH_TO_RENAVIGATE
-// TODO: change to 12 in the production build
-export const MIN_CATEGORIES_LENGTH_TO_RENAVIGATE = 8;
+export const MIN_CATEGORIES_LENGTH_TO_RENAVIGATE = 12;
 
 // we use the const below on one of the columns overflow
 export const CATEGORIES_COL_LVL_THREE_LIMIT = 8;
 
-// TODO: in production build the values should be greater than current ones
-export const FILTERS_OPTIONS_LENGTH_LIMIT = 6;
+export const FILTERS_OPTIONS_LENGTH_LIMIT = 10;
 export const DEVICE_ITEM_INFO_AMOUNT_LIMIT = 6;
 
 // unfortunately we can't use consts in css, so on changing the values below
