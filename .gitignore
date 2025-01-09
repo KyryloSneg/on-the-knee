@@ -402,3 +402,6 @@ node_modules
 
 # environment files
 .env
+
+# vs code settings etc.
+.vscode
