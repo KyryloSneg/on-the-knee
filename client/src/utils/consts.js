@@ -32,6 +32,9 @@ export const SEARCH_CATALOG_ROUTE = "/search" // + ?text=value;
 export const SALES_ROUTE = "/sales/" // + ":slug" (freeDelivery for example)
 export const SALE_ROUTE = "/sale/" // + ":saleIdSlug (1--freeDelivery for example)"
 
+export const EMAIL_CONFIRMATION_SUCCESS_ROUTE = "/email-confirmation/success";
+export const EMAIL_CONFIRMATION_FAILURE_ROUTE = "/email-confirmation/failure";
+
 const deviceAPIUrlQueryParams = "_embed=device-combinations&_embed=device-feedbacks&_embed=device-infos&_embed=sale-devices&_embed=additional-service-devices"
 
 export const DEVICE_API_URL = "/devices?" + deviceAPIUrlQueryParams;
