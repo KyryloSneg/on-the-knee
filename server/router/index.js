@@ -60,7 +60,6 @@ router.patch('/change-password',
 // router.get('/users', authMiddleware, activationMiddleware, userController.getUsers);
 
 router.get('/user-emails-to-confirm', authMiddleware, userController.getUserEmailsToConfirm);
-router.get('/users', userController.getUsers);
 router.get('/users/:id', userController.getUser);
 
 module.exports = router

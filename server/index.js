@@ -1,4 +1,10 @@
 require('dotenv').config()
+
+// this is the ugliest thing i could ever do, but it doesn't work other way
+if (process.env?.VERCEL_ENV === "production" || process.env?.VERCEL_ENV === "preview") {
+    process.env.API_URL = "https://" + process.env.VERCEL_URL;
+}
+
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser')
