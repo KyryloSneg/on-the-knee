@@ -444,11 +444,6 @@ class UserService {
         await user.save();
     }
 
-    async getAllUsers() {
-        const users = await UserModel.find();
-        return users;
-    }
-
     async getUser(id, isDto = false) {
         const user = await UserModel.findOne({_id: id});
         if (isDto) {
