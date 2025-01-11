@@ -31,7 +31,7 @@ const EmailConfirmationStatusPage = ({ type }) => {
         {type === "success"
           ? (
             <p>
-              Open the store in the browser you used to log in to this account or, if you want to use this one, refresh the site and follow the navigation links above
+              Open the store in the browser you used to log in to this account and refresh the site or, if you want to use this one, follow the navigation links above
             </p>
           )
           : <p>Possibly, the confirmation link is outdated. Send a new one from the browser you used to log in to this account</p>
