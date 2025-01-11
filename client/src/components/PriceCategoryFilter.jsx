@@ -6,6 +6,7 @@ import URLActions from "../utils/URLActions";
 import useResettingMinMaxPrices from "../hooks/useResettingMinMaxPrices";
 import useNavigateToEncodedURL from "../hooks/useNavigateToEncodedURL";
 import UIButton from "./UI/uiButton/UIButton";
+import { CLIENT_URL } from "utils/consts";
 
 const PriceCategoryFilter = observer(({ storeToUse }) => {
   const navigate = useNavigateToEncodedURL();
@@ -35,7 +36,7 @@ const PriceCategoryFilter = observer(({ storeToUse }) => {
     let nextUrl = URLActions.setNewParam("price", `${minPriceValue}-${maxPriceValue}`);
     nextUrl = URLActions.getURLWithResettedPageRelatedParams(nextUrl);
     
-    const basename = process.env.REACT_APP_CLIENT_URL;
+    const basename = CLIENT_URL;
     navigate(nextUrl.replaceAll(basename, ""), { preventScrollReset: true });
   }
 

@@ -4,7 +4,7 @@ import UserOrdersSearchInput from "../components/UserOrdersSearchInput";
 import UserPageOrderList from "../components/UserPageOrderList";
 import URLActions from "../utils/URLActions";
 import UIButton from "../components/UI/uiButton/UIButton";
-import { ROOT_ROUTE } from "../utils/consts";
+import { CLIENT_URL, ROOT_ROUTE } from "../utils/consts";
 import { useContext } from "react";
 import { Context } from "Context";
 import { observer } from "mobx-react-lite";
@@ -43,7 +43,7 @@ const UserOrdersPage = observer(({
 
       if (orderQuery && initialOrders?.length) {
         const url = URLActions.deleteParamValue("orderQuery", orderQuery);
-        const basename = process.env.REACT_APP_CLIENT_URL;
+        const basename = CLIENT_URL;
         const to = url.replace(basename, "");
 
         return (

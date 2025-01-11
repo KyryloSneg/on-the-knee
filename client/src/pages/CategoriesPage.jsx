@@ -19,9 +19,9 @@ const CategoriesPage = observer(({ type, categoryId = null, brandId = null }) =>
   let brand;
 
   if (type === "category") {
-    category = deviceStore.categories.find(cat => cat.id === categoryId);
+    category = deviceStore.categories?.find(cat => cat.id === categoryId);
   } else {
-    brand = deviceStore.brands.find(brandItem => brandItem.id === brandId);
+    brand = deviceStore.brands?.find(brandItem => brandItem.id === brandId);
   }
 
   let documentTitle = null;

@@ -2,7 +2,7 @@ import "./styles/UserOrdersSearchInput.css";
 import { useState } from "react";
 import DeleteInputContent from "./UI/deleteInputContent/DeleteInputContent";
 import getPreparedForMockServerStr from "../utils/getPreparedForMockServerStr";
-import { USER_ORDERS_ROUTE, WIDTH_TO_SHOW_USER_ORDERS_SEARCH_DESKTOP_VERSION } from "../utils/consts";
+import { CLIENT_URL, USER_ORDERS_ROUTE, WIDTH_TO_SHOW_USER_ORDERS_SEARCH_DESKTOP_VERSION } from "../utils/consts";
 import useNavigateToEncodedURL from "../hooks/useNavigateToEncodedURL";
 import UIButton from "./UI/uiButton/UIButton";
 import URLActions from "../utils/URLActions";
@@ -21,7 +21,7 @@ const UserOrdersSearchInput = ({ sortedOrders, initialOrders }) => {
       // reset the orderQuery param
       if (orderQuery) {
         const url = URLActions.deleteParamValue("orderQuery", orderQuery);
-        const basename = process.env.REACT_APP_CLIENT_URL;
+        const basename = CLIENT_URL;
 
         navigate(url.replace(basename, ""), { preventScrollReset: true });
       };

@@ -7,7 +7,7 @@ import Loader from "./UI/loader/Loader";
 
 const CategoriesModalContent = observer(() => {
   const { deviceStore } = useContext(Context);
-  const mainCategories = deviceStore.categories.filter(category => category.treeParentCategoriesIds === null);
+  const mainCategories = deviceStore.categories?.filter(category => category.treeParentCategoriesIds === null);
 
   return (
     <section className="categories-modal-content">

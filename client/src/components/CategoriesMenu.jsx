@@ -30,7 +30,7 @@ const CategoriesMenu = observer(({ navCategoryBtnRef }) => {
     setSelectedId(getFirstCategoryId())
   }, [deviceStore.categories, getFirstCategoryId]);
 
-  const isHidden = !app.isVisibleCategoriesMenu || !Object.keys(deviceStore.categories).length;
+  const isHidden = !app.isVisibleCategoriesMenu || !Object.keys(deviceStore.categories || {}).length;
 
   const closeMenu = useCallback(() => {
     setCategoriesMenuVisibility(false, app);
@@ -44,7 +44,7 @@ const CategoriesMenu = observer(({ navCategoryBtnRef }) => {
     firstCategoryRef.current = getAllFocusableElements(categoriesMenuRef.current)?.[2] || { current: null };
   }, [isHidden]);
 
-  useWindowInvisibleFocus(firstCategoryRef, app.isVisibleCategoriesMenu);
+  useWindowInvisibleFocus(firstCategoryRef, !isHidden);
   useClickOnEverything(isHidden ? null : closeMenu, categoriesMenuRef);
 
   function onBlurCapture(e) {
