@@ -1,7 +1,9 @@
 require('dotenv').config()
 
 // this is the ugliest thing i could ever do, but it doesn't work other way
-if (process.env?.VERCEL_ENV === "production" || process.env?.VERCEL_ENV === "preview") {
+if (process.env?.VERCEL_ENV === "production") {
+    process.env.API_URL = "https://" + process.env.VERCEL_PROJECT_PRODUCTION_URL;
+} else if (process.env?.VERCEL_ENV === "preview") {
     process.env.API_URL = "https://" + process.env.VERCEL_URL;
 }
 

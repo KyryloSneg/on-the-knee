@@ -4,12 +4,13 @@
 
 // do not ask why (process.env.REACT_APP_CLIENT_URL is set on vercel ??? even if i don't do that ???)
 let CLIENT_URL_VALUE = process.env.REACT_APP_CLIENT_URL;
-if (process.env?.REACT_APP_VERCEL_ENV === "production" || process.env?.REACT_APP_VERCEL_ENV === "preview") {
+if (process.env?.REACT_APP_VERCEL_ENV === "production") {
+  CLIENT_URL_VALUE = "https://" + process.env.REACT_APP_VERCEL_PROJECT_PRODUCTION_URL;
+} else if (process.env?.REACT_APP_VERCEL_ENV === "preview") {
   CLIENT_URL_VALUE = "https://" + process.env.REACT_APP_VERCEL_URL;
 }
 
 export const CLIENT_URL = CLIENT_URL_VALUE;
-
 export const ROOT_ROUTE = "/";
 
 export const DEVICE_ROUTE = "/device/"; // + :deviceIdCombo
