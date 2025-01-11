@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import getPreparedForMockServerStr from "../utils/getPreparedForMockServerStr";
 import URLActions from "../utils/URLActions";
 import useNavigateToEncodedURL from "./useNavigateToEncodedURL";
+import { CLIENT_URL } from "utils/consts";
 
 export default function useGettingSortedUserPageOrders(orders) {
   const navigate = useNavigateToEncodedURL();
@@ -36,7 +37,7 @@ export default function useGettingSortedUserPageOrders(orders) {
   }
 
   useEffect(() => {
-    const basename = process.env.REACT_APP_CLIENT_URL;
+    const basename = CLIENT_URL;
     if (urlToNavigateToRef.current) navigate(urlToNavigateToRef.current.replace(basename, ""), { replace: true });
 
     // just in case

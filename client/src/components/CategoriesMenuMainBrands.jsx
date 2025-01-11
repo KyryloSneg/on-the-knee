@@ -6,6 +6,8 @@ import { BRAND_CATALOG_ROUTE } from "../utils/consts";
 
 const CategoriesMenuMainBrands = ({ selectedId }) => {
   const { deviceStore } = useContext(Context);
+  if (!deviceStore.brands?.length) return;
+
   const mainCategory = deviceStore.categories.find(category => category.id === selectedId);
 
   return (

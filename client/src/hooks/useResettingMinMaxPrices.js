@@ -3,6 +3,7 @@ import URLActions from "../utils/URLActions";
 import checkMinMaxPricesValidity from "../utils/checkMinMaxPricesValidity";
 import { useEffect, useRef } from "react";
 import useNavigateToEncodedURL from "./useNavigateToEncodedURL";
+import { CLIENT_URL } from "utils/consts";
 
 function useResettingMinMaxPrices(initialMinPrice, initialMaxPrice, minPriceValue, maxPriceValue, setMinPriceValue, setMaxPriceValue) {
   const location = useLocation();
@@ -29,7 +30,7 @@ function useResettingMinMaxPrices(initialMinPrice, initialMaxPrice, minPriceValu
       if (isChangedMinInitPrice || isChangedMaxInitPrice) return;
       if (!isValidQueryMinPrice || !isValidQueryMaxPrice) {
         // renavigating user to the url without the price filter if our query prices aren't valid
-        const basename = process.env.REACT_APP_CLIENT_URL;
+        const basename = CLIENT_URL;
         const nextURL = URLActions.deleteParamValue("price", `${minPriceValue}-${maxPriceValue}`);
         
         navigate(nextURL.replace(basename, ""), { replace: true, preventScrollReset: true });
@@ -53,7 +54,7 @@ function useResettingMinMaxPrices(initialMinPrice, initialMaxPrice, minPriceValu
     const [queryMinPrice, queryMaxPrice] = URLActions.getParamValue("price")?.split("-") || [];
     const isSettedQueryPrice = queryMinPrice && queryMaxPrice;
     const resettedURL = URLActions.deleteParamValue("price", `${minPriceValue}-${maxPriceValue}`);
-    const basename = process.env.REACT_APP_CLIENT_URL;
+    const basename = CLIENT_URL;
 
     if (resettedURL && isSettedQueryPrice) {
       navigate(resettedURL.replace(basename, ""), { replace: true });

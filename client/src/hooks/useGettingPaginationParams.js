@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import URLActions from "../utils/URLActions";
 import { useLocation } from "react-router-dom";
 import useNavigateToEncodedURL from "./useNavigateToEncodedURL";
+import { CLIENT_URL } from "utils/consts";
 
 function useGettingPaginationParams(storeWithPagination, totalPages) {
   const location = useLocation();
@@ -15,7 +16,7 @@ function useGettingPaginationParams(storeWithPagination, totalPages) {
 
     function replaceInvalidParams(nextPage, nextPagesToFetch) {
       let url;
-      const basename = process.env.REACT_APP_CLIENT_URL;
+      const basename = CLIENT_URL;
       
       if (isNaN(+nextPage)) {
         nextPage = 1;

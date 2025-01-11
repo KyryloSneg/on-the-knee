@@ -18,7 +18,8 @@
   height: 400px;
   box-sizing: border-box;
   overflow: hidden;
-  width: 100%;
+  width: 100% !important;
+  box-sizing: border-box;
 }
 
 .categories-menu-sec-cols > li {

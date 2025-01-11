@@ -1,12 +1,12 @@
 import URLActions from "./URLActions";
-import { CATEGORY_CATALOG_ROUTE } from "./consts";
+import { CATEGORY_CATALOG_ROUTE, CLIENT_URL } from "./consts";
 import encodeUrl from "./encodeUrl";
 
 function getCategoryLinkTo(category, parentCategoryId = null, categories = null) {
   let to;
 
   if (category.queryParams || category.isVariation) {
-    const basename = process.env.REACT_APP_CLIENT_URL;
+    const basename = CLIENT_URL;
 
     let relativeURL = "";
     // if we want to just set query params without finding parent category

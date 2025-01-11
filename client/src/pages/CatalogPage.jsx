@@ -2,7 +2,7 @@ import "./styles/CatalogPage.css";
 import Dropdown from "../components/UI/dropdown/Dropdown";
 import TopFilterBar from "../components/TopFilterBar";
 import useWindowWidth from "../hooks/useWindowWidth";
-import { WIDTH_TO_SHOW_ASIDE, sortingOptions } from "../utils/consts";
+import { CLIENT_URL, WIDTH_TO_SHOW_ASIDE, sortingOptions } from "../utils/consts";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { Context } from "../Context";
 import CatalogAside from "../components/CatalogAside";
@@ -140,7 +140,7 @@ const CatalogPage = observer(({ type, seller = null, sale = null }) => {
 
     // router from the tests seems to not work with navigate() function,
     // so it's better to skip the block below
-    const basename = process.env.REACT_APP_CLIENT_URL;
+    const basename = CLIENT_URL;
     const currentUrl = basename + location.pathname + location.search;
 
     if (currentUrl !== url && !isTest) {

@@ -1,6 +1,7 @@
 import { getDevices } from "../http/DeviceApi";
 import spellCheck from "../http/SaplingAPI";
 import URLActions from "./URLActions";
+import { CLIENT_URL } from "./consts";
 import getPreparedForMockServerStr from "./getPreparedForMockServerStr";
 
 // using this function in two cases: to get devices or check will a search query return empty catalog page or no (by checking devices amount)
@@ -55,7 +56,7 @@ async function getDevicesBySearchQuery(fetchStringQueryParams, additionalConditi
     if (devices.length && !!spellCheckedSearchQuery && spellCheckedSearchQuery !== preparedSearchQuery) {
       const newUrl = URLActions.setNewParam("text", spellCheckedSearchQuery);
 
-      const basename = process.env.REACT_APP_CLIENT_URL;
+      const basename = CLIENT_URL;
       if (navigate) navigate(newUrl.replace(basename, ""), { replace: true });
     }
     if (setIsFoundDevicesByQuery) setIsFoundDevicesByQuery(!!devices.length);

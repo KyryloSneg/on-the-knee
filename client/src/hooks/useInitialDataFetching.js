@@ -84,9 +84,10 @@ function useInitialDataFetching() {
       if (!userLocation && allLocations?.length) {
         try {
           // auto-getting user location
-          // (using try ... catch because ipify crushes sometimes)
           const fetchedUserLocation = await getUserLocation();
-          userLocation = allLocations.find(location => location.name === fetchedUserLocation.city) || null;
+          userLocation = allLocations.find(
+            location => location.name?.toLowerCase() === fetchedUserLocation.city.toLowerCase()
+          ) || null;
         } catch (e) {
           console.log(e.message);
         }
@@ -94,11 +95,13 @@ function useInitialDataFetching() {
         app.setIsUserLocationDeterminedCorrectly(!!userLocation);
         if (!userLocation) {
           // if we still haven't found user location, set default one (Kyiv)
-          userLocation = allLocations.find(location => location.name === DEFAULT_USER_LOCATION_NAME) || null;
+          userLocation = allLocations.find(
+            location => location.name?.toLowerCase() === DEFAULT_USER_LOCATION_NAME.toLowerCase()
+          ) || null;
         }
 
         app.setIsToShowUserLocationNotification(true);
-        localStorage.setItem("location", JSON.stringify(userLocation))
+        if (userLocation) localStorage.setItem("location", JSON.stringify(userLocation))
       }
 
       app.setAllLocations(allLocations);

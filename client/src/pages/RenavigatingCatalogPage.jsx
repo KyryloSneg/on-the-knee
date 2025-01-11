@@ -13,7 +13,7 @@ const RenavigatingCatalogPage = observer(({ type }) => {
   const { categoryIdSlug, brandIdSlug } = useParams();
   const location = useLocation();
 
-  if (!deviceStore.categories.length && !deviceStore.brands.length) return <main />;
+  if (!deviceStore.categories?.length && !deviceStore.brands?.length) return <main />;
   if (type === "search" && !categoryIdSlug && !brandIdSlug) return <CatalogPage type={type} />;
   
   const brandId = brandIdSlug?.split("--")[0] || null;
