@@ -34,8 +34,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "server": "json-server -w jsonServer/index.js --port 7000 --routes jsonServer/routes.json"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
@@ -62,10 +61,7 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "@faker-js/faker": "^8.0.2",
     "@hookform/devtools": "^4.3.1",
-    "css-mediaquery": "^0.1.2",
-    "json-server": "^0.17.3",
     "react-scripts": "^5.0.1"
   }
 }
