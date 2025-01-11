@@ -15,36 +15,52 @@ class MailService {
     }
 
     async sendActivationMail(to, link, expireDurationString = null) {
-        await this.transporter.sendMail({
-            from: process.env.SMTP_USER,
-            to,
-            subject: 'Activation of your account ' + process.env.API_URL,
-            text: '',
-            html:
-                `
-                    <div>
-                        <h1>To activate the account click on the link below:</h1>
-                        <a href="${link}">${link}</a>
-                        ${expireDurationString ? `<p>The mail expires after ${expireDurationString}</p>` : ""}
-                    </div>
-                `
+        await new Promise((resolve, reject) => {
+            this.transporter.sendMail({
+                from: process.env.SMTP_USER,
+                to,
+                subject: 'Activation of your account ' + process.env.API_URL,
+                text: '',
+                html:
+                    `
+                        <div>
+                            <h1>To activate the account click on the link below:</h1>
+                            <a href="${link}">${link}</a>
+                            ${expireDurationString ? `<p>The mail expires after ${expireDurationString}</p>` : ""}
+                        </div>
+                    `
+            }, (err, info) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(info);
+                }
+            })
         })
     }
 
     async sendEmailConfirmationMail(to, link, expireDurationString = null) {
-        await this.transporter.sendMail({
-            from: process.env.SMTP_USER,
-            to,
-            subject: 'Confirm email ' + process.env.API_URL,
-            text: '',
-            html:
-                `
-                    <div>
-                        <h1>To change current account email confirm this one (there are 2 of them) by clicking on the link below:</h1>
-                        <a href="${link}">${link}</a>
-                        ${expireDurationString ? `<p>The mail expires after ${expireDurationString}</p>` : ""}
-                    </div>
-                `
+        await new Promise((resolve, reject) => {
+            this.transporter.sendMail({
+                from: process.env.SMTP_USER,
+                to,
+                subject: 'Confirm email ' + process.env.API_URL,
+                text: '',
+                html:
+                    `
+                        <div>
+                            <h1>To change current account email confirm this one (there are 2 of them) by clicking on the link below:</h1>
+                            <a href="${link}">${link}</a>
+                            ${expireDurationString ? `<p>The mail expires after ${expireDurationString}</p>` : ""}
+                        </div>
+                    `
+            }, (err, info) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(info);
+                }
+            })
         })
     }
 }
