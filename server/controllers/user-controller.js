@@ -3,6 +3,19 @@ const {validationResult} = require('express-validator');
 const ApiError = require('../exceptions/api-error');
 const userAddressService = require("../service/user-address-service");
 
+const isCurrentEnvPreviewOrProd = process.env?.VERCEL_ENV === "production" || process.env?.VERCEL_ENV === "preview";
+function setCookie(response, name, value, options = {}) {
+    let previewOrProdOptions = {};
+    if (isCurrentEnvPreviewOrProd) {
+        // setting these options because otherwise browser couldn't save a cookie
+        // (at least the Chrome 80+ stable)
+        previewOrProdOptions.secure = true;
+        previewOrProdOptions.sameSite = "None";
+    }
+
+    response.cookie(name, value, { ...options, ...previewOrProdOptions, httpOnly: true })
+}
+
 class UserController {
     async registration(req, res, next) {
         try {
@@ -13,8 +26,8 @@ class UserController {
             const { name, surname, password, email, phoneNumber } = req.body;
             const { userData, userDeviceInfos } = await userService.registration(name, surname, password, email, phoneNumber);
 
-            res.cookie('refreshToken', userData.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
-            res.cookie('userDeviceInfos', JSON.stringify(userDeviceInfos), {httpOnly: true})
+            setCookie(res, 'refreshToken', userData.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000});
+            setCookie(res, 'userDeviceInfos', JSON.stringify(userDeviceInfos));
 
             return res.json(userData);
         } catch (e) {
@@ -30,8 +43,8 @@ class UserController {
             const { address, password } = req.body; // address = email || phoneNumber
             const { userData, newUserDeviceInfos } = await userService.login(address, password, parsedUserDeviceInfos);
             
-            res.cookie('refreshToken', userData.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
-            res.cookie('userDeviceInfos', JSON.stringify(newUserDeviceInfos), {httpOnly: true})
+            setCookie(res, 'refreshToken', userData.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000});
+            setCookie(res, 'userDeviceInfos', JSON.stringify(newUserDeviceInfos));
 
             return res.json(userData);
         } catch (e) {
@@ -111,8 +124,8 @@ class UserController {
             const parsedUserDeviceInfos = userDeviceInfos ? JSON.parse(userDeviceInfos) : null;
             const { userData, newUserDeviceInfos } = await userService.refresh(refreshToken, parsedUserDeviceInfos);
 
-            res.cookie('refreshToken', userData.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
-            res.cookie('userDeviceInfos', JSON.stringify(newUserDeviceInfos), {httpOnly: true})
+            setCookie(res, 'refreshToken', userData.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000});
+            setCookie(res, 'userDeviceInfos', JSON.stringify(newUserDeviceInfos));
 
             return res.json(userData);
         } catch (e) {
