@@ -1,4 +1,5 @@
 require('dotenv').config()
+// const fs = require("fs");
 
 const createCarts = require("./utils/createCarts");
 const createCourierSchedules = require("./utils/createCourierSchedules");
@@ -152,6 +153,14 @@ module.exports = function createData () {
     data["order-courier-deliveries"] = orderResult.orderCourierDeliveries;
     data["order-device-combinations"] = orderResult.orderDeviceCombinations;
     data["receivents"] = orderResult.receivents;
+
+    // Uncomment to fill up db.json file (and import fs)
+
+    // const dbData = JSON.stringify(data);
+    // fs.writeFile("db.json", dbData, (error) => {
+    //   if (error) throw error;
+    // });
+
     console.log("finished");
   });
   
