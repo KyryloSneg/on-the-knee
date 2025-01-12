@@ -162,17 +162,6 @@ const STORE_LOCATIONS = {
   },
 }
 
-const USERS = [
-  {
-    "_id": "66fc214b3087117caf04ebb8",
-    "name": "Someone",
-    "surname": "Forgot",
-    "roles": ["PUBLIC", "ORDER-MANAGER", "CONTENT-MANAGER", "SELLER", "OWNER"],
-    "email": "onthekneeauth@gmail.com",
-    "phoneNumber": "+380 95 532 9384"
-  },
-];
-
 const MOCK_USER = {
   // i made up the _id below
   "_id": "6348acd2e1a47ca32e79f46f",
@@ -181,15 +170,6 @@ const MOCK_USER = {
   "roles": ["PUBLIC", "ORDER-MANAGER", "CONTENT-MANAGER", "SELLER", "OWNER"],
   "email": "mockuserauth@gmail.com",
   "phoneNumber": "+380 82 0172 6701"
-};
-
-const REAL_USER = {
-  "_id": "66fc214b3087117caf04ebb8",
-  "name": "Someone",
-  "surname": "Forgot",
-  "roles": ["PUBLIC"],
-  "email": "onthekneeauth@gmail.com",
-  "phoneNumber": "+380 95 532 9384"
 };
 
 const POSSIBLE_DELIVERY_TYPES = { "self-delivery": 0, "courier": 5 };
@@ -297,8 +277,6 @@ const MAX_FEEDBACK_IMAGE_HEIGHT = 1500;
 const MAX_FEEDBACK_IMAGE_WIDTH = 1650;
 
 module.exports = {
-  USERS,
-  REAL_USER,
   MOCK_USER,
 
   POSSIBLE_DEVICE_INFOS,

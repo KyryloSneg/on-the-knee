@@ -133,7 +133,7 @@ function useGettingCartData(
       await validateComboAmounts(cartDevCombos);
 
       initCartSelectedAdditionalServices =
-        (await getOneCartSelectedAdditionalServices(propsCartId))[0]
+        (await getOneCartSelectedAdditionalServices(propsCartId))
         || cartSelectedAddServicesPlaceholder;
     } else {
       cartDevCombos = LocalStorageActions.getItem("cartDeviceCombinations") || [];

@@ -1,3 +1,4 @@
+import { v4 } from "uuid";
 import { ONE_CART_API_URL, ONE_CART_DEVICE_COMBINATIONS_API_URL } from "../utils/consts";
 import { $mockApi } from "./index";
 
@@ -13,7 +14,28 @@ export async function getOneCartDeviceCombinations(cartId) {
 
 export async function getOneCartSelectedAdditionalServices(cartId) {
   const { data } = await $mockApi.get("/cart-selected-additional-services?cartId=" + cartId);
-  return data;
+  return Array.isArray(data) ? data?.[0] : data;
+}
+
+export async function createCart(userId) {
+  // the logic should be located on the server if we weren't using the mock one
+  const cart = {
+    "id": v4(),
+    "userId": userId,
+  };
+
+  const cartSelectedAdditionalServices = {
+    "id": v4(),
+    "cartId": cart.id,
+    "selected-additional-services": {},
+  }
+
+  const { data: cartData } = await $mockApi.post("/carts", cart);
+  const { 
+    data: cartSelectedAdditionalServicesData 
+  } = await $mockApi.post("/cart-selected-additional-services", cartSelectedAdditionalServices);
+
+  return { cartData, cartSelectedAdditionalServicesData };
 }
 
 export async function createCartDeviceCombination(combo) {

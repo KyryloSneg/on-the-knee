@@ -33,6 +33,7 @@
 
 .cart-modal-list-item-main-row > a.link-colors {
   width: 100%;
+  word-break: break-all;
 }
 
 .message-to-user.cart-modal-item-stock-error {

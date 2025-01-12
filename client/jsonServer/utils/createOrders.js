@@ -1,8 +1,7 @@
 const { faker } = require("@faker-js/faker");
 const createReceivents = require("./createReceivents");
-const { USERS, POSSIBLE_ORDER_STATUSES } = require("./consts");
+const { POSSIBLE_ORDER_STATUSES } = require("./consts");
 const createOrderDeviceCombinations = require("./createOrderDeviceCombinations");
-const createOrderName = require("./createOrderName");
 const { parsePhoneNumber } = require("libphonenumber-js");
 const createOrderCourierDelivery = require("./createOrderCourierDelivery");
 const _ = require("lodash");
@@ -228,11 +227,11 @@ module.exports = (
   for (let orderInfo of allOrderInfos) {
     const id = faker.string.uuid();
     // both authorized and unauthorized users can checkout their order
-    const isAuth = faker.datatype.boolean(0.5);
+    // const isAuth = faker.datatype.boolean(0.5);
     let user;
-    if (isAuth) {
-      user = USERS.length ? USERS[faker.number.int({ min: 0, max: USERS.length - 1 })] : USERS[0];
-    }
+    // if (isAuth) {
+    //   user = USERS.length ? USERS[faker.number.int({ min: 0, max: USERS.length - 1 })] : USERS[0];
+    // }
     const receivent = receivents[faker.number.int({ min: 0, max: receivents.length - 1 })];
 
     const delivery = deliveries[faker.number.int({ min: 0, max: deliveries.length - 1 })];

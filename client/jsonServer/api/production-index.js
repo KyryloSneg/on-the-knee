@@ -6,7 +6,7 @@ const routes = require("../routes.json");
 
 const server = jsonServer.create();
 
-// allow write operations
+// allow write operations (doesn't work because vercel "clears" all changes after a serverless function is executed)
 const dbDataFilePath = path.join('db.json');
 const data = fs.readFileSync(dbDataFilePath, "utf-8");
 const db = JSON.parse(data);

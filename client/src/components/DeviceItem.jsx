@@ -118,7 +118,6 @@ const DeviceItem = observer(({ device, isInStock, isPreOrder, defaultCombination
         <DeviceItemPrice price={defaultCombination.price} discountPercentage={discountPercentage} />
         {(isInStock || isPreOrder) && 
           <DeviceItemAddToCartBtn 
-            combinations={device["device-combinations"]} 
             combo={defaultCombination} 
             isPreOrder={isPreOrder}
           />

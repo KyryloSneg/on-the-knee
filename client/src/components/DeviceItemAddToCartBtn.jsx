@@ -1,5 +1,5 @@
 import "./styles/DeviceItemAddToCartBtn.css";
-import { useCallback, useContext, useRef } from "react";
+import { useCallback, useContext, useRef, useState } from "react";
 import addToCartIcon from "../assets/show-cart-button.svg";
 import inCartIcon from "../assets/in_cart_24x24_FFF.svg";
 import { Context } from "../Context";
@@ -11,22 +11,21 @@ import { getDevice } from "../http/DeviceApi";
 import { getOneDeviceSaleDevices } from "../http/SalesAPI";
 import useLodashThrottle from "../hooks/useLodashThrottle";
 import updateServerCartSelectedAddServices from "utils/updateServerCartSelectedAddServices";
+import Loader from "./UI/loader/Loader";
 
-const DeviceItemAddToCartBtn = observer(({ 
-  combinations, combo, selectedAddServices = null, isWithText = false, isPreOrder = false 
+const DeviceItemAddToCartBtn = observer(({
+  combo, selectedAddServices = null, isWithText = false, isPreOrder = false
 }) => {
   const { app, user } = useContext(Context);
+  const [isLoading, setIsLoading] = useState(false);
   const isAlreadyAddingRef = useRef(false);
   const btnRef = useRef(null);
-
-  let className = "main-device-add-to-cart";
-  if (isPreOrder) {
-    className += " preorder-version";
-  }
 
   const addToCartLogic = useCallback(async () => {
     if (isAlreadyAddingRef.current) return;
     else isAlreadyAddingRef.current = true;
+
+    setIsLoading(true);
 
     try {
       let cartDevCombo = {
@@ -63,6 +62,7 @@ const DeviceItemAddToCartBtn = observer(({
       throw e;
     } finally {
       isAlreadyAddingRef.current = false;
+      setIsLoading(false);
     }
     // eslint-disable-next-line
   }, [user, isAlreadyAddingRef, combo, selectedAddServices]);
@@ -71,10 +71,8 @@ const DeviceItemAddToCartBtn = observer(({
   const throttledAddToCartLogic = useLodashThrottle(addToCartLogic, 3000, { "trailing": false });
 
   function onClick() {
-    const isAdded = !!user.cartDeviceCombinations?.find(
-      cartCombo => !!combinations?.find(devCombo => devCombo.id === cartCombo["device-combinationId"])
-    );
-    
+    const isAdded = !!user.cartDeviceCombinations?.find(cartCombo => combo.id === cartCombo["device-combinationId"]);;
+
     if (isAdded) {
       app.setCartModalBtnRef(btnRef);
       setCartModalVisibility(true, app);
@@ -84,22 +82,40 @@ const DeviceItemAddToCartBtn = observer(({
     }
   }
 
-  const isAdded = !!user.cartDeviceCombinations?.find(
-    cartCombo => !!combinations?.find(devCombo => devCombo.id === cartCombo["device-combinationId"])
-  );
+  const isAdded = !!user.cartDeviceCombinations?.find(cartCombo => combo.id === cartCombo["device-combinationId"]);
   const src = isAdded ? inCartIcon : addToCartIcon;
 
-  return (
-    <button className={className} onClick={onClick} ref={btnRef}>
-      {isWithText && (
-        isAdded
-          ? <span>In cart</span>
-          : isPreOrder
-            ? <span>Preorder</span>
-            : <span>Purchase</span>
+  let childrenContent;
+  if (isLoading) {
+    childrenContent = <Loader />;
+  } else {
+    childrenContent = (
+      <>
+        {isWithText && (
+          isAdded
+            ? <span>In cart</span>
+            : isPreOrder
+              ? <span>Preorder</span>
+              : <span>Purchase</span>
 
-      )}
-      <img src={src} alt={isWithText ? "" : "Add to cart"} draggable="false" />
+        )}
+        <img src={src} alt={isWithText ? "" : "Add to cart"} draggable="false" />
+      </>
+    )
+  }
+
+  let className = "main-device-add-to-cart";
+  if (isAdded) {
+    className += " added-version";
+  }
+  
+  if (isPreOrder) {
+    className += " preorder-version";
+  }
+
+  return (
+    <button className={className} onClick={onClick} disabled={isLoading} ref={btnRef}>
+      {childrenContent}
     </button>
   );
 });

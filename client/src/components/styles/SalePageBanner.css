@@ -39,6 +39,7 @@
 
 .sale-page-banner-sale-info > h2 {
   margin: 0;
+  word-break: break-all;
 }
 
 .sale-page-banner-info-list {
@@ -102,7 +103,7 @@
   }
 
   .sale-page-banner-sale-info {
-    width: max-content;
+    width: auto;
     max-width: 50%;
   }
 }

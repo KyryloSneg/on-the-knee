@@ -1,6 +1,6 @@
 const { faker } = require("@faker-js/faker");
 const { MIN_FEEDBACK_IMAGE_WIDTH, MAX_FEEDBACK_IMAGE_WIDTH, MIN_FEEDBACK_IMAGE_HEIGHT, MAX_FEEDBACK_IMAGE_HEIGHT, MOCK_USER } = require("./consts");
-const findAverageNum = require("../../src/utils/findAverageNum");
+const findAverageNum = require("./findAverageNum.js");
 
 module.exports = (feedbacks, feedbackReplies, deviceId) => {
   let rates = [];
