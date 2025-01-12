@@ -9,7 +9,7 @@
   box-sizing: border-box;
 }
 
-.additional-services-section > h3 {
+section.additional-services-section > h3 {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
@@ -30,7 +30,7 @@
 }
 
 @media screen and (min-width: 460px) {
-  .additional-services-section > h3 {
+  section.additional-services-section > h3 {
     flex-direction: row;
     gap: 5px;
   }

@@ -1,3 +1,4 @@
+import { v4 } from "uuid";
 import setViewedDevicesAdditionalFields from "../utils/setViewedDevicesAdditionalFields";
 
 const { $mockApi } = require(".");
@@ -23,6 +24,16 @@ export async function getOneViewedDevicesListDevs(viewedDevicesListId, options =
     await setViewedDevicesAdditionalFields(data);
   }
   
+  return data;
+}
+
+export async function createViewedDevicesList(userId) {
+  const viewedDevicesList = {
+    "id": v4(),
+    "userId": userId,
+  };
+
+  const { data } = await $mockApi.post("/viewed-devices-lists", viewedDevicesList);
   return data;
 }
 

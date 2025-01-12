@@ -11,11 +11,11 @@ import { getLocations } from "../http/LocationsAPI";
 import { getUserLocation } from "../http/UserLocationAPI";
 import { DEFAULT_USER_LOCATION_NAME } from "../utils/consts";
 import { getStorePickupPoints } from "../http/StorePickupPointsAPI";
-import { getOneCart, getOneCartDeviceCombinations } from "../http/CartAPI";
+import { createCart, getOneCart, getOneCartDeviceCombinations } from "../http/CartAPI";
 import useGettingCartData from "./useGettingCartData";
 import LocalStorageActions from "../utils/LocalStorageActions";
-import { getOneDesiredList, getOneDesiredListDevices } from "../http/DesiredListAPI";
-import { getOneViewedDevicesList, getOneViewedDevicesListDevs } from "../http/ViewedDevicesAPI";
+import { createDesiredList, getOneDesiredList, getOneDesiredListDevices } from "../http/DesiredListAPI";
+import { createViewedDevicesList, getOneViewedDevicesList, getOneViewedDevicesListDevs } from "../http/ViewedDevicesAPI";
 import setViewedDevicesAdditionalFields from "../utils/setViewedDevicesAdditionalFields";
 
 function useInitialDataFetching() {
@@ -123,6 +123,13 @@ function useInitialDataFetching() {
   
       if (user.isAuth) {
         cart = await getOneCart(user.user?.id);
+        
+        if (!cart) {
+          // the logic should be located on the server if we weren't using the mock one
+          // (in the dev build react will create the cart twice)
+          cart = (await createCart(user.user?.id)).cartData;
+        }
+
         cartDeviceCombinations = await getOneCartDeviceCombinations(cart?.id);
       } else {
         cartDeviceCombinations = LocalStorageActions.getItem("cartDeviceCombinations") || [];
@@ -140,6 +147,12 @@ function useInitialDataFetching() {
   
       if (user.isAuth) {
         desiredList = await getOneDesiredList(user.user?.id);
+        if (!desiredList) {
+          // the logic should be located on the server if we weren't using the mock one
+          // (in the dev build react will create the cart twice)
+          desiredList = await createDesiredList(user.user?.id);
+        }
+
         desiredListDevices = await getOneDesiredListDevices(desiredList?.id);
       }
       
@@ -155,6 +168,12 @@ function useInitialDataFetching() {
   
       if (user.isAuth) {
         viewedDevicesList = await getOneViewedDevicesList(user.user?.id);
+        if (!viewedDevicesList) {
+          // the logic should be located on the server if we weren't using the mock one
+          // (in the dev build react will create the cart twice)
+          viewedDevicesList = await createViewedDevicesList(user.user?.id);
+        }
+
         viewedDevices = await getOneViewedDevicesListDevs(viewedDevicesList?.id);
       } else {
         viewedDevices = LocalStorageActions.getItem("viewedDevices") || [];

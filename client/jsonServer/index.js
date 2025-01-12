@@ -1,14 +1,14 @@
 require('dotenv').config()
 // const fs = require("fs");
 
-const createCarts = require("./utils/createCarts");
+// const createCarts = require("./utils/createCarts");
 const createCourierSchedules = require("./utils/createCourierSchedules");
 const createDeliveries = require("./utils/createDeliveries");
-const createDesiredList = require("./utils/createDesiredList");
+// const createDesiredList = require("./utils/createDesiredList");
 const createDevices = require("./utils/createDevices");
 const createLocations = require("./utils/createLocations");
 const createOrders = require("./utils/createOrders");
-const createViewedDevicesList = require("./utils/createViewedDevicesList");
+// const createViewedDevicesList = require("./utils/createViewedDevicesList");
 
 module.exports = function createData () {
   const data = {
@@ -126,18 +126,18 @@ module.exports = function createData () {
     data["sale-type-names"] = result.saleTypeNames;
     data["sale-devices"] = result.saleDevices;
 
-    const { carts, cartDeviceCombos, cartSelectedAdditionalServices } = createCarts(result.deviceCombinations);
-    data["carts"] = carts;
-    data["cart-device-combinations"] = cartDeviceCombos;
-    data["cart-selected-additional-services"] = cartSelectedAdditionalServices;
+    // const { carts, cartDeviceCombos, cartSelectedAdditionalServices } = createCarts(result.deviceCombinations);
+    // data["carts"] = carts;
+    // data["cart-device-combinations"] = cartDeviceCombos;
+    // data["cart-selected-additional-services"] = cartSelectedAdditionalServices;
 
-    const { desiredLists, desiredListDevices } = createDesiredList(result.devices, result.deviceCombinations);
-    data["desired-lists"] = desiredLists;
-    data["desired-list-devices"] = desiredListDevices;
+    // const { desiredLists, desiredListDevices } = createDesiredList(result.devices, result.deviceCombinations);
+    // data["desired-lists"] = desiredLists;
+    // data["desired-list-devices"] = desiredListDevices;
 
-    const { viewedDevicesLists, viewedDevices } = createViewedDevicesList(result.devices, result.deviceCombinations);
-    data["viewed-devices-lists"] = viewedDevicesLists;
-    data["viewed-devices"] = viewedDevices;
+    // const { viewedDevicesLists, viewedDevices } = createViewedDevicesList(result.devices, result.deviceCombinations);
+    // data["viewed-devices-lists"] = viewedDevicesLists;
+    // data["viewed-devices"] = viewedDevices;
   });
   
   Promise.all([locationsPromise, devicesPromise]).then(() => {

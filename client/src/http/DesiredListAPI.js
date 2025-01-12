@@ -1,3 +1,4 @@
+import { v4 } from "uuid";
 import { getDevice, getDeviceCombination, getOneDeviceCombinations } from "./DeviceApi";
 
 const { $mockApi } = require(".");
@@ -19,6 +20,16 @@ export async function getOneDesiredListDevices(desiredListId) {
     }
   }
   
+  return data;
+}
+
+export async function createDesiredList(userId) {
+  const desiredList = {
+    "id": v4(),
+    "userId": userId,
+  };
+
+  const { data } = await $mockApi.post("/desired-lists", desiredList);
   return data;
 }
 
