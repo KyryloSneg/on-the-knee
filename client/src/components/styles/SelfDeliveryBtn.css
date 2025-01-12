@@ -46,7 +46,7 @@
 
 .self-delivery-btn:hover,
 .self-delivery-btn:active,
-.self-delivery-btn:focus {
+.self-delivery-btn:focus-visible {
   border-bottom: 1px dashed #bd5e10;
 }
 

@@ -26,7 +26,6 @@ const PurchaseDeviceFooter = observer(({ device, selectedCombo, selectedAddServi
       <DeviceItemPrice price={selectedCombo.price} discountPercentage={discountPercentage} />
       <AddToDesiredListBtn deviceId={device.id} deviceCombinationId={selectedCombo.id} />
       <DeviceItemAddToCartBtn 
-        combinations={device["device-combinations"]} 
         combo={selectedCombo} 
         selectedAddServices={selectedAddServices} 
       />

@@ -13,7 +13,7 @@ import useLodashThrottle from "../hooks/useLodashThrottle";
 import updateServerCartSelectedAddServices from "utils/updateServerCartSelectedAddServices";
 
 const DeviceItemAddToCartBtn = observer(({ 
-  combinations, combo, selectedAddServices = null, isWithText = false, isPreOrder = false 
+  combo, selectedAddServices = null, isWithText = false, isPreOrder = false 
 }) => {
   const { app, user } = useContext(Context);
   const isAlreadyAddingRef = useRef(false);
@@ -71,9 +71,7 @@ const DeviceItemAddToCartBtn = observer(({
   const throttledAddToCartLogic = useLodashThrottle(addToCartLogic, 3000, { "trailing": false });
 
   function onClick() {
-    const isAdded = !!user.cartDeviceCombinations?.find(
-      cartCombo => !!combinations?.find(devCombo => devCombo.id === cartCombo["device-combinationId"])
-    );
+    const isAdded = !!user.cartDeviceCombinations?.find(cartCombo => combo.id === cartCombo["device-combinationId"]);;
     
     if (isAdded) {
       app.setCartModalBtnRef(btnRef);
@@ -83,10 +81,8 @@ const DeviceItemAddToCartBtn = observer(({
       throttledAddToCartLogic();
     }
   }
-
-  const isAdded = !!user.cartDeviceCombinations?.find(
-    cartCombo => !!combinations?.find(devCombo => devCombo.id === cartCombo["device-combinationId"])
-  );
+  
+  const isAdded = !!user.cartDeviceCombinations?.find(cartCombo => combo.id === cartCombo["device-combinationId"]);
   const src = isAdded ? inCartIcon : addToCartIcon;
 
   return (

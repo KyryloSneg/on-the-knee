@@ -16,7 +16,6 @@ const DevicePurchaseSection = observer(({ price, discountPercentage, device, sel
       {(isInStock || device.isPreOrder)
         ? (
           <DeviceItemAddToCartBtn
-            combinations={device["device-combinations"]}
             combo={selectedCombo}
             selectedAddServices={selectedAddServices}
             isWithText={true}
