@@ -8,13 +8,19 @@
 }
 
 .device-purchase-section .main-device-add-to-cart {
-  width: 100%;
-  height: max-content;
+  width: 90px;
   min-width: 0;
-  max-width: max-content;
+  max-width: none;
+  height: 31px;
   padding: 6px 10px;
   gap: 8px;
+}
+
+.device-purchase-section .main-device-add-to-cart.added-version {
+  width: 100%;
   min-width: max-content;
+  max-width: max-content;
+  height: max-content;
 }
 
 .device-purchase-section .main-device-add-to-cart > img {
@@ -45,6 +51,11 @@
 
 @media screen and (min-width: 270px) {
   .device-purchase-section .main-device-add-to-cart {
+    width: 136px;
+    height: 36px;
+  }
+
+  .device-purchase-section .main-device-add-to-cart.added-version {
     width: max-content;
     max-width: none;
   }
