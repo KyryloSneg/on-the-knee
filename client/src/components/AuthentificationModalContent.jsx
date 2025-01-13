@@ -6,7 +6,6 @@ import { useForm } from "react-hook-form";
 import isPhoneValidFn from "../utils/isPhoneValid";
 import { AUTHENTIFICATION_MODAL_INPUT_SERVICE_CLASS, AUTHENTIFICATION_MODAL_SUBMIT_BTN_SERVICE_CLASS } from "../utils/consts";
 import _ from "lodash";
-import { getUserIp } from "../http/UserLocationAPI";
 import { Context } from "../Context";
 import { observer } from "mobx-react-lite";
 import setErrorModalVisibility from "../utils/setErrorModalVisibility";
@@ -60,9 +59,10 @@ const AuthentificationModalContent = observer(({ closeModal }) => {
   const phoneInputRefs = useRef(initPhoneInputRefs);
 
   const openErrorModal = useCallback(() => {
+    
     const errorModalInfoChildren = (
       <p className="error-modal-p">
-        Unfortunately, registration has failed. Try a bit later
+        Unfortunately, {selectedVariant === "registration" ? "registration" : "authentification"} has failed. Try a bit later
       </p>
     );
 
@@ -83,9 +83,7 @@ const AuthentificationModalContent = observer(({ closeModal }) => {
       isAlreadySubmittingRef.current = true;
 
       setIsSubmitting(true);
-
       const password = value[`${selectedVariant}-password`];
-      const ip = await getUserIp();
 
       if (selectedVariant === "registration") {
         const name = value[`${selectedVariant}-firstName`];

@@ -1,5 +1,4 @@
 import { $api, $authApi } from "./index";
-import { getUserIp } from "./UserLocationAPI";
 
 // name, surname, password, email, phoneNumber, ip
 export async function registerUser(userData) {
@@ -24,9 +23,7 @@ export async function sendShortTermActivationEmail() {
 }
 
 export async function isAuthFetch() {
-  const ip = await getUserIp();
-
-  const { data } = await $api.get(`/refresh/${ip}`);
+  const { data } = await $api.get("/refresh");
   return data;
 }
 
