@@ -178,6 +178,8 @@ const OriginalComment = observer(({
 
   const rateComment = useCallback(async isLike => {
     if (!userStore.isAuth) {
+      closeGalleryModal?.();
+
       // open user login modal
       app.setAuthentificationModalBtnRef(isLike ? likeBtnRef : dislikeBtnRef);
       setAuthentificationModalVisibility(true, app);
@@ -255,7 +257,8 @@ const OriginalComment = observer(({
   }, [
     app, comment.id, fetchingDislikes, isCantRateYourCommentError,
     fetchingLikes, type, userStore.isAuth, userStore.user?.id, openErrorModal,
-    isYourComment, likeFromUser, dislikeFromUser, removeDislike, removeLike
+    isYourComment, likeFromUser, dislikeFromUser, removeDislike, removeLike, 
+    closeGalleryModal
   ]);
 
   const throttledRateComment = useLodashThrottle(rateComment, 50, { "trailing": false });
