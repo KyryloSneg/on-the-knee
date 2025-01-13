@@ -177,9 +177,11 @@ function useInitialDataFetching() {
         viewedDevices = await getOneViewedDevicesListDevs(viewedDevicesList?.id);
       } else {
         viewedDevices = LocalStorageActions.getItem("viewedDevices") || [];
-        viewedDevices.sort((a, b) => b.date.localeCompare(a.date));
+        // just in case
+        if (!Array.isArray(viewedDevices)) viewedDevices = [];
 
-        await setViewedDevicesAdditionalFields(viewedDevices);
+        viewedDevices.sort((a, b) => b.date.localeCompare(a.date));
+        if (viewedDevices.length) viewedDevices = await setViewedDevicesAdditionalFields(viewedDevices, false);
       }
       
       if (viewedDevicesList) user.setViewedDevicesList(viewedDevicesList);
