@@ -59,7 +59,6 @@ const AuthentificationModalContent = observer(({ closeModal }) => {
   const phoneInputRefs = useRef(initPhoneInputRefs);
 
   const openErrorModal = useCallback(() => {
-    
     const errorModalInfoChildren = (
       <p className="error-modal-p">
         Unfortunately, {selectedVariant === "registration" ? "registration" : "authentification"} has failed. Try a bit later
@@ -71,7 +70,7 @@ const AuthentificationModalContent = observer(({ closeModal }) => {
     app.setIsToFocusErrorModalPrevModalTriggerElem(false);
 
     setErrorModalVisibility(true, app);
-  }, [app]);
+  }, [app, selectedVariant]);
 
   const submitCallback = useCallback(async (value) => {
     // we can change possible error state only if main logic has been invoked
@@ -92,7 +91,7 @@ const AuthentificationModalContent = observer(({ closeModal }) => {
         const phoneNumber = phoneInputInfos[selectedVariant].value;
 
         hasBeenMainLogicInvoked = true;
-        callbackPossibleError = await user.register(name, surname, password, email, phoneNumber, ip);
+        callbackPossibleError = await user.register(name, surname, password, email, phoneNumber);
       } else {
         let address;
         if (selectedVariant === "authentificateWithPhone") {
@@ -105,12 +104,12 @@ const AuthentificationModalContent = observer(({ closeModal }) => {
         // try again with a trimmed variant if there are whitespaces aside
         // (spaces are allowed in passwords as i know)
         hasBeenMainLogicInvoked = true;
-        callbackPossibleError = await user.login(address, password, ip);
+        callbackPossibleError = await user.login(address, password);
         
         if (callbackPossibleError?.response && callbackPossibleError?.code !== AxiosError.ERR_NETWORK) {
           const trimmedPassword = password.trim();
           if (trimmedPassword !== password) {
-            callbackPossibleError = await user.login(address, trimmedPassword, ip);
+            callbackPossibleError = await user.login(address, trimmedPassword);
           }
         }
         

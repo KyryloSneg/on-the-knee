@@ -48,9 +48,9 @@ class UserStore {
     this._isEmailActivated = isEmailActivated;
   }
 
-  async register(name, surname, password, email, phoneNumber, ip) {
+  async register(name, surname, password, email, phoneNumber) {
     try {
-      const data = await registerUser({ name, surname, password, email, phoneNumber, ip });
+      const data = await registerUser({ name, surname, password, email, phoneNumber });
       localStorage.setItem("token", data.accessToken);
 
       this.setIsAuth(true);
@@ -63,9 +63,9 @@ class UserStore {
     }
   }
 
-  async login(address, password, ip) {
+  async login(address, password) {
     try {
-      const data = await login({ address, password, ip });
+      const data = await login({ address, password });
       localStorage.setItem("token", data.accessToken);
 
       this.setIsAuth(true);
