@@ -4,6 +4,7 @@ button.menu-account-btn, a.menu-account-btn {
 }
 
 .menu-account-btn-content-wrap {
+  max-width: 200px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
