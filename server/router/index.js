@@ -25,7 +25,7 @@ router.post('/send-short-term-activation-email',
     userController.sendShortTermActivationEmail
 );
 
-router.get('/refresh/:ip', userController.refresh);
+router.get('/refresh', userController.refresh);
 router.get('/activate/:link', userController.activate);
 
 // we can change the user email only if he / she has activated the current one
